@@ -9,11 +9,11 @@
 [/template]
 
 [template public genController(c : Class)]
-[file (c.name.concat('.ctrl.js'), false, 'UTF-8')]
+[file (c.name.toLowerFirst().concat('.ctrl.js'), false, 'UTF-8')]
 (function () {
-    var app = angular.module('[c.name.toLowerCase()/]Module');
+    var app = angular.module('[c.name.toLowerFirst()/]Module');
 
-    app.controller('sportCtrl', ['['/]'$scope', 'CRUDUtils', '[c.name.toLowerCase()/].context', function ($scope, CRUDUtils, context) {
+    app.controller('[c.name.toLowerFirst()/]Ctrl', ['['/]'$scope', 'CRUDUtils', '[c.name.toLowerFirst()/].context', function ($scope, CRUDUtils, context) {
             this.url = context;
             CRUDUtils.extendCtrl(this, $scope);
             this.fetchRecords();
@@ -24,7 +24,7 @@
 
 [template public genView(c : Class)]
 [let ctrl : String = c.name.toLowerFirst().concat('Ctrl')]
-[file (c.name.concat('tpl.html'), false, 'UTF-8')]
+[file (c.name.toLowerFirst()+'/'+c.name.toLowerFirst()+'.tpl.html', false, 'UTF-8')]
 <div ng-controller="[ctrl/] as [ctrl/]">
 	<div id="header">
 		<nav class="navbar navbar-default" role="navigation">
@@ -55,7 +55,9 @@
 			<thead>
 				<tr>
 					[for (a : Property | c.attribute)]
+					[if (a.name <> 'id')]
 					<td>{{record.[a.name/]}}</td>
+					[/if]
 					[/for]
 					<th>Actions</th>
 				</tr>
@@ -63,7 +65,9 @@
 			<tbody>
 				<tr ng-repeat="record in records">
 					[for (a : Property | c.attribute)]
+					[if (a.name <> 'id')]
 					<td>{{record.[a.name/]}}</td>
+					[/if]
 					[/for]
 					<td>
 						<button class="btn btn-default btn-sm" ng-click="[ctrl/].editRecord(record)"><span class="glyphicon glyphicon-edit"></span> Edit</button>
@@ -74,24 +78,37 @@
 		</table>
 	</div>
 	<div ng-show="[ctrl/].editMode">
-		<form name="countryForm" role="form">
-			<input id="name" class="form-control" type="hidden" ng-model="currentRecord.id"/>
+		<form name="[c.name.toLowerFirst()/]Form" role="form">
+			[for (a : Property | c.attribute)]
+			[if a.name = 'id']
+			<input id="id" class="form-control" type="hidden" ng-model="currentRecord.id"/>
+			[/if]
+			[if (a.type.name = 'String')]
 			<div class="form-group">
-				<label for="name">Name</label>
-				<input id="name" class="form-control" type="text" ng-model="currentRecord.name"/>
+				<label for="[a.name/]">[a.name/]</label>
+				<input id="[a.name/]" class="form-control" type="text" ng-model="currentRecord.[a.name/]"/>
 			</div>
+			[/if]
+			[if (a.type.name = 'Long' or a.type.name = 'Integer')]
 			<div class="form-group">
-				<label for="minAge">Min Age</label>
-				<input id="minAge" class="form-control" type="number" ng-model="currentRecord.minAge"/>
+				<label for="[a.name/]">[a.name/]</label>
+				<input id="[a.name/]" class="form-control" type="number" ng-model="currentRecord.[a.name/]"/>
 			</div>
+			[/if]
+			[if (a.type.name = 'Date')]
 			<div class="form-group">
-				<label for="maxAge">Max Age</label>
-				<input id="maxAge" class="form-control" type="number" ng-model="currentRecord.maxAge"/>
+				<label for="[a.name/]">[a.name/]</label>
+				<input id="[a.name/]" class="form-control" type="date" ng-model="currentRecord.[a.name/]"/>
 			</div>
-			<div class="form-group">
-				<label for="rules">Rules</label>
-				<input id="rules" class="form-control" type="text" ng-model="currentRecord.rules"/>
+			[/if]
+			[if (a.type.name = 'Boolean')]
+			<div class="form-group" >
+			    <label>
+		    	  <input id="[a.name/]" name="[a.name/]" ng-value="false" type="checkbox" ng-model="currentRecord.[a.name/]"> [a.name/]
+		    	</label>
 			</div>
+			[/if]
+			[/for]
 		</form>
 	</div>
 </div>
