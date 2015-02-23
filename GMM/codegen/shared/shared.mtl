@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module shared('http://www.eclipse.org/uml2/5.0.0/UML')]
+
+
+[template public mock(aClass : Class)]
+[file ('src/test.js', false, 'UTF-8')]
+//este es un ejemplo para usar varias plantillas
+[aClass.name /]
+[/file]
+[/template]

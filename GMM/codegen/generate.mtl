@@ -1,11 +1,12 @@
 [comment encoding = UTF-8 /]
 [module generate('http://www.eclipse.org/uml2/5.0.0/UML')]
-
+[import GMM::codegen::shared::shared /]
 
 [template public generate(m : Class)]
 [comment @main/]
 [m.genController()/]
 [m.genView()/]
+[m.mock() /]
 [/template]
 
 [template public genController(c : Class)]
