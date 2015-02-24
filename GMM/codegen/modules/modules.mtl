@@ -75,7 +75,7 @@
 				<tr>
 					[for (a : Property | c.attribute)]
 					[if (a.name <> 'id')]
-					<td>{{record.[a.name/]}}</td>
+					<th>[a.name.toUpperFirst()/]</th>
 					[/if]
 					[/for]
 					<th>Actions</th>
