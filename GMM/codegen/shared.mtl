@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module shared('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import mocks /]
+[import crud /]
+
+[template public generateElement(m : Model)]
+[file ('index.html', false, 'UTF-8')]
+	<!-- test -->
+[/file]
+[/template]

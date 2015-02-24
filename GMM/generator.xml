@@ -1,4 +1,5 @@
 <generator>
   <name>GMM</name>
   <m2t name="generate.mtl"/>
+  <m2t name="shared.mtl"/>
 </generator>
