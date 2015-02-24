@@ -1,16 +1,79 @@
 [comment encoding = UTF-8 /]
 [module crud('http://www.eclipse.org/uml2/5.0.0/UML')]
 
-
-[template public crudMain(c : Class)]
-[c.crudModule()/]
-[c.crudService()/]
+[template public crudMain(m : Model, path : String)]
+[let filePath : String = path.concat('crud/')]
+	[m.crudModule(filePath)/]
+	[m.crudService(filePath)/]
+[/let]
 [/template]
 
-[template public crudModule(c : Class)]
+[template public crudModule(m : Model, path : String)]
+[file (path.concat('crud.mod.js'), false, 'UTF-8')]
+(function () {
+    var crud = angular.module('CrudModule', ['['/]'restangular'[']'/]);
 
+    crud.config(['['/]'RestangularProvider', function (rp) {
+            rp.setBaseUrl('webresources');
+        }[']'/]);
+})();
+[/file]
 [/template]
 
-[template public crudService(c : Class)]
+[template public crudService(m : Model, path : String)]
+[file (path.concat('crud.svc.js'), false, 'UTF-8')]
+(function () {
+    var crud = angular.module('CrudModule');
 
+    crud.factory('CRUDUtils', ['['/]'Restangular', function (RestAngular) {
+            function crudFunction($scope) {
+                this.api = RestAngular.all(this.url);
+                $scope.currentRecord = {};
+                $scope.records = ['[]'/];
+                this.editMode = false;
+
+                this.fetchRecords = function () {
+                    var self = this;
+                    this.api.getList().then(function (data) {
+                        $scope.records = data;
+                        $scope.currentRecord = {};
+                        self.editMode = false;
+                    });
+                };
+                this.createRecord = function () {
+                    this.editMode = true;
+                    $scope.currentRecord = {};
+                };
+                this.saveRecord = function () {
+                    var self = this;
+                    if ($scope.currentRecord.id) {
+                        $scope.currentRecord.put().then(function () {
+                            self.fetchRecords();
+                        });
+                    } else {
+                        this.api.post($scope.currentRecord).then(function () {
+                            self.fetchRecords();
+                        });
+                    }
+                };
+                this.deleteRecord = function (record) {
+                    var self = this;
+                    record.remove().then(function () {
+                        self.fetchRecords();
+                    });
+                };
+                this.editRecord = function (record) {
+                    $scope.currentRecord = RestAngular.copy(record);
+                    this.editMode = true;
+                };
+            }
+            ;
+            return {
+                extendCtrl: function (obj, scope) {
+                    crudFunction.call(obj, scope);
+                }
+            };
+        }[']'/]);
+})();
+[/file]
 [/template]
