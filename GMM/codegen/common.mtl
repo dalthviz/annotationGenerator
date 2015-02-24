@@ -1,0 +1,7 @@
+[comment encoding = UTF-8 /]
+[module common('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import index /]
+[template public generate(m : Model)]
+[comment @main /]
+[m.indexMain()/]
+[/template]
