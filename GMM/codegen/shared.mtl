@@ -3,7 +3,8 @@
 [import mocks /]
 [import crud /]
 
-[template public generateElement(m : Model)]
+[template public generate(m : Model)]
+[comment @main /]
 [file ('index.html', false, 'UTF-8')]
 	<!-- test -->
 [/file]
