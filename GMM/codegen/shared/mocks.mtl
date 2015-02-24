@@ -1,0 +1,16 @@
+[comment encoding = UTF-8 /]
+[module mocks('http://www.eclipse.org/uml2/5.0.0/UML')]
+
+
+[template public mocksMain(c : Class)]
+[c.mocksModule()/]
+[c.mocksService()/]
+[/template]
+
+[template public mocksModule(c : Class)]
+
+[/template]
+
+[template public mocksService(c : Class)]
+
+[/template]

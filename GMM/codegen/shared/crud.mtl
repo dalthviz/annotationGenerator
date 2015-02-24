@@ -1,0 +1,16 @@
+[comment encoding = UTF-8 /]
+[module crud('http://www.eclipse.org/uml2/5.0.0/UML')]
+
+
+[template public crudMain(c : Class)]
+[c.crudModule()/]
+[c.crudService()/]
+[/template]
+
+[template public crudModule(c : Class)]
+
+[/template]
+
+[template public crudService(c : Class)]
+
+[/template]
