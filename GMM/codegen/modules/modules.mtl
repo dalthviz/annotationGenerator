@@ -85,8 +85,13 @@
 				<tr ng-repeat="record in records">
 					[for (a : Property | c.getAllAttributes())]
 					[if (a.name <> 'id')]
+                    [if (a.type.name = 'Date')]
+                    <td>{{record.[a.name/] | date}}</td>
+                    [/if]
+                    [if (a.type.name <> 'Date')]
 					<td>{{record.[a.name/]}}</td>
 					[/if]
+                    [/if]
 					[/for]
 					<td>
 						<button class="btn btn-default btn-sm" ng-click="[ctrl/].editRecord(record)"><span class="glyphicon glyphicon-edit"></span> Edit</button>
