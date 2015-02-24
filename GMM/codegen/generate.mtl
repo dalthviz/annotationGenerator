@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module generate('http://www.eclipse.org/uml2/5.0.0/UML')]
-[import GMM::codegen::shared::shared /]
+[import shared /]
 
 [template public generate(m : Class)]
 [comment @main/]
