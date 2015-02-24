@@ -1,9 +1,34 @@
 [comment encoding = UTF-8 /]
 [module index('http://www.eclipse.org/uml2/5.0.0/UML')]
 
-[template public indexMain(m : Model)]
-[m.index()/]
+[query public getClasses(m : Model) : Set(Class) = m.packagedElement->filter(Class) /]
 
+[template public indexMain(m : Model)]
+[m.appjs()/]
+[m.index()/]
+[/template]
+
+[template public appjs(m : Model)]
+[file ('src/app.js', false, 'UTF-8')]
+(function () {
+
+    var mainApp = angular.module('mainApp', ['['/]
+        'ngRoute',
+        [for (c : Class | m.getClasses())] 
+        '[c.name.toLowerFirst()/]Module', 
+        [/for]
+        'countryModule'
+    [']'/]);
+
+    mainApp.config(['['/]'$routeProvider', function ($routeProvider) {
+            $routeProvider
+            [for (c : Class | m.getClasses())]
+                .when('/[c.name.toLowerFirst()/]', {templateUrl: 'src/modules/[c.name.toLowerFirst()/]/[c.name.toLowerFirst()/].tpl.html'})
+            [/for]
+                .otherwise('/');
+        }[']'/]);
+})();
+[/file]
 [/template]
 
 [template public index(m : Model)]
@@ -28,17 +53,18 @@
         <script src="src/shared/mocks/mock.mod.js"></script>
         <script src="src/shared/mocks/mock.svc.js"></script>
 
-        <script src="src/modules/sport/sport.mod.js"></script>
-        <script src="src/modules/sport/sport.ctrl.js"></script>
-        <script src="src/modules/country/country.mod.js"></script>
-        <script src="src/modules/country/country.ctrl.js"></script>
+        [for (c : Class | m.getClasses())]
+        <script src="src/modules/[c.name.toLowerFirst()/]/[c.name.toLowerFirst()/].mod.js"></script>
+        <script src="src/modules/[c.name.toLowerFirst()/]/[c.name.toLowerFirst()/].ctrl.js"></script>
+
+        [/for]
     </head>
     <body>
         <div class="container">
             <div class="col-md-2">
                 <ul class="nav nav-pills nav-stacked">
-				[for (c : Class | m.packagedElement->filter(Class))]
-					<li><a href="#/[c.name.toLowerFirst()/]">[c.name/]</a></li>
+				[for (c : Class | m.getClasses())]
+                    <li><a href="#/[c.name.toLowerFirst()/]">[c.name/]</a></li>
 				[/for]
                 </ul>
             </div>
