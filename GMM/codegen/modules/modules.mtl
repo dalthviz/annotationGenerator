@@ -73,7 +73,7 @@
 		<table class="table table-striped table-bordered">
 			<thead>
 				<tr>
-					[for (a : Property | c.attribute)]
+					[for (a : Property | c.getAllAttributes())]
 					[if (a.name <> 'id')]
 					<th>[a.name.toUpperFirst()/]</th>
 					[/if]
@@ -83,7 +83,7 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="record in records">
-					[for (a : Property | c.attribute)]
+					[for (a : Property | c.getAllAttributes())]
 					[if (a.name <> 'id')]
 					<td>{{record.[a.name/]}}</td>
 					[/if]
@@ -98,7 +98,7 @@
 	</div>
 	<div ng-show="[ctrl/].editMode">
 		<form name="[c.name.toLowerFirst()/]Form" role="form">
-			[for (a : Property | c.attribute)]
+			[for (a : Property | c.getAllAttributes())]
 			[if (a.name = 'id')]
 			<input id="id" class="form-control" type="hidden" ng-model="currentRecord.id"/>
 			[/if]
