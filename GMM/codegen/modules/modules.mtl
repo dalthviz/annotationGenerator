@@ -56,7 +56,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#">Sport</a>
+					<a class="navbar-brand" href="#">[c.name/]</a>
 				</div>
 
 				<!-- Collect the nav links, forms, and other content for toggling -->
@@ -102,32 +102,32 @@
 			[if (a.name = 'id')]
 			<input id="id" class="form-control" type="hidden" ng-model="currentRecord.id"/>
 			[/if]
-				[if (a.name <> 'id')]
-					[if (a.type.name = 'String')]
-				<div class="form-group">
-					<label for="[a.name/]">[a.name/]</label>
-					<input id="[a.name/]" class="form-control" type="text" ng-model="currentRecord.[a.name/]"/>
-				</div>
-				[/if]
-				[if (a.type.name = 'Long' or a.type.name = 'Integer')]
-				<div class="form-group">
-					<label for="[a.name/]">[a.name/]</label>
-					<input id="[a.name/]" class="form-control" type="number" ng-model="currentRecord.[a.name/]"/>
-				</div>
-				[/if]
-				[if (a.type.name = 'Date')]
-				<div class="form-group">
-					<label for="[a.name/]">[a.name/]</label>
-					<input id="[a.name/]" class="form-control" type="date" ng-model="currentRecord.[a.name/]"/>
-				</div>
-				[/if]
-				[if (a.type.name = 'Boolean')]
-				<div class="form-group" >
-				    <label>
-			    	  <input id="[a.name/]" name="[a.name/]" ng-value="false" type="checkbox" ng-model="currentRecord.[a.name/]"> [a.name/]
-			    	</label>
-				</div>
-				[/if]
+			[if (a.name <> 'id')]
+			[if (a.type.name = 'String')]
+			<div class="form-group">
+				<label for="[a.name/]">[a.name.toUpperFirst()/]</label>
+				<input id="[a.name/]" class="form-control" type="text" ng-model="currentRecord.[a.name/]"/>
+			</div>
+			[/if]
+			[if (a.type.name = 'Long' or a.type.name = 'Integer')]
+			<div class="form-group">
+				<label for="[a.name/]">[a.name.toUpperFirst()/]</label>
+				<input id="[a.name/]" class="form-control" type="number" ng-model="currentRecord.[a.name/]"/>
+			</div>
+			[/if]
+			[if (a.type.name = 'Date')]
+			<div class="form-group">
+				<label for="[a.name/]">[a.name.toUpperFirst()/]</label>
+				<input id="[a.name/]" class="form-control" type="date" ng-model="currentRecord.[a.name/]"/>
+			</div>
+			[/if]
+			[if (a.type.name = 'Boolean')]
+			<div class="form-group" >
+			    <label>
+		    	  <input id="[a.name/]" name="[a.name/]" ng-value="false" type="checkbox" ng-model="currentRecord.[a.name/]"> [a.name.toUpperFirst()/]
+		    	</label>
+			</div>
+			[/if]
 			[/if]
 			[/for]
 		</form>
