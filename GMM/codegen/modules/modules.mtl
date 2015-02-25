@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module modules('http://www.eclipse.org/uml2/5.0.0/UML')]
-[query public getAllAttribs(c : Class) : OrderedSet(Property) = c.getAllAttributes()->select( a | a.name <> 'id')->sortedBy(name) /]
+[query public getAllAttribs(c : Class) : OrderedSet(Property) = c.allAttributes()->select( a | a.name <> 'id') /]
 
 [template public moduleMain(c : Class, path : String)]
 [let filePath : String = path.concat(c.name.toLowerFirst()+'/'+c.name.toLowerFirst())]
