@@ -11,10 +11,20 @@
 [template public crudModule(m : Model, path : String)]
 [file (path.concat('crud.mod.js'), false, 'UTF-8')]
 (function () {
-    var crud = angular.module('CrudModule', ['['/]'restangular'[']'/]);
+    var crud = angular.module('CrudModule', ['['/]'restangular', 'ui.bootstrap'[']'/]);
 
     crud.config(['['/]'RestangularProvider', function (rp) {
             rp.setBaseUrl('webresources');
+            rp.addResponseInterceptor(function (data, operation) {
+                var extractedData;
+                if (operation === "getList") {
+                    extractedData = data.records;
+                    extractedData.totalRecords = data.totalRecords;
+                } else {
+                    extractedData = data;
+                }
+                return extractedData;
+            });
         }[']'/]);
 })();
 [/file]
@@ -32,10 +42,20 @@
                 $scope.records = ['[]'/];
                 this.editMode = false;
 
+                this.pageChanged = function () {
+                    this.fetchRecords();
+                };
+
+                $scope.maxSize = 5;
+                $scope.itemsPerPage = 5;
+                $scope.totalItems = 0;
+                $scope.currentPage = 1;
+
                 this.fetchRecords = function () {
                     var self = this;
-                    this.api.getList().then(function (data) {
+                    this.api.getList(null, {page: $scope.currentPage, maxRecords: $scope.itemsPerPage}).then(function (data) {
                         $scope.records = data;
+                        $scope.totalItems = data.totalRecords;
                         $scope.currentRecord = {};
                         self.editMode = false;
                     });
