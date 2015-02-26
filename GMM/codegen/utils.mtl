@@ -1,10 +1,30 @@
 [comment encoding = UTF-8 /]
 [module utils('http://www.eclipse.org/uml2/5.0.0/UML')]
 
-[template public getDTOName(c : Class)]
-[c.name.concat('DTO')/]
-[/template]
-
 [query public getAllAttribs(c : Class) : OrderedSet(Property) = c.allAttributes()->select( a | a.name <> 'id') /]
 
 [query public getClasses(m : Model) : Set(Class) = m.packagedElement->filter(Class) /]
+
+[template public getPageName(c : Class)]
+[c.name.toUpperFirst().concat('PageDTO')/]
+[/template]
+
+[template public getDTOName(c : Class)]
+[c.name.toUpperFirst().concat('DTO')/]
+[/template]
+
+[template public basePck(c : Class, suffix : String)]
+['co.edu.uniandes.csw'.concat(c.getModelName()).concat('.'+c.name).concat(suffix)/]
+[/template]
+
+[template public getModelName(c : Class)]
+[c.getModel().name/]
+[/template]
+
+[template public getBackendProjectName(c : Class, suffix : String)]
+[c.getModelName().concat('.backend').concat(suffix)/]
+[/template]
+
+[template public getFrontendProjectName(c : Class, suffix : String)]
+[c.getModelName().concat('.frontend').concat(suffix)/]
+[/template]
