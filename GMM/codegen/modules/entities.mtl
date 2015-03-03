@@ -33,7 +33,7 @@
 (function () {
     var [mod /] = angular.module('[mod /]');
 
-    [mod /].controller('[c.name.toLowerFirst()/]Ctrl', ['['/]'$scope', '[c.name.toLowerFirst()/]Service', function ($scope, [c.name.toLowerFirst()/]Service,) {
+    [mod /].controller('[c.name.toLowerFirst()/]Ctrl', ['['/]'$scope', '[c.name.toLowerFirst()/]Service', function ($scope, [c.name.toLowerFirst()/]Service) {
             [c.name.toLowerFirst()/]Service.extendCtrl(this, $scope);
             this.fetchRecords();
         }[']'/]);
