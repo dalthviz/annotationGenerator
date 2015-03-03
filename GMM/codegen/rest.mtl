@@ -1,9 +1,0 @@
-[comment encoding = UTF-8 /]
-[module rest('http://www.eclipse.org/uml2/5.0.0/UML')/]
-[import jersey /]
-[import utils /]
-
-[template public generate(c : Class)]
-[comment @main /]
-[c.restMain(c.getBackendProjectName('/src/main/'))/]
-[/template]
