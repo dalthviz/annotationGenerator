@@ -5,8 +5,8 @@
 [template public genReadMe(m : Model)]
 [file ('README.md', false, 'UTF-8')]
 #**API Rest**
-##**IntroducciÛn**
-La comunicaciÛn entre cliente y servidor se realiza intercambiando objetos JSON. Para cada entidad se hace un mapeo a JSON, donde cada uno de sus atributos se transforma en una propiedad de un objeto JSON. Todos los servicios se generan en la URL /[m.getProjectName('/webresources')/]/. Por defecto, todas las entidades tienen un atributo `id`, con el cual se identifica cada registro:
+##**Introducci√≥n**
+La comunicaci√≥n entre cliente y servidor se realiza intercambiando objetos JSON. Para cada entidad se hace un mapeo a JSON, donde cada uno de sus atributos se transforma en una propiedad de un objeto JSON. Todos los servicios se generan en la URL /[m.getProjectName('/webresources')/]/. Por defecto, todas las entidades tienen un atributo `id`, con el cual se identifica cada registro:
 
 ```javascript
 {
@@ -18,29 +18,29 @@ La comunicaciÛn entre cliente y servidor se realiza intercambiando objetos JSON.
 }
 ```
 
-###**CRUD B·sico**
-Para los servicios de CRUD B·sico, Cuando se transmite informaciÛn sobre un registro especÌfico, se realiza enviando un objeto con la estructura mencionada en la secciÛn anterior.
-La ˙nica excepciÛn se presenta al solicitar al servidor una lista de los registros en la base de datos, que incluye informaciÛn adicional para manejar paginaciÛn de lado del servidor.
+###**CRUD B√°sico**
+Para los servicios de CRUD B√°sico, Cuando se transmite informaci√≥n sobre un registro espec√≠fico, se realiza enviando un objeto con la estructura mencionada en la secci√≥n anterior.
+La √∫nica excepci√≥n se presenta al solicitar al servidor una lista de los registros en la base de datos, que incluye informaci√≥n adicional para manejar paginaci√≥n de lado del servidor.
 
-La respuesta del servidor al solicitar una colecciÛn presenta el siguiente formato:
+La respuesta del servidor al solicitar una colecci√≥n presenta el siguiente formato:
 
 ```javascript
 {
     totalRecords: 0, //cantidad de registros en la base de datos
-    records: ['[]'/] //collecciÛn con los datos solicitados. cada objeto tiene la estructura de la entidad.
+    records: ['[]'/] //collecci√≥n con los datos solicitados. cada objeto tiene la estructura de la entidad.
 }
 ```
 
 ###**Maestro Detalle**
-El API REST para los componentes Maestro/Detalle tiene un funcionamiento distinto al API de CRUD B·sico, dado que est· diseÒado para poder guardar toda la informaciÛn de una entidad y sus detalles en una transacciÛn. La estructura de los datos intercambiados entre el cliente y el servidor cumple con las siguientes reglas:
+El API REST para los componentes Maestro/Detalle tiene un funcionamiento distinto al API de CRUD B√°sico, dado que est√° dise√±ado para poder guardar toda la informaci√≥n de una entidad y sus detalles en una transacci√≥n. La estructura de los datos intercambiados entre el cliente y el servidor cumple con las siguientes reglas:
 
-1. El objeto JSON tiene un atributo correspondiente a la entidad padre. La estructura interna de este objeto corresponde a la misma usada en el CRUD b·sico de la entidad.
+1. El objeto JSON tiene un atributo correspondiente a la entidad padre. La estructura interna de este objeto corresponde a la misma usada en el CRUD b√°sico de la entidad.
 2. Por cada entidad detalle, se crea cuatro colecciones JSON correspondientes a las acciones a realizar con los datos:
-    + Una colecciÛn con los datos a listar en el cliente. Su nombre sigue el formato *list`nombreEntidad`*
-    + Una colecciÛn con los datos a crear en el servidor. Su nombre sigue el formato *create`nombreEntidad`*
-    + Una colecciÛn con los datos a actualizar en el servidor. Su nombre sigue el formato *update`nombreEntidad`*
-    + Una colecciÛn con los datos a eliminar en el servidor. Su nombre sigue el formato *delete`nombreEntidad`*
-3. La estructura de los objetos dentro de las colecciones corresponde con la estructura b·sica de la entidad correspondiente.
+    + Una colecci√≥n con los datos a listar en el cliente. Su nombre sigue el formato *list`nombreEntidad`*
+    + Una colecci√≥n con los datos a crear en el servidor. Su nombre sigue el formato *create`nombreEntidad`*
+    + Una colecci√≥n con los datos a actualizar en el servidor. Su nombre sigue el formato *update`nombreEntidad`*
+    + Una colecci√≥n con los datos a eliminar en el servidor. Su nombre sigue el formato *delete`nombreEntidad`*
+3. La estructura de los objetos dentro de las colecciones corresponde con la estructura b√°sica de la entidad correspondiente.
 
 Ejemplo de una entidad :
 
@@ -66,10 +66,10 @@ Ejemplo de una entidad :
     deletedetail_n: ['[]'/],
 }
 ```
-##***API de la aplicaciÛn [m.name/]***
+##***API de la aplicaci√≥n [m.name/]***
 [for(class : Class | m.getClasses()) ]
 ###**Entidad [ class.name /]**
-####**CRUD B·sico**
+####**CRUD B√°sico**
 En la siguiente tabla se detalla los servicios REST generados para la entidad [ class.name /], la estructura del objeto que intercambian y sus respectivas funciones.
 
 #####**Estructura de objeto [ class.name /]**
@@ -81,9 +81,9 @@ En la siguiente tabla se detalla los servicios REST generados para la entidad [ 
 }
 ```
 #####**Servicios**
-MÈtodo|URI|AcciÛn|Par·metros|Retorno
+M√©todo|URI|Acci√≥n|Par√°metros|Retorno
 :--:|:--:|:--:|:--:|:--:
-**GET**|/[ class.name.toLowerFirst() /]s|Obtener todos los objetos de [ class.name /] (RETRIEVE)|**@QueryParam page**: p·gina a consultar<br>**@QueryParam maxRecords**: cantidad de registros a consultar<br><br>*Si se omite alguno de estos par·metros se obtiene todos los registros en la base de datos*|ColecciÛn JSON con instancias de [ class.name /]
+**GET**|/[ class.name.toLowerFirst() /]s|Obtener todos los objetos de [ class.name /] (RETRIEVE)|**@QueryParam page**: p√°gina a consultar<br>**@QueryParam maxRecords**: cantidad de registros a consultar<br><br>*Si se omite alguno de estos par√°metros se obtiene todos los registros en la base de datos*|colecci√≥n JSON con instancias de [ class.name /]
 **GET**|/[ class.name.toLowerFirst() /]s/:id|Obtener los atributos de una instancia de [ class.name /] (RETRIEVE)|**@PathParam id**: Identificador del registro|Objeto JSON con detalle de la instancia de [ class.name /]
 **POST**|/[ class.name.toLowerFirst() /]s|Crear una nueva instancia de la entidad [ class.name /] (CREATE)|Objeto JSON de la entidad|Objeto JSON de [ class.name /] creado
 **PUT**|/[ class.name.toLowerFirst() /]s|Actualiza una instancia de la entidad [ class.name /] (UPDATE)|Objeto JSON de [ class.name /]|Objeto JSON [ class.name /] actualizado
