@@ -76,8 +76,7 @@ En la siguiente tabla se detalla los servicios REST generados para la entidad [ 
 ```javascript
 {
     [for(attr : Property | class.getAllAttributes()) separator(',')]
-    [ attr.name /]: '' /*Tipo [ attr.type.name /]*/
-    [/for]
+    [ attr.name /]: '' /*Tipo [ attr.type.name /]*/[/for]
 }
 ```
 #####**Servicios**
