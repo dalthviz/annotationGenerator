@@ -7,6 +7,7 @@
 	[c.genModule(filePath)/]
 	[c.genCtrl(filePath)/]
 	[c.genView(filePath)/]
+    [c.genService(filePath)/]
 [/let]
 [/template]
 
@@ -32,14 +33,28 @@
 (function () {
     var [mod /] = angular.module('[mod /]');
 
-    [mod /].controller('[c.name.toLowerFirst()/]Ctrl', ['['/]'$scope', 'CRUDUtils', '[c.name.toLowerFirst()/].context', function ($scope, CRUDUtils, context) {
-            this.url = context;
-            CRUDUtils.extendCtrl(this, $scope);
+    [mod /].controller('[c.name.toLowerFirst()/]Ctrl', ['['/]'$scope', '[c.name.toLowerFirst()/]Service', function ($scope, [c.name.toLowerFirst()/]Service) {
+            [c.name.toLowerFirst()/]Service.extendCtrl(this, $scope);
             this.fetchRecords();
         }[']'/]);
 })();
 [/file]
 [/let]
+[/template]
+
+[template public genService(c : Class, path : String)]
+[file (path.concat('.svc.js'), false, 'UTF-8')]
+[let mod : String = c.name.toLowerFirst().concat('Module')]
+(function(){
+    var [mod /] = angular.module('[mod /]');
+    
+    [mod /].service('[c.name.toLowerFirst()/]Service', ['['/]'CRUDBase','[c.name.toLowerFirst()/].context', function(CRUDBase, context){
+            this.url = context;
+            CRUDBase.extendService(this);
+    }[']'/]);
+})();
+[/let]
+[/file]
 [/template]
 
 [template public genView(c : Class, path : String)]

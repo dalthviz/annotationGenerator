@@ -56,6 +56,7 @@
         [for (c : Class | m.getClasses())]
         <script src="src/modules/[c.name.toLowerFirst()/]/[c.name.toLowerFirst()/].mod.js"></script>
         <script src="src/modules/[c.name.toLowerFirst()/]/[c.name.toLowerFirst()/].ctrl.js"></script>
+        <script src="src/modules/[c.name.toLowerFirst()/]/[c.name.toLowerFirst()/].svc.js"></script>
 
         [/for]
     </head>
