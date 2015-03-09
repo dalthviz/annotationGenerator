@@ -89,6 +89,34 @@ Método|URI|Acción|Parámetros|Retorno
 **PUT**|/[ class.name.toLowerFirst() /]s/:id|Actualiza una instancia de la entidad [ class.name /] (UPDATE)|Objeto JSON de [ class.name /]|Objeto JSON [ class.name /] actualizado
 **DELETE**|/[ class.name.toLowerFirst() /]s/:id|Borra instancia de [ class.name /] en el servidor (DELETE)|<strong>@PathParam id</strong>: Identificador del registro| 
 
+[let refs : String = 1]
+####Maestro Detalle de [class.name/]
+#####Estructura de objeto JSON
+La estructura del objeto JSON que se intercambia con el servidor corresponde al siguiente ejemplo:
+
+```javascript
+{
+	id:null,
+	[class.name.toLowerFirst()/]Entity:{},
+	[for(asc : Property | class.allAttributes())]
+	list[asc.name/]:['[]'/],
+	create[asc.name/]:['[]'/],
+	update[asc.name/]:['[]'/],
+	delete[asc.name/]:['[]'/]
+	[/for]
+}
+```
+
+#####Servicios
+A diferencia del API para CRUD Básico, el API de Maestro/Detalle no provee un servicio para listar los registros de la entidad maestra. Los servicios generados para el componente Maestro/Detalle de [class.name/] son los siguientes:
+
+Método|URI|Acción|Parámetros|Retorno
+:--:|:--:|:--:|:--:|:--:
+**GET**|/[class.name/]Master/:id|Obtener los atributos de una instancia de [class.name/] y colecciones de las entidades detalle|**@PathParam id**: Identificador del registro|Objeto JSON con detalle de la instancia de [class.name/]
+**POST**|/[class.name/]Master|Crear una nueva instancia de la entidad [class.name/]|Objeto JSON de la entidad|Objeto creado
+**PUT**|/[class.name/]Master/:id|Actualiza una instancia de la entidad [class.name/]|Objeto JSON de la entidad|Objeto actualizado
+**DELETE**|/[class.name/]Master/:id|Borra instancia de la entidad en el servidor|**@PathParam id**: Identificador del registro|
+[/let]
 [/for]
 [/file]
 [/template]
