@@ -89,6 +89,32 @@ Método|URI|Acción|Parámetros|Retorno
 **PUT**|/[ class.name.toLowerFirst() /]s/:id|Actualiza una instancia de la entidad [ class.name /] (UPDATE)|Objeto JSON de [ class.name /]|Objeto JSON [ class.name /] actualizado
 **DELETE**|/[ class.name.toLowerFirst() /]s/:id|Borra instancia de [ class.name /] en el servidor (DELETE)|<strong>@PathParam id</strong>: Identificador del registro| 
 
+[if (class.hasReferences())]
+####Maestro Detalle de [class.name/]
+#####Estructura de objeto JSON
+La estructura del objeto JSON que se intercambia con el servidor corresponde al siguiente ejemplo:
+
+```javascript
+{
+}
+```
+
+#####Servicios
+A diferencia del API para CRUD Básico, el API de Maestro/Detalle no provee un servicio para listar los registros de la entidad maestra. Los servicios generados para el componente Maestro/Detalle de [class.name/] son los siguientes:
+
+Método|URI|Acción|Parámetros|Cuerpo|Retorno
+:--:|:--:|:--:|:--:|:--:
+[for (asc : Association | class.getAssociations())]
+    [let el : Set(Property) = asc.getAllAttributes()->select(a|a.type<>class and a.isNavigable())]
+        [for (elem : Property | el)]
+**GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener registros de [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]||Arreglo de objetos [elem.name/]
+**POST**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Creación de registros [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de objetos [elem.name/] a crear|Arreglo de objetos [elem.name/] creados con sus respectivos ID
+**PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de registros [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de objetos [elem.name/] a actualizar|Arreglo de objetos [elem.name/] actualizados
+**DELETE**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Eliminación de registros [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de atributo `id` de [elem.name/] a eliminar|
+        [/for]
+    [/let]
+[/for]
+[/if]
 [/for]
 [/file]
 [/template]
