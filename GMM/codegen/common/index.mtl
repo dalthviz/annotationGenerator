@@ -1,7 +1,6 @@
 [comment encoding = UTF-8 /]
 [module index('http://www.eclipse.org/uml2/5.0.0/UML')]
-
-[query public getClasses(m : Model) : Set(Class) = m.packagedElement->filter(Class) /]
+[import utils /]
 
 [template public indexMain(m : Model)]
 [m.appjs()/]
@@ -57,6 +56,7 @@
         [for (c : Class | m.getClasses())]
         <script src="src/modules/[c.name.toLowerFirst()/]/[c.name.toLowerFirst()/].mod.js"></script>
         <script src="src/modules/[c.name.toLowerFirst()/]/[c.name.toLowerFirst()/].ctrl.js"></script>
+        <script src="src/modules/[c.name.toLowerFirst()/]/[c.name.toLowerFirst()/].svc.js"></script>
 
         [/for]
     </head>
