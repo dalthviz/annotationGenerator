@@ -9,8 +9,12 @@ c.allAttributes()->select( a | a.name <> 'id')
 m.packagedElement->filter(Class)
 /]
 
-[query public hasReferences(c : Class) : Boolean =
-c.getAssociations()->select(asc | asc.getAllAttributes()->select(a | a.type <> c and a.isNavigable())->notEmpty())->notEmpty()
+[query public isMaster(c : Class) : Boolean =
+c.getAssociations()->select(asc | asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c)->notEmpty())->notEmpty()
+/]
+
+[query public getChildProperty(asc : Association, c : Class) : Set(Property) =
+asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c)
 /]
 
 [template public getModelName(c : Class)]

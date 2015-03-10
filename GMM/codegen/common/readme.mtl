@@ -31,41 +31,6 @@ La respuesta del servidor al solicitar una colección presenta el siguiente form
 }
 ```
 
-###Maestro Detalle
-El API REST para los componentes Maestro/Detalle tiene un funcionamiento distinto al API de CRUD Básico, dado que está diseñado para poder guardar toda la información de una entidad y sus detalles en una transacción. La estructura de los datos intercambiados entre el cliente y el servidor cumple con las siguientes reglas:
-
-1. El objeto JSON tiene un atributo correspondiente a la entidad padre. La estructura interna de este objeto corresponde a la misma usada en el CRUD básico de la entidad.
-2. Por cada entidad detalle, se crea cuatro colecciones JSON correspondientes a las acciones a realizar con los datos:
-    + Una colección con los datos a listar en el cliente. Su nombre sigue el formato *list`nombreEntidad`*
-    + Una colección con los datos a crear en el servidor. Su nombre sigue el formato *create`nombreEntidad`*
-    + Una colección con los datos a actualizar en el servidor. Su nombre sigue el formato *update`nombreEntidad`*
-    + Una colección con los datos a eliminar en el servidor. Su nombre sigue el formato *delete`nombreEntidad`*
-3. La estructura de los objetos dentro de las colecciones corresponde con la estructura básica de la entidad correspondiente.
-
-Ejemplo de una entidad :
-
-```javascript
-{
-    //objeto para entidad maestra llamada master
-    masterEntity: {},
-    //4 listas para entidad detalle detail_1
-    listdetail_1: ['[]'/],
-    createdetail_1: ['[]'/],
-    updatedetail_1: ['[]'/],
-    deletedetail_1: ['[]'/],
-    //4 colecciones para entidad detalle detail_2
-    listdetail_2: ['[]'/],
-    createdetail_2: ['[]'/],
-    updatedetail_2: ['[]'/],
-    deletedetail_2: ['[]'/],
-    ...
-    //4 colecciones para entidad detalle detail_n
-    listdetail_n: ['[]'/],
-    createdetail_n: ['[]'/],
-    updatedetail_n: ['[]'/],
-    deletedetail_n: ['[]'/],
-}
-```
 ##API de la aplicación [m.name/]
 [for(class : Class | m.getClasses()) ]
 ###Entidad [ class.name /]
@@ -89,28 +54,25 @@ Método|URI|Acción|Parámetros|Retorno
 **PUT**|/[ class.name.toLowerFirst() /]s/:id|Actualiza una instancia de la entidad [ class.name /] (UPDATE)|Objeto JSON de [ class.name /]|Objeto JSON [ class.name /] actualizado
 **DELETE**|/[ class.name.toLowerFirst() /]s/:id|Borra instancia de [ class.name /] en el servidor (DELETE)|<strong>@PathParam id</strong>: Identificador del registro| 
 
-[if (class.hasReferences())]
-####Maestro Detalle de [class.name/]
-#####Estructura de objeto JSON
-La estructura del objeto JSON que se intercambia con el servidor corresponde al siguiente ejemplo:
-
-```javascript
-{
-}
-```
-
+[if (class.isMaster())]
+####Maestros Detalle de [class.name/]
 #####Servicios
 A diferencia del API para CRUD Básico, el API de Maestro/Detalle no provee un servicio para listar los registros de la entidad maestra. Los servicios generados para el componente Maestro/Detalle de [class.name/] son los siguientes:
 
 Método|URI|Acción|Parámetros|Cuerpo|Retorno
 :--:|:--:|:--:|:--:|:--:
 [for (asc : Association | class.getAssociations())]
-    [let el : Set(Property) = asc.getAllAttributes()->select(a|a.type<>class and a.isNavigable())]
+    [let el : Set(Property) = asc.getChildProperty(class)]
         [for (elem : Property | el)]
+			[if (elem.isComposite())]
 **GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener registros de [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]||Arreglo de objetos [elem.name/]
 **POST**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Creación de registros [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de objetos [elem.name/] a crear|Arreglo de objetos [elem.name/] creados con sus respectivos ID
 **PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de registros [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de objetos [elem.name/] a actualizar|Arreglo de objetos [elem.name/] actualizados
 **DELETE**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Eliminación de registros [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de atributo `id` de [elem.name/] a eliminar|
+			[else]
+**GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener registros de [elem.name/] asociados a [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]||Arreglo de objetos [elem.name/] asociados a [class.name/]
+**PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de referencias a [elem.name/] desde [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de objetos [elem.name/] a asociar|Arreglo de objetos [elem.name/] asociados
+			[/if]
         [/for]
     [/let]
 [/for]
