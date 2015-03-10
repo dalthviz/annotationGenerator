@@ -49,7 +49,7 @@ En la siguiente tabla se detalla los servicios REST generados para la entidad [ 
 ```
 #####Servicios
 Método|URI|Acción|Parámetros|Cuerpo|Retorno
-:--:|:--:|:--:|:--:|:--:
+:--:|:--:|:--:|:--:|:--:|:--:
 **GET**|/[ class.name.toLowerFirst() /]s|Obtener todos los objetos JSON de [ class.name /] (RETRIEVE)|**@QueryParam page**: página a consultar<br>**@QueryParam maxRecords**: cantidad de registros a consultar<br><br>*Si se omite alguno de estos parámetros se obtiene todos los registros en la base de datos*||Objeto JSON con registros de [class.name/] y el total de registros en la base de datos
 **GET**|/[ class.name.toLowerFirst() /]s/:id|Obtener los atributos de una instancia de [ class.name /] en formato JSON(RETRIEVE)|**@PathParam id**: Identificador del registro||Objeto JSON con detalle de la instancia de [ class.name /]
 **POST**|/[ class.name.toLowerFirst() /]s|Crear una nueva instancia de la entidad [ class.name /] (CREATE)||Objeto JSON de [ class.name /] a crear|Objeto JSON de [ class.name /] creado
