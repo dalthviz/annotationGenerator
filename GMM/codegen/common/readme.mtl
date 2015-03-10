@@ -60,7 +60,7 @@ Método|URI|Acción|Parámetros|Retorno
 A diferencia del API para CRUD Básico, el API de Maestro/Detalle no provee un servicio para listar los registros de la entidad maestra. Los servicios generados para el componente Maestro/Detalle de [class.name/] son los siguientes:
 
 Método|URI|Acción|Parámetros|Cuerpo|Retorno
-:--:|:--:|:--:|:--:|:--:
+:--:|:--:|:--:|:--:|:--:|:--:
 [for (asc : Association | class.getAssociations())]
     [let el : Set(Property) = asc.getChildProperty(class)]
         [for (elem : Property | el)]
