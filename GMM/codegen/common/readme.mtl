@@ -59,19 +59,19 @@ Método|URI|Acción|Parámetros|Retorno
 #####Servicios
 A diferencia del API para CRUD Básico, el API de Maestro/Detalle no provee un servicio para listar los registros de la entidad maestra. Los servicios generados para el componente Maestro/Detalle de [class.name/] son los siguientes:
 
-Método|URI|Acción|Parámetros|Cuerpo|Retorno
-:--:|:--:|:--:|:--:|:--:|:--:
+Tipo|Método|URI|Acción|Parámetros|Cuerpo|Retorno
+:--:|:--:|:--:|:--:|:--:|:--:|:--:
 [for (asc : Association | class.getAssociations())]
     [let el : Set(Property) = asc.getChildProperty(class)]
         [for (elem : Property | el)]
 			[if (elem.isComposite())]
-**GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener registros de [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]||Arreglo de objetos [elem.name/]
-**POST**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Creación de registros [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de objetos [elem.name/] a crear|Arreglo de objetos [elem.name/] creados con sus respectivos ID
-**PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de registros [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de objetos [elem.name/] a actualizar|Arreglo de objetos [elem.name/] actualizados
-**DELETE**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Eliminación de registros [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de atributo `id` de [elem.name/] a eliminar|
+[elem.aggregation.toString().toUpperFirst()/]|**GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener registros de [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]||Arreglo de objetos [elem.name/]
+[elem.aggregation.toString().toUpperFirst()/]|**POST**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Creación de registros [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de objetos [elem.name/] a crear|Arreglo de objetos [elem.name/] creados con sus respectivos ID
+[elem.aggregation.toString().toUpperFirst()/]|**PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de registros [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de objetos [elem.name/] a actualizar|Arreglo de objetos [elem.name/] actualizados
+[elem.aggregation.toString().toUpperFirst()/]|**DELETE**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Eliminación de registros [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de atributo `id` de [elem.name/] a eliminar|
 			[else]
-**GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener registros de [elem.name/] asociados a [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]||Arreglo de objetos [elem.name/] asociados a [class.name/]
-**PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de referencias a [elem.name/] desde [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de objetos [elem.name/] a asociar|Arreglo de objetos [elem.name/] asociados
+[elem.aggregation.toString().toUpperFirst()/]|**GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener registros de [elem.name/] asociados a [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]||Arreglo de objetos [elem.name/] asociados a [class.name/]
+[elem.aggregation.toString().toUpperFirst()/]|**PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de referencias a [elem.name/] desde [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de objetos [elem.name/] a asociar|Arreglo de objetos [elem.name/] asociados
 			[/if]
         [/for]
     [/let]
