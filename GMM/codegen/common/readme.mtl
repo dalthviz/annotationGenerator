@@ -41,18 +41,20 @@ En la siguiente tabla se detalla los servicios REST generados para la entidad [ 
 ```javascript
 {
     [for(attr : Property | class.getAttributesWithRef()) separator(',\n')]
-    [ attr.name /]: '' /*Tipo [ attr.type.name /]*/[/for]
+    [if (attr.type.name <> 'Long' or attr.type.name <> 'Integer' or attr.type.name <> 'Date' or attr.type.name <> 'Boolean')]
+    [ attr.name /]: '' /*Tipo Long*/[else]
+    [ attr.name /]: '' /*Tipo [ attr.type.name /]*/[/if][/for]
 
 }
 ```
 #####Servicios
 Método|URI|Acción|Parámetros|Cuerpo|Retorno
 :--:|:--:|:--:|:--:|:--:
-**GET**|/[ class.name.toLowerFirst() /]s|Obtener todos los objetos de [ class.name /] (RETRIEVE)|**@QueryParam page**: página a consultar<br>**@QueryParam maxRecords**: cantidad de registros a consultar<br><br>*Si se omite alguno de estos parámetros se obtiene todos los registros en la base de datos*||Objeto JSON con registros de [class.name/] y el total de registros en la base de datos
-**GET**|/[ class.name.toLowerFirst() /]s/:id|Obtener los atributos de una instancia de [ class.name /] (RETRIEVE)|**@PathParam id**: Identificador del registro||Objeto JSON con detalle de la instancia de [ class.name /]
+**GET**|/[ class.name.toLowerFirst() /]s|Obtener todos los objetos JSON de [ class.name /] (RETRIEVE)|**@QueryParam page**: página a consultar<br>**@QueryParam maxRecords**: cantidad de registros a consultar<br><br>*Si se omite alguno de estos parámetros se obtiene todos los registros en la base de datos*||Objeto JSON con registros de [class.name/] y el total de registros en la base de datos
+**GET**|/[ class.name.toLowerFirst() /]s/:id|Obtener los atributos de una instancia de [ class.name /] en formato JSON(RETRIEVE)|**@PathParam id**: Identificador del registro||Objeto JSON con detalle de la instancia de [ class.name /]
 **POST**|/[ class.name.toLowerFirst() /]s|Crear una nueva instancia de la entidad [ class.name /] (CREATE)||Objeto JSON de [ class.name /] a crear|Objeto JSON de [ class.name /] creado
 **PUT**|/[ class.name.toLowerFirst() /]s/:id|Actualiza una instancia de la entidad [ class.name /] (UPDATE)|**@PathParam id**: Identificador del registro|Objeto JSON de [ class.name /]|Objeto JSON [ class.name /] actualizado
-**DELETE**|/[ class.name.toLowerFirst() /]s/:id|Borra instancia de [ class.name /] en el servidor (DELETE)|<strong>@PathParam id</strong>: Identificador del registro||
+**DELETE**|/[ class.name.toLowerFirst() /]s/:id|Borra instancia de [ class.name /] en el servidor (DELETE)|re<strong>@PathParam id</strong>: Identificador del registro||
 
 [if (class.isMaster())]
 ####Maestros Detalle de [class.name/]
@@ -65,13 +67,13 @@ Tipo|Método|URI|Acción|Parámetros|Cuerpo|Retorno
     [let el : Set(Property) = asc.getChildProperty(class)]
         [for (elem : Property | el)]
 			[if (elem.isComposite())]
-[elem.aggregation.toString().toUpperFirst()/]|**GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener registros de [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]||Arreglo de objetos [elem.name/]
-[elem.aggregation.toString().toUpperFirst()/]|**POST**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Creación de registros [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de objetos [elem.name/] a crear|Arreglo de objetos [elem.name/] creados con sus respectivos ID
-[elem.aggregation.toString().toUpperFirst()/]|**PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de registros [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de objetos [elem.name/] a actualizar|Arreglo de objetos [elem.name/] actualizados
-[elem.aggregation.toString().toUpperFirst()/]|**DELETE**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Eliminación de registros [elem.name/] hijos de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de atributo `id` de [elem.name/] a eliminar|
+[elem.aggregation.toString().toUpperFirst()/]|**GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener Objetos JSON de [elem.name/] dependientes de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]||Colección de objetos JSON de [elem.name/]
+[elem.aggregation.toString().toUpperFirst()/]|**POST**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Creación de instancias de [elem.name/] dependientes de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Colección de objetos JSON de [elem.name/] a crear|Colección de objetos JSON de [elem.name/] creados con sus respectivos ID
+[elem.aggregation.toString().toUpperFirst()/]|**PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de instancias de [elem.name/] dependientes de [class.name/]|**@PathParam id**: Identificador  de [class.name/]|Colección de objetos JSON de [elem.name/] a actualizar|Colección de objetos JSON de [elem.name/] actualizados
+[elem.aggregation.toString().toUpperFirst()/]|**DELETE**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Eliminación de instancias de [elem.name/] dependientes de [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Colección de atributo `id` de [elem.name/] a eliminar|
 			[else]
-[elem.aggregation.toString().toUpperFirst()/]|**GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener registros de [elem.name/] asociados a [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]||Arreglo de objetos [elem.name/] asociados a [class.name/]
-[elem.aggregation.toString().toUpperFirst()/]|**PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de referencias a [elem.name/] desde [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Arreglo de objetos [elem.name/] a asociar|Arreglo de objetos [elem.name/] asociados
+[elem.aggregation.toString().toUpperFirst()/]|**GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener instancias de [elem.name/] asociados con [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]||Colección de objetos JSON de [elem.name/] asociados con [class.name/]
+[elem.aggregation.toString().toUpperFirst()/]|**PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de referencias a [elem.name/] desde [class.name/]|**@PathParam id**: Identificador del registro de [class.name/]|Colección de objetos JSON de [elem.name/] a asociar|Colección de objetos JSON de [elem.name/] asociados
 			[/if]
         [/for]
     [/let]
