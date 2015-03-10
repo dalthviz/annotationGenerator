@@ -61,23 +61,37 @@ Método|URI|Acción|Parámetros|Cuerpo|Retorno
 #####Servicios
 A diferencia del API para CRUD Básico, el API de Maestro/Detalle no provee un servicio para listar los registros de la entidad maestra. Los servicios generados para el componente Maestro/Detalle de [class.name/] son los siguientes:
 
+[if(class.hasCompositeAssociations())]
+######Relaciones Composite
+
 Tipo|Método|URI|Acción|Parámetros|Cuerpo|Retorno
 :--:|:--:|:--:|:--:|:--:|:--:|:--:
-[for (asc : Association | class.getAssociations())]
+[for (asc : Association | class.getCompositeAssociations())]
     [let el : Set(Property) = asc.getChildProperty(class)]
         [for (elem : Property | el)]
-			[if (elem.isComposite())]
 [elem.aggregation.toString().toUpperFirst()/]|**GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener Objetos JSON de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]||Colección de objetos JSON de [elem.name/]([elem.type.name/])
 [elem.aggregation.toString().toUpperFirst()/]|**POST**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Creación de instancias de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de objetos JSON de [elem.name/]([elem.type.name/]) a crear|Colección de objetos JSON de [elem.name/]([elem.type.name/]) creados con sus respectivos ID
 [elem.aggregation.toString().toUpperFirst()/]|**PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de instancias de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de objetos JSON de [elem.name/]([elem.type.name/]) a actualizar|Colección de objetos JSON de [elem.name/]([elem.type.name/]) actualizados
 [elem.aggregation.toString().toUpperFirst()/]|**DELETE**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Eliminación de instancias de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de atributo `id` de [elem.name/]([elem.type.name/]) a eliminar|
-			[else]
-[elem.aggregation.toString().toUpperFirst()/]|**GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener instancias de [elem.name/]([elem.type.name/]) asociados con [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]||Colección de `id` de [elem.name/]([elem.type.name/]) asociados con [class.name/]
-[elem.aggregation.toString().toUpperFirst()/]|**PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de referencias a [elem.name/]([elem.type.name/]) desde [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de `id` de [elem.name/]([elem.type.name/]) a asociar|Colección de objetos JSON de [elem.name/]([elem.type.name/]) asociados
-			[/if]
         [/for]
     [/let]
 [/for]
+[/if]
+
+[if(class.hasSharedAssociations())]
+######Relaciones Shared
+
+Tipo|Método|URI|Acción|Parámetros|Cuerpo|Retorno
+:--:|:--:|:--:|:--:|:--:|:--:|:--:
+[for (asc : Association | class.getSharedAssociations())]
+    [let el : Set(Property) = asc.getChildProperty(class)]
+        [for (elem : Property | el)]
+[elem.aggregation.toString().toUpperFirst()/]|**GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener instancias de [elem.name/]([elem.type.name/]) asociados con [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]||Colección de `id` de [elem.name/]([elem.type.name/]) asociados con [class.name/]
+[elem.aggregation.toString().toUpperFirst()/]|**PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de referencias a [elem.name/]([elem.type.name/]) desde [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de `id` de [elem.name/]([elem.type.name/]) a asociar|Colección de objetos JSON de [elem.name/]([elem.type.name/]) asociados
+        [/for]
+    [/let]
+[/for]
+[/if]
 [/if]
 [/for]
 [/file]

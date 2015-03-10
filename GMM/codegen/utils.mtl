@@ -25,7 +25,7 @@ c.allAttributes()->union(c.refAttributes())->asOrderedSet()
 c.getAssociations()->collect(getAllAttributes()->select(a | a.isNavigable() and a.getUpper() > 0 and a.getOtherEnd().type = c))->flatten()->asSet()
 /]
 
-[query public getContainmentAssociations(c : Class) : Set(Association) =
+[query public getCompositeAssociations(c : Class) : Set(Association) =
 c.getAssociations()->select(
     asc | asc.getAllAttributes()->select(
         a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c and a.isComposite()
@@ -39,6 +39,22 @@ c.getAssociations()->select(
         a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c and not a.isComposite()
     )->notEmpty()
 )
+/]
+
+[query public hasCompositeAssociations(c : Class) : Boolean =
+c.getAssociations()->select(
+    asc | asc.getAllAttributes()->select(
+        a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c and a.isComposite()
+    )->notEmpty()
+)->notEmpty()
+/]
+
+[query public hasSharedAssociations(c : Class) : Boolean =
+c.getAssociations()->select(
+    asc | asc.getAllAttributes()->select(
+        a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c and not a.isComposite()
+    )->notEmpty()
+)->notEmpty()
 /]
 
 [template public getModelName(c : Class)]
