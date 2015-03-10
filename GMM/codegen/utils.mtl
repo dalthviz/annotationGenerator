@@ -25,6 +25,22 @@ c.allAttributes()->union(c.refAttributes())->asOrderedSet()
 c.getAssociations()->collect(getAllAttributes()->select(a | a.isNavigable() and a.getUpper() > 0 and a.getOtherEnd().type = c))->flatten()->asSet()
 /]
 
+[query public getContainmentAssociations(c : Class) : Set(Association) =
+c.getAssociations()->select(
+    asc | asc.getAllAttributes()->select(
+        a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c and a.isComposite()
+    )->notEmpty()
+)
+/]
+
+[query public getSharedAssociations(c : Class) : Set(Association) =
+c.getAssociations()->select(
+    asc | asc.getAllAttributes()->select(
+        a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c and not a.isComposite()
+    )->notEmpty()
+)
+/]
+
 [template public getModelName(c : Class)]
 [c.getModel().name/]
 [/template]
