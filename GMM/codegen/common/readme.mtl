@@ -1,9 +1,15 @@
 [comment encoding = UTF-8 /]
 [module readme('http://www.eclipse.org/uml2/5.0.0/UML')]
-[import utils /]
+[import GMM::codegen::utils /]
 
 [template public genReadMe(m : Model)]
 [file ('README.md', false, 'UTF-8')]
+#Tabla de contenidos
+-  ['['/]Introducción[']'/](#introducción)
+-  ['['/]API[']'/](#api-de-la-aplicación-[m.name.toLowerCase()/])
+[for (c : Class | m.getClasses())]
+  - ['['/]Entidad [c.name+']'/](#entidad-[c.name.toLowerCase()/])
+[/for]
 #API Rest
 ##Introducción
 La comunicación entre cliente y servidor se realiza intercambiando objetos JSON. Para cada entidad se hace un mapeo a JSON, donde cada uno de sus atributos se transforma en una propiedad de un objeto JSON. Todos los servicios se generan en la URL /[m.getProjectName('/webresources')/]/. Por defecto, todas las entidades tienen un atributo `id`, con el cual se identifica cada registro:
