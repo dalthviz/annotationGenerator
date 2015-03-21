@@ -5,6 +5,8 @@
 [let filePath : String = path.concat('crud/')]
 	[m.crudModule(filePath)/]
 	[m.crudService(filePath)/]
+    [m.crudDirectives(filePath)/]
+    [m.crudListTemplate(filePath)/]
 [/let]
 [/template]
 
@@ -57,7 +59,7 @@
                     scope.currentRecord = {};
                     scope.records = ['[]'/];
 
-                    //Variables de paginación
+                    //Variables de paginaciï¿½n
                     scope.maxSize = 5;
                     scope.itemsPerPage = 5;
                     scope.totalItems = 0;
@@ -109,5 +111,62 @@
                 }};
         }[']'/]);
 })();
+[/file]
+[/template]
+
+[template public crudDirectives(m : Model, path : String)]
+[file (path.concat('crud.dir.js'), false, 'UTF-8')]
+(function (angular) {
+    var crudModule = angular.module('CrudModule');
+
+    crudModule.directive('listRecords', ['['/]function () {
+            return {
+                scope: {
+                    records: '=*',
+                    model: '=',
+                    totalItems: '=',
+                    currentPage: '=',
+                    maxSize: '=',
+                    itemsPerPage: '=',
+                    editMode: '=',
+                    changePage: '&',
+                    editRecord: '&',
+                    deleteRecord: '&'
+                },
+                restrict: 'E',
+                templateUrl: 'src/shared/crud/list.tpl.html',
+                link: function (scope, el, attr) {
+                    scope.$watch(attr.currentPage, function () {
+                        scope.changePage();
+                    });
+                }
+            };
+        }[']'/]);
+})(window.angular);
+[/file]
+[/template]
+
+[template public crudListTemplate(m : Model, path : String)]
+[file (path.concat('list.tpl.html'), false, 'UTF-8')]
+<div ng-hide="editMode">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th ng-repeat="column in model">{{column.name}}</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="record in records">
+                <td ng-repeat="column in model">{{record['['/]column.name[']'/]}}</td>
+                <td>
+                    <button class="btn btn-default btn-sm" ng-click="editRecord({record: record})"><span class="glyphicon glyphicon-edit"></span> Edit</button>
+                    <button class="btn btn-default btn-sm" ng-click="deleteRecord({record: record})"><span class="glyphicon glyphicon-minus"></span> Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <pagination total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+</div>
 [/file]
 [/template]

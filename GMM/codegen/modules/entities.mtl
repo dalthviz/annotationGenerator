@@ -30,14 +30,22 @@
 [template public genCtrl(c : Class, path : String)]
 [let mod : String = c.name.toLowerFirst().concat('Module')]
 [file (path + '.ctrl.js', false, 'UTF-8')]
-(function () {
+(function (angular) {
     var [mod /] = angular.module('[mod /]');
 
     [mod /].controller('[c.name.toLowerFirst()/]Ctrl', ['['/]'$scope', '[c.name.toLowerFirst()/]Service', function ($scope, [c.name.toLowerFirst()/]Service) {
+            $scope.model = ['['/]
+                [for (a : Property | c.getAllAttribs()) separator(',\n')]
+                {
+                    name: '[a.name/]',
+                    type: '[a.type.name/]
+                }
+                [/for]
+            [']'/];
             [c.name.toLowerFirst()/]Service.extendCtrl(this, $scope);
             this.fetchRecords();
         }[']'/]);
-})();
+})(window.angular);
 [/file]
 [/let]
 [/template]
@@ -85,35 +93,18 @@
 			</div>
 		</nav>
 	</div>
-	<div ng-hide="[ctrl/].editMode">
-		<table class="table table-striped table-bordered">
-			<thead>
-				<tr>
-					[for (a : Property | c.getAllAttribs())]
-					<th>[a.name.toUpperFirst()/]</th>
-					[/for]
-					<th>Actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="record in records">
-					[for (a : Property | c.getAllAttribs())]
-                    [if (a.type.name = 'Date')]
-                    <td>{{record.[a.name/] | date}}</td>
-                    [/if]
-                    [if (a.type.name <> 'Date')]
-					<td>{{record.[a.name/]}}</td>
-					[/if]
-					[/for]
-					<td>
-						<button class="btn btn-default btn-sm" ng-click="[ctrl/].editRecord(record)"><span class="glyphicon glyphicon-edit"></span> Edit</button>
-						<button class="btn btn-default btn-sm" ng-click="[ctrl/].deleteRecord(record)"><span class="glyphicon glyphicon-minus"></span> Delete</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-        <pagination total-items="totalItems" ng-model="currentPage" ng-change="[ctrl/].pageChanged()" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false" items-per-page="itemsPerPage"></pagination>
-	</div>
+    <list-records 
+        edit-mode="[ctrl/].editMode"
+        change-page="[ctrl/].pageChanged()"
+        edit-record="[ctrl/].editRecord(record)"
+        delete-record="[ctrl/].deleteRecord(record)">        
+        model="model"
+        records="records"
+        total-items="totalItems"
+        current-page="currentPage"
+        max-size="maxSize"
+        items-per-page="itemsPerPage"
+    </list-records>
 	<div ng-show="[ctrl/].editMode">
 		<form name="[c.name.toLowerFirst()/]Form" role="form">
             <input id="id" class="form-control" type="hidden" ng-model="currentRecord.id"/>			

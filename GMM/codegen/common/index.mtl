@@ -50,6 +50,7 @@
 
         <script src="src/shared/crud/crud.mod.js"></script>
         <script src="src/shared/crud/crud.svc.js"></script>
+        <script src="src/shared/crud/crud.dir.js"></script>
         <script src="src/shared/mocks/mock.mod.js"></script>
         <script src="src/shared/mocks/mock.svc.js"></script>
 
