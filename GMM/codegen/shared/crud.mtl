@@ -158,7 +158,10 @@
         </thead>
         <tbody>
             <tr ng-repeat="record in records">
-                <td ng-repeat="column in model">{{record['['/]column.name[']'/]}}</td>
+                <td ng-repeat="column in model" ng-switch="column.type">
+                    <div ng-switch-when="Date">{{record['['/]column.name[']'/] | date}}</div>
+                    <div ng-switch-default>{{record['['/]column.name[']'/]}}</div>
+                </td>
                 <td>
                     <button class="btn btn-default btn-sm" ng-click="editRecord({record: record})"><span class="glyphicon glyphicon-edit"></span> Edit</button>
                     <button class="btn btn-default btn-sm" ng-click="deleteRecord({record: record})"><span class="glyphicon glyphicon-minus"></span> Delete</button>
