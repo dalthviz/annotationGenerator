@@ -38,9 +38,10 @@
                 [for (a : Property | c.getAllAttribs()) separator(',\n')]
                 {
                     name: '[a.name/]',
+                    displayName: '[a.name.toUpperFirst()/]',
                     type: '[a.type.name/]'
-                }
-                [/for]
+                }[/for]
+
             [']'/];
             [c.name.toLowerFirst()/]Service.extendCtrl(this, $scope);
             this.fetchRecords();

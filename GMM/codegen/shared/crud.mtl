@@ -152,7 +152,7 @@
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
-                <th ng-repeat="column in model">{{column.name}}</th>
+                <th ng-repeat="column in model">{{column.displayName}}</th>
                 <th>Actions</th>
             </tr>
         </thead>
