@@ -97,13 +97,13 @@
         edit-mode="[ctrl/].editMode"
         change-page="[ctrl/].pageChanged()"
         edit-record="[ctrl/].editRecord(record)"
-        delete-record="[ctrl/].deleteRecord(record)">        
+        delete-record="[ctrl/].deleteRecord(record)"
         model="model"
         records="records"
         total-items="totalItems"
         current-page="currentPage"
         max-size="maxSize"
-        items-per-page="itemsPerPage"
+        items-per-page="itemsPerPage">
     </list-records>
 	<div ng-show="[ctrl/].editMode">
 		<form name="[c.name.toLowerFirst()/]Form" role="form">
