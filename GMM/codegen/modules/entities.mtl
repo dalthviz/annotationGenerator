@@ -38,7 +38,7 @@
                 [for (a : Property | c.getAllAttribs()) separator(',\n')]
                 {
                     name: '[a.name/]',
-                    type: '[a.type.name/]
+                    type: '[a.type.name/]'
                 }
                 [/for]
             [']'/];
