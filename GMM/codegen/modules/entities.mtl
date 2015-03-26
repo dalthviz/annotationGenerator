@@ -14,7 +14,7 @@
 [template public genModule(c : Class, path : String)]
 [let mod : String = c.name.toLowerFirst().concat('Module')]
 [file (path + '.mod.js', false, 'UTF-8')]
-(function () {
+(function (angular) {
     var [mod /] = angular.module('[mod /]', ['['/]'CrudModule', 'MockModule'[']'/]);
 
     [mod /].constant('[c.name.toLowerFirst()/].context', '[c.name.toLowerFirst()+'s'/]');
@@ -22,7 +22,7 @@
     [mod /].config(['['/]'[c.name.toLowerFirst()/].context', 'MockModule.urlsProvider', function (context, urlsProvider) {
             urlsProvider.registerUrl(context);
         }[']'/]);
-})();
+})(window.angular);
 [/file]
 [/let]
 [/template] 
@@ -54,14 +54,14 @@
 [template public genService(c : Class, path : String)]
 [file (path.concat('.svc.js'), false, 'UTF-8')]
 [let mod : String = c.name.toLowerFirst().concat('Module')]
-(function(){
+(function(angular){
     var [mod /] = angular.module('[mod /]');
     
     [mod /].service('[c.name.toLowerFirst()/]Service', ['['/]'CRUDBase','[c.name.toLowerFirst()/].context', function(CRUDBase, context){
             this.url = context;
             CRUDBase.extendService(this);
     }[']'/]);
-})();
+})(window.angular);
 [/let]
 [/file]
 [/template]
