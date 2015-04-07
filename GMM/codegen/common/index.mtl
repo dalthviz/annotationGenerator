@@ -12,11 +12,10 @@
 (function () {
 
     var mainApp = angular.module('mainApp', ['['/]
-        'ngRoute',
         [for (c : Class | m.getClasses())] 
-        '[c.name.toLowerFirst()/]Module', 
+        '[c.name.toLowerFirst()/]Module',
         [/for]
-        'countryModule'
+        'ngRoute'
     [']'/]);
 
     mainApp.config(['['/]'$routeProvider', function ($routeProvider) {
