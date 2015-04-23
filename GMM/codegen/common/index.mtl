@@ -9,7 +9,7 @@
 
 [template public appjs(m : Model)]
 [file ('src/app.js', false, 'UTF-8')]
-(function () {
+(function (angular) {
 
     var mainApp = angular.module('mainApp', ['['/]
         [for (c : Class | m.getClasses())] 
@@ -25,7 +25,7 @@
             [/for]
                 .otherwise('/');
         }[']'/]);
-})();
+})(window.angular);
 [/file]
 [/template]
 
