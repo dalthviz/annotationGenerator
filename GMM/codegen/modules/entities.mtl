@@ -38,8 +38,8 @@
 (function (ng) {
     var mod = ng.module('[mod /]');
 
-    mod.controller('[c.name.toLowerFirst()/]Ctrl', ['['/]'$scope', '[c.name.toLowerFirst()/]Service', function ($scope, [c.name.toLowerFirst()/]Service) {
-            [c.name.toLowerFirst()/]Service.extendCtrl(this, $scope);
+    mod.controller('[c.name.toLowerFirst()/]Ctrl', ['['/]'$scope', '[c.name.toLowerFirst()/]Service', '[c.name.toLowerFirst()/]Model', function ($scope, svc, model) {
+            svc.extendController(this, $scope, model);
             this.fetchRecords();
         }[']'/]);
 })(window.angular);
