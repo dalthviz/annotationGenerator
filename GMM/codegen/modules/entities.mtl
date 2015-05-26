@@ -14,14 +14,19 @@
 [template public genModule(c : Class, path : String)]
 [let mod : String = c.name.toLowerFirst().concat('Module')]
 [file (path + '.mod.js', false, 'UTF-8')]
-(function (angular) {
-    var [mod /] = angular.module('[mod /]', ['['/]'CrudModule', 'MockModule'[']'/]);
+(function (ng) {
+    var mod = ng.module('[mod /]', ['['/]'CrudModule'[']'/]);
 
-    [mod /].constant('[c.name.toLowerFirst()/].context', '[c.name.toLowerFirst()+'s'/]');
+    mod.constant('[c.name.toLowerFirst()/].context', '[c.name.toLowerFirst()+'s'/]');
 
-    [mod /].config(['['/]'[c.name.toLowerFirst()/].context', 'MockModule.urlsProvider', function (context, urlsProvider) {
-            urlsProvider.registerUrl(context);
-        }[']'/]);
+    mod.constant('[c.name.toLowerFirst()/]Model', ['['/]
+        [for (a : Property | c.getAllAttribs()) separator(', ')]
+        {
+            name: '[a.name/]',
+            displayName: '[a.name.toUpperFirst()/]',
+            type: '[a.type.name/]'
+        }[/for]
+    [']'/]);
 })(window.angular);
 [/file]
 [/let]
@@ -30,19 +35,10 @@
 [template public genCtrl(c : Class, path : String)]
 [let mod : String = c.name.toLowerFirst().concat('Module')]
 [file (path + '.ctrl.js', false, 'UTF-8')]
-(function (angular) {
-    var [mod /] = angular.module('[mod /]');
+(function (ng) {
+    var mod = ng.module('[mod /]');
 
-    [mod /].controller('[c.name.toLowerFirst()/]Ctrl', ['['/]'$scope', '[c.name.toLowerFirst()/]Service', function ($scope, [c.name.toLowerFirst()/]Service) {
-            $scope.model = ['['/]
-                [for (a : Property | c.getAllAttribs()) separator(',\n')]
-                {
-                    name: '[a.name/]',
-                    displayName: '[a.name.toUpperFirst()/]',
-                    type: '[a.type.name/]'
-                }[/for]
-
-            [']'/];
+    mod.controller('[c.name.toLowerFirst()/]Ctrl', ['['/]'$scope', '[c.name.toLowerFirst()/]Service', function ($scope, [c.name.toLowerFirst()/]Service) {
             [c.name.toLowerFirst()/]Service.extendCtrl(this, $scope);
             this.fetchRecords();
         }[']'/]);
@@ -55,11 +51,10 @@
 [file (path.concat('.svc.js'), false, 'UTF-8')]
 [let mod : String = c.name.toLowerFirst().concat('Module')]
 (function(angular){
-    var [mod /] = angular.module('[mod /]');
+    var mod = angular.module('[mod /]');
     
-    [mod /].service('[c.name.toLowerFirst()/]Service', ['['/]'CRUDBase','[c.name.toLowerFirst()/].context', function(CRUDBase, context){
-            this.url = context;
-            CRUDBase.extendService(this);
+    mod.service('[c.name.toLowerFirst()/]Service', ['['/]'CRUDBase','[c.name.toLowerFirst()/].context', function(CRUDBase, context){
+            CRUDBase.extendService(this, context);
     }[']'/]);
 })(window.angular);
 [/let]
@@ -69,75 +64,46 @@
 [template public genView(c : Class, path : String)]
 [let ctrl : String = c.name.toLowerFirst().concat('Ctrl')]
 [file (path + '.tpl.html', false, 'UTF-8')]
-<div ng-controller="[ctrl/] as [ctrl/]">
-	<div id="header">
-		<nav class="navbar navbar-default" role="navigation">
-			<div class="container-fluid">
-				<!-- Brand and toggle get grouped for better mobile display -->
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#country-navbar">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="#">[c.name/]</a>
-				</div>
-
-				<!-- Collect the nav links, forms, and other content for toggling -->
-				<div class="collapse navbar-collapse" id="country-navbar">
-					<button class="btn btn-default navbar-btn" ng-hide="[ctrl/].editMode" ng-click="[ctrl/].createRecord()"><span class="glyphicon glyphicon-plus"></span> Create</button>
-					<button class="btn btn-default navbar-btn" ng-hide="[ctrl/].editMode" ng-click="[ctrl/].fetchRecords()"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
-					<button class="btn btn-default navbar-btn" ng-show="[ctrl/].editMode" ng-click="[ctrl/].saveRecord()"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
-					<button class="btn btn-default navbar-btn" ng-show="[ctrl/].editMode" ng-click="[ctrl/].fetchRecords()"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
-				</div>
-			</div>
-		</nav>
-	</div>
-    <list-records 
-        edit-mode="[ctrl/].editMode"
-        change-page="[ctrl/].pageChanged()"
-        edit-record="[ctrl/].editRecord(record)"
-        delete-record="[ctrl/].deleteRecord(record)"
+<toolbar name="[c.name.toLowerFirst()/]" display-name="[c.name/]" actions="[ctrl/].globalActions"></toolbar>
+<div ng-hide="[ctrl/].editMode">
+    <list-records
         model="model"
         records="records"
-        total-items="totalItems"
-        current-page="currentPage"
-        max-size="maxSize"
-        items-per-page="itemsPerPage">
+        actions="[ctrl/].recordActions">
     </list-records>
-	<div ng-show="[ctrl/].editMode">
-		<form name="[c.name.toLowerFirst()/]Form" role="form">
-            <input id="id" class="form-control" type="hidden" ng-model="currentRecord.id"/>			
-            [for (a : Property | c.getAllAttribs())]
-			[if (a.type.name = 'String')]
-			<div class="form-group">
-				<label for="[a.name/]">[a.name.toUpperFirst()/]</label>
-				<input id="[a.name/]" class="form-control" type="text" ng-model="currentRecord.[a.name/]"/>
-			</div>
-			[/if]
-			[if (a.type.name = 'Long' or a.type.name = 'Integer')]
-			<div class="form-group">
-				<label for="[a.name/]">[a.name.toUpperFirst()/]</label>
-				<input id="[a.name/]" class="form-control" type="number" ng-model="currentRecord.[a.name/]"/>
-			</div>
-			[/if]
-			[if (a.type.name = 'Date')]
-			<div class="form-group">
-				<label for="[a.name/]">[a.name.toUpperFirst()/]</label>
-				<input id="[a.name/]" class="form-control" type="date" ng-model="currentRecord.[a.name/]"/>
-			</div>
-			[/if]
-			[if (a.type.name = 'Boolean')]
-			<div class="form-group" >
-			    <label>
-		    	  <input id="[a.name/]" name="[a.name/]" ng-value="false" type="checkbox" ng-model="currentRecord.[a.name/]"> [a.name.toUpperFirst()/]
-		    	</label>
-			</div>
-			[/if]
-			[/for]
-		</form>
-	</div>
+    <pagination total-items="[ctrl/].totalItems" ng-model="[ctrl/].currentPage" ng-change="[ctrl/].pageChanged()" items-per-page="[ctrl/].itemsPerPage" max-size="[ctrl/].maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+</div>
+<div ng-show="[ctrl/].editMode">
+	<form name="[c.name.toLowerFirst()/]Form" role="form">
+        <input id="id" class="form-control" type="hidden" ng-model="currentRecord.id"/>			
+        [for (a : Property | c.getAllAttribs())]
+		[if (a.type.name = 'String')]
+		<div class="form-group">
+			<label for="[a.name/]">[a.name.toUpperFirst()/]</label>
+			<input id="[a.name/]" class="form-control" type="text" ng-model="currentRecord.[a.name/]"/>
+		</div>
+		[/if]
+		[if (a.type.name = 'Long' or a.type.name = 'Integer')]
+		<div class="form-group">
+			<label for="[a.name/]">[a.name.toUpperFirst()/]</label>
+			<input id="[a.name/]" class="form-control" type="number" ng-model="currentRecord.[a.name/]"/>
+		</div>
+		[/if]
+		[if (a.type.name = 'Date')]
+		<div class="form-group">
+			<label for="[a.name/]">[a.name.toUpperFirst()/]</label>
+			<input id="[a.name/]" class="form-control" type="date" ng-model="currentRecord.[a.name/]"/>
+		</div>
+		[/if]
+		[if (a.type.name = 'Boolean')]
+		<div class="form-group" >
+		    <label>
+	    	  <input id="[a.name/]" name="[a.name/]" ng-value="false" type="checkbox" ng-model="currentRecord.[a.name/]"> [a.name.toUpperFirst()/]
+	    	</label>
+		</div>
+		[/if]
+		[/for]
+	</form>
 </div>
 [/file]
 [/let]
