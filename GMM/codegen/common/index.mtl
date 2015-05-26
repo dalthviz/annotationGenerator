@@ -15,7 +15,7 @@
         [for (c : Class | m.getClasses())] 
         '[c.getModule()/]',
         [/for]
-        'ngRoute'
+        'ngRoute', 'MockModule'
     [']'/]);
 
     mainApp.config(['['/]'$routeProvider', function ($routeProvider) {
