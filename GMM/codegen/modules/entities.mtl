@@ -58,6 +58,10 @@
 [template public genView(c : Class, path : String)]
 [file (path + '.tpl.html', false, 'UTF-8')]
 <toolbar name="[c.getName()/]" display-name="[c.getDisplayName()/]" actions="[c.getCtrl()/].globalActions"></toolbar>
+<div ng-show="[c.getCtrl()/].error.show" ng-message="show" class="alert alert-{{[c.getCtrl()/].error.type}}" role="alert">
+    <button type="button" class="close" ng-click="[c.getCtrl()/].closeError()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>{{[c.getCtrl()/].error.type | uppercase}}:</strong> {{[c.getCtrl()/].error.msg}}
+</div>
 <div ng-hide="[c.getCtrl()/].editMode">
     <list-records
         model="model"
