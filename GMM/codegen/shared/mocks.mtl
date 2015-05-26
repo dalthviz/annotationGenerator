@@ -10,7 +10,7 @@
 
 [template public mocksModule(m : Model, path : String)]
 [file (path.concat('mock.mod.js'), false, 'UTF-8')]
-(function () {
+(function (angular) {
     var mocksModule = angular.module('MockModule', ['['/]'ngMockE2E'[']'/]);
 
     mocksModule.constant('MockModule.baseUrl', 'webresources');
@@ -75,13 +75,13 @@
                 }
             }
         }[']'/]);
-})();
+})(window.angular);
 [/file]
 [/template]
 
 [template public mocksService(m : Model, path : String)]
 [file (path.concat('mock.svc.js'), false, 'UTF-8')]
-(function () {
+(function (angular) {
     var mock = angular.module('MockModule');
 
     mock.value('MockModule.mockRecords', {});
@@ -95,6 +95,6 @@
             return context;
         };
     });
-})();
+})(window.angular);
 [/file]
 [/template]

@@ -9,14 +9,13 @@
 
 [template public appjs(m : Model)]
 [file ('src/app.js', false, 'UTF-8')]
-(function () {
+(function (angular) {
 
     var mainApp = angular.module('mainApp', ['['/]
-        'ngRoute',
         [for (c : Class | m.getClasses())] 
-        '[c.name.toLowerFirst()/]Module', 
+        '[c.name.toLowerFirst()/]Module',
         [/for]
-        'countryModule'
+        'ngRoute'
     [']'/]);
 
     mainApp.config(['['/]'$routeProvider', function ($routeProvider) {
@@ -26,7 +25,7 @@
             [/for]
                 .otherwise('/');
         }[']'/]);
-})();
+})(window.angular);
 [/file]
 [/template]
 
@@ -50,6 +49,7 @@
 
         <script src="src/shared/crud/crud.mod.js"></script>
         <script src="src/shared/crud/crud.svc.js"></script>
+        <script src="src/shared/crud/crud.dir.js"></script>
         <script src="src/shared/mocks/mock.mod.js"></script>
         <script src="src/shared/mocks/mock.svc.js"></script>
 
