@@ -66,5 +66,37 @@ c.getAssociations()->select(
 [/template]
 
 [template public getProjectName(m : Model, suffix : String)]
-[m.name.concat('.frontend').concat(suffix)/]
+[m.name.concat('.web').concat(suffix)/]
+[/template]
+
+[template public getCtrl(c : Class)]
+[c.name.toLowerFirst().concat('Ctrl')/]
+[/template]
+
+[template public getService(c : Class)]
+[c.name.toLowerFirst().concat('Service')/]
+[/template]
+
+[template public getEntityModel(c : Class)]
+[c.name.toLowerFirst().concat('Model')/]
+[/template]
+
+[template public getModule(c : Class)]
+[c.name.toLowerFirst().concat('Module')/]
+[/template]
+
+[template public getContext(c : Class)]
+[c.name.toLowerFirst().concat('Context')/]
+[/template]
+
+[template public getURI(c : Class)]
+[c.name.toLowerFirst().concat('s')/]
+[/template]
+
+[template public getName(c : Class)]
+[c.name.toLowerFirst()/]
+[/template]
+
+[template public getDisplayName(c : Class)]
+[c.name/]
 [/template]
