@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module logic('http://www.eclipse.org/uml2/5.0.0/UML')]
-[import utils /]
+[import ::utils /]
 
 [template public genLogic(c : Class, path : String)]
 [let filePath : String = path.concat(c.name.toLowerFirst()).concat('/logic/api/')]

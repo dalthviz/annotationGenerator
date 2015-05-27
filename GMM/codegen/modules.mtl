@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module modules('http://www.eclipse.org/uml2/5.0.0/UML')/]
-[import entities /]
+[import modules::entities /]
 
 [template public generate(c : Class)]
 [comment @main/]

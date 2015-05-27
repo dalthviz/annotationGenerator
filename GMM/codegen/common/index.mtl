@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module index('http://www.eclipse.org/uml2/5.0.0/UML')]
-[import utils /]
+[import ::utils /]
 
 [template public indexMain(m : Model, path : String)]
 [m.appjs(path.concat('src/'))/]

@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module readme('http://www.eclipse.org/uml2/5.0.0/UML')]
-[import utils /]
+[import ::utils /]
 
 [template public genReadMe(m : Model)]
 [file ('README.md', false, 'UTF-8')]

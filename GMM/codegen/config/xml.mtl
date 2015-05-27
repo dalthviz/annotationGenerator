@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module xml('http://www.eclipse.org/uml2/5.0.0/UML')]
-[import utils /]
+[import ::utils /]
 
 [template public genWebXML(m : Model, path : String)]
 [file (path.concat('web.xml'), false, 'UTF-8')]
