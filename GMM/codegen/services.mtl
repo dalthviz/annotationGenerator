@@ -7,7 +7,7 @@
 
 [template public generate(c : Class)]
 [comment @main /]
-[let project : String = c.getModel().getBackendProjectName('/src/main/java/')]
+[let project : String = c.getModel().getBackendProjectName().concat('/src/main/java/')]
 [c.restMain(project.concat(c.getModel().basePath()))/]
 [c.mainDTOs(project.concat(c.getModel().basePath()))/]
 [c.genLogic(project.concat(c.getModel().basePath()))/]

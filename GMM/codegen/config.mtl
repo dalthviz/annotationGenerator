@@ -6,8 +6,9 @@
 
 [template public generate(m : Model)]
 [comment @main /]
-
-[m.genPOM(m.getBackendProjectName('/'))/]
-[m.genBeansXml(m.getBackendProjectName('/src/main/webapp/WEB-INF/'))/]
-[m.genWebXML(m.getBackendProjectName('/src/main/webapp/WEB-INF/'))/]
+[let project : String = m.getBackendProjectName()]
+    [m.genWebPOM(project.concat('/'))/]
+    [m.genBeansXml(project.concat('/src/main/webapp/WEB-INF/'))/]
+    [m.genWebXML(project.concat('/src/main/webapp/WEB-INF/'))/]
+[/let]
 [/template]
