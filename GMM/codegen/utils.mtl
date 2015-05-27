@@ -5,6 +5,8 @@
 c.allAttributes()->select( a | a.name <> 'id')
 /]
 
+[query public getId(c : Class) : Property = c.allAttributes()->select( a | a.name = 'id')->first() /]
+
 [query public getClasses(m : Model) : Set(Class) =
 m.packagedElement->filter(Class)
 /]
@@ -99,4 +101,24 @@ c.getAssociations()->select(
 
 [template public getDisplayName(c : Class)]
 [c.name/]
+[/template]
+
+[template public getDTOName(c : Class)]
+[c.name.toUpperFirst().concat('DTO')/]
+[/template]
+
+[template public baseGroup(m : Model)]
+['co.edu.uniandes.csw.'.concat(m.name.toLowerCase())/]
+[/template]
+
+[template public basePath(m : Model)]
+['co/edu/uniandes/csw/'.concat(m.name).concat('/')/]
+[/template]
+
+[template public basePck(c : Class, suffix : String)]
+[c.getModel().baseGroup().concat('.'+c.name.toLowerFirst()).concat(suffix)/]
+[/template]
+
+[template public getBackendProjectName(m : Model, suffix : String)]
+[m.name.concat('.logic').concat(suffix)/]
 [/template]

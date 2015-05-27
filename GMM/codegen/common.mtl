@@ -4,6 +4,6 @@
 [import readme /]
 [template public generate(m : Model)]
 [comment @main /]
-[m.indexMain()/]
+[m.indexMain('')/]
 [m.genReadMe()/]
 [/template]

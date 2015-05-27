@@ -1,0 +1,14 @@
+[comment encoding = UTF-8 /]
+[module config('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import utils /]
+[import pom /]
+[import beans_xml /]
+[import xml /]
+
+[template public generate(m : Model)]
+[comment @main /]
+
+[m.genPOM(m.getBackendProjectName('/'))/]
+[m.genBeansXml(m.getBackendProjectName('/src/main/webapp/WEB-INF/'))/]
+[m.genWebXML(m.getBackendProjectName('/src/main/webapp/WEB-INF/'))/]
+[/template]

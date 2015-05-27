@@ -1,0 +1,108 @@
+[comment encoding = UTF-8 /]
+[module dto('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import utils /]
+
+
+[template public mainDTOs(c : Class, path : String)]
+[let filePath : String = path.concat(c.name.toLowerFirst()).concat('/logic/dto/')]
+[c._genDTO(filePath)/]
+[c.genDTO(filePath)/]
+[c._pageDTO(filePath)/]
+[c.pageDTO(filePath)/]
+[/let]
+[/template]
+
+[template public genDTO(c : Class, path : String) {className : String = c.getDTOName();}]
+[file (path.concat(className+'.java'), false, 'UTF-8')]
+package [c.basePck('')/].logic.dto;
+
+public class [className/] extends _[className/] {
+
+}
+[/file]
+[/template]
+
+[template public _genDTO(c : Class, path: String) {className : String = '_'+c.getDTOName();}]
+[file (path.concat(className+'.java'), false, 'UTF-8')]
+package [c.basePck('')/].logic.dto;
+
+import java.util.Date;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement 
+public abstract class [className/] {
+
+[for(p : Property | c.allAttributes())]
+	[if(p.type.name='Date')]
+	private String [p.name/];
+	[else]
+	private [p.type.name/] [p.name/];
+	[/if]
+[/for]
+
+[for (p : Property | c.allAttributes())]
+[if(p.type.name='Date')]
+	public String get[p.name.toUpperFirst()/]() {
+		return [p.name/];
+	}
+ 
+	public void set[p.name.toUpperFirst()/](String [p.name.toLower()/]) {
+		this.[p.name/] = [p.name.toLower()/];
+	}
+[else]
+	public [p.type.name/] get[p.name.toUpperFirst()/]() {
+		return [p.name/];
+	}
+ 
+	public void set[p.name.toUpperFirst()/]([p.type.name/] [p.name.toLower()/]) {
+		this.[p.name/] = [p.name.toLower()/];
+	}
+[/if]
+[/for]
+}
+[/file]
+[/template]
+
+[template public pageDTO(c : Class, path : String) {className : String = c.getPageDTOName();}]
+[file (path.concat(className+'.java'), false, 'UTF-8')]
+package [c.basePck('')/].logic.dto;
+
+public class [className/] extends _[className/] {
+
+}
+[/file]
+[/template]
+
+[template public _pageDTO(c : Class, path : String) {className : String = '_'+c.getPageDTOName();}]
+[file (path.concat(className+'.java'), false, 'UTF-8')]
+package [c.basePck('')/].logic.dto;
+
+import java.util.List;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+public class [className/] {
+
+    private Long totalRecords;
+
+    private List<[c.getDTOName()/]> records;
+
+    public Long getTotalRecords() {
+	return totalRecords;
+    }
+
+    public void setTotalRecords(Long totalRecords) {
+	this.totalRecords = totalRecords;
+    }
+
+    public List<[c.getDTOName()/]> getRecords() {
+	return records;
+    }
+
+    public void setRecords(List<[c.getDTOName()/]> records) {
+	this.records = records;
+    }
+}
+[/file]
+[/template]
