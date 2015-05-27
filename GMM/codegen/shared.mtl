@@ -1,7 +1,7 @@
 [comment encoding = UTF-8 /]
 [module shared('http://www.eclipse.org/uml2/5.0.0/UML')]
-[import shared::mocks /]
-[import shared::crud /]
+[import frontend::shared::mocks /]
+[import frontend::shared::crud /]
 
 [template public generate(m : Model)]
 [comment @main /]
