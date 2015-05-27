@@ -1,9 +1,9 @@
 [comment encoding = UTF-8 /]
 [module services('http://www.eclipse.org/uml2/5.0.0/UML')/]
 [import ::utils /]
-[import services::dto /]
-[import services::jaxrs /]
-[import services::logic /]
+[import backend::services::dto /]
+[import backend::services::jaxrs /]
+[import backend::services::logic /]
 
 [template public generate(c : Class)]
 [comment @main /]
