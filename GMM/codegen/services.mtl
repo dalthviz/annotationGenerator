@@ -5,7 +5,6 @@
 [import jaxrs /]
 [import logic /]
 [import mocks /]
-[import GMM::codegen::shared::mocks /]
 
 [template public generate(c : Class)]
 [comment @main /]

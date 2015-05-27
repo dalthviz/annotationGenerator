@@ -2,7 +2,6 @@
 [module config('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import utils /]
 [import pom /]
-[import beans_xml /]
 [import xml /]
 
 [template public generate(m : Model)]
