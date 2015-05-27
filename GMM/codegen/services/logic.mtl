@@ -26,13 +26,11 @@ package [c.basePck('')/].logic.api;
 import java.util.List; 
 
 import [c.basePck('')/].logic.dto.[c.getDTOName()/];
-import [c.basePck('')/].logic.dto.[c.getPageDTOName()/];
 
 public interface [className/] {
 
 	public [c.getDTOName()/] create[c.name/]([c.getDTOName()/] detail);
 	public List<[c.getDTOName()/]> get[c.name/]s();
-	public [c.getPageDTOName()/] get[c.name/]s(Integer page, Integer maxRecords);
 	public [c.getDTOName()/] get[c.name/](Long id);
 	public void delete[c.name/](Long id);
 	public void update[c.name/]([c.getDTOName()/] detail);

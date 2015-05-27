@@ -7,8 +7,6 @@
 [let filePath : String = path.concat(c.name.toLowerFirst()).concat('/logic/dto/')]
 [c._genDTO(filePath)/]
 [c.genDTO(filePath)/]
-[c._pageDTO(filePath)/]
-[c.pageDTO(filePath)/]
 [/let]
 [/template]
 
@@ -60,49 +58,6 @@ public abstract class [className/] {
 	}
 [/if]
 [/for]
-}
-[/file]
-[/template]
-
-[template public pageDTO(c : Class, path : String) {className : String = c.getPageDTOName();}]
-[file (path.concat(className+'.java'), false, 'UTF-8')]
-package [c.basePck('')/].logic.dto;
-
-public class [className/] extends _[className/] {
-
-}
-[/file]
-[/template]
-
-[template public _pageDTO(c : Class, path : String) {className : String = '_'+c.getPageDTOName();}]
-[file (path.concat(className+'.java'), false, 'UTF-8')]
-package [c.basePck('')/].logic.dto;
-
-import java.util.List;
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement
-public class [className/] {
-
-    private Long totalRecords;
-
-    private List<[c.getDTOName()/]> records;
-
-    public Long getTotalRecords() {
-	return totalRecords;
-    }
-
-    public void setTotalRecords(Long totalRecords) {
-	this.totalRecords = totalRecords;
-    }
-
-    public List<[c.getDTOName()/]> getRecords() {
-	return records;
-    }
-
-    public void setRecords(List<[c.getDTOName()/]> records) {
-	this.records = records;
-    }
 }
 [/file]
 [/template]

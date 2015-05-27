@@ -17,7 +17,6 @@ import javax.inject.Inject;
 
 import [c.basePck('')/].logic.api.I[c.name/]LogicService;
 import [c.basePck('')/].logic.dto.[c.getDTOName()/];
-import [c.basePck('')/].logic.dto.[c.getPageDTOName()/];
 
 public abstract class [className/] {
 
@@ -36,7 +35,7 @@ public abstract class [className/] {
     }
     
     @GET
-    public [c.getPageDTOName()/] get[c.name/]s(@QueryParam("page") Integer page, @QueryParam("maxRecords") Integer maxRecords){
+    public [c.getDTOName()/] get[c.name/]s(@QueryParam("page") Integer page, @QueryParam("maxRecords") Integer maxRecords){
         return [c.name.toLowerFirst()/]LogicService.get[c.name/]s(page, maxRecords);
     }
     
