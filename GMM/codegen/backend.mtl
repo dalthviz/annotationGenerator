@@ -1,8 +1,12 @@
 [comment encoding = UTF-8 /]
 [module backend('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import backend::config /]
-
+[import backend::services /]
+[import ::utils /]
 [template public generate(m : Model)]
 [comment @main/]
 [m.genConfig()/]
+[for (c : Class | m.getClasses())]
+    [c.genServices(m.getWebProjectName())/]
+[/for]
 [/template]

@@ -99,6 +99,14 @@ c.getAssociations()->select(
 [c.name.toUpperFirst().concat('DTO')/]
 [/template]
 
+[template public getJaxRsName(c : Class)]
+[c.name.concat('Service')/]
+[/template]
+
+[template public getAPIName(c : Class)]
+['I'.concat(c.name).concat('Logic')/]
+[/template]
+
 [template public baseGroup(m : Model)]
 ['co.edu.uniandes.csw.'.concat(m.name.toLowerCase())/]
 [/template]

@@ -5,10 +5,8 @@
 [import backend::services::jaxrs /]
 [import backend::services::logic /]
 
-[template public genServices(c : Class)]
-[let project : String = c.getModel().getBackendProjectName().concat('/src/main/java/')]
-    [c.restMain(project.concat(c.getModel().basePath()))/]
-    [c.mainDTOs(project.concat(c.getModel().basePath()))/]
-    [c.genLogic(project.concat(c.getModel().basePath()))/]
+[template public genServices(c : Class, path : String)]
+[let project : String = path.concat(c.getModel().basePath().concat('service/'))]
+    [c.restMain(project)/]
 [/let]
 [/template]
