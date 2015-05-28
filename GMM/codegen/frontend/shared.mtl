@@ -3,9 +3,8 @@
 [import frontend::shared::mocks /]
 [import frontend::shared::crud /]
 
-[template public generate(m : Model)]
-[comment @main /]
-[let path : String = 'src/shared/']
+[template public genShared(m : Model, path : String)]
+[let path : String = path.concat('src/shared/')]
 	[m.crudMain(path)/]
 	[m.mocksMain(path)/]
 [/let]

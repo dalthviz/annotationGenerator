@@ -63,10 +63,6 @@ c.getAssociations()->select(
 [c.getModel().name/]
 [/template]
 
-[template public getWebProjectName(m : Model)]
-[m.name.concat('.web')/]
-[/template]
-
 [template public getCtrl(c : Class)]
 [c.name.toLowerFirst().concat('Ctrl')/]
 [/template]
@@ -117,4 +113,12 @@ c.getAssociations()->select(
 
 [template public getBackendProjectName(m : Model)]
 [m.name.concat('.logic')/]
+[/template]
+
+[template public getWebProjectName(m : Model)]
+[m.name.concat('.web')/]
+[/template]
+
+[template public getWebRoot(m : Model)]
+[m.getWebProjectName().concat('/src/main/webapp/')/]
 [/template]
