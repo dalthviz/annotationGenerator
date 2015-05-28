@@ -3,6 +3,10 @@
 [import ::utils /]
 
 [template public mainXML(m : Model)]
+[let metainf : String = m.getMetaInfPath()]
+    [m.genBeansXml(metainf)/]
+    [m.genPersistence(metainf)/]
+[/let]
 [let webinf : String = m.getWebRoot().concat('WEB-INF/')]
     [m.genWebXML(webinf)/]
     [m.genBeansXml(webinf)/]
@@ -62,5 +66,22 @@
     </jdbc-connection-pool>
     <jdbc-resource enabled="true" jndi-name="[m.getJNDIName()/]" object-type="user" pool-name="[m.getPoolName()/]"/>
 </resources>
+[/file]
+[/template]
+
+[template public genPersistence(m : Model, path : String)]
+[file (path.concat('persistence.xml'), false, 'UTF-8')]
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <persistence-unit name="[m.getPUName()/]" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>[m.getJNDIName()/]</jta-data-source>
+    <properties>
+      <property name="eclipselink.logging.level" value="FINE"/>
+      <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
+      <property name="eclipselink.cache.type.default" value="Weak" />
+    </properties>
+  </persistence-unit>
+</persistence>
 [/file]
 [/template]

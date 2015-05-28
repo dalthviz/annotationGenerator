@@ -138,3 +138,11 @@ c.getAssociations()->select(
 [template public getJNDIName(m : Model)]
 ['java:app/jdbc/'.concat(m.name)/]
 [/template]
+
+[template public getPUName(m : Model)]
+[m.name.concat('PU')/]
+[/template]
+
+[template public getMetaInfPath(m : Model)]
+[m.getBackendProjectName().concat('/src/main/resources/META-INF/')/]
+[/template]
