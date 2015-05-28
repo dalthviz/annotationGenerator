@@ -1,0 +1,11 @@
+[comment encoding = UTF-8 /]
+[module logic('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+[import backend::logic::dto /]
+[import backend::logic::logic /]
+
+[template public genLogic(c : Class, path : String)]
+[let base : String = path.concat(c.getModel().basePath())]
+    [c.mainLogic(base)/]
+[/let]
+[/template]

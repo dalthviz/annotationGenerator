@@ -1,9 +1,7 @@
 [comment encoding = UTF-8 /]
 [module services('http://www.eclipse.org/uml2/5.0.0/UML')/]
 [import ::utils /]
-[import backend::services::dto /]
 [import backend::services::jaxrs /]
-[import backend::services::logic /]
 
 [template public genServices(c : Class, path : String)]
 [let project : String = path.concat(c.getModel().basePath().concat('service/'))]
