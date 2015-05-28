@@ -4,9 +4,11 @@
 [import backend::config::pom /]
 [import backend::config::xml /]
 [import backend::config::exception /]
+[import backend::config::persistence /]
 
 [template public genConfig(m : Model)]
 [m.mainPOM()/]
 [m.mainXML()/]
 [m.genExceptionMapper(m.getWebProjectName().concat(m.basePath()).concat('service/'))/]
+[m.mainPersistence(m.getBackendProjectName().concat(m.basePath()))/]
 [/template]
