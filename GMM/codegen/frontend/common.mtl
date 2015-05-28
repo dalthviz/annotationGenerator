@@ -4,5 +4,4 @@
 [import frontend::common::readme /]
 [template public genCommon(m : Model, path : String)]
 [m.indexMain(path)/]
-[m.genReadMe()/]
 [/template]
