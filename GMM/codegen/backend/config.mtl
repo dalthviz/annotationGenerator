@@ -3,8 +3,10 @@
 [import ::utils /]
 [import backend::config::pom /]
 [import backend::config::xml /]
+[import backend::config::exception /]
 
 [template public genConfig(m : Model)]
 [m.mainPOM()/]
 [m.mainXML()/]
+[m.genExceptionMapper(m.getWebProjectName().concat(m.basePath()).concat('service/'))/]
 [/template]

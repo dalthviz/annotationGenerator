@@ -104,7 +104,7 @@ c.getAssociations()->select(
 [/template]
 
 [template public basePath(m : Model)]
-[m.baseGroup().replaceAll('[.]', '/').concat('/')/]
+['/src/main/java/'.concat(m.baseGroup().replaceAll('[.]', '/')).concat('/')/]
 [/template]
 
 [template public basePck(c : Class, suffix : String)]
