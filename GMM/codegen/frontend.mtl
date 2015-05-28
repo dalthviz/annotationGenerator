@@ -5,7 +5,7 @@
 [import frontend::modules /]
 [import ::utils /]
 
-[template public genFrontEnd(m : Model)]
+[template public generate(m : Model)]
 [comment @main/]
 [let root : String = m.getWebRoot()]
 	[m.genCommon(root)/]
