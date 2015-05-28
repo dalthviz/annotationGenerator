@@ -2,30 +2,17 @@
 [module dto('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
 
-
 [template public mainDTOs(c : Class, path : String)]
-[let filePath : String = path.concat(c.name.toLowerFirst()).concat('/logic/dto/')]
-[c._genDTO(filePath)/]
-[c.genDTO(filePath)/]
+[let filePath : String = path.concat('dto/')]
+    [c.genDTO(filePath)/]
 [/let]
 [/template]
 
-[template public genDTO(c : Class, path : String) {className : String = c.getDTOName();}]
+[template public genDTO(c : Class, path: String) {className : String = c.getDTOName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
-package [c.basePck('')/].logic.dto;
-
-public class [className/] extends _[className/] {
-
-}
-[/file]
-[/template]
-
-[template public _genDTO(c : Class, path: String) {className : String = '_'+c.getDTOName();}]
-[file (path.concat(className+'.java'), false, 'UTF-8')]
-package [c.basePck('')/].logic.dto;
+package [c.getModel().baseGroup()/].dtos;
 
 import java.util.Date;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement 
