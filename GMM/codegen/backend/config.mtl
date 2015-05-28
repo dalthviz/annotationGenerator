@@ -5,9 +5,6 @@
 [import backend::config::xml /]
 
 [template public genConfig(m : Model)]
-[let project : String = m.getBackendProjectName()]
-    [m.genWebPOM(project.concat('/'))/]
-    [m.genBeansXml(project.concat('/src/main/webapp/WEB-INF/'))/]
-    [m.genWebXML(project.concat('/src/main/webapp/WEB-INF/'))/]
-[/let]
+[m.mainPOM()/]
+[m.mainXML()/]
 [/template]

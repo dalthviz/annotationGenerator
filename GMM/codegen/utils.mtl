@@ -104,7 +104,7 @@ c.getAssociations()->select(
 [/template]
 
 [template public basePath(m : Model)]
-['co/edu/uniandes/csw/'.concat(m.name.toLowerCase()).concat('/')/]
+[m.baseGroup().replaceAll('[.]', '/').concat('/')/]
 [/template]
 
 [template public basePck(c : Class, suffix : String)]
@@ -121,4 +121,12 @@ c.getAssociations()->select(
 
 [template public getWebRoot(m : Model)]
 [m.getWebProjectName().concat('/src/main/webapp/')/]
+[/template]
+
+[template public getPoolName(m : Model)]
+[m.name.concat('_pool')/]
+[/template]
+
+[template public getJNDIName(m : Model)]
+[m.name/]
 [/template]
