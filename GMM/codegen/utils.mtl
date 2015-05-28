@@ -8,7 +8,7 @@ c.allAttributes()->select( a | a.name <> 'id')
 [query public getId(c : Class) : Property = c.allAttributes()->select( a | a.name = 'id')->first() /]
 
 [query public getClasses(m : Model) : OrderedSet(Class) =
-m.packagedElement->filter(Class)->asOrderedSet()
+m.packagedElement->filter(Class)->sortedBy(c | c.name)
 /]
 
 [query public isMaster(c : Class) : Boolean =
