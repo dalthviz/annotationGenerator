@@ -104,7 +104,7 @@ c.getAssociations()->select(
 [/template]
 
 [template public basePath(m : Model)]
-['co/edu/uniandes/csw/'.concat(m.name).concat('/')/]
+['co/edu/uniandes/csw/'.concat(m.name.toLowerCase()).concat('/')/]
 [/template]
 
 [template public basePck(c : Class, suffix : String)]
