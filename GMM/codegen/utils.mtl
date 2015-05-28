@@ -128,5 +128,5 @@ c.getAssociations()->select(
 [/template]
 
 [template public getJNDIName(m : Model)]
-[m.name/]
+['java:app/jdbc/'.concat(m.name)/]
 [/template]
