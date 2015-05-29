@@ -4,11 +4,12 @@
 [import backend::logic::dto /]
 [import backend::logic::logic /]
 [import backend::logic::entities /]
-
+[import backend::logic::converters /]
 [template public genLogic(c : Class, path : String)]
 [let base : String = path.concat(c.getModel().basePath())]
     [c.mainLogic(base)/]
     [c.mainDTOs(base)/]
     [c.mainEntity(base)/]
+    [c.mainConverter(base)/]
 [/let]
 [/template]

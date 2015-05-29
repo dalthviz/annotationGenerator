@@ -7,7 +7,7 @@
 [/let]
 [/template]
 
-[template public mocksModule(m : Model, path : String)]
+[template protected mocksModule(m : Model, path : String)]
 [file (path.concat('mock.mod.js'), false, 'UTF-8')]
 (function (ng) {
     var mod = ng.module('MockModule', ['['/]'ngMockE2E'[']'/]);

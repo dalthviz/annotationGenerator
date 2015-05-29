@@ -6,7 +6,7 @@
 [c.restClass(path)/]
 [/template]
 
-[template public restClass(c : Class, path : String) {className : String = c.getJaxRsName(); logic : String = c.getName().concat('Logic');}]
+[template protected restClass(c : Class, path : String) {className : String = c.getJaxRsName(); logic : String = c.getName().concat('Logic');}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].service;
 

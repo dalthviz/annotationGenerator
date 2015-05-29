@@ -14,7 +14,7 @@
 [/let]
 [/template]
 
-[template private genWebXML(m : Model, path : String)]
+[template protected genWebXML(m : Model, path : String)]
 [file (path.concat('web.xml'), false, 'UTF-8')]
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
@@ -40,7 +40,7 @@
 [/file]
 [/template]
 
-[template private genBeansXml(m : Model, path : String)]
+[template protected genBeansXml(m : Model, path : String)]
 [file(path.concat('beans.xml'), false, 'UTF-8')]
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://java.sun.com/xml/ns/javaee"
@@ -50,7 +50,7 @@
 [/file]
 [/template]
 
-[template private genResources(m : Model, path : String)]
+[template protected genResources(m : Model, path : String)]
 [file (path.concat('glassfish-resources.xml'), false, 'UTF-8')]
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE resources PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN" "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
@@ -69,7 +69,7 @@
 [/file]
 [/template]
 
-[template private genPersistence(m : Model, path : String)]
+[template protected genPersistence(m : Model, path : String)]
 [file (path.concat('persistence.xml'), false, 'UTF-8')]
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">

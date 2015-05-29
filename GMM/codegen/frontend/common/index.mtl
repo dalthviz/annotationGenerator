@@ -7,7 +7,7 @@
 [m.index(path)/]
 [/template]
 
-[template public appjs(m : Model, path : String)]
+[template protected appjs(m : Model, path : String)]
 [file (path.concat('app.js'), false, 'UTF-8')]
 (function (ng) {
 
@@ -32,7 +32,7 @@
 [/file]
 [/template]
 
-[template public index(m : Model, path : String)]
+[template protected index(m : Model, path : String)]
 [file (path.concat('index.html'), false, 'UTF-8')]
 <!DOCTYPE html>
 <html ng-app="mainApp">

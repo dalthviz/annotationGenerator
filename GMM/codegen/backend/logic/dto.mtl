@@ -8,7 +8,7 @@
 [/let]
 [/template]
 
-[template private genDTO(c : Class, path: String) {className : String = c.getDTOName();}]
+[template protected genDTO(c : Class, path: String) {className : String = c.getDTOName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].dtos;
 
