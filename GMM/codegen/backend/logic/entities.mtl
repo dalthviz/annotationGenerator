@@ -38,14 +38,13 @@ public abstract class [className/] implements Serializable {
     public [a.type.name/] get[a.name.toUpperFirst()/](){
         return [a.name.toLowerFirst()/];
     }
-    
+
     public void set[a.name.toUpperFirst()/]([a.type.name/] [a.name.toLowerFirst()/]){
         this.[a.name.toLowerFirst()/] = [a.name.toLowerFirst()/];
     }
     [/for]
 
     //[protected ('custom')]
-    //TODO probando generacion
     //[/protected]
 }
 [/file]
