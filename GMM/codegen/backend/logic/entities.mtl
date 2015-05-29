@@ -6,8 +6,8 @@
 [c.genEntity(path.concat('entities/'))/]
 [/template]
 
-[template private genEntity(c : Class, path : String)]
-[file (path, false, 'UTF-8')]
+[template private genEntity(c : Class, path : String) {className : String = c.getEntityName()}]
+[file (path.concat(className+'.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].entities;
 
 import java.util.Date;
@@ -20,7 +20,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-public abstract class [c.getEntityName()/] implements Serializable {
+public abstract class [className/] implements Serializable {
 
     [for (a : Property | c.allAttributes())]
     [if (a.name='id')]
