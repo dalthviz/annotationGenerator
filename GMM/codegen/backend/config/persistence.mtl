@@ -6,7 +6,7 @@
 [m.genPersistenceBean(path.concat('ejb/'))/]
 [/template]
 
-[template public genPersistenceBean(m : Model, path : String)]
+[template private genPersistenceBean(m : Model, path : String)]
 [file (path.concat('CrudLogic.java'), false, 'UTF-8')]
 package [m.baseGroup()/].ejbs;
 

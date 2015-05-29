@@ -2,13 +2,13 @@
 [module entities('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
 
-[template public mainEntity(c : Class)]
-
+[template public mainEntity(c : Class, path : String)]
+[c.genEntity(path.concat('entities/'))/]
 [/template]
 
-[template public genEntity(c : Class, path : String)]
+[template private genEntity(c : Class, path : String)]
 [file (path, false, 'UTF-8')]
-package [c.getModel().baseGroup()/].persistence.entity;
+package [c.getModel().baseGroup()/].entities;
 
 import java.util.Date;
 import java.util.List;
@@ -42,6 +42,10 @@ public abstract class [c.getEntityName()/] implements Serializable {
         this.[a.name.toLowerFirst()/] = [a.name.toLowerFirst()/];
     }
     [/for]
+
+    //[protected ('custom')]
+    //TODO probando
+    //[/protected]
 }
 [/file]
 [/template]

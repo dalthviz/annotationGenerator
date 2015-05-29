@@ -7,7 +7,7 @@
 [c.genLogicBean(path.concat('ejb/'))/]
 [/template]
 
-[template public genLogicInterface(c : Class, path : String) {className : String = c.getAPIName();}]
+[template private genLogicInterface(c : Class, path : String) {className : String = c.getAPIName();}]
 [file (path.concat(className + '.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].api;
 
@@ -25,7 +25,7 @@ public interface [className/] {
 [/file]
 [/template]
 
-[template public genLogicBean(c : Class, path : String) {className : String = c.getBeanName();}]
+[template private genLogicBean(c : Class, path : String) {className : String = c.getBeanName();}]
 [file (path.concat(className.concat('.java')), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].ejbs;
 

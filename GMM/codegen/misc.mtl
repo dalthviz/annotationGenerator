@@ -9,7 +9,7 @@
 [m.genReadMe()/]
 [/template]
 
-[template public genPOM(m : Model)]
+[template private genPOM(m : Model)]
 [file ('pom.xml', false, 'UTF-8')]
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -27,13 +27,13 @@
 [/file]
 [/template]
 
-[template public genTravis(m : Model)]
+[template private genTravis(m : Model)]
 [file ('.travis.yml', false, 'UTF-8')]
 language: java
 [/file]
 [/template]
 
-[template public genReadMe(m : Model)]
+[template private genReadMe(m : Model)]
 [file ('README.md', false, 'UTF-8')]
 #Tabla de contenidos
 -  ['['/]Introducción[']'/](#introducción)
