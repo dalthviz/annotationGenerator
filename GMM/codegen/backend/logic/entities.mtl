@@ -44,7 +44,7 @@ public abstract class [className/] implements Serializable {
     [/for]
 
     //[protected ('custom')]
-    //TODO probando
+    //TODO probando generacion
     //[/protected]
 }
 [/file]
