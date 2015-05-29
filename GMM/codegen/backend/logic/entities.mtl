@@ -1,0 +1,47 @@
+[comment encoding = UTF-8 /]
+[module entities('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[template public mainEntity(c : Class)]
+
+[/template]
+
+[template public genEntity(c : Class, path : String)]
+[file (path, false, 'UTF-8')]
+package [c.getModel().baseGroup()/].persistence.entity;
+
+import java.util.Date;
+import java.util.List;
+import java.io.Serializable;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+public abstract class [c.getEntityName()/] implements Serializable {
+
+    [for (a : Property | c.allAttributes())]
+    [if (a.name='id')]
+    @Id
+    @GeneratedValue(generator = "[c.name/]")
+    [/if]
+    [if (a.type.name='Date')]
+    @Temporal(TemporalType.DATE)
+    [/if]
+    private [a.type.name/] [a.name.toLowerFirst()/];
+    [/for]
+
+    [for (a : Property | c.allAttributes())]
+    public [a.type.name/] get[a.name.toLowerFirst()/](){
+        return [a.name.toLowerFirst()/];
+    }
+    
+    public void set[a.name.toUpperFirst()/]([a.type.name/] [a.name.toLowerFirst()/]){
+        this.[a.name.toLowerFirst()/] = [a.name.toLowerFirst()/];
+    }
+    [/for]
+}
+[/file]
+[/template]

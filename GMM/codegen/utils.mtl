@@ -59,6 +59,8 @@ c.getAssociations()->select(
 )->notEmpty()
 /]
 
+[query public acceptedTypes(a : Property) : Set(String) = Set{'String','Boolean', 'Date', 'Long', 'Integer'} /]
+
 [template public getModelName(c : Class)]
 [c.getModel().name/]
 [/template]

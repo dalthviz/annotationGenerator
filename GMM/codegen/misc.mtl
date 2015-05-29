@@ -78,10 +78,10 @@ En la siguiente tabla se detalla los servicios REST generados para la entidad [ 
 #####Estructura de objeto [ class.name /]
 ```javascript
 {
-    [for(attr : Property | class.getAttributesWithRef()) separator(',\n')]
-    [if (attr.type.name <> 'Long' and attr.type.name <> 'Integer' and attr.type.name <> 'Date' and attr.type.name <> 'Boolean' and attr.type.name <> 'String')]
-    [ attr.name /]: '' /*Tipo Long que representa id de [attr.type.name/]*/[else]
-    [ attr.name /]: '' /*Tipo [ attr.type.name /]*/[/if][/for]
+    [for(a : Property | class.getAttributesWithRef()) separator(',\n')]
+    [if (a.acceptedTypes()->exists(self = a.type.name))]
+    [ a.name /]: '' /*Tipo Long que representa id de [a.type.name/]*/[else]
+    [ a.name /]: '' /*Tipo [ a.type.name /]*/[/if][/for]
 
 }
 ```
