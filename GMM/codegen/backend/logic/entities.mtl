@@ -6,7 +6,7 @@
 [c.genEntity(path.concat('entities/'))/]
 [/template]
 
-[template private genEntity(c : Class, path : String) {className : String = c.getEntityName()}]
+[template private genEntity(c : Class, path : String) {className : String = c.getEntityName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].entities;
 
