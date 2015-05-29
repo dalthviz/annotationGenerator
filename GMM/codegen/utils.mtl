@@ -107,6 +107,18 @@ c.getAssociations()->select(
 ['I'.concat(c.name).concat('Logic')/]
 [/template]
 
+[template public getBeanName(c : Class)]
+[c.name.concat('Logic')/]
+[/template]
+
+[template public getEntityName(c : Class)]
+[c.name.concat('Entity')/]
+[/template]
+
+[template public getConverterName(c : Class)]
+[c.name.concat('Converter')/]
+[/template]
+
 [template public baseGroup(m : Model)]
 ['co.edu.uniandes.csw.'.concat(m.name.toLowerCase())/]
 [/template]

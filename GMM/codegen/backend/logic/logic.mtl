@@ -4,6 +4,7 @@
 
 [template public mainLogic(c : Class, path : String)]
 [c.genLogicInterface(path.concat('api/'))/]
+[c.genLogicBean(path.concat('ejb/'))/]
 [/template]
 
 [template public genLogicInterface(c : Class, path : String) {className : String = c.getAPIName();}]
@@ -20,6 +21,54 @@ public interface [className/] {
     public [c.getDTOName()/] createSport([c.getDTOName()/] dto);
     public [c.getDTOName()/] update[c.name/]([c.getDTOName()/] dto);
     public void delete[c.name/](Long id);
+}
+[/file]
+[/template]
+
+[template public genLogicBean(c : Class, path : String) {className : String = c.getBeanName();}]
+[file (path.concat(className.concat('.java')), false, 'UTF-8')]
+package [c.getModel().baseGroup()/].ejbs;
+
+import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
+import [c.getModel().baseGroup()/].converters.[c.getConverterName()/];
+import [c.getModel().baseGroup()/].dtos.[c.getDTOName()/];
+import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
+import java.util.List;
+import javax.ejb.Stateless;
+
+@Stateless
+public class className extends CrudLogic<[c.getEntityName()/]> implements [c.getAPIName()/] {
+
+    public [c.name/]Logic() {
+        entityClass = [c.getEntityName()/].class;
+    }
+
+    public [c.getDTOName()/] create[c.name/]([c.getDTOName()/] dto) {
+        [c.getEntityName()/] entity = [c.getConverterName()/].persistenceDTO2Entity(dto);
+        create(entity);
+        return [c.getConverterName()/].entity2PersistenceDTO(entity);
+    }
+
+    public int count[c.name/]s() {
+        return count();
+    }
+
+    public List<[c.getDTOName()/]> get[c.name/]s(Integer page, Integer maxRecords) {
+        return [c.getConverterName()/].entity2PersistenceDTOList(findAll(page, maxRecords));
+    }
+
+    public [c.getDTOName()/] get[c.name/](Long id) {
+        return [c.getConverterName()/].entityMaster2PersistenceDTO(find(id));
+    }
+
+    public void delete[c.name/](Long id) {
+        delete(id);
+    }
+
+    public [c.getDTOName()/] update[c.name/]([c.getDTOName()/] dto) {
+        [c.getEntityName()/] entity = update([c.getConverterName()/].persistenceDTO2EntityMaster(dto));
+        return [c.getConverterName()/].entity2PersistenceDTO(entity);
+    }
 }
 [/file]
 [/template]
