@@ -1,9 +1,61 @@
 [comment encoding = UTF-8 /]
 [module utils('http://www.eclipse.org/uml2/5.0.0/UML')]
 
-[query public getAllAttribs(c : Class) : OrderedSet(Property) = c.allAttributes()->select( a | a.name <> 'id') /]
+[query public getAllAttribs(c : Class) : OrderedSet(Property) = 
+c.allAttributes()->select( a | a.name <> 'id')
+/]
 
-[query public getClasses(m : Model) : Set(Class) = m.packagedElement->filter(Class) /]
+[query public getClasses(m : Model) : Set(Class) =
+m.packagedElement->filter(Class)
+/]
+
+[query public isMaster(c : Class) : Boolean =
+c.getAssociations()->select(asc | asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c)->notEmpty())->notEmpty()
+/]
+
+[query public getChildProperty(asc : Association, c : Class) : Set(Property) =
+asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c)
+/]
+
+[query public getAttributesWithRef(c : Class) : OrderedSet(Property) = 
+c.allAttributes()->union(c.refAttributes())->asOrderedSet()
+/]
+
+[query public refAttributes(c : Class) : Set(Property) = 
+c.getAssociations()->collect(getAllAttributes()->select(a | a.isNavigable() and a.getUpper() > 0 and a.getOtherEnd().type = c))->flatten()->asSet()
+/]
+
+[query public getCompositeAssociations(c : Class) : Set(Association) =
+c.getAssociations()->select(
+    asc | asc.getAllAttributes()->select(
+        a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c and a.isComposite()
+    )->notEmpty()
+)
+/]
+
+[query public getSharedAssociations(c : Class) : Set(Association) =
+c.getAssociations()->select(
+    asc | asc.getAllAttributes()->select(
+        a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c and not a.isComposite()
+    )->notEmpty()
+)
+/]
+
+[query public hasCompositeAssociations(c : Class) : Boolean =
+c.getAssociations()->select(
+    asc | asc.getAllAttributes()->select(
+        a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c and a.isComposite()
+    )->notEmpty()
+)->notEmpty()
+/]
+
+[query public hasSharedAssociations(c : Class) : Boolean =
+c.getAssociations()->select(
+    asc | asc.getAllAttributes()->select(
+        a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c and not a.isComposite()
+    )->notEmpty()
+)->notEmpty()
+/]
 
 [template public getModelName(c : Class)]
 [c.getModel().name/]
