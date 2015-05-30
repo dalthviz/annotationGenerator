@@ -27,19 +27,19 @@ public class [className/] {
 
 [for (p : Property | c.allAttributes())]
 [if(p.isDate())]
-	public String get[p.name.toUpperFirst()/]() {
+	public String [p.getter()/]() {
 		return [p.name/];
 	}
  
-	public void set[p.name.toUpperFirst()/](String [p.name.toLower()/]) {
+	public void [p.setter()/](String [p.name.toLower()/]) {
 		this.[p.name/] = [p.name.toLower()/];
 	}
 [else]
-	public [p.type.name/] get[p.name.toUpperFirst()/]() {
+	public [p.type.name/] [p.getter()/]() {
 		return [p.name/];
 	}
  
-	public void set[p.name.toUpperFirst()/]([p.type.name/] [p.name.toLower()/]) {
+	public void [p.setter()/]([p.type.name/] [p.name.toLower()/]) {
 		this.[p.name/] = [p.name.toLower()/];
 	}
 [/if]

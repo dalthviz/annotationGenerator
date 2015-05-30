@@ -1,0 +1,209 @@
+[comment encoding = UTF-8 /]
+[module tests('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[template public mainTests(c : Class, path : String)]
+[c.genTests(path.concat('tests/'))/]
+[/template]
+
+[template protected genTests(c : Class, path : String) {className : String = c.getTestName();}]
+[let bean : String = c.getName().concat('Logic')]
+[file (path.concat(className+'.java'), false, 'UTF-8')]
+package [c.getModel().baseGroup()/].tests;
+
+import [c.getModel().baseGroup()/].ejbs.[c.getBeanName()/];
+import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
+import [c.getModel().baseGroup()/].converters.[c.getConverterName()/];
+import [c.getModel().baseGroup()/].dtos.[c.getDTOName()/];
+import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
+import static [c.getModel().baseGroup()/].tests._TestUtil.*;
+import java.util.ArrayList;
+import java.util.List;
+[if (c.hasDateAttribute())]import java.util.Date;[/if]
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.UserTransaction;
+import org.junit.Assert;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+@RunWith(Arquillian.class)
+public class [className/] {
+    public static final String DEPLOY = "Prueba";
+
+    @Deployment
+    public static WebArchive createDeployment() {
+        return ShrinkWrap.create(WebArchive.class, DEPLOY + ".war")
+                .addPackage([c.getEntityName()/].class.getPackage())
+                .addPackage([c.getDTOName()/].class.getPackage())
+                .addPackage([c.getConverterName()/].class.getPackage())
+                .addPackage([c.getBeanName()/].class.getPackage())
+                .addPackage([c.getAPIName()/].class.getPackage())
+                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
+                .addAsWebInfResource("META-INF/beans.xml", "beans.xml");
+    }
+
+    @Inject
+    private [c.getAPIName()/] [bean/];
+
+    @PersistenceContext
+    private EntityManager em;
+
+    @Inject
+    UserTransaction utx;
+
+    @Before
+    public void configTest() {
+        System.out.println("em: " + em);
+        try {
+            utx.begin();
+            clearData();
+            insertData();
+            utx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                utx.rollback();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    private void clearData() {
+        em.createQuery("delete from [c.getEntityName()/]").executeUpdate();
+    }
+
+    private List<[c.getEntityName()/]> data = new ArrayList<[c.getEntityName()/]>();
+
+    private void insertData() {
+        for (int i = 0; i < 3; i++) {
+            [c.getEntityName()/] entity = new [c.getEntityName()/]();
+            [for (a : Property | c.getAllAttribs())]
+        	entity.[a.setter()/](generateRandom([a.type.name/].class));
+            [/for]
+            em.persist(entity);
+            data.add(entity);
+        }
+    }
+
+    @Test
+    public void create[c.name/]Test() {
+        [c.getDTOName()/] dto = new [c.getDTOName()/]();
+        [for (a : Property | c.getAllAttribs())]
+        [if (a.isDate())]
+        dto.[a.setter()/](generateRandom([a.type.name/].class));
+        [else]
+        dto.[a.setter()/](generateRandomDate());
+        [/if]
+        [/for]
+
+        [c.getDTOName()/] result = [bean/].create[c.name/](dto);
+
+        Assert.assertNotNull(result);
+
+        [c.getEntityName()/] entity = em.find([c.getEntityName()/].class, result.getId());
+
+        [for (a : Property | c.getAllAttribs())]
+        Assert.assertEquals(dto.[a.getter()/](), entity.[a.getter()/]());
+        [/for]
+    }
+
+    @Test
+    public void get[c.name/]sTest() {
+        List<[c.getDTOName()/]> list = [bean/].get[c.name/]s(null, null);
+        Assert.assertEquals(list.size(), data.size());
+        for ([c.getDTOName()/] dto : list) {
+            boolean found = false;
+            for ([c.getEntityName()/] entity : data) {
+                if (dto.getId().equals(entity.getId())) {
+                    found = true;
+                }
+            }
+            Assert.assertTrue(found);
+        }
+    }
+
+    @Test
+    public void get[c.name/]Test() {
+        [c.getEntityName()/] entity = data.get(0);
+        [c.getDTOName()/] dto = [bean/].get[c.name/](entity.getId());
+        Assert.assertNotNull(dto);
+        [for (a : Property | c.getAllAttribs())]
+        Assert.assertEquals(entity.[a.getter()/](), dto.[a.getter()/]());
+        [/for]
+    }
+
+    @Test
+    public void delete[c.name/]Test() {
+        [c.getEntityName()/] entity = data.get(0);
+        [bean/].delete[c.name/](entity.getId());
+        [c.getEntityName()/] deleted = em.find([c.getEntityName()/].class, entity.getId());
+        Assert.assertNull(deleted);
+    }
+
+    @Test
+    public void update[c.name/]Test() {
+        [c.getEntityName()/] entity = data.get(0);
+
+        [c.getDTOName()/] dto = new [c.getDTOName()/]();
+
+        dto.setId(entity.getId());
+        [for (a : Property | c.getAllAttribs())]
+        [if (a.isDate())]
+        dto.[a.setter()/](generateRandomDate());
+        [else]
+        dto.[a.setter()/](generateRandom([a.type.name/].class));
+        [/if]
+        [/for]
+
+        [bean/].update[c.name/](dto);
+
+        [c.getEntityName()/] resp = em.find([c.getEntityName()/].class, entity.getId());
+
+        [for (a : Property | c.getAllAttribs())]
+        Assert.assertEquals(dto.[a.getter()/](), resp.[a.getter()/]());
+        [/for]
+    }
+
+    @Test
+    public void get[c.name/]PaginationTest() {
+        //Page 1
+        List<[c.getDTOName()/]> dto1 = [bean/].get[c.name/]s(1, 2);
+        Assert.assertNotNull(dto1);
+        Assert.assertEquals(dto1.size(), 2);
+        //Page 2
+        List<[c.getDTOName()/]> dto2 = [bean/].get[c.name/]s(2, 2);
+        Assert.assertNotNull(dto2);
+        Assert.assertEquals(dto2.size(), 1);
+
+        for ([c.getDTOName()/] dto : dto1) {
+            boolean found = false;
+            for ([c.getEntityName()/] entity : data) {
+                if (dto.getId().equals(entity.getId())) {
+                    found = true;
+                }
+            }
+            Assert.assertTrue(found);
+        }
+
+        for ([c.getDTOName()/] dto : dto2) {
+            boolean found = false;
+            for ([c.getEntityName()/] entity : data) {
+                if (dto.getId().equals(entity.getId())) {
+                    found = true;
+                }
+            }
+            Assert.assertTrue(found);
+        }
+    }
+}
+[/file]
+[/let]
+[/template]

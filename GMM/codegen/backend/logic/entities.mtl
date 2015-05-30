@@ -37,11 +37,11 @@ public class [className/] implements Serializable {
     [/for]
 
     [for (a : Property | c.allAttributes())]
-    public [a.type.name/] get[a.name.toUpperFirst()/](){
+    public [a.type.name/] [a.getter()/](){
         return [a.name.toLowerFirst()/];
     }
 
-    public void set[a.name.toUpperFirst()/]([a.type.name/] [a.name.toLowerFirst()/]){
+    public void [a.setter()/]([a.type.name/] [a.name.toLowerFirst()/]){
         this.[a.name.toLowerFirst()/] = [a.name.toLowerFirst()/];
     }
     [/for]

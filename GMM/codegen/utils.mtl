@@ -65,6 +65,10 @@ c.getAssociations()->select(
 
 [query public isDate(a : Property) : Boolean = a.type.name = 'Date' /]
 
+[query public getter(a : Property) : String = 'get'.concat(a.name.toUpperFirst()) /]
+
+[query public setter(a : Property) : String = 'set'.concat(a.name.toUpperFirst()) /]
+
 [template public getModelName(c : Class)]
 [c.getModel().name/]
 [/template]
@@ -123,6 +127,10 @@ c.getAssociations()->select(
 
 [template public getConverterName(c : Class)]
 [c.name.concat('Converter')/]
+[/template]
+
+[template public getTestName(c : Class)]
+[c.name.concat('LogicTest')/]
 [/template]
 
 [template public baseGroup(m : Model)]
