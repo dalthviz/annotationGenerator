@@ -20,7 +20,7 @@ asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.ge
 /]
 
 [query public getAttributesWithRef(c : Class) : OrderedSet(Property) = 
-c.allAttributes()->union(c.refAttributes())->asOrderedSet()
+c.allAttributes()->addAll(c.refAttributes())
 /]
 
 [query public refAttributes(c : Class) : Set(Property) = 
