@@ -37,7 +37,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 
 @Stateless
-public class className extends CrudLogic<[c.getEntityName()/]> implements [c.getAPIName()/] {
+public class [className/] extends CrudLogic<[c.getEntityName()/]> implements [c.getAPIName()/] {
 
     public [c.name/]Logic() {
         entityClass = [c.getEntityName()/].class;
