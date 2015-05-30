@@ -27,11 +27,11 @@ public class [className/] {
             [c.getDTOName()/] dto = new [c.getDTOName()/]();
             [for (a : Property | c.allAttributes())]
                 [if(a.isDate())]
-            if(entity.get[a.name.toUpperFirst()/]() != null){
-                dto.set[a.name.toUpperFirst()/](DATE_FORMAT.format(entity.get[a.name.toUpperFirst()/]()));
+            if(entity.[a.getter()/]() != null){
+                dto.[a.setter()/](DATE_FORMAT.format(entity.[a.getter()/]()));
             }
                 [else]
-            dto.set[a.name.toUpperFirst()/](entity.get[a.name.toUpperFirst()/]());
+            dto.[a.setter()/](entity.[a.getter()/]());
                 [/if]
             [/for]
 
@@ -46,15 +46,15 @@ public class [className/] {
             [c.getEntityName()/] entity = new [c.getEntityName()/]();
             [for (a : Property | c.allAttributes())]
                 [if(a.isDate())]
-            if(entity.get[a.name.toUpperFirst()/]() != null){
+            if(dto.[a.getter()/]() != null){
                 try{
-                    entity.set[a.name.toUpperFirst()/](DATE_FORMAT.parse(dto.get[a.name.toUpperFirst()/]()));
+                    entity.[a.setter()/](DATE_FORMAT.parse(dto.[a.getter()/]()));
                 } catch(Exception ex){
 
                 }
             }
                 [else]
-            entity.set[a.name.toUpperFirst()/](dto.get[a.name.toUpperFirst()/]());
+            entity.[a.setter()/](dto.[a.getter()/]());
                 [/if]
             [/for]
 
