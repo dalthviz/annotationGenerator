@@ -111,7 +111,11 @@ public class [className/] {
         [c.getEntityName()/] entity = em.find([c.getEntityName()/].class, result.getId());
 
         [for (a : Property | c.getAllAttribs())]
+        [if (a.isDate())]
+        Assert.assertEquals(parseDate(dto.[a.getter()/]()), entity.[a.getter()/]());
+        [else]
         Assert.assertEquals(dto.[a.getter()/](), entity.[a.getter()/]());
+        [/if]
         [/for]
     }
 
@@ -136,7 +140,11 @@ public class [className/] {
         [c.getDTOName()/] dto = [bean/].get[c.name/](entity.getId());
         Assert.assertNotNull(dto);
         [for (a : Property | c.getAllAttribs())]
+        [if (a.isDate())]
+        Assert.assertEquals(entity.[a.getter()/](), parseDate(dto.[a.getter()/]()));
+        [else]
         Assert.assertEquals(entity.[a.getter()/](), dto.[a.getter()/]());
+        [/if]
         [/for]
     }
 
@@ -168,7 +176,11 @@ public class [className/] {
         [c.getEntityName()/] resp = em.find([c.getEntityName()/].class, entity.getId());
 
         [for (a : Property | c.getAllAttribs())]
+        [if (a.isDate())]
+        Assert.assertEquals(parseDate(dto.[a.getter()/]()), resp.[a.getter()/]());
+        [else]
         Assert.assertEquals(dto.[a.getter()/](), resp.[a.getter()/]());
+        [/if]
         [/for]
     }
 
