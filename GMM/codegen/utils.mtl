@@ -23,8 +23,8 @@ asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.ge
 c.allAttributes()->addAll(c.refAttributes())
 /]
 
-[query public refAttributes(c : Class) : Set(Property) = 
-c.getAssociations()->collect(getAllAttributes()->select(a | a.isNavigable() and a.getUpper() > 0 and a.getOtherEnd().type = c))->flatten()->asSet()
+[query public refAttributes(c : Class) : OrderedSet(Property) = 
+c.getAssociations()->collect(getAllAttributes()->select(a | a.isNavigable() and a.getUpper() > 0 and a.getOtherEnd().type = c))->flatten()->asOrderedSet()
 /]
 
 [query public getCompositeAssociations(c : Class) : Set(Association) =
