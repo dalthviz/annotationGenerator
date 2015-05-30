@@ -10,17 +10,19 @@
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].entities;
 
-import java.util.Date;
+
 import java.util.List;
 import java.io.Serializable;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Entity;
+[if (c.hasDateAttribute())]
+import java.util.Date;
 import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.TemporalType;[/if]
 
 @Entity
-public abstract class [className/] implements Serializable {
+public class [className/] implements Serializable {
 
     [for (a : Property | c.allAttributes())]
     [if (a.name='id')]

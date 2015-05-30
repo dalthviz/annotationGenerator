@@ -4,7 +4,7 @@
 
 [template public mainLogic(c : Class, path : String)]
 [c.genLogicInterface(path.concat('api/'))/]
-[c.genLogicBean(path.concat('ejb/'))/]
+[c.genLogicBean(path.concat('ejbs/'))/]
 [/template]
 
 [template protected genLogicInterface(c : Class, path : String) {className : String = c.getAPIName();}]
@@ -18,7 +18,7 @@ public interface [className/] {
     public int count[c.name/]s();
     public List<[c.getDTOName()/]> get[c.name/]s(Integer page, Integer maxRecords);
     public [c.getDTOName()/] get[c.name/](Long id);
-    public [c.getDTOName()/] createSport([c.getDTOName()/] dto);
+    public [c.getDTOName()/] create[c.name/]([c.getDTOName()/] dto);
     public [c.getDTOName()/] update[c.name/]([c.getDTOName()/] dto);
     public void delete[c.name/](Long id);
 }
