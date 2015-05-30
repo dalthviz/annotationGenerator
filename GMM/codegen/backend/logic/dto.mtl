@@ -1,0 +1,49 @@
+[comment encoding = UTF-8 /]
+[module dto('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[template public mainDTOs(c : Class, path : String)]
+[let filePath : String = path.concat('dtos/')]
+    [c.genDTO(filePath)/]
+[/let]
+[/template]
+
+[template protected genDTO(c : Class, path: String) {className : String = c.getDTOName();}]
+[file (path.concat(className+'.java'), false, 'UTF-8')]
+package [c.getModel().baseGroup()/].dtos;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement 
+public class [className/] {
+
+[for(p : Property | c.allAttributes())]
+	[if(p.isDate())]
+	private String [p.name/];
+	[else]
+	private [p.type.name/] [p.name/];
+	[/if]
+[/for]
+
+[for (p : Property | c.allAttributes())]
+[if(p.isDate())]
+	public String [p.getter()/]() {
+		return [p.name/];
+	}
+ 
+	public void [p.setter()/](String [p.name.toLower()/]) {
+		this.[p.name/] = [p.name.toLower()/];
+	}
+[else]
+	public [p.type.name/] [p.getter()/]() {
+		return [p.name/];
+	}
+ 
+	public void [p.setter()/]([p.type.name/] [p.name.toLower()/]) {
+		this.[p.name/] = [p.name.toLower()/];
+	}
+[/if]
+[/for]
+}
+[/file]
+[/template]

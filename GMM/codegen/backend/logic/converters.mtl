@@ -1,0 +1,114 @@
+[comment encoding = UTF-8 /]
+[module converters('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[template public mainConverter(c : Class, path : String)]
+[c.genConverter(path.concat('converters/'))/]
+[/template]
+
+[template protected genConverter(c : Class, path : String) {className : String = c.getConverterName();}]
+[file (path.concat(className+'.java'), false, 'UTF-8')]
+package [c.getModel().baseGroup()/].converters;
+
+import [c.getModel().baseGroup()/].dtos.[c.getDTOName()/];
+import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
+import java.util.ArrayList;
+import java.util.List;
+[if (c.hasDateAttribute())]import java.text.SimpleDateFormat;[/if]
+
+public class [className/] {
+
+    [if(c.hasDateAttribute())]
+    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+
+    [/if]
+    public static [c.getDTOName()/] entity2PersistenceDTO([c.getEntityName()/] entity) {
+        if (entity != null) {
+            [c.getDTOName()/] dto = new [c.getDTOName()/]();
+            [for (a : Property | c.allAttributes())]
+                [if(a.isDate())]
+            if(entity.[a.getter()/]() != null){
+                dto.[a.setter()/](DATE_FORMAT.format(entity.[a.getter()/]()));
+            }
+                [else]
+            dto.[a.setter()/](entity.[a.getter()/]());
+                [/if]
+            [/for]
+
+            return dto;
+        } else {
+            return null;
+        }
+    }
+
+    public static [c.getEntityName()/] persistenceDTO2Entity([c.getDTOName()/] dto) {
+        if (dto != null) {
+            [c.getEntityName()/] entity = new [c.getEntityName()/]();
+            [for (a : Property | c.allAttributes())]
+                [if(a.isDate())]
+            if(dto.[a.getter()/]() != null){
+                try{
+                    entity.[a.setter()/](DATE_FORMAT.parse(dto.[a.getter()/]()));
+                } catch(Exception ex){
+
+                }
+            }
+                [else]
+            entity.[a.setter()/](dto.[a.getter()/]());
+                [/if]
+            [/for]
+
+            return entity;
+        } else {
+            return null;
+        }
+    }
+
+    public static [c.getDTOName()/] entityMaster2PersistenceDTO([c.getEntityName()/] entity) {
+        if (entity != null) {
+            [c.getDTOName()/] dto = entity2PersistenceDTO(entity);
+            [comment]
+            dto.setSports(SportConverter.entity2PersistenceDTOList(entity.getSports()));
+            dto.setOwnedSports(SportConverter.entity2PersistenceDTOList(entity.getOwnedSports()));
+            [/comment]
+            return dto;
+        } else {
+            return null;
+        }
+    }
+
+    public static [c.getEntityName()/] persistenceDTO2EntityMaster([c.getDTOName()/] dto) {
+        if (dto != null) {
+            [c.getEntityName()/] entity = persistenceDTO2Entity(dto);
+            [comment]
+            entity.setSports(SportConverter.persistenceDTO2EntityList(dto.getSports()));
+            entity.setOwnedSports(SportConverter.persistenceDTO2EntityListChild(dto.getOwnedSports(), entity));
+            [/comment]
+            return entity;
+        } else {
+            return null;
+        }
+    }
+
+    public static List<[c.getDTOName()/]> entity2PersistenceDTOList(List<[c.getEntityName()/]> entities) {
+        List<[c.getDTOName()/]> dtos = new ArrayList<[c.getDTOName()/]>();
+        if (entities != null) {
+            for ([c.getEntityName()/] entity : entities) {
+                dtos.add(entity2PersistenceDTO(entity));
+            }
+        }
+        return dtos;
+    }
+
+    public static List<[c.getEntityName()/]> persistenceDTO2EntityList(List<[c.getDTOName()/]> dtos) {
+        List<[c.getEntityName()/]> entities = new ArrayList<[c.getEntityName()/]>();
+        if (dtos != null) {
+            for ([c.getDTOName()/] dto : dtos) {
+                entities.add(persistenceDTO2Entity(dto));
+            }
+        }
+        return entities;
+    }
+}
+[/file]
+[/template]

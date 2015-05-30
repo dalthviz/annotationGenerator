@@ -5,8 +5,10 @@
 c.allAttributes()->select( a | a.name <> 'id')
 /]
 
-[query public getClasses(m : Model) : Set(Class) =
-m.packagedElement->filter(Class)
+[query public getId(c : Class) : Property = c.allAttributes()->select( a | a.name = 'id')->first() /]
+
+[query public getClasses(m : Model) : OrderedSet(Class) =
+m.packagedElement->filter(Class)->sortedBy(c | c.name)
 /]
 
 [query public isMaster(c : Class) : Boolean =
@@ -21,8 +23,8 @@ asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.ge
 c.allAttributes()->union(c.refAttributes())->asOrderedSet()
 /]
 
-[query public refAttributes(c : Class) : Set(Property) = 
-c.getAssociations()->collect(getAllAttributes()->select(a | a.isNavigable() and a.getUpper() > 0 and a.getOtherEnd().type = c))->flatten()->asSet()
+[query public refAttributes(c : Class) : OrderedSet(Property) = 
+c.getAssociations()->collect(getAllAttributes()->select(a | a.isNavigable() and a.getUpper() > 0 and a.getOtherEnd().type = c))->flatten()->asOrderedSet()
 /]
 
 [query public getCompositeAssociations(c : Class) : Set(Association) =
@@ -57,14 +59,124 @@ c.getAssociations()->select(
 )->notEmpty()
 /]
 
+[query public acceptedTypes(a : Property) : Set(String) = Set{'String','Boolean', 'Date', 'Long', 'Integer'} /]
+
+[query public hasDateAttribute(c : Class) : Boolean = c.allAttributes()->exists(a|a.isDate()) /]
+
+[query public isDate(a : Property) : Boolean = a.type.name = 'Date' /]
+
+[query public getter(a : Property) : String = 'get'.concat(a.name.toUpperFirst()) /]
+
+[query public setter(a : Property) : String = 'set'.concat(a.name.toUpperFirst()) /]
+
 [template public getModelName(c : Class)]
 [c.getModel().name/]
 [/template]
 
-[template public getProjectName(c : Class, suffix : String)]
-[c.getModel().getProjectName(suffix)/]
+[template public getCtrl(c : Class)]
+[c.name.toLowerFirst().concat('Ctrl')/]
 [/template]
 
-[template public getProjectName(m : Model, suffix : String)]
-[m.name.concat('.frontend').concat(suffix)/]
+[template public getService(c : Class)]
+[c.name.toLowerFirst().concat('Service')/]
+[/template]
+
+[template public getEntityModel(c : Class)]
+[c.name.toLowerFirst().concat('Model')/]
+[/template]
+
+[template public getModule(c : Class)]
+[c.name.toLowerFirst().concat('Module')/]
+[/template]
+
+[template public getContext(c : Class)]
+[c.name.toLowerFirst().concat('Context')/]
+[/template]
+
+[template public getURI(c : Class)]
+[c.name.toLowerFirst().concat('s')/]
+[/template]
+
+[template public getName(c : Class)]
+[c.name.toLowerFirst()/]
+[/template]
+
+[template public getDisplayName(c : Class)]
+[c.name/]
+[/template]
+
+[template public getDTOName(c : Class)]
+[c.name.toUpperFirst().concat('DTO')/]
+[/template]
+
+[template public getJaxRsName(c : Class)]
+[c.name.concat('Service')/]
+[/template]
+
+[template public getAPIName(c : Class)]
+['I'.concat(c.name).concat('Logic')/]
+[/template]
+
+[template public getBeanName(c : Class)]
+[c.name.concat('Logic')/]
+[/template]
+
+[template public getEntityName(c : Class)]
+[c.name.concat('Entity')/]
+[/template]
+
+[template public getConverterName(c : Class)]
+[c.name.concat('Converter')/]
+[/template]
+
+[template public getTestName(c : Class)]
+[c.name.concat('LogicTest')/]
+[/template]
+
+[template public baseGroup(m : Model)]
+['co.edu.uniandes.csw.'.concat(m.name.toLowerCase())/]
+[/template]
+
+[template public basePath(m : Model)]
+['/src/main/java/'.concat(m.baseGroup().replaceAll('[.]', '/')).concat('/')/]
+[/template]
+
+[template public baseTestPath(m : Model)]
+['/src/test/java/'.concat(m.baseGroup().replaceAll('[.]', '/')).concat('/')/]
+[/template]
+
+[template public basePck(c : Class, suffix : String)]
+[c.getModel().baseGroup().concat('.'+c.name.toLowerFirst()).concat(suffix)/]
+[/template]
+
+[template public getBackendProjectName(m : Model)]
+[m.name.concat('.logic')/]
+[/template]
+
+[template public getWebProjectName(m : Model)]
+[m.name.concat('.web')/]
+[/template]
+
+[template public getWebRoot(m : Model)]
+[m.getWebProjectName().concat('/src/main/webapp/')/]
+[/template]
+
+[template public getPoolName(m : Model)]
+[m.name.concat('_pool')/]
+[/template]
+
+[template public getJNDIName(m : Model)]
+['java:app/jdbc/'.concat(m.name)/]
+[/template]
+
+[template public getPUName(m : Model)]
+[m.name.concat('PU')/]
+[/template]
+
+[template public getMetaInfPath(m : Model)]
+[m.getBackendProjectName().concat('/src/main/resources/META-INF/')/]
+[/template]
+
+[template public getTestMetaInfPath(m : Model)]
+[m.getBackendProjectName().concat('/src/test/resources/META-INF/')/]
 [/template]

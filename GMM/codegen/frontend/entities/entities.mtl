@@ -1,0 +1,106 @@
+[comment encoding = UTF-8 /]
+[module entities('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[template public moduleMain(c : Class, path : String)]
+[let filePath : String = path.concat(c.getName()+'/'+c.getName())]
+	[c.genModule(filePath)/]
+	[c.genCtrl(filePath)/]
+	[c.genView(filePath)/]
+    [c.genService(filePath)/]
+[/let]
+[/template]
+
+[template protected genModule(c : Class, path : String)]
+[file (path + '.mod.js', false, 'UTF-8')]
+(function (ng) {
+    var mod = ng.module('[c.getModule() /]', ['['/]'CrudModule'[']'/]);
+
+    mod.constant('[c.getContext()/]', '[c.getURI()/]');
+
+    mod.constant('[c.getEntityModel()/]', ['['/]
+        [for (a : Property | c.getAllAttribs()) separator(', ')]
+        {
+            name: '[a.name/]',
+            displayName: '[a.name.toUpperFirst()/]',
+            type: '[a.type.name/]'
+        }[/for]
+    [']'/]);
+})(window.angular);
+[/file]
+[/template] 
+
+[template protected genCtrl(c : Class, path : String)]
+[file (path + '.ctrl.js', false, 'UTF-8')]
+(function (ng) {
+    var mod = ng.module('[c.getModule() /]');
+
+    mod.controller('[c.getCtrl()/]', ['['/]'$scope', '[c.getService()/]', '[c.getEntityModel()/]', function ($scope, svc, model) {
+            svc.extendController(this, $scope, model);
+            this.fetchRecords();
+        }[']'/]);
+})(window.angular);
+[/file]
+[/template]
+
+[template protected genService(c : Class, path : String)]
+[file (path.concat('.svc.js'), false, 'UTF-8')]
+(function(angular){
+    var mod = angular.module('[c.getModule() /]');
+    
+    mod.service('[c.getService()/]', ['['/]'CRUDBase','[c.getContext()/]', function(CRUDBase, context){
+            CRUDBase.extendService(this, context);
+    }[']'/]);
+})(window.angular);
+[/file]
+[/template]
+
+[template protected genView(c : Class, path : String)]
+[file (path + '.tpl.html', false, 'UTF-8')]
+<toolbar name="[c.getName()/]" display-name="[c.getDisplayName()/]" actions="[c.getCtrl()/].globalActions"></toolbar>
+<div ng-show="[c.getCtrl()/].error.show" ng-message="show" class="alert alert-{{[c.getCtrl()/].error.type}}" role="alert">
+    <button type="button" class="close" ng-click="[c.getCtrl()/].closeError()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>{{[c.getCtrl()/].error.type | uppercase}}:</strong> {{[c.getCtrl()/].error.msg}}
+</div>
+<div ng-hide="[c.getCtrl()/].editMode">
+    <list-records
+        model="model"
+        records="records"
+        actions="[c.getCtrl()/].recordActions">
+    </list-records>
+    <pagination total-items="[c.getCtrl()/].totalItems" ng-model="[c.getCtrl()/].currentPage" ng-change="[c.getCtrl()/].pageChanged()" items-per-page="[c.getCtrl()/].itemsPerPage" max-size="[c.getCtrl()/].maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+</div>
+<div ng-show="[c.getCtrl()/].editMode">
+	<form name="[c.getName()/]Form" role="form">
+        <input id="id" class="form-control" type="hidden" ng-model="currentRecord.id"/>			
+        [for (a : Property | c.getAllAttribs())]
+		[if (a.type.name = 'String')]
+		<div class="form-group">
+			<label for="[a.name/]">[a.name.toUpperFirst()/]</label>
+			<input id="[a.name/]" class="form-control" type="text" ng-model="currentRecord.[a.name/]"/>
+		</div>
+		[/if]
+		[if (a.type.name = 'Long' or a.type.name = 'Integer')]
+		<div class="form-group">
+			<label for="[a.name/]">[a.name.toUpperFirst()/]</label>
+			<input id="[a.name/]" class="form-control" type="number" ng-model="currentRecord.[a.name/]"/>
+		</div>
+		[/if]
+		[if (a.isDate())]
+		<div class="form-group">
+			<label for="[a.name/]">[a.name.toUpperFirst()/]</label>
+			<input id="[a.name/]" class="form-control" type="date" ng-model="currentRecord.[a.name/]"/>
+		</div>
+		[/if]
+		[if (a.type.name = 'Boolean')]
+		<div class="form-group" >
+		    <label>
+	    	  <input id="[a.name/]" name="[a.name/]" ng-value="false" type="checkbox" ng-model="currentRecord.[a.name/]"> [a.name.toUpperFirst()/]
+	    	</label>
+		</div>
+		[/if]
+		[/for]
+	</form>
+</div>
+[/file]
+[/template]
