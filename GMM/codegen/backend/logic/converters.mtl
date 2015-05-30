@@ -26,13 +26,14 @@ public class className {
             [c.getDTOName()/] dto = new [c.getDTOName()/]();
             [for (a : Property | c.allAttributes())]
                 [if(a.type.name = 'Date')]
-                if(entity.get[a.name.toUpperFirst()/]() != null){
-                    dto.set[a.name.toUpperFirst()/](DATE_FORMAT.format(entity.get[a.name.toUpperFirst()/]()));
-                }
+            if(entity.get[a.name.toUpperFirst()/]() != null){
+                dto.set[a.name.toUpperFirst()/](DATE_FORMAT.format(entity.get[a.name.toUpperFirst()/]()));
+            }
                 [else]
-                    dto.set[a.name.toUpperFirst()/](entity.get[a.name.toUpperFirst()/]());
+            dto.set[a.name.toUpperFirst()/](entity.get[a.name.toUpperFirst()/]());
                 [/if]
             [/for]
+
             return dto;
         } else {
             return null;
@@ -44,11 +45,11 @@ public class className {
             [c.getEntityName()/] entity = new [c.getEntityName()/]();
             [for (a : Property | c.allAttributes())]
                 [if(a.type.name = 'Date')]
-                if(entity.get[a.name.toUpperFirst()/]() != null){
-                    entity.set[a.name.toUpperFirst()/](DATE_FORMAT.format(dto.get[a.name.toUpperFirst()/]()));
-                }
+            if(entity.get[a.name.toUpperFirst()/]() != null){
+                entity.set[a.name.toUpperFirst()/](DATE_FORMAT.format(dto.get[a.name.toUpperFirst()/]()));
+            }
                 [else]
-                    entity.set[a.name.toUpperFirst()/](dto.get[a.name.toUpperFirst()/]());
+            entity.set[a.name.toUpperFirst()/](dto.get[a.name.toUpperFirst()/]());
                 [/if]
             [/for]
 
@@ -78,7 +79,6 @@ public class className {
             entity.setSports(SportConverter.persistenceDTO2EntityList(dto.getSports()));
             entity.setOwnedSports(SportConverter.persistenceDTO2EntityListChild(dto.getOwnedSports(), entity));
             [/comment]
-
             return entity;
         } else {
             return null;
