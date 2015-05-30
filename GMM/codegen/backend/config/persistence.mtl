@@ -3,7 +3,7 @@
 [import ::utils /]
 
 [template public mainPersistence(m : Model, path : String)]
-[m.genPersistenceBean(path.concat('ejb/'))/]
+[m.genPersistenceBean(path.concat('ejbs/'))/]
 [/template]
 
 [template protected genPersistenceBean(m : Model, path : String)]
