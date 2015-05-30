@@ -8,7 +8,7 @@
 
 [template protected genConverter(c : Class, path : String) {className : String = c.getConverterName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
-package co.edu.uniandes.csw.SportGroup.converters;
+package [c.getModel().baseGroup()/].converters;
 
 import [c.getModel().baseGroup()/].dtos.[c.getDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
