@@ -63,6 +63,8 @@ c.getAssociations()->select(
 
 [query public hasDateAttribute(c : Class) : Boolean = c.allAttributes()->exists(a|a.type.name = 'Date') /]
 
+[query public isDate(a : Property) : Boolean = a.type.name = 'Date' /]
+
 [template public getModelName(c : Class)]
 [c.getModel().name/]
 [/template]
@@ -131,6 +133,10 @@ c.getAssociations()->select(
 ['/src/main/java/'.concat(m.baseGroup().replaceAll('[.]', '/')).concat('/')/]
 [/template]
 
+[template public baseTestPath(m : Model)]
+['/src/test/java/'.concat(m.baseGroup().replaceAll('[.]', '/')).concat('/')/]
+[/template]
+
 [template public basePck(c : Class, suffix : String)]
 [c.getModel().baseGroup().concat('.'+c.name.toLowerFirst()).concat(suffix)/]
 [/template]
@@ -161,4 +167,8 @@ c.getAssociations()->select(
 
 [template public getMetaInfPath(m : Model)]
 [m.getBackendProjectName().concat('/src/main/resources/META-INF/')/]
+[/template]
+
+[template public getTestMetaInfPath(m : Model)]
+[m.getBackendProjectName().concat('/src/test/resources/META-INF/')/]
 [/template]

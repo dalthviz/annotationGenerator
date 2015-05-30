@@ -5,10 +5,12 @@
 [import backend::config::xml /]
 [import backend::config::exception /]
 [import backend::config::persistence /]
+[import backend::config::tests /]
 
 [template public genConfig(m : Model)]
 [m.mainPOM()/]
 [m.mainXML()/]
 [m.genExceptionMapper(m.getWebProjectName().concat(m.basePath()).concat('service/'))/]
 [m.mainPersistence(m.getBackendProjectName().concat(m.basePath()))/]
+[m.mainTests(m.getBackendProjectName().concat(m.baseTestPath()))/]
 [/template]
