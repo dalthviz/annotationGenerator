@@ -20,8 +20,8 @@ public class [className/] {
 
     [if(c.getAllAttributes()->exists(a | a.type.name='Date'))]
     private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-    [/if]
 
+    [/if]
     public static [c.getDTOName()/] entity2PersistenceDTO([c.getEntityName()/] entity) {
         if (entity != null) {
             [c.getDTOName()/] dto = new [c.getDTOName()/]();
@@ -47,7 +47,7 @@ public class [className/] {
             [for (a : Property | c.allAttributes())]
                 [if(a.type.name = 'Date')]
             if(entity.get[a.name.toUpperFirst()/]() != null){
-                entity.set[a.name.toUpperFirst()/](DATE_FORMAT.format(dto.get[a.name.toUpperFirst()/]()));
+                entity.set[a.name.toUpperFirst()/](DATE_FORMAT.parse(dto.get[a.name.toUpperFirst()/]()));
             }
                 [else]
             entity.set[a.name.toUpperFirst()/](dto.get[a.name.toUpperFirst()/]());
