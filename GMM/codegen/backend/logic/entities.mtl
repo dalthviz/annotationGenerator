@@ -29,7 +29,7 @@ public class [className/] implements Serializable {
     @Id
     @GeneratedValue(generator = "[c.name/]")
     [/if]
-    [if (a.type.name='Date')]
+    [if (a.isDate())]
     @Temporal(TemporalType.DATE)
     [/if]
     private [a.type.name/] [a.name.toLowerFirst()/];

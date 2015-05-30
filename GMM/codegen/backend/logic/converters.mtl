@@ -26,7 +26,7 @@ public class [className/] {
         if (entity != null) {
             [c.getDTOName()/] dto = new [c.getDTOName()/]();
             [for (a : Property | c.allAttributes())]
-                [if(a.type.name = 'Date')]
+                [if(a.isDate())]
             if(entity.get[a.name.toUpperFirst()/]() != null){
                 dto.set[a.name.toUpperFirst()/](DATE_FORMAT.format(entity.get[a.name.toUpperFirst()/]()));
             }
@@ -45,7 +45,7 @@ public class [className/] {
         if (dto != null) {
             [c.getEntityName()/] entity = new [c.getEntityName()/]();
             [for (a : Property | c.allAttributes())]
-                [if(a.type.name = 'Date')]
+                [if(a.isDate())]
             if(entity.get[a.name.toUpperFirst()/]() != null){
                 try{
                     entity.set[a.name.toUpperFirst()/](DATE_FORMAT.parse(dto.get[a.name.toUpperFirst()/]()));

@@ -86,7 +86,7 @@
 			<input id="[a.name/]" class="form-control" type="number" ng-model="currentRecord.[a.name/]"/>
 		</div>
 		[/if]
-		[if (a.type.name = 'Date')]
+		[if (a.isDate())]
 		<div class="form-group">
 			<label for="[a.name/]">[a.name.toUpperFirst()/]</label>
 			<input id="[a.name/]" class="form-control" type="date" ng-model="currentRecord.[a.name/]"/>
