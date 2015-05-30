@@ -47,7 +47,11 @@ public class [className/] {
             [for (a : Property | c.allAttributes())]
                 [if(a.type.name = 'Date')]
             if(entity.get[a.name.toUpperFirst()/]() != null){
-                entity.set[a.name.toUpperFirst()/](DATE_FORMAT.parse(dto.get[a.name.toUpperFirst()/]()));
+                try{
+                    entity.set[a.name.toUpperFirst()/](DATE_FORMAT.parse(dto.get[a.name.toUpperFirst()/]()));
+                } catch(Exception ex){
+
+                }
             }
                 [else]
             entity.set[a.name.toUpperFirst()/](dto.get[a.name.toUpperFirst()/]());
