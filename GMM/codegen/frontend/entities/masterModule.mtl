@@ -4,13 +4,26 @@
 
 [template public mainMasterModule(c : Class, path : String)]
 [c.genMasterModule(path)/]
+[c.genMasterService(path)/]
 [/template]
 
 [template protected genMasterModule(c : Class, path : String)]
 [file (path.concat(c.getName()+'.master.mod.js'), false, 'UTF-8')]
 (function (ng) {
     var mod = ng.module('[c.getMasterModule()/]', ['['/]'[c.getModule()/]', [for (asc : Association | c.getMasterAssociations())]'[asc.getChildProperty(c).getClass().getModule()/]', [/for]'masterModule'[']'/]);
-    mod.constant('[c.getMasterModule()/].context', '[c.getURI()/]/master');
+    mod.constant('[c.getMasterContext()/]', '[c.getURI()/]/master');
+})(window.angular);
+[/file]
+[/template]
+
+[template protected genMasterService (c : Class, path : String)]
+[file (path.concat(c.getName()+'.master.svc.js'), false, 'UTF-8')]
+(function(ng){
+    var mod = ng.module('[c.getMasterModule()/]');
+    
+    mod.service('[c.getMasterModule()/]', ['['/]'masterUtils', '[c.getMasterContext()/]', function(utils, ctx){
+            utils.extendService(this, ctx);
+    }[']'/]);
 })(window.angular);
 [/file]
 [/template]

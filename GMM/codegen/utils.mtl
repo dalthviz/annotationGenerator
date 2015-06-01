@@ -80,31 +80,39 @@ c.getAssociations()->select(
 [/template]
 
 [template public getCtrl(c : Class)]
-[c.name.toLowerFirst().concat('Ctrl')/]
+[c.getName().concat('Ctrl')/]
 [/template]
 
 [template public getService(c : Class)]
-[c.name.toLowerFirst().concat('Service')/]
+[c.getName().concat('Service')/]
 [/template]
 
 [template public getEntityModel(c : Class)]
-[c.name.toLowerFirst().concat('Model')/]
+[c.getName().concat('Model')/]
 [/template]
 
 [template public getModule(c : Class)]
-[c.name.toLowerFirst().concat('Module')/]
+[c.getName().concat('Module')/]
 [/template]
 
 [template public getMasterModule(c : Class)]
 [c.getName().concat('MasterModule')/]
 [/template]
 
+[template public getMasterService(c : Class)]
+[c.getName().concat('MasterService')/]
+[/template]
+
+[template public getMasterContext(c : Class)]
+[c.getName().concat('MasterContext')/]
+[/template]
+
 [template public getContext(c : Class)]
-[c.name.toLowerFirst().concat('Context')/]
+[c.getName().concat('Context')/]
 [/template]
 
 [template public getURI(c : Class)]
-[c.name.toLowerFirst().concat('s')/]
+[c.getName().concat('s')/]
 [/template]
 
 [template public getName(c : Class)]
