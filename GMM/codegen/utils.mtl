@@ -11,10 +11,6 @@ c.allAttributes()->select( a | a.name <> 'id')
 m.packagedElement->filter(Class)->sortedBy(c | c.name)
 /]
 
-[query public isMaster(c : Class) : Boolean =
-c.getAssociations()->select(asc | asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c)->notEmpty())->notEmpty()
-/]
-
 [query public getChildProperty(asc : Association, c : Class) : Property =
 asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c)->asOrderedSet()->first()
 /]
@@ -43,24 +39,24 @@ c.getAssociations()->select(
 )
 /]
 
-[query public getMasterAssociations(c : Class) : OrderedSet(Association) = 
-c.getSharedAssociations()->union(c.getCompositeAssociations())->asOrderedSet()
+[query public getMasterAssociations(c : Class) : Set(Association) = 
+c.getAssociations()->select(
+    asc | asc.getAllAttributes()->select(
+        a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c
+    )->notEmpty()
+)
 /]
 
 [query public hasCompositeAssociations(c : Class) : Boolean =
-c.getAssociations()->select(
-    asc | asc.getAllAttributes()->select(
-        a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c and a.isComposite()
-    )->notEmpty()
-)->notEmpty()
+c.getCompositeAssociations()->notEmpty()
 /]
 
 [query public hasSharedAssociations(c : Class) : Boolean =
-c.getAssociations()->select(
-    asc | asc.getAllAttributes()->select(
-        a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c and not a.isComposite()
-    )->notEmpty()
-)->notEmpty()
+c.getSharedAssociations()->notEmpty()
+/]
+
+[query public isMaster(c : Class) : Boolean =
+c.getMasterAssociations()->notEmpty()
 /]
 
 [query public acceptedTypes(a : Property) : Set(String) = Set{'String','Boolean', 'Date', 'Long', 'Integer'} /]
@@ -74,6 +70,8 @@ c.getAssociations()->select(
 [query public setter(a : Property) : String = 'set'.concat(a.name.toUpperFirst()) /]
 
 [query public getClass(a : Property) : Class = Class.allInstances()->select(c|c.name = a.type.name)->asOrderedSet()->first() /]
+
+[query public getDisplayName(a : Property) : String = a.name.toUpperFirst() /]
 
 [template public getModelName(c : Class)]
 [c.getModel().name/]
@@ -105,6 +103,10 @@ c.getAssociations()->select(
 
 [template public getMasterContext(c : Class)]
 [c.getName().concat('MasterContext')/]
+[/template]
+
+[template public getMasterController(c : Class)]
+[c.getName().concat('MasterCtrl')/]
 [/template]
 
 [template public getContext(c : Class)]

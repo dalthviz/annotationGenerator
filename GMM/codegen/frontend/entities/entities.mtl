@@ -23,13 +23,11 @@
     mod.constant('[c.getContext()/]', '[c.getURI()/]');
 
     mod.constant('[c.getEntityModel()/]', ['['/]
-        [for (a : Property | c.getAllAttribs()) separator(', ')]
-        {
+        [for (a : Property | c.getAllAttribs()) separator(', ')]{
             name: '[a.name/]',
-            displayName: '[a.name.toUpperFirst()/]',
+            displayName: '[a.getDisplayName()/]',
             type: '[a.type.name/]'
-        }[/for]
-    [']'/]);
+        }[/for][']'/]);
 })(window.angular);
 [/file]
 [/template] 

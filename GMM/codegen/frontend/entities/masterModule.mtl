@@ -5,6 +5,7 @@
 [template public mainMasterModule(c : Class, path : String)]
 [c.genMasterModule(path)/]
 [c.genMasterService(path)/]
+[c.genMasterController(path)/]
 [/template]
 
 [template protected genMasterModule(c : Class, path : String)]
@@ -24,6 +25,35 @@
     mod.service('[c.getMasterModule()/]', ['['/]'masterUtils', '[c.getMasterContext()/]', function(utils, ctx){
             utils.extendService(this, ctx);
     }[']'/]);
+})(window.angular);
+[/file]
+[/template]
+
+[template protected genMasterController(c : Class, path : String)]
+[file (path.concat(c.getName()+'.master.ctrl.js'), false, 'UTF-8')]
+(function (ng) {
+    var mod = ng.module('[c.getMasterModule()/]');
+
+    mod.controller('[c.getMasterController()/]', ['['/]'$scope', '[c.getMasterService()/]', '[c.getEntityModel()/]', function ($scope, svc, model) {
+            svc.extendController(this, $scope, model);
+            this.fetchRecords();
+        }[']'/]);
+    [for (asc : Association | c.getCompositeAssociations())]
+
+    [let el : Property = asc.getChildProperty(c)]
+    mod.controller('[el.name/]Ctrl', ['['/]'masterUtils', '$scope', '[el.getClass().getEntityModel()/]', function (masterSvc, $scope, model) {
+            masterSvc.extendCompChildCtrl(this, $scope, model, '[el.name/]', '[el.getOtherEnd().name/]');
+        }[']'/]);
+    [/let]
+    [/for]
+    [for (asc : Association | c.getSharedAssociations())]
+
+    [let el : Property = asc.getChildProperty(c)]
+    mod.controller('[el.name/]Ctrl', ['['/]'masterUtils', '$scope', '[el.getClass().getEntityModel()/]', '[el.getClass().getService()/]', 'modalService', function (masterSvc, $scope, model, svc, modalService) {
+            masterSvc.extendAggChildCtrl(this, $scope, model, '[el.name/]', svc);
+        }[']'/]);
+    [/let]
+    [/for]
 })(window.angular);
 [/file]
 [/template]
