@@ -10,7 +10,7 @@
 	[c.genView(filePath)/]
     [c.genService(filePath)/]
 [if (c.isMaster())]
-	[c.mainMasterModule(filePath.concat('master/'))/]
+	[c.mainMasterModule(path.concat(c.getName()+'/master/'))/]
 [/if]
 [/let]
 [/template]
