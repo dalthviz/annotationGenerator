@@ -12,7 +12,7 @@
 [template protected genMasterModule(m : Model, path : String)]
 [file (path.concat('master.mod.js'), false, 'UTF-8')]
 (function (ng) {
-    var mod = ng.module('masterModule', ['['/] 'CrudModule'[']'/] );
+    var mod = ng.module('masterModule', ['['/]'CrudModule'[']'/]);
 })(window.angular);
 [/file]
 [/template]

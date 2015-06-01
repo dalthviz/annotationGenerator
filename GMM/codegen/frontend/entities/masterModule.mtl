@@ -1,0 +1,16 @@
+[comment encoding = UTF-8 /]
+[module masterModule('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[template public mainMasterModule(c : Class, path : String)]
+
+[/template]
+
+[template protected genMasterModule(c : Class, path : String)]
+[file (path.concat(c.getName()+'.master.mod.js'), false, 'UTF-8')]
+(function (ng) {
+    var mod = ng.module('[c.getMasterModule()/]', ['['/]'[c.getModule()/]', [for (asc : Association | c.getMasterAssociations())]'[asc.getChildProperty(c)/]', [/for]'masterModule'[']'/]);
+    mod.constant('[c.getMasterModule()/].context', '[c.getURI()/]/master');
+})(window.angular);
+[/file]
+[/template]

@@ -15,8 +15,8 @@ m.packagedElement->filter(Class)->sortedBy(c | c.name)
 c.getAssociations()->select(asc | asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c)->notEmpty())->notEmpty()
 /]
 
-[query public getChildProperty(asc : Association, c : Class) : Set(Property) =
-asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c)
+[query public getChildProperty(asc : Association, c : Class) : Property =
+asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c)->asOrderedSet()->first()
 /]
 
 [query public getAttributesWithRef(c : Class) : OrderedSet(Property) = 
@@ -41,6 +41,10 @@ c.getAssociations()->select(
         a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c and not a.isComposite()
     )->notEmpty()
 )
+/]
+
+[query public getMasterAssociations(c : Class) : OrderedSet(Association) = 
+c.getSharedAssociations()->union(c.getCompositeAssociations())->asOrderedSet()
 /]
 
 [query public hasCompositeAssociations(c : Class) : Boolean =
@@ -87,6 +91,10 @@ c.getAssociations()->select(
 
 [template public getModule(c : Class)]
 [c.name.toLowerFirst().concat('Module')/]
+[/template]
+
+[template public getMasterModule(c : Class)]
+[c.getName().concat('MasterModule')/]
 [/template]
 
 [template public getContext(c : Class)]
