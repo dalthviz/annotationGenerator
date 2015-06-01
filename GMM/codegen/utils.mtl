@@ -73,6 +73,8 @@ c.getAssociations()->select(
 
 [query public setter(a : Property) : String = 'set'.concat(a.name.toUpperFirst()) /]
 
+[query public getClass(a : Property) : Class = Class.allInstances()->select(c|c.name = a.type.name)->asOrderedSet()->first() /]
+
 [template public getModelName(c : Class)]
 [c.getModel().name/]
 [/template]
