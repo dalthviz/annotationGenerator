@@ -25,6 +25,12 @@
                     controller: '[c.getCtrl()/]',
                     controllerAs: '[c.getCtrl()/]'
                 })
+                [if (c.isMaster())]
+                .when('/[c.getName()/]/master', {
+                    templateUrl: 'src/modules/[c.getName()/]/master/[c.getName()/].master.tpl.html',
+                    controller: '[c.getMasterController()/]',
+                    controllerAs: '[c.getCtrl()/]'
+                })[/if]
             [/for]
                 .otherwise('/');
         }[']'/]);
@@ -65,6 +71,12 @@
         <script src="src/modules/[c.getName()/]/[c.getName()/].ctrl.js"></script>
         <script src="src/modules/[c.getName()/]/[c.getName()/].svc.js"></script>
 
+        [if (c.isMaster())]
+        <script src="src/modules/[c.getName()/]/master/[c.getName()/].master.mod.js"></script>
+        <script src="src/modules/[c.getName()/]/master/[c.getName()/].master.svc.js"></script>
+        <script src="src/modules/[c.getName()/]/master/[c.getName()/].master.ctrl.js"></script>
+        [/if]
+
         [/for]
     </head>
     <body>
@@ -73,6 +85,9 @@
                 <ul class="nav nav-pills nav-stacked">
 				[for (c : Class | m.getClasses())]
                     <li><a href="#/[c.getName()/]">[c.getDisplayName()/]</a></li>
+                [if (c.isMaster())]
+                    <li><a href="#/[c.getName()/]/master">[c.getDisplayName()/] Master</a></li>
+                [/if]
 				[/for]
                 </ul>
             </div>
