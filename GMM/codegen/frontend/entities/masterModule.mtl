@@ -3,7 +3,7 @@
 [import ::utils /]
 
 [template public mainMasterModule(c : Class, path : String)]
-
+[c.genMasterModule(path)/]
 [/template]
 
 [template protected genMasterModule(c : Class, path : String)]
