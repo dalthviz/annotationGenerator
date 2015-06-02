@@ -22,8 +22,7 @@
 
     mod.constant('[c.getContext()/]', '[c.getURI()/]');
 
-    mod.constant('[c.getEntityModel()/]', ['['/]
-        [for (a : Property | c.getAllAttribs()) separator(', ')]{
+    mod.constant('[c.getEntityModel()/]', ['['/][for (a : Property | c.getAllAttribs()) separator(', ')]{
             name: '[a.name/]',
             displayName: '[a.getDisplayName()/]',
             type: '[a.type.name/]'
