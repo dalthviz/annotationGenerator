@@ -396,6 +396,7 @@
                     <div ng-switch-when="Computed">{{column.fn(record)}}</div>
                     <div ng-switch-when="Date">{{record['[column.name]'/]| date}}</div>
                     <div ng-switch-when="Reference">{{record['[column.name]'/].name}}</div>
+                    <div ng-switch-when="Boolean"><span ng-if="record['[column.name]'/] != undefined" class="glyphicon" ng-class="{'glyphicon-check': record['[column.name]'/], 'glyphicon-unchecked': !record['[column.name]'/]}"></span></div>
                     <div ng-switch-default>{{record['[column.name]'/]}}</div>
                 </td>
                 <td ng-if="actions">
@@ -488,15 +489,15 @@
 [file (path.concat('form.tpl.html'), false, 'UTF-8')]
 <form novalidate name="form" id="{{name}}-form" role="form">
     <fieldset>
-        <input id="id" class="form-control" type="hidden" ng-model="record.id"/>
+        <input id="id" class="form-control col-md-12" type="hidden" ng-model="record.id"/>
         <div class="form-group" ng-repeat="column in model" ng-switch="column.type" ng-class="{'has-success': form['[column.name]'/].$valid && form['[column.name]'/].$dirty, 'has-error': form['[column.name]'/].$invalid && form['[column.name]'/].$dirty}" >
             <label for="{{column.name}}" class="col-md-2 control-label">{{column.displayName}}</label>
             <div class="col-md-10">
-                <input ng-switch-when="String" id="{{column.name}}" name="{{column.name}}" class="form-control" type="text" ng-model="record['[column.name]'/]" ng-required="column.required"/>
-                <input ng-switch-when="Integer" id="{{column.name}}" name="{{column.name}}" class="form-control" type="number" ng-model="record['[column.name]'/]" ng-required="column.required"/>
-                <input ng-switch-when="Long" id="{{column.name}}" name="{{column.name}}" class="form-control" type="number" ng-model="record['[column.name]'/]" ng-required="column.required"/>
-                <input ng-switch-when="Boolean" id="{{column.name}}" name="{{column.name}}" ng-value="false" type="checkbox" ng-model="record['[column.name]'/]" ng-required="column.required" />
-                <input ng-switch-when="Computed" id="{{column.name}}" name="{{column.name}}" class="form-control" type="text" ng-value="column.fn(record)" readonly/>
+                <input ng-switch-when="String" id="{{column.name}}" name="{{column.name}}" class="form-control" type="text" ng-model="record['[column.name]'/]" ng-required="column.required" />
+                <input ng-switch-when="Integer" id="{{column.name}}" name="{{column.name}}" class="form-control" type="number" ng-model="record['[column.name]'/]" ng-required="column.required" />
+                <input ng-switch-when="Long" id="{{column.name}}" name="{{column.name}}" class="form-control" type="number" ng-model="record['[column.name]'/]" ng-required="column.required" />
+                <input ng-switch-when="Boolean" id="{{column.name}}" name="{{column.name}}" ng-checked="record['[column.name]'/]" type="checkbox" ng-model="record['[column.name]'/]" ng-required="column.required && record['[column.name]'/].$isEmpty" />
+                <input ng-switch-when="Computed" id="{{column.name}}" name="{{column.name}}" class="form-control" type="text" ng-value="column.fn(record)" readonly />
                 <select ng-switch-when="Reference" id="{{column.name}}" name="{{column.name}}" class="form-control" ng-options="rc as rc.name for rc in column.options" ng-model="record['[column.name]'/]"></select>
                 <date-picker ng-switch-when="Date" value="record['[column.name]'/]" model="column"></date-picker>
             </div>

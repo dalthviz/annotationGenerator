@@ -153,5 +153,13 @@ hs_err_pid*
 /target/
 /[m.getBackendProjectName()/]/target/
 /[m.getWebProjectName()/]/target/
+
+#NetBeans
+nbactions.xml
+/[m.getWebProjectName()/]/nb-configuration.xml
+
+#Tests
+/[m.getBackendProjectName()/]/derby.log
+
 [/file]
 [/template]
