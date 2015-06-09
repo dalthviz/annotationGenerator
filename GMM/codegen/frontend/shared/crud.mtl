@@ -10,6 +10,9 @@
     [m.crudListTemplate(filePath)/]
     [m.crudModalTemplate(filePath)/]
     [m.crudToolbarTemplate(filePath)/]
+    [m.genCrudTemplate(filePath)/]
+    [m.genDatePickerTemplate(filePath)/]
+    [m.genFormTemplate(filePath)/]
 [/let]
 [/template]
 
@@ -60,11 +63,35 @@
             return {
                 scope: {
                     actions: '=*',
-                    name: '@',
-                    displayName: '@'
+                    name: '=',
+                    displayName: '='
                 },
                 restrict: 'E',
                 templateUrl: 'src/shared/crud/toolbar.tpl.html'
+            };
+        }[']'/]);
+
+    mod.directive('crudForm', ['['/]function () {
+            return {
+                scope: {
+                    name: '=',
+                    model: '=*',
+                    record: '='
+                },
+                restrict: 'E',
+                templateUrl: 'src/shared/crud/form.tpl.html'
+            };
+        }[']'/]);
+
+    mod.directive('datePicker', ['['/]function () {
+            return {
+                scope: {
+                    model: '=',
+                    value: '='
+                },
+                restrict: 'E',
+                templateUrl: 'src/shared/crud/datepicker.tpl.html',
+                controller: 'datePickerCtrl'
             };
         }[']'/]);
 })(window.angular);
@@ -147,8 +174,10 @@
         }[']'/]);
 
     mod.service('CRUDBase', ['['/]'Restangular', 'actionsService', function (RestAngular, actionsBuilder) {
-            function extendCtrl(scope, model, svc) {
+            function extendCtrl(scope, model, svc, name, displayName) {
                 //Variables para el scope
+                scope.name = name;
+                scope.displayName = displayName;
                 scope.model = model;
                 scope.currentRecord = {};
                 scope.records = ['['/][']'/];
@@ -165,8 +194,8 @@
                 this.editMode = false;
                 this.error = {show: false, type: 'danger'};
                 var self = this;
-                
-                this.showMessage = function(msg, type){
+
+                this.showMessage = function (msg, type) {
                     var types = ['['/]'info', 'danger', 'warning', 'success'[']'/];
                     if(types.some(function(rc){return type === rc;})){
                         this.error.show = true;
@@ -178,15 +207,15 @@
                 this.showError = function (msg) {
                     this.showMessage(msg, 'danger');
                 };
-                
+
                 this.showSuccess = function(msg){
                     this.showMessage(msg, 'success');
                 };
-                
+
                 this.showWarning = function(msg){
                     this.showMessage(msg, 'warning');
                 };
-                
+
                 this.showInfo = function(msg){
                     this.showMessage(msg, 'info');
                 };
@@ -200,11 +229,20 @@
                 this.pageChanged = function () {
                     this.fetchRecords();
                 };
-                
+
+                this.setModelOptions = function (name, options) {
+                    for (var i in scope.model) {
+                        if (scope.model.hasOwnProperty(i) && scope.model['[i]'/].name === name) {
+                            scope.model['[i]'/].options = options;
+                            return;
+                        }
+                    }
+                };
+
                 function responseError(response){
                     self.showError(response.data);
                 }
-                
+
                 this.createRecord = function () {
                     this.editMode = true;
                     scope.currentRecord = {};
@@ -261,8 +299,8 @@
                 this.deleteRecord = function (record) {
                     return record.remove();
                 };
-                this.extendController = function (ctrl, scope, model) {
-                    extendCtrl.call(ctrl, scope, model, this);
+                this.extendController = function (ctrl, scope, model, name, displayName) {
+                    extendCtrl.call(ctrl, scope, model, this, name, displayName);
                 };
             }
             this.extendService = function (svc, ctx) {
@@ -302,6 +340,23 @@
             };
     }[']'/]);
 
+    mod.controller('datePickerCtrl', ['['/]'$scope', function ($scope) {
+            $scope.today = function () {
+                $scope.value = new Date();
+            };
+
+            $scope.clear = function () {
+                $scope.value = null;
+            };
+            
+            $scope.open = function ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+
+                $scope.opened = true;
+            };
+        }[']'/]);
+
     mod.controller('modalCtrl', ['['/]'$scope', '$modalInstance', 'items', 'name', function ($scope, $modalInstance, items, name) {
             $scope.model = ['['/]{name: 'name', displayName: 'Name', type: 'String', order: 1}[']'/]            
             $scope.name = name;
@@ -339,8 +394,9 @@
                 <td ng-if="checklist" id="{{$index}}-selected"><input type="checkbox" ng-model="record.selected"/></td>
                 <td ng-repeat="column in model" ng-switch="column.type" id="{{$parent.$index}}-{{column.name}}">
                     <div ng-switch-when="Computed">{{column.fn(record)}}</div>
-                    <div ng-switch-when="Date">{{record['['/]column.name[']'/]| date}}</div>
-                    <div ng-switch-default>{{record['['/]column.name[']'/]}}</div>
+                    <div ng-switch-when="Date">{{record['[column.name]'/]| date}}</div>
+                    <div ng-switch-when="Reference">{{record['[column.name]'/].name}}</div>
+                    <div ng-switch-default>{{record['[column.name]'/]}}</div>
                 </td>
                 <td ng-if="actions">
                     <button ng-repeat="action in actions" id="{{$parent.$index}}-{{action.name}}-btn" class="btn btn-default btn-sm" ng-show="action.show()" ng-click="action.fn(record)"><span class="glyphicon glyphicon-{{action.icon}}"></span> {{action.displayName}}</button>
@@ -393,5 +449,59 @@
         </div>
     </nav>
 </div>
+[/file]
+[/template]
+
+[template protected genDatePickerTemplate(m : Model, path : String)]
+[file (path.concat('datepicker.tpl.html'), false, 'UTF-8')]
+<p class="input-group">
+    <input type="text" id="{{model.name}}" name="{{model.name}}" class="form-control" ng-model="value" ng-required="model.required" datepicker-popup is-open="opened" readonly />
+    <span class="input-group-btn">
+        <button type="button" id="{{model.name}}-datepicker" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+    </span>
+</p>
+[/file]
+[/template]
+
+[template protected genCrudTemplate(m : Model, path : String)]
+[file (path.concat('crud.tpl.html'), false, 'UTF-8')]
+<toolbar name="name" display-name="displayName" actions="ctrl.globalActions"></toolbar>
+<div ng-show="ctrl.error.show" ng-message="show" class="alert alert-{{ctrl.error.type}}" role="alert">
+    <button type="button" class="close" ng-click="ctrl.closeError()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>{{ctrl.error.type | uppercase}}:</strong> {{ctrl.error.msg}}
+</div>
+<div ng-hide="ctrl.editMode">
+    <list-records
+        model="model"
+        records="records"
+        actions="ctrl.recordActions">
+    </list-records>
+    <pagination total-items="ctrl.totalItems" ng-model="ctrl.currentPage" ng-change="ctrl.pageChanged()" items-per-page="ctrl.itemsPerPage" max-size="ctrl.maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+</div>
+<div ng-show="ctrl.editMode" class="well">
+    <crud-form name="name" model="model" record="currentRecord"></crud-form>
+</div>
+[/file]
+[/template]
+
+[template protected genFormTemplate(m : Model, path : String)]
+[file (path.concat('form.tpl.html'), false, 'UTF-8')]
+<form novalidate name="form" id="{{name}}-form" role="form">
+    <fieldset>
+        <input id="id" class="form-control" type="hidden" ng-model="record.id"/>
+        <div class="form-group" ng-repeat="column in model" ng-switch="column.type" ng-class="{'has-success': form['[column.name]'/].$valid && form['[column.name]'/].$dirty, 'has-error': form['[column.name]'/].$invalid && form['[column.name]'/].$dirty}" >
+            <label for="{{column.name}}" class="col-md-2 control-label">{{column.displayName}}</label>
+            <div class="col-md-10">
+                <input ng-switch-when="String" id="{{column.name}}" name="{{column.name}}" class="form-control" type="text" ng-model="record['[column.name]'/]" ng-required="column.required"/>
+                <input ng-switch-when="Integer" id="{{column.name}}" name="{{column.name}}" class="form-control" type="number" ng-model="record['[column.name]'/]" ng-required="column.required"/>
+                <input ng-switch-when="Long" id="{{column.name}}" name="{{column.name}}" class="form-control" type="number" ng-model="record['[column.name]'/]" ng-required="column.required"/>
+                <input ng-switch-when="Boolean" id="{{column.name}}" name="{{column.name}}" ng-value="false" type="checkbox" ng-model="record['[column.name]'/]" ng-required="column.required" />
+                <input ng-switch-when="Computed" id="{{column.name}}" name="{{column.name}}" class="form-control" type="text" ng-value="column.fn(record)" readonly/>
+                <select ng-switch-when="Reference" id="{{column.name}}" name="{{column.name}}" class="form-control" ng-options="rc as rc.name for rc in column.options" ng-model="record['[column.name]'/]"></select>
+                <date-picker ng-switch-when="Date" value="record['[column.name]'/]" model="column"></date-picker>
+            </div>
+        </div>
+    </fieldset>
+</form>
 [/file]
 [/template]

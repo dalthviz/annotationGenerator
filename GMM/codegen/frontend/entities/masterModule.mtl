@@ -37,7 +37,7 @@
     var mod = ng.module('[c.getMasterModule()/]');
 
     mod.controller('[c.getMasterController()/]', ['['/]'$scope', '[c.getMasterService()/]', '[c.getEntityModel()/]', function ($scope, svc, model) {
-            svc.extendController(this, $scope, model);
+            svc.extendController(this, $scope, model, '[c.getName()/]Master', '[c.getDisplayName()/] Master');
             this.fetchRecords();
         }[']'/]);
     [for (asc : Association | c.getCompositeAssociations())]
@@ -62,20 +62,22 @@
 
 [template protected genMasterTemplate(c : Class, path : String)]
 [file (path.concat(c.getName()+'.master.tpl.html'), false, 'UTF-8')]
-<div ng-include="'src/modules/[c.getName()/]/[c.getName()/].tpl.html'"></div>
-<div id="childs" ng-show="[c.getCtrl()/].editMode">
+[let tpl : String = 'src/shared/crud/crud.tpl.html']
+<div ng-include="'[tpl/]'"></div>
+<div id="childs" ng-show="ctrl.editMode">
     <ul class="nav nav-tabs">
         [for (asc : Association | c.getSharedAssociations())]
         [let el : Property = asc.getChildProperty(c)]
-        <li role="presentation" ng-class="{active: tab === '[el.name/]'}"><a href ng-click="[c.getCtrl()/].changeTab('[el.name/]')">[el.getDisplayName()/]</a></li>
+        <li role="presentation" ng-class="{active: tab === '[el.name/]'}"><a href ng-click="ctrl.changeTab('[el.name/]')">[el.getDisplayName()/]</a></li>
         [/let]
         [/for]
     </ul>
     [for (asc : Association | c.getSharedAssociations())]
     [let el : Property = asc.getChildProperty(c)]
-    <div ng-show="tab === '[el.name/]'" ng-controller="[el.name/]Ctrl as [el.getClass().getCtrl()/]"ng-include="'src/modules/[el.getClass().getName()/]/[el.getClass().getName()/].tpl.html'"></div>
+    <div ng-show="tab === '[el.name/]'" ng-controller="[el.name/]Ctrl as ctrl"ng-include="'[tpl/]'"></div>
     [/let]
     [/for]
 </div>
+[/let]
 [/file]
 [/template]

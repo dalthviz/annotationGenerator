@@ -23,18 +23,19 @@
     [']'/]);
 
     mainApp.config(['['/]'$routeProvider', function ($routeProvider) {
+            var crudTpl = 'src/shared/crud/crud.tpl.html';
             $routeProvider
                 [for (c : Class | m.getClasses())]
                 .when('/[c.getName()/]', {
-                    templateUrl: 'src/modules/[c.getName()/]/[c.getName()/].tpl.html',
+                    templateUrl: crudTpl,
                     controller: '[c.getCtrl()/]',
-                    controllerAs: '[c.getCtrl()/]'
+                    controllerAs: 'ctrl'
                 })
                 [if (c.isMaster())]
                 .when('/[c.getName()/]/master', {
                     templateUrl: 'src/modules/[c.getName()/]/master/[c.getName()/].master.tpl.html',
                     controller: '[c.getMasterController()/]',
-                    controllerAs: '[c.getCtrl()/]'
+                    controllerAs: 'ctrl'
                 })
                 [/if]
                 [/for]
@@ -53,7 +54,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://bootswatch.com/lumen/bootstrap.min.css">
         <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
         <script src="http://underscorejs.org/underscore-min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -90,7 +91,7 @@
     </head>
     <body>
         <div class="container">
-            <div class="col-md-2">
+            <div class="col-md-2 well">
                 <ul class="nav nav-pills nav-stacked">
 				[for (c : Class | m.getClasses())]
                     <li><a href="#/[c.getName()/]">[c.getDisplayName()/]</a></li>

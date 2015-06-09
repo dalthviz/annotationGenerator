@@ -21,6 +21,9 @@ import java.util.Date;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;[/if]
 
+/**
+ * @generated
+ */
 @Entity
 public class [className/] implements Serializable {
 
@@ -35,19 +38,22 @@ public class [className/] implements Serializable {
     private [a.type.name/] [a.name.toLowerFirst()/];
 
     [/for]
-
     [for (a : Property | c.allAttributes())]
+    /**
+     * @generated
+     */
     public [a.type.name/] [a.getter()/](){
         return [a.name.toLowerFirst()/];
     }
 
+    /**
+     * @generated
+     */
     public void [a.setter()/]([a.type.name/] [a.name.toLowerFirst()/]){
         this.[a.name.toLowerFirst()/] = [a.name.toLowerFirst()/];
     }
-    [/for]
 
-    //[protected ('custom')]
-    //[/protected]
+    [/for]
 }
 [/file]
 [/template]

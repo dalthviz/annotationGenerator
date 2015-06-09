@@ -33,10 +33,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * @generated
+ */
 @RunWith(Arquillian.class)
 public class [className/] {
     public static final String DEPLOY = "Prueba";
 
+    /**
+     * @generated
+     */
     @Deployment
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class, DEPLOY + ".war")
@@ -49,15 +55,27 @@ public class [className/] {
                 .addAsWebInfResource("META-INF/beans.xml", "beans.xml");
     }
 
+    /**
+     * @generated
+     */
     @Inject
     private [c.getAPIName()/] [bean/];
 
+    /**
+     * @generated
+     */
     @PersistenceContext
     private EntityManager em;
 
+    /**
+     * @generated
+     */
     @Inject
     UserTransaction utx;
 
+    /**
+     * @generated
+     */
     @Before
     public void configTest() {
         System.out.println("em: " + em);
@@ -76,12 +94,21 @@ public class [className/] {
         }
     }
 
+    /**
+     * @generated
+     */
     private void clearData() {
         em.createQuery("delete from [c.getEntityName()/]").executeUpdate();
     }
 
+    /**
+     * @generated
+     */
     private List<[c.getEntityName()/]> data = new ArrayList<[c.getEntityName()/]>();
 
+    /**
+     * @generated
+     */
     private void insertData() {
         for (int i = 0; i < 3; i++) {
             [c.getEntityName()/] entity = new [c.getEntityName()/]();
@@ -93,15 +120,14 @@ public class [className/] {
         }
     }
 
+    /**
+     * @generated
+     */
     @Test
     public void create[c.name/]Test() {
         [c.getDTOName()/] dto = new [c.getDTOName()/]();
         [for (a : Property | c.getAllAttribs())]
-        [if (a.isDate())]
-        dto.[a.setter()/](generateRandomDate());
-        [else]
         dto.[a.setter()/](generateRandom([a.type.name/].class));
-        [/if]
         [/for]
 
         [c.getDTOName()/] result = [bean/].create[c.name/](dto);
@@ -111,14 +137,13 @@ public class [className/] {
         [c.getEntityName()/] entity = em.find([c.getEntityName()/].class, result.getId());
 
         [for (a : Property | c.getAllAttribs())]
-        [if (a.isDate())]
-        Assert.assertEquals(parseDate(dto.[a.getter()/]()), entity.[a.getter()/]());
-        [else]
         Assert.assertEquals(dto.[a.getter()/](), entity.[a.getter()/]());
-        [/if]
         [/for]
     }
 
+    /**
+     * @generated
+     */
     @Test
     public void get[c.name/]sTest() {
         List<[c.getDTOName()/]> list = [bean/].get[c.name/]s(null, null);
@@ -134,20 +159,22 @@ public class [className/] {
         }
     }
 
+    /**
+     * @generated
+     */
     @Test
     public void get[c.name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
         [c.getDTOName()/] dto = [bean/].get[c.name/](entity.getId());
         Assert.assertNotNull(dto);
         [for (a : Property | c.getAllAttribs())]
-        [if (a.isDate())]
-        Assert.assertEquals(entity.[a.getter()/](), parseDate(dto.[a.getter()/]()));
-        [else]
         Assert.assertEquals(entity.[a.getter()/](), dto.[a.getter()/]());
-        [/if]
         [/for]
     }
 
+    /**
+     * @generated
+     */
     @Test
     public void delete[c.name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
@@ -156,6 +183,9 @@ public class [className/] {
         Assert.assertNull(deleted);
     }
 
+    /**
+     * @generated
+     */
     @Test
     public void update[c.name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
@@ -164,11 +194,7 @@ public class [className/] {
 
         dto.setId(entity.getId());
         [for (a : Property | c.getAllAttribs())]
-        [if (a.isDate())]
-        dto.[a.setter()/](generateRandomDate());
-        [else]
         dto.[a.setter()/](generateRandom([a.type.name/].class));
-        [/if]
         [/for]
 
         [bean/].update[c.name/](dto);
@@ -176,14 +202,13 @@ public class [className/] {
         [c.getEntityName()/] resp = em.find([c.getEntityName()/].class, entity.getId());
 
         [for (a : Property | c.getAllAttribs())]
-        [if (a.isDate())]
-        Assert.assertEquals(parseDate(dto.[a.getter()/]()), resp.[a.getter()/]());
-        [else]
         Assert.assertEquals(dto.[a.getter()/](), resp.[a.getter()/]());
-        [/if]
         [/for]
     }
 
+    /**
+     * @generated
+     */
     @Test
     public void get[c.name/]PaginationTest() {
         //Page 1

@@ -25,7 +25,8 @@
     mod.constant('[c.getEntityModel()/]', ['['/][for (a : Property | c.getAllAttribs()) separator(', ')]{
             name: '[a.name/]',
             displayName: '[a.getDisplayName()/]',
-            type: '[a.type.name/]'
+            type: '[a.type.name/]',
+            required: [if (a.isRequired())]true[else]false[/if]
         }[/for][']'/]);
 })(window.angular);
 [/file]
@@ -37,25 +38,13 @@
     var mod = ng.module('[c.getModule() /]');
 
     mod.controller('[c.getCtrl()/]', ['['/]'$scope', '[c.getService()/]', '[c.getEntityModel()/]'[for(a : Property | c.refAttributes())], '[a.getClass().getService()/]'[/for], function ($scope, svc, model[for(a : Property | c.refAttributes())], [a.getClass().getService()/][/for]) {
-            svc.extendController(this, $scope, model);
+            svc.extendController(this, $scope, model, '[c.getName()/]', '[c.getDisplayName()/]');
             this.fetchRecords();
+
+            var self = this;
         [for (a : Property | c.refAttributes())]
-            var get[a.getDisplayName()/]Name = function(record){
-                for (var i in $scope.[a.name/]Records) {
-                    if ($scope.[a.name/]Records['[i]'/].id === record.[a.name/]) {
-                        return $scope.[a.name/]Records['[i]'/].name;
-                    }
-                }
-                return;
-            };
             [a.getClass().getService()/].fetchRecords().then(function(data){
-                $scope.[a.name/]Records = data.plain();
-                for(var i in model){
-                    if(model.hasOwnProperty(i) && model['[i]'/].name === '[a.name/]'){
-                        model['[i]'/].compute = get[a.getDisplayName()/]Name;
-                        return;
-                    }
-                }
+                self.setModelOptions('[a.name/]', data.plain());
             });
         [/for]
         }[']'/]);

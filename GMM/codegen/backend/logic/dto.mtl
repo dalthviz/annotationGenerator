@@ -13,36 +13,39 @@
 package [c.getModel().baseGroup()/].dtos;
 
 import javax.xml.bind.annotation.XmlRootElement;
+[if (c.hasDateAttribute())]
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.Date;
+[/if]
 
+/**
+ * @generated
+ */
 @XmlRootElement 
 public class [className/] {
 
 [for(p : Property | c.allAttributes())]
 	[if(p.isDate())]
-	private String [p.name/];
-	[else]
-	private [p.type.name/] [p.name/];
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	[/if]
-[/for]
+	private [p.type.name/] [p.name/];
 
+[/for]
 [for (p : Property | c.allAttributes())]
-[if(p.isDate())]
-	public String [p.getter()/]() {
-		return [p.name/];
-	}
- 
-	public void [p.setter()/](String [p.name.toLower()/]) {
-		this.[p.name/] = [p.name.toLower()/];
-	}
-[else]
+    /**
+     * @generated
+     */
 	public [p.type.name/] [p.getter()/]() {
 		return [p.name/];
 	}
- 
+
+    /**
+     * @generated
+     */
 	public void [p.setter()/]([p.type.name/] [p.name.toLower()/]) {
 		this.[p.name/] = [p.name.toLower()/];
 	}
-[/if]
+
 [/for]
 }
 [/file]
