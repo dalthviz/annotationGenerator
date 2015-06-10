@@ -180,7 +180,7 @@
                 scope.displayName = displayName;
                 scope.model = model;
                 scope.currentRecord = {};
-                scope.records = ['['/][']'/];
+                scope.records = ['[]'/];
 
                 //Variables de paginacion
                 this.maxSize = 5;
@@ -273,6 +273,9 @@
                         var svc = $injector.get(field.service);
                         svc.fetchRecords().then(function (data) {
                             field.options = data.plain();
+                            if (!field.required) {
+                                field.options.unshift(null);
+                            }
                         });
                     }
                     var model = scope.model;
@@ -502,8 +505,8 @@
 [file (path.concat('form.tpl.html'), false, 'UTF-8')]
 <form novalidate name="form" id="{{name}}-form" role="form">
     <fieldset>
-        <input id="id" class="form-control col-md-12" type="hidden" ng-model="record.id"/>
-        <div class="form-group" ng-repeat="column in model" ng-switch="column.type" ng-class="{'has-success': form['[column.name]'/].$valid && form['[column.name]'/].$dirty, 'has-error': form['[column.name]'/].$invalid && form['[column.name]'/].$dirty}" >
+        <input id="id" class="form-control" type="hidden" ng-model="record.id"/>
+        <div class="form-group col-md-12" ng-repeat="column in model" ng-switch="column.type" ng-class="{'has-success': form['[column.name]'/].$valid && form['[column.name]'/].$dirty, 'has-error': form['[column.name]'/].$invalid && form['[column.name]'/].$dirty}" >
             <label for="{{column.name}}" class="col-md-2 control-label">{{column.displayName}}</label>
             <div class="col-md-10">
                 <input ng-switch-when="String" id="{{column.name}}" name="{{column.name}}" class="form-control" type="text" ng-model="record['[column.name]'/]" ng-required="column.required" />
