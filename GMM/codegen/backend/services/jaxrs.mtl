@@ -70,6 +70,7 @@ public class [className/] {
     @PUT
     @Path("{id}")
     public [c.getDTOName()/] update[c.name/](@PathParam("id") Long id, [c.getDTOName()/] dto) {
+        dto.setId(id);
         return [logic/].update[c.name/](dto);
     }
 

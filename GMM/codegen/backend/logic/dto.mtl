@@ -24,27 +24,46 @@ import java.util.Date;
 @XmlRootElement 
 public class [className/] {
 
-[for(p : Property | c.allAttributes())]
-	[if(p.isDate())]
+[for(a : Property | c.allAttributes())]
+	[if(a.isDate())]
 	@XmlJavaTypeAdapter(DateAdapter.class)
 	[/if]
-	private [p.type.name/] [p.name/];
+	private [a.type.name/] [a.name/];
 
 [/for]
-[for (p : Property | c.allAttributes())]
+[for (a : Property | c.refAttributes())]
+	private [a.getClass().getDTOName()/] [a.name/];
+[/for]
+[for (a : Property | c.allAttributes())]
     /**
      * @generated
      */
-	public [p.type.name/] [p.getter()/]() {
-		return [p.name/];
+	public [a.type.name/] [a.getter()/]() {
+		return [a.name/];
 	}
 
     /**
      * @generated
      */
-	public void [p.setter()/]([p.type.name/] [p.name.toLower()/]) {
-		this.[p.name/] = [p.name.toLower()/];
+	public void [a.setter()/]([a.type.name/] [a.name.toLower()/]) {
+		this.[a.name/] = [a.name.toLower()/];
 	}
+
+[/for]
+[for (a : Property | c.refAttributes())]
+    /**
+     * @generated
+     */
+    public [a.getClass().getDTOName()/] [a.getter()/]() {
+        return [a.name/];
+    }
+
+    /**
+     * @generated
+     */
+    public void [a.setter()/]([a.getClass().getDTOName()/] [a.name.toLower()/]) {
+        this.[a.name/] = [a.name.toLower()/];
+    }
 
 [/for]
 }

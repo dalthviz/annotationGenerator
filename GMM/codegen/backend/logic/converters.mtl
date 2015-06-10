@@ -29,6 +29,9 @@ public class [className/] {
             [for (a : Property | c.allAttributes())]
             dto.[a.setter()/](entity.[a.getter()/]());
             [/for]
+            [for (a : Property | c.refAttributes())]
+            dto.[a.setter()/]([a.getClass().getConverterName()/].entity2PersistenceDTO(entity.[a.getter()/]()));
+            [/for]
 
             return dto;
         } else {
@@ -44,6 +47,9 @@ public class [className/] {
             [c.getEntityName()/] entity = new [c.getEntityName()/]();
             [for (a : Property | c.allAttributes())]
             entity.[a.setter()/](dto.[a.getter()/]());
+            [/for]
+            [for (a : Property | c.refAttributes())]
+            entity.[a.setter()/]([a.getClass().getConverterName()/].persistenceDTO2Entity(dto.[a.getter()/]()));
             [/for]
 
             return entity;

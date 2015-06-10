@@ -77,6 +77,8 @@ c.getMasterAssociations()->notEmpty()
 
 [query public isRequired(a : Property) : Boolean = self.upperBound() > 0 /]
 
+[query public isID(a : Property) : Boolean = a.name = 'id' /]
+
 [template public getModelName(c : Class)]
 [c.getModel().name/]
 [/template]

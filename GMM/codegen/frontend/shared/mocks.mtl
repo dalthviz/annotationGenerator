@@ -40,7 +40,7 @@
                 if (mockRecords['[entity]'/] === undefined) {
                     mockRecords['[entity]'/] = ['[]'/];
                 }
-                return mockRecords['['/]entity[']'/];
+                return mockRecords['[entity]'/];
             }
 
             var queryParamsRegex = '((['[?]'/](\\w+=\\w+))(['[&]'/](\\w+=\\w+))*)?$';
