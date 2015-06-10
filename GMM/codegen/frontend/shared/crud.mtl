@@ -173,7 +173,7 @@
             };
         }[']'/]);
 
-    mod.service('CRUDBase', ['['/]'Restangular', 'actionsService', function (RestAngular, actionsBuilder) {
+    mod.service('CRUDBase', ['['/]'Restangular', 'actionsService', '$injector', function (RestAngular, actionsBuilder, $injector) {
             function extendCtrl(scope, model, svc, name, displayName) {
                 //Variables para el scope
                 scope.name = name;
