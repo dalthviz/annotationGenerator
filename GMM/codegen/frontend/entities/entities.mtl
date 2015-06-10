@@ -34,10 +34,8 @@
             service: '[a.getClass().getService()/]',
             options: ['[]'/],
             required: [a.isRequired()/]
-        }[/for]
-[/if][']'/]);
+        }[/for][/if][']'/]);
 })(window.angular);
-[/for]
 [/file]
 [/template] 
 
