@@ -26,9 +26,18 @@
             name: '[a.name/]',
             displayName: '[a.getDisplayName()/]',
             type: '[a.type.name/]',
-            required: [if (a.isRequired())]true[else]false[/if]
-        }[/for][']'/]);
+            required: [a.isRequired()/]
+        }[/for][if(c.hasReferences())], [for (a : Property | c.refAttributes()) separator(', ')]{
+            name: '[a.name/]',
+            displayName: '[a.getDisplayName()/]',
+            type: 'Reference',
+            service: '[a.getClass().getService()/]',
+            options: ['[]'/],
+            required: [a.isRequired()/]
+        }[/for]
+[/if][']'/]);
 })(window.angular);
+[/for]
 [/file]
 [/template] 
 
@@ -39,14 +48,10 @@
 
     mod.controller('[c.getCtrl()/]', ['['/]'$scope', '[c.getService()/]', '[c.getEntityModel()/]'[for(a : Property | c.refAttributes())], '[a.getClass().getService()/]'[/for], function ($scope, svc, model[for(a : Property | c.refAttributes())], [a.getClass().getService()/][/for]) {
             svc.extendController(this, $scope, model, '[c.getName()/]', '[c.getDisplayName()/]');
+            [if (c.hasReferences())]
+        	this.loadRefOptions();
+            [/if]
             this.fetchRecords();
-
-            var self = this;
-        [for (a : Property | c.refAttributes())]
-            [a.getClass().getService()/].fetchRecords().then(function(data){
-                self.setModelOptions('[a.name/]', data.plain());
-            });
-        [/for]
         }[']'/]);
 })(window.angular);
 [/file]

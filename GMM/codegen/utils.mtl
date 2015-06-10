@@ -20,7 +20,7 @@ c.allAttributes()->union(c.refAttributes())->asOrderedSet()
 /]
 
 [query public refAttributes(c : Class) : OrderedSet(Property) = 
-c.getAssociations()->collect(getAllAttributes()->select(a | a.isNavigable() and a.getUpper() > 0 and a.getOtherEnd().type = c))->flatten()->asOrderedSet()
+c.getAssociations()->collect(getAllAttributes()->select(a | a.isNavigable() and a.getUpper() > 0 and a.getOtherEnd().type = c))->flatten()->sortedBy(a | a.name)->asOrderedSet()
 /]
 
 [query public getCompositeAssociations(c : Class) : Set(Association) =
@@ -54,6 +54,8 @@ c.getCompositeAssociations()->notEmpty()
 [query public hasSharedAssociations(c : Class) : Boolean =
 c.getSharedAssociations()->notEmpty()
 /]
+
+[query public hasReferences(c : Class) : Boolean = c.refAttributes()->size()>0 /]
 
 [query public isMaster(c : Class) : Boolean =
 c.getMasterAssociations()->notEmpty()
