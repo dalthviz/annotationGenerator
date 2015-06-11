@@ -51,7 +51,7 @@
     [for (asc : Association | c.getSharedAssociations())]
 
     [let el : Property = asc.getChildProperty(c)]
-    mod.controller('[el.name/]Ctrl', ['['/]'masterUtils', '$scope', '[el.getClass().getEntityModel()/]', '[el.getClass().getService()/]', 'modalService', function (masterSvc, $scope, model, svc, modalService) {
+    mod.controller('[el.name/]Ctrl', ['['/]'masterUtils', '$scope', '[el.getClass().getEntityModel()/]', '[el.getClass().getService()/]', function (masterSvc, $scope, model, svc) {
             masterSvc.extendAggChildCtrl(this, $scope, model, '[el.name/]', svc);
         }[']'/]);
     [/let]
