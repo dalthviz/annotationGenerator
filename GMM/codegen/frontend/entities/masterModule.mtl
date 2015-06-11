@@ -66,13 +66,13 @@
 <div ng-include="'[tpl/]'"></div>
 <div id="childs" ng-show="ctrl.editMode">
     <ul class="nav nav-tabs">
-        [for (asc : Association | c.getSharedAssociations())]
+        [for (asc : Association | c.getMasterAssociations())]
         [let el : Property = asc.getChildProperty(c)]
         <li role="presentation" ng-class="{active: tab === '[el.name/]'}"><a href ng-click="ctrl.changeTab('[el.name/]')">[el.getDisplayName()/]</a></li>
         [/let]
         [/for]
     </ul>
-    [for (asc : Association | c.getSharedAssociations())]
+    [for (asc : Association | c.getMasterAssociations())]
     [let el : Property = asc.getChildProperty(c)]
     <div ng-show="tab === '[el.name/]'" ng-controller="[el.name/]Ctrl as ctrl"ng-include="'[tpl/]'"></div>
     [/let]
