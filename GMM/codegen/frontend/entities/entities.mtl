@@ -47,7 +47,7 @@
     mod.controller('[c.getCtrl()/]', ['['/]'$scope', '[c.getService()/]', '[c.getEntityModel()/]'[for(a : Property | c.refAttributes())], '[a.getClass().getService()/]'[/for], function ($scope, svc, model[for(a : Property | c.refAttributes())], [a.getClass().getService()/][/for]) {
             svc.extendController(this, $scope, model, '[c.getName()/]', '[c.getDisplayName()/]');
             [if (c.hasReferences())]
-        	this.loadRefOptions();
+            this.loadRefOptions();
             [/if]
             this.fetchRecords();
         }[']'/]);
@@ -83,42 +83,42 @@
     <pagination total-items="[c.getCtrl()/].totalItems" ng-model="[c.getCtrl()/].currentPage" ng-change="[c.getCtrl()/].pageChanged()" items-per-page="[c.getCtrl()/].itemsPerPage" max-size="[c.getCtrl()/].maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
 </div>
 <div ng-show="[c.getCtrl()/].editMode">
-	<form name="[c.getName()/]Form" role="form">
+    <form name="[c.getName()/]Form" role="form">
         <input id="id" class="form-control" type="hidden" ng-model="currentRecord.id"/>			
         [for (a : Property | c.getAllAttribs())]
-		[if (a.type.name = 'String')]
-		<div class="form-group">
-			<label for="[a.name/]">[a.name.toUpperFirst()/]</label>
-			<input id="[a.name/]" class="form-control" type="text" ng-model="currentRecord.[a.name/]"/>
-		</div>
-		[/if]
-		[if (a.type.name = 'Long' or a.type.name = 'Integer')]
-		<div class="form-group">
-			<label for="[a.name/]">[a.name.toUpperFirst()/]</label>
-			<input id="[a.name/]" class="form-control" type="number" ng-model="currentRecord.[a.name/]"/>
-		</div>
-		[/if]
-		[if (a.isDate())]
-		<div class="form-group">
-			<label for="[a.name/]">[a.name.toUpperFirst()/]</label>
-			<input id="[a.name/]" class="form-control" type="date" ng-model="currentRecord.[a.name/]"/>
-		</div>
-		[/if]
-		[if (a.type.name = 'Boolean')]
-		<div class="form-group" >
-		    <label>
-	    	  <input id="[a.name/]" name="[a.name/]" ng-value="false" type="checkbox" ng-model="currentRecord.[a.name/]"> [a.name.toUpperFirst()/]
-	    	</label>
-		</div>
-		[/if]
-		[/for]
+        [if (a.type.name = 'String')]
+        <div class="form-group">
+            <label for="[a.name/]">[a.name.toUpperFirst()/]</label>
+            <input id="[a.name/]" class="form-control" type="text" ng-model="currentRecord.[a.name/]"/>
+        </div>
+        [/if]
+        [if (a.type.name = 'Long' or a.type.name = 'Integer')]
+        <div class="form-group">
+            <label for="[a.name/]">[a.name.toUpperFirst()/]</label>
+            <input id="[a.name/]" class="form-control" type="number" ng-model="currentRecord.[a.name/]"/>
+        </div>
+        [/if]
+        [if (a.isDate())]
+        <div class="form-group">
+            <label for="[a.name/]">[a.name.toUpperFirst()/]</label>
+            <input id="[a.name/]" class="form-control" type="date" ng-model="currentRecord.[a.name/]"/>
+        </div>
+        [/if]
+        [if (a.type.name = 'Boolean')]
+        <div class="form-group" >
+            <label>
+                <input id="[a.name/]" name="[a.name/]" ng-value="false" type="checkbox" ng-model="currentRecord.[a.name/]"> [a.name.toUpperFirst()/]
+            </label>
+        </div>
+        [/if]
+        [/for]
         [for (a : Property | c.refAttributes())]
-    	<div class="form-group">
+        <div class="form-group">
             <label for="[a.name/]">[a.getDisplayName()/]</label>
             <select id="[a.name/]" class="form-control" ng-options="[a.name/].id as [a.name/].name for [a.name/] in [a.name/]Records" ng-model="currentRecord.[a.name/]"></select>
         </div>
         [/for]
-	</form>
+    </form>
 </div>
 [/file]
 [/template]
