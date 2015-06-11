@@ -29,7 +29,6 @@ public class [className/] {
 	@XmlJavaTypeAdapter(DateAdapter.class)
 	[/if]
 	private [a.type.name/] [a.name/];
-
 [/for]
 [for (a : Property | c.refAttributes())]
 	private [a.getClass().getDTOName()/] [a.name/];

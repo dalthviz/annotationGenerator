@@ -23,6 +23,12 @@ public abstract class [className/] {
     /**
      * @generated
      */
+    private [className/]() {
+    }
+
+    /**
+     * @generated
+     */
     public static [c.getDTOName()/] entity2PersistenceDTO([c.getEntityName()/] entity) {
         if (entity != null) {
             [c.getDTOName()/] dto = new [c.getDTOName()/]();
