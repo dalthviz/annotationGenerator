@@ -25,28 +25,28 @@ import java.util.Date;
 public class [className/] {
 
 [for(a : Property | c.allAttributes())]
-	[if(a.isDate())]
-	@XmlJavaTypeAdapter(DateAdapter.class)
-	[/if]
-	private [a.type.name/] [a.name/];
+    [if(a.isDate())]
+    @XmlJavaTypeAdapter(DateAdapter.class)
+    [/if]
+    private [a.type.name/] [a.name/];
 [/for]
 [for (a : Property | c.refAttributes())]
-	private [a.getClass().getDTOName()/] [a.name/];
+    private [a.getClass().getDTOName()/] [a.name/];
 [/for]
 [for (a : Property | c.allAttributes())]
     /**
      * @generated
      */
-	public [a.type.name/] [a.getter()/]() {
-		return [a.name/];
-	}
+    public [a.type.name/] [a.getter()/]() {
+        return [a.name/];
+    }
 
     /**
      * @generated
      */
-	public void [a.setter()/]([a.type.name/] [a.name.toLower()/]) {
-		this.[a.name/] = [a.name.toLower()/];
-	}
+    public void [a.setter()/]([a.type.name/] [a.name.toLower()/]) {
+        this.[a.name/] = [a.name.toLower()/];
+    }
 
 [/for]
 [for (a : Property | c.refAttributes())]
