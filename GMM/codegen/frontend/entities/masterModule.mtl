@@ -14,7 +14,7 @@
 (function (ng) {
     var mod = ng.module('[c.getMasterModule()/]', ['['/]'[c.getModule()/]', [for (asc : Association | c.getMasterAssociations())]'[asc.getChildProperty(c).getClass().getModule()/]', [/for]'masterModule'[']'/]);
 
-    mod.constant('[c.getMasterContext()/]', '[c.getURI()/]/master');
+    mod.constant('[c.getMasterContext()/]', '[c.getURI()/]');
 })(window.angular);
 [/file]
 [/template]

@@ -123,6 +123,10 @@ c.getMasterAssociations()->notEmpty()
 [c.getName().concat('s')/]
 [/template]
 
+[template public getMasterURI(c : Class)]
+[c.getName().concat('s').concat('/master')/]
+[/template]
+
 [template public getName(c : Class)]
 [c.name.toLowerFirst()/]
 [/template]
@@ -137,6 +141,10 @@ c.getMasterAssociations()->notEmpty()
 
 [template public getJaxRsName(c : Class)]
 [c.name.concat('Service')/]
+[/template]
+
+[template public getMasterJaxRsName(c : Class)]
+[c.name.concat('MasterService')/]
 [/template]
 
 [template public getAPIName(c : Class)]

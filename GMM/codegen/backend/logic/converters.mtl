@@ -27,102 +27,6 @@ public abstract class [className/] {
     }
 
     /**
-     * @generated
-     */
-    public static [c.getDTOName()/] entity2PersistenceDTO([c.getEntityName()/] entity) {
-        if (entity != null) {
-            [c.getDTOName()/] dto = new [c.getDTOName()/]();
-            [for (a : Property | c.allAttributes())]
-            dto.[a.setter()/](entity.[a.getter()/]());
-            [/for]
-            [for (a : Property | c.refAttributes())]
-            dto.[a.setter()/]([a.getClass().getConverterName()/].refEntity2DTO(entity.[a.getter()/]()));
-            [/for]
-
-            return dto;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @generated
-     */
-    public static [c.getEntityName()/] persistenceDTO2Entity([c.getDTOName()/] dto) {
-        if (dto != null) {
-            [c.getEntityName()/] entity = new [c.getEntityName()/]();
-            [for (a : Property | c.allAttributes())]
-            entity.[a.setter()/](dto.[a.getter()/]());
-            [/for]
-            [for (a : Property | c.refAttributes())]
-            entity.[a.setter()/]([a.getClass().getConverterName()/].refDTO2Entity(dto.[a.getter()/]()));
-            [/for]
-
-            return entity;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @generated
-     */
-    public static [c.getDTOName()/] entityMaster2PersistenceDTO([c.getEntityName()/] entity) {
-        if (entity != null) {
-            [c.getDTOName()/] dto = entity2PersistenceDTO(entity);
-            [comment]
-            dto.setSports(SportConverter.entity2PersistenceDTOList(entity.getSports()));
-            dto.setOwnedSports(SportConverter.entity2PersistenceDTOList(entity.getOwnedSports()));
-            [/comment]
-            return dto;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @generated
-     */
-    public static [c.getEntityName()/] persistenceDTO2EntityMaster([c.getDTOName()/] dto) {
-        if (dto != null) {
-            [c.getEntityName()/] entity = persistenceDTO2Entity(dto);
-            [comment]
-            entity.setSports(SportConverter.persistenceDTO2EntityList(dto.getSports()));
-            entity.setOwnedSports(SportConverter.persistenceDTO2EntityListChild(dto.getOwnedSports(), entity));
-            [/comment]
-            return entity;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @generated
-     */
-    public static List<[c.getDTOName()/]> entity2PersistenceDTOList(List<[c.getEntityName()/]> entities) {
-        List<[c.getDTOName()/]> dtos = new ArrayList<[c.getDTOName()/]>();
-        if (entities != null) {
-            for ([c.getEntityName()/] entity : entities) {
-                dtos.add(entity2PersistenceDTO(entity));
-            }
-        }
-        return dtos;
-    }
-
-    /**
-     * @generated
-     */
-    public static List<[c.getEntityName()/]> persistenceDTO2EntityList(List<[c.getDTOName()/]> dtos) {
-        List<[c.getEntityName()/]> entities = new ArrayList<[c.getEntityName()/]>();
-        if (dtos != null) {
-            for ([c.getDTOName()/] dto : dtos) {
-                entities.add(persistenceDTO2Entity(dto));
-            }
-        }
-        return entities;
-    }
-
-    /**
      * @param entity
      * @return
      * @generated
@@ -153,6 +57,102 @@ public abstract class [className/] {
         } else {
             return null;
         }
+    }
+
+    /**
+     * @generated
+     */
+    private static [c.getDTOName()/] basicEntity2DTO([c.getEntityName()/] entity) {
+        if (entity != null) {
+            [c.getDTOName()/] dto = new [c.getDTOName()/]();
+            [for (a : Property | c.allAttributes())]
+            dto.[a.setter()/](entity.[a.getter()/]());
+            [/for]
+            [for (a : Property | c.refAttributes())]
+            dto.[a.setter()/]([a.getClass().getConverterName()/].refEntity2DTO(entity.[a.getter()/]()));
+            [/for]
+
+            return dto;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @generated
+     */
+    private static [c.getEntityName()/] basicDTO2Entity([c.getDTOName()/] dto) {
+        if (dto != null) {
+            [c.getEntityName()/] entity = new [c.getEntityName()/]();
+            [for (a : Property | c.allAttributes())]
+            entity.[a.setter()/](dto.[a.getter()/]());
+            [/for]
+            [for (a : Property | c.refAttributes())]
+            entity.[a.setter()/]([a.getClass().getConverterName()/].refDTO2Entity(dto.[a.getter()/]()));
+            [/for]
+
+            return entity;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @generated
+     */
+    public static [c.getDTOName()/] fullEntity2DTO([c.getEntityName()/] entity) {
+        if (entity != null) {
+            [c.getDTOName()/] dto = entity2PersistenceDTO(entity);
+            [comment]
+            dto.setSports(SportConverter.entity2PersistenceDTOList(entity.getSports()));
+            dto.setOwnedSports(SportConverter.entity2PersistenceDTOList(entity.getOwnedSports()));
+            [/comment]
+            return dto;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @generated
+     */
+    public static [c.getEntityName()/] fullDTO2Entity([c.getDTOName()/] dto) {
+        if (dto != null) {
+            [c.getEntityName()/] entity = persistenceDTO2Entity(dto);
+            [comment]
+            entity.setSports(SportConverter.persistenceDTO2EntityList(dto.getSports()));
+            entity.setOwnedSports(SportConverter.persistenceDTO2EntityListChild(dto.getOwnedSports(), entity));
+            [/comment]
+            return entity;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @generated
+     */
+    public static List<[c.getDTOName()/]> listEntity2DTO(List<[c.getEntityName()/]> entities) {
+        List<[c.getDTOName()/]> dtos = new ArrayList<[c.getDTOName()/]>();
+        if (entities != null) {
+            for ([c.getEntityName()/] entity : entities) {
+                dtos.add(basicEntity2DTO(entity));
+            }
+        }
+        return dtos;
+    }
+
+    /**
+     * @generated
+     */
+    public static List<[c.getEntityName()/]> listDTO2Entity(List<[c.getDTOName()/]> dtos) {
+        List<[c.getEntityName()/]> entities = new ArrayList<[c.getEntityName()/]>();
+        if (dtos != null) {
+            for ([c.getDTOName()/] dto : dtos) {
+                entities.add(basicDTO2Entity(dto));
+            }
+        }
+        return entities;
     }
 }
 [/file]
