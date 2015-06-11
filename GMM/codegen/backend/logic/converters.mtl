@@ -102,7 +102,7 @@ public abstract class [className/] {
      */
     public static [c.getDTOName()/] fullEntity2DTO([c.getEntityName()/] entity) {
         if (entity != null) {
-            [c.getDTOName()/] dto = entity2PersistenceDTO(entity);
+            [c.getDTOName()/] dto = basicEntity2DTO(entity);
             [comment]
             dto.setSports(SportConverter.entity2PersistenceDTOList(entity.getSports()));
             dto.setOwnedSports(SportConverter.entity2PersistenceDTOList(entity.getOwnedSports()));
@@ -118,7 +118,7 @@ public abstract class [className/] {
      */
     public static [c.getEntityName()/] fullDTO2Entity([c.getDTOName()/] dto) {
         if (dto != null) {
-            [c.getEntityName()/] entity = persistenceDTO2Entity(dto);
+            [c.getEntityName()/] entity = basicDTO2Entity(dto);
             [comment]
             entity.setSports(SportConverter.persistenceDTO2EntityList(dto.getSports()));
             entity.setOwnedSports(SportConverter.persistenceDTO2EntityListChild(dto.getOwnedSports(), entity));
