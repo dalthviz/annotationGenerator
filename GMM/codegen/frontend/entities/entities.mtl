@@ -43,7 +43,7 @@
 (function (ng) {
     var mod = ng.module('[c.getModule() /]');
 
-    mod.controller('[c.getCtrl()/]', ['['/]'$scope', '[c.getService()/]', '[c.getEntityModel()/]'[for(a : Property | c.refAttributes())], '[a.getClass().getService()/]'[/for], function ($scope, svc, model[for(a : Property | c.refAttributes())], [a.getClass().getService()/][/for]) {
+    mod.controller('[c.getCtrl()/]', ['['/]'$scope', '[c.getService()/]', '[c.getEntityModel()/]', function ($scope, svc, model) {
             svc.extendController(this, $scope, model, '[c.getName()/]', '[c.getDisplayName()/]');
             [if (c.hasReferences())]
             this.loadRefOptions();
@@ -56,8 +56,8 @@
 
 [template protected genService(c : Class, path : String)]
 [file (path.concat('.svc.js'), false, 'UTF-8')]
-(function(angular){
-    var mod = angular.module('[c.getModule() /]');
+(function(ng){
+    var mod = ng.module('[c.getModule() /]');
     
     mod.service('[c.getService()/]', ['['/]'CRUDBase','[c.getContext()/]', function(CRUDBase, context){
             CRUDBase.extendService(this, context);
