@@ -32,7 +32,7 @@ c.getAssociations()->collect(
 				a.getOtherEnd().isNavigable()
 			and a.getOtherEnd().getUpper() < 0
 			and a.getOtherEnd().type = c
-			and a.isComposite()
+			and a.getOtherEnd().isComposite()
 )))->flatten()->sortedBy(a | a.name)->asOrderedSet()
 /]
 

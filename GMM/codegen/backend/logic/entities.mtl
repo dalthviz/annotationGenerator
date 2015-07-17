@@ -10,7 +10,6 @@
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].entities;
 
-import java.util.List;
 import java.io.Serializable;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
@@ -22,6 +21,10 @@ import javax.persistence.TemporalType;
 [/if]
 [if (c.hasReferences())]
 import javax.persistence.ManyToOne;
+[/if]
+[if (c.isMaster())]
+import javax.persistence.ManyToOne;
+import java.util.List;
 [/if]
 
 /**
@@ -44,6 +47,16 @@ public class [className/] implements Serializable {
 [for (a : Property | c.refAttributes())]
     @ManyToOne
     private [a.getClass().getEntityName()/] [a.name/];
+[/for]
+[for (asc : Association | c.getMasterAssociations())]
+[let a : Property = asc.getChildProperty(c)]
+[if (a.isComposite())]
+    @OneToMany(mappedBy = "[a.getOtherEnd().name/]", cascade = CascadeType.ALL, orphanRemoval = true)
+[else]
+	@OneToMany
+[/if]
+    private List<[a.getClass().getEntityName()/]> [a.name/];
+[/let]
 [/for]
 [for (a : Property | c.allAttributes())]
     /**
@@ -76,6 +89,23 @@ public class [className/] implements Serializable {
         this.[a.name/] = [a.name.toLower()/];
     }
 
+[/for]
+[for (asc : Association | c.getMasterAssociations())]
+[let a : Property = asc.getChildProperty(c)]
+    /**
+     * @generated
+     */
+    public List<[a.getClass().getEntityName()/]> [a.getter()/]() {
+        return [a.name/];
+    }
+
+    /**
+     * @generated
+     */
+    public void [a.setter()/](List<[a.getClass().getEntityName()/]> [a.name.toLower()/]) {
+        this.[a.name/] = [a.name.toLower()/];
+    }
+[/let]
 [/for]
 }
 [/file]
