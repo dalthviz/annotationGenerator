@@ -23,8 +23,11 @@ import javax.persistence.TemporalType;
 import javax.persistence.ManyToOne;
 [/if]
 [if (c.isMaster())]
-import javax.persistence.ManyToOne;
 import java.util.List;
+import javax.persistence.OneToMany;
+[if (c.hasCompositeAssociations())]
+import javax.persistence.CascadeType;
+[/if]
 [/if]
 
 /**
@@ -53,7 +56,7 @@ public class [className/] implements Serializable {
 [if (a.isComposite())]
     @OneToMany(mappedBy = "[a.getOtherEnd().name/]", cascade = CascadeType.ALL, orphanRemoval = true)
 [else]
-	@OneToMany
+    @OneToMany
 [/if]
     private List<[a.getClass().getEntityName()/]> [a.name/];
 [/let]
@@ -106,6 +109,7 @@ public class [className/] implements Serializable {
         this.[a.name/] = [a.name.toLower()/];
     }
 [/let]
+
 [/for]
 }
 [/file]

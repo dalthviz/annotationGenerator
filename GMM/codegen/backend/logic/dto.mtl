@@ -17,6 +17,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Date;
 [/if]
+[if (c.isMaster())]
+import java.util.List;
+[/if]
 
 /**
  * @generated
@@ -32,6 +35,11 @@ public class [className/] {
 [/for]
 [for (a : Property | c.refAttributes())]
     private [a.getClass().getDTOName()/] [a.name/];
+[/for]
+[for (asc : Association | c.getMasterAssociations())]
+[let a : Property = asc.getChildProperty(c)]
+    private List<[a.getClass().getEntityName()/]> [a.name/];
+[/let]
 [/for]
 [for (a : Property | c.allAttributes())]
     /**
@@ -63,6 +71,24 @@ public class [className/] {
     public void [a.setter()/]([a.getClass().getDTOName()/] [a.name.toLower()/]) {
         this.[a.name/] = [a.name.toLower()/];
     }
+
+[/for]
+[for (asc : Association | c.getMasterAssociations())]
+[let a : Property = asc.getChildProperty(c)]
+    /**
+     * @generated
+     */
+    public List<[a.getClass().getDTOName()/]> [a.getter()/]() {
+        return [a.name/];
+    }
+
+    /**
+     * @generated
+     */
+    public void [a.setter()/](List<[a.getClass().getDTOName()/]> [a.name.toLower()/]) {
+        this.[a.name/] = [a.name.toLower()/];
+    }
+[/let]
 
 [/for]
 }
