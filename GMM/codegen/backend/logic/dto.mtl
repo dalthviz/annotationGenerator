@@ -38,7 +38,7 @@ public class [className/] {
 [/for]
 [for (asc : Association | c.getMasterAssociations())]
 [let a : Property = asc.getChildProperty(c)]
-    private List<[a.getClass().getEntityName()/]> [a.name/];
+    private List<[a.getClass().getDTOName()/]> [a.name/];
 [/let]
 [/for]
 [for (a : Property | c.allAttributes())]
