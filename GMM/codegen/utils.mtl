@@ -20,7 +20,20 @@ c.allAttributes()->union(c.refAttributes())->asOrderedSet()
 /]
 
 [query public refAttributes(c : Class) : OrderedSet(Property) = 
-c.getAssociations()->collect(getAllAttributes()->select(a | a.isNavigable() and a.getUpper() > 0 and a.getOtherEnd().type = c))->flatten()->sortedBy(a | a.name)->asOrderedSet()
+c.getAssociations()->collect(
+	getAllAttributes()->select(
+		a | (
+				a.isNavigable()
+			and a.getUpper() > 0
+			and a.getOtherEnd().type = c
+			and a.getOtherEnd().aggregation = AggregationKind::none
+			and not a.getOtherEnd().isNavigable()
+		) or (
+				a.getOtherEnd().isNavigable()
+			and a.getOtherEnd().getUpper() < 0
+			and a.getOtherEnd().type = c
+			and a.isComposite()
+)))->flatten()->sortedBy(a | a.name)->asOrderedSet()
 /]
 
 [query public getCompositeAssociations(c : Class) : Set(Association) =
