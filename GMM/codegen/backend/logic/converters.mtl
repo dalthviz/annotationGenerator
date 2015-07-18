@@ -15,7 +15,7 @@ import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import java.util.ArrayList;
 import java.util.List;
 [if (c.isChild())]
-import [c.getModel().baseGroup()/].entities.*;
+import [c.getModel().baseGroup()/].entities.[c.getParentAttribute().getClass().getEntityName()/];
 [/if]
 
 /**
