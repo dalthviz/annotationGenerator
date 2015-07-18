@@ -179,7 +179,7 @@ public abstract class [className/] {
         List<[c.getEntityName()/]> entities = new ArrayList<[c.getEntityName()/]>();
         if (dtos != null) {
             for ([c.getDTOName()/] dto : dtos) {
-                entities.add(basicDTO2EntityChild(dto, parent));
+                entities.add(childDTO2Entity(dto, parent));
             }
         }
         return entities;
