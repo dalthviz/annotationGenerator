@@ -103,10 +103,11 @@ public abstract class [className/] {
     public static [c.getDTOName()/] fullEntity2DTO([c.getEntityName()/] entity) {
         if (entity != null) {
             [c.getDTOName()/] dto = basicEntity2DTO(entity);
-            [comment]
-            dto.setSports(SportConverter.entity2PersistenceDTOList(entity.getSports()));
-            dto.setOwnedSports(SportConverter.entity2PersistenceDTOList(entity.getOwnedSports()));
-            [/comment]
+            [for (asc : Association | c.getMasterAssociations())]
+            [let a : Property = asc.getChildProperty(c)]
+            dto.[a.setter()/]([a.getClass().getConverterName()/].listEntity2DTO(entity.[a.getter()/]()));
+            [/let]
+            [/for]
             return dto;
         } else {
             return null;
@@ -119,10 +120,11 @@ public abstract class [className/] {
     public static [c.getEntityName()/] fullDTO2Entity([c.getDTOName()/] dto) {
         if (dto != null) {
             [c.getEntityName()/] entity = basicDTO2Entity(dto);
-            [comment]
-            entity.setSports(SportConverter.persistenceDTO2EntityList(dto.getSports()));
-            entity.setOwnedSports(SportConverter.persistenceDTO2EntityListChild(dto.getOwnedSports(), entity));
-            [/comment]
+            [for (asc : Association | c.getMasterAssociations())]
+            [let a : Property = asc.getChildProperty(c)]
+            entity.[a.setter()/]([a.getClass().getConverterName()/].listDTO2Entity(dto.[a.getter()/]()));
+            [/let]
+            [/for]
             return entity;
         } else {
             return null;
@@ -132,6 +134,7 @@ public abstract class [className/] {
     /**
      * @generated
      */
+
     public static List<[c.getDTOName()/]> listEntity2DTO(List<[c.getEntityName()/]> entities) {
         List<[c.getDTOName()/]> dtos = new ArrayList<[c.getDTOName()/]>();
         if (entities != null) {
@@ -154,6 +157,32 @@ public abstract class [className/] {
         }
         return entities;
     }
+
+    [if (c.isChild())]
+    [let parent : Property = c.getParentAttribute()]
+    /**
+     * @generated
+     */
+    public static [c.getEntityName()/] childDTO2Entity([c.getDTOName()/] dto, [parent.getClass().getEntityName()/] parent){
+        [c.getEntityName()/] entity = basicDTO2Entity(dto);
+        entity.[parent.setter()/](parent);
+        return entity;
+    }
+
+    /**
+     * @generated
+     */
+    public static List<[c.getEntityName()/]> childListDTO2Entity(List<[c.getDTOName()/]> dtos, [parent.getClass().getEntityName()/] parent) {
+        List<[c.getEntityName()/]> entities = new ArrayList<[c.getEntityName()/]>();
+        if (dtos != null) {
+            for ([c.getDTOName()/] dto : dtos) {
+                entities.add(basicDTO2EntityChild(dto, parent));
+            }
+        }
+        return entities;
+    }
+    [/let]
+    [/if]
 }
 [/file]
 [/template]

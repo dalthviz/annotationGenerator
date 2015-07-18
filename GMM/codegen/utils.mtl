@@ -68,6 +68,29 @@ c.getCompositeAssociations()->notEmpty()
 c.getSharedAssociations()->notEmpty()
 /]
 
+[query public isChild(c : Class) : Boolean = 
+c.getAssociations()->collect(
+    getAllAttributes()->select(
+        a | 
+                a.getOtherEnd().isNavigable()
+            and a.getOtherEnd().getUpper() < 0
+            and a.getOtherEnd().type = c
+            and a.getOtherEnd().isComposite()
+))->flatten()->notEmpty()
+ /]
+
+[query public getParentAttribute(c : Class) : Property = 
+c.getAssociations()->collect(
+    getAllAttributes()->select(
+        a | 
+                a.getOtherEnd().isNavigable()
+            and a.getOtherEnd().getUpper() < 0
+            and a.getOtherEnd().type = c
+            and a.getOtherEnd().isComposite()
+))->flatten()->asOrderedSet()->first()
+ /]
+
+
 [query public hasReferences(c : Class) : Boolean = c.refAttributes()->size()>0 /]
 
 [query public isMaster(c : Class) : Boolean =
