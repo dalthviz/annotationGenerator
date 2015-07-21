@@ -195,6 +195,10 @@ c.getMasterAssociations()->notEmpty()
 [c.name.concat('Entity')/]
 [/template]
 
+[template public getPersistenceName(c : Class)]
+[c.name.concat('Persistence')/]
+[/template]
+
 [template public getConverterName(c : Class)]
 [c.name.concat('Converter')/]
 [/template]
