@@ -8,7 +8,7 @@
 
 [template protected genPersistenceBean(m : Model, path : String)]
 [file (path.concat('CrudPersistence.java'), false, 'UTF-8')]
-package [m.baseGroup()/].ejbs;
+package [m.baseGroup()/].persistence;
 
 import java.util.List;
 import java.util.Map;
