@@ -7,6 +7,7 @@
 [m.genPOM()/]
 [m.genTravis()/]
 [m.genReadMe()/]
+[m.genGitIgnore()/]
 [/template]
 
 [template protected genPOM(m : Model)]
@@ -23,6 +24,20 @@
         <module>[m.getBackendProjectName()/]</module>
         <module>[m.getWebProjectName()/]</module>
     </modules>
+    <profiles>
+        <profile>
+            <id>sonar</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <sonar.jdbc.url>${sonar_jdbc_url}</sonar.jdbc.url>
+                <sonar.jdbc.username>${sonar_jdbc_username}</sonar.jdbc.username>
+                <sonar.jdbc.password>${sonar_jdbc_password}</sonar.jdbc.password>
+                <sonar.host.url>${sonar_host_url}</sonar.host.url>
+            </properties>
+        </profile>
+    </profiles>
 </project>
 [/file]
 [/template]
@@ -105,13 +120,11 @@ A diferencia del API para CRUD Básico, el API de Maestro/Detalle no provee un s
 Método|URI|Acción|Parámetros|Cuerpo|Retorno
 :--:|:--:|:--:|:--:|:--:|:--:
 [for (asc : Association | class.getCompositeAssociations())]
-    [let el : Set(Property) = asc.getChildProperty(class)]
-        [for (elem : Property | el)]
+    [let elem : Property = asc.getChildProperty(class)]
 **GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener Objetos JSON de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]||Colección de objetos JSON de [elem.name/]([elem.type.name/])
 **POST**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Creación de instancias de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de objetos JSON de [elem.name/]([elem.type.name/]) a crear|Colección de objetos JSON de [elem.name/]([elem.type.name/]) creados con sus respectivos ID
 **PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de instancias de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de objetos JSON de [elem.name/]([elem.type.name/]) a actualizar|Colección de objetos JSON de [elem.name/]([elem.type.name/]) actualizados
 **DELETE**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Eliminación de instancias de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de atributo `id` de [elem.name/]([elem.type.name/]) a eliminar|
-        [/for]
     [/let]
 [/for]
 [/if]
@@ -122,11 +135,9 @@ Método|URI|Acción|Parámetros|Cuerpo|Retorno
 Método|URI|Acción|Parámetros|Cuerpo|Retorno
 :--:|:--:|:--:|:--:|:--:|:--:
 [for (asc : Association | class.getSharedAssociations())]
-    [let el : Set(Property) = asc.getChildProperty(class)]
-        [for (elem : Property | el)]
+    [let elem : Property = asc.getChildProperty(class)]
 **GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener instancias de [elem.name/]([elem.type.name/]) asociados con [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]||Colección de `id` de [elem.name/]([elem.type.name/]) asociados con [class.name/]
 **PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de referencias a [elem.name/]([elem.type.name/]) desde [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de `id` de [elem.name/]([elem.type.name/]) a asociar|Colección de objetos JSON de [elem.name/]([elem.type.name/]) asociados
-        [/for]
     [/let]
 [/for]
 [/if]
@@ -134,5 +145,35 @@ Método|URI|Acción|Parámetros|Cuerpo|Retorno
 ['['/]Volver arriba[']'/](#tabla-de-contenidos)
 
 [/for]
+[/file]
+[/template]
+
+[template protected genGitIgnore(m : Model)]
+[file ('.gitignore', false, 'UTF-8')]
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+.tmp/
+/target/
+/[m.getBackendProjectName()/]/target/
+/[m.getWebProjectName()/]/target/
+
+#NetBeans
+nbactions.xml
+/[m.getWebProjectName()/]/nb-configuration.xml
+
+#Tests
+/[m.getBackendProjectName()/]/derby.log
+
 [/file]
 [/template]

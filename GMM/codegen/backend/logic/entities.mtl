@@ -10,8 +10,6 @@
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].entities;
 
-
-import java.util.List;
 import java.io.Serializable;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
@@ -19,13 +17,27 @@ import javax.persistence.Entity;
 [if (c.hasDateAttribute())]
 import java.util.Date;
 import javax.persistence.Temporal;
-import javax.persistence.TemporalType;[/if]
+import javax.persistence.TemporalType;
+[/if]
+[if (c.hasReferences())]
+import javax.persistence.ManyToOne;
+[/if]
+[if (c.isMaster())]
+import java.util.List;
+import javax.persistence.OneToMany;
+[if (c.hasCompositeAssociations())]
+import javax.persistence.CascadeType;
+[/if]
+[/if]
 
+/**
+ * @generated
+ */
 @Entity
 public class [className/] implements Serializable {
 
-    [for (a : Property | c.allAttributes())]
-    [if (a.name='id')]
+[for (a : Property | c.allAttributes())]
+    [if (a.isID())]
     @Id
     @GeneratedValue(generator = "[c.name/]")
     [/if]
@@ -34,20 +46,71 @@ public class [className/] implements Serializable {
     [/if]
     private [a.type.name/] [a.name.toLowerFirst()/];
 
-    [/for]
-
-    [for (a : Property | c.allAttributes())]
+[/for]
+[for (a : Property | c.refAttributes())]
+    @ManyToOne
+    private [a.getClass().getEntityName()/] [a.name/];
+[/for]
+[for (asc : Association | c.getMasterAssociations())]
+[let a : Property = asc.getChildProperty(c)]
+[if (a.isComposite())]
+    @OneToMany(mappedBy = "[a.getOtherEnd().name/]", cascade = CascadeType.ALL, orphanRemoval = true)
+[else]
+    @OneToMany
+[/if]
+    private List<[a.getClass().getEntityName()/]> [a.name/];
+[/let]
+[/for]
+[for (a : Property | c.allAttributes())]
+    /**
+     * @generated
+     */
     public [a.type.name/] [a.getter()/](){
         return [a.name.toLowerFirst()/];
     }
 
+    /**
+     * @generated
+     */
     public void [a.setter()/]([a.type.name/] [a.name.toLowerFirst()/]){
         this.[a.name.toLowerFirst()/] = [a.name.toLowerFirst()/];
     }
-    [/for]
 
-    //[protected ('custom')]
-    //[/protected]
+[/for]
+[for (a : Property | c.refAttributes())]
+    /**
+     * @generated
+     */
+    public [a.getClass().getEntityName()/] [a.getter()/]() {
+        return [a.name/];
+    }
+
+    /**
+     * @generated
+     */
+    public void [a.setter()/]([a.getClass().getEntityName()/] [a.name.toLower()/]) {
+        this.[a.name/] = [a.name.toLower()/];
+    }
+
+[/for]
+[for (asc : Association | c.getMasterAssociations())]
+[let a : Property = asc.getChildProperty(c)]
+    /**
+     * @generated
+     */
+    public List<[a.getClass().getEntityName()/]> [a.getter()/]() {
+        return [a.name/];
+    }
+
+    /**
+     * @generated
+     */
+    public void [a.setter()/](List<[a.getClass().getEntityName()/]> [a.name.toLower()/]) {
+        this.[a.name/] = [a.name.toLower()/];
+    }
+[/let]
+
+[/for]
 }
 [/file]
 [/template]

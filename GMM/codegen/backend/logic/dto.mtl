@@ -13,36 +13,83 @@
 package [c.getModel().baseGroup()/].dtos;
 
 import javax.xml.bind.annotation.XmlRootElement;
+[if (c.hasDateAttribute())]
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.Date;
+[/if]
+[if (c.isMaster())]
+import java.util.List;
+[/if]
 
+/**
+ * @generated
+ */
 @XmlRootElement 
 public class [className/] {
 
-[for(p : Property | c.allAttributes())]
-	[if(p.isDate())]
-	private String [p.name/];
-	[else]
-	private [p.type.name/] [p.name/];
-	[/if]
+[for(a : Property | c.allAttributes())]
+    [if(a.isDate())]
+    @XmlJavaTypeAdapter(DateAdapter.class)
+    [/if]
+    private [a.type.name/] [a.name/];
 [/for]
+[for (a : Property | c.refAttributes())]
+    private [a.getClass().getDTOName()/] [a.name/];
+[/for]
+[for (asc : Association | c.getMasterAssociations())]
+[let a : Property = asc.getChildProperty(c)]
+    private List<[a.getClass().getDTOName()/]> [a.name/];
+[/let]
+[/for]
+[for (a : Property | c.allAttributes())]
+    /**
+     * @generated
+     */
+    public [a.type.name/] [a.getter()/]() {
+        return [a.name/];
+    }
 
-[for (p : Property | c.allAttributes())]
-[if(p.isDate())]
-	public String [p.getter()/]() {
-		return [p.name/];
-	}
- 
-	public void [p.setter()/](String [p.name.toLower()/]) {
-		this.[p.name/] = [p.name.toLower()/];
-	}
-[else]
-	public [p.type.name/] [p.getter()/]() {
-		return [p.name/];
-	}
- 
-	public void [p.setter()/]([p.type.name/] [p.name.toLower()/]) {
-		this.[p.name/] = [p.name.toLower()/];
-	}
-[/if]
+    /**
+     * @generated
+     */
+    public void [a.setter()/]([a.type.name/] [a.name.toLower()/]) {
+        this.[a.name/] = [a.name.toLower()/];
+    }
+
+[/for]
+[for (a : Property | c.refAttributes())]
+    /**
+     * @generated
+     */
+    public [a.getClass().getDTOName()/] [a.getter()/]() {
+        return [a.name/];
+    }
+
+    /**
+     * @generated
+     */
+    public void [a.setter()/]([a.getClass().getDTOName()/] [a.name.toLower()/]) {
+        this.[a.name/] = [a.name.toLower()/];
+    }
+
+[/for]
+[for (asc : Association | c.getMasterAssociations())]
+[let a : Property = asc.getChildProperty(c)]
+    /**
+     * @generated
+     */
+    public List<[a.getClass().getDTOName()/]> [a.getter()/]() {
+        return [a.name/];
+    }
+
+    /**
+     * @generated
+     */
+    public void [a.setter()/](List<[a.getClass().getDTOName()/]> [a.name.toLower()/]) {
+        this.[a.name/] = [a.name.toLower()/];
+    }
+[/let]
+
 [/for]
 }
 [/file]

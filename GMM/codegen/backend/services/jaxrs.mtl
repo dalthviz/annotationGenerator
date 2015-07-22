@@ -31,6 +31,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+/**
+ * @generated
+ */
 @Path("/[c.getURI()/]")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -41,6 +44,9 @@ public class [className/] {
     @QueryParam("page") private Integer page;
     @QueryParam("maxRecords") private Integer maxRecords;
 
+    /**
+     * @generated
+     */
     @GET
     public List<[c.getDTOName()/]> get[c.name/]s() {
         if (page != null && maxRecords != null) {
@@ -49,12 +55,18 @@ public class [className/] {
         return [logic/].get[c.name/]s(page, maxRecords);
     }
 
+    /**
+     * @generated
+     */
     @GET
     @Path("{id}")
     public [c.getDTOName()/] get[c.name/](@PathParam("id") Long id) {
         return [logic/].get[c.name/](id);
     }
 
+    /**
+     * @generated
+     */
     @POST
     public [c.getDTOName()/] create[c.name/]([c.getDTOName()/] dto) {
         [c.getDTOName()/] new_dto = [logic/].create[c.name/](dto);
@@ -62,17 +74,24 @@ public class [className/] {
         try {
             response.flushBuffer();
         } catch (IOException ex) {
-            Logger.getLogger(CountryService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger([className/].class.getName()).log(Level.SEVERE, null, ex);
         }
         return new_dto;
     }
 
+    /**
+     * @generated
+     */
     @PUT
     @Path("{id}")
     public [c.getDTOName()/] update[c.name/](@PathParam("id") Long id, [c.getDTOName()/] dto) {
+        dto.setId(id);
         return [logic/].update[c.name/](dto);
     }
 
+    /**
+     * @generated
+     */
     @DELETE
     @Path("{id}")
     public void delete[c.name/](@PathParam("id") Long id) {

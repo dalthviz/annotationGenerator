@@ -1,0 +1,83 @@
+[comment encoding = UTF-8 /]
+[module masterModule('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[template public mainMasterModule(c : Class, path : String)]
+[c.genMasterModule(path)/]
+[c.genMasterService(path)/]
+[c.genMasterController(path)/]
+[c.genMasterTemplate(path)/]
+[/template]
+
+[template protected genMasterModule(c : Class, path : String)]
+[file (path.concat(c.getName()+'.master.mod.js'), false, 'UTF-8')]
+(function (ng) {
+    var mod = ng.module('[c.getMasterModule()/]', ['['/]'[c.getModule()/]', [for (asc : Association | c.getMasterAssociations())]'[asc.getChildProperty(c).getClass().getModule()/]', [/for]'masterModule'[']'/]);
+
+    mod.constant('[c.getMasterContext()/]', '[c.getURI()/]');
+})(window.angular);
+[/file]
+[/template]
+
+[template protected genMasterService (c : Class, path : String)]
+[file (path.concat(c.getName()+'.master.svc.js'), false, 'UTF-8')]
+(function(ng){
+    var mod = ng.module('[c.getMasterModule()/]');
+
+    mod.service('[c.getMasterService()/]', ['['/]'masterUtils', '[c.getMasterContext()/]', function(utils, ctx){
+            utils.extendService(this, ctx);
+    }[']'/]);
+})(window.angular);
+[/file]
+[/template]
+
+[template protected genMasterController(c : Class, path : String)]
+[file (path.concat(c.getName()+'.master.ctrl.js'), false, 'UTF-8')]
+(function (ng) {
+    var mod = ng.module('[c.getMasterModule()/]');
+
+    mod.controller('[c.getMasterController()/]', ['['/]'$scope', '[c.getMasterService()/]', '[c.getEntityModel()/]', function ($scope, svc, model) {
+            svc.extendController(this, $scope, model, '[c.getName()/]Master', '[c.getDisplayName()/] Master');
+            this.fetchRecords();
+        }[']'/]);
+    [for (asc : Association | c.getCompositeAssociations())]
+
+    [let el : Property = asc.getChildProperty(c)]
+    mod.controller('[el.name/]Ctrl', ['['/]'masterUtils', '$scope', '[el.getClass().getEntityModel()/]', function (masterSvc, $scope, model) {
+            masterSvc.extendCompChildCtrl(this, $scope, model, '[el.name/]', '[el.getOtherEnd().name/]');
+        }[']'/]);
+    [/let]
+    [/for]
+    [for (asc : Association | c.getSharedAssociations())]
+
+    [let el : Property = asc.getChildProperty(c)]
+    mod.controller('[el.name/]Ctrl', ['['/]'masterUtils', '$scope', '[el.getClass().getEntityModel()/]', '[el.getClass().getService()/]', function (masterSvc, $scope, model, svc) {
+            masterSvc.extendAggChildCtrl(this, $scope, model, '[el.name/]', svc);
+        }[']'/]);
+    [/let]
+    [/for]
+})(window.angular);
+[/file]
+[/template]
+
+[template protected genMasterTemplate(c : Class, path : String)]
+[file (path.concat(c.getName()+'.master.tpl.html'), false, 'UTF-8')]
+[let tpl : String = 'src/shared/crud/crud.tpl.html']
+<div ng-include="'[tpl/]'"></div>
+<div id="childs" ng-show="ctrl.editMode">
+    <ul class="nav nav-tabs">
+        [for (asc : Association | c.getMasterAssociations())]
+        [let el : Property = asc.getChildProperty(c)]
+        <li role="presentation" ng-class="{active: tab === '[el.name/]'}"><a href ng-click="ctrl.changeTab('[el.name/]')">[el.getDisplayName()/]</a></li>
+        [/let]
+        [/for]
+    </ul>
+    [for (asc : Association | c.getMasterAssociations())]
+    [let el : Property = asc.getChildProperty(c)]
+    <div ng-show="tab === '[el.name/]'" ng-controller="[el.name/]Ctrl as ctrl"ng-include="'[tpl/]'"></div>
+    [/let]
+    [/for]
+</div>
+[/let]
+[/file]
+[/template]
