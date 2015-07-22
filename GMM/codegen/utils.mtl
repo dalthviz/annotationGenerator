@@ -207,6 +207,10 @@ c.getMasterAssociations()->notEmpty()
 [c.name.concat('LogicTest')/]
 [/template]
 
+[template public getPersistenceTestName(c : Class)]
+[c.name.concat('PersistenceTest')/]
+[/template]
+
 [template public baseGroup(m : Model)]
 ['co.edu.uniandes.csw.'.concat(m.name.toLowerCase())/]
 [/template]

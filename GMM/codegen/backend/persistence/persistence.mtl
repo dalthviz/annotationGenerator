@@ -2,7 +2,7 @@
 [module persistence('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
 
-[template public genMainPersistence(c : Class, path : String)]
+[template public mainPersistence(c : Class, path : String)]
 [c.genPersistence(path.concat('persistence/'))/]
 [/template]
 
