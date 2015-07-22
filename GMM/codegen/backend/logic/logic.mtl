@@ -21,6 +21,7 @@ public interface [className/] {
     public [c.getDTOName()/] create[c.name/]([c.getDTOName()/] dto);
     public [c.getDTOName()/] update[c.name/]([c.getDTOName()/] dto);
     public void delete[c.name/](Long id);
+    public List<[c.getDTOName()/]> findByName(String name);
 }
 [/file]
 [/template]
