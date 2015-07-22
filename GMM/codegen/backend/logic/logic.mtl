@@ -90,6 +90,13 @@ public class [className/] implements [c.getAPIName()/] {
     public void delete[c.name/](Long id) {
         persistence.delete(id);
     }
+
+    /**
+     * @generated
+     */
+    public List<[c.getDTOName()/]> findByName(String name) {
+        return [c.getConverterName()/].listEntity2DTO(persistence.findByName(name));
+    }
 }
 [/file]
 [/template]

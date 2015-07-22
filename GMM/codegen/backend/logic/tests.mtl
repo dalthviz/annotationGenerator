@@ -241,6 +241,35 @@ public class [className/] {
             Assert.assertTrue(found);
         }
     }
+
+    /**
+     * @generated
+     */
+    @Test
+    public void findByName() {
+        String name = data.get(0).getName();
+        List<[c.getEntityName()/]> cache = new ArrayList<[c.getEntityName()/]>();
+        List<[c.getDTOName()/]> list = [bean/].findByName(name);
+
+        for ([c.getEntityName()/] entity : data) {
+            if (entity.getName().equals(name)) {
+                cache.add(entity);
+            }
+        }
+        Assert.assertEquals(cache.size(), list.size());
+        for ([c.getDTOName()/] dto : list) {
+            boolean found = false;
+            for ([c.getEntityName()/] cacheEntity : cache) {
+                if (cacheEntity.getName().equals(dto.getName())) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                Assert.fail();
+            }
+        }
+    }
 }
 [/file]
 [/let]
