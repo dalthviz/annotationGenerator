@@ -47,26 +47,6 @@ public class [className/] {
     /**
      * @generated
      */
-    @GET
-    public List<[c.getDTOName()/]> get[c.name/]s() {
-        if (page != null && maxRecords != null) {
-            this.response.setIntHeader("X-Total-Count", [logic/].count[c.name/]s());
-        }
-        return [logic/].get[c.name/]s(page, maxRecords);
-    }
-
-    /**
-     * @generated
-     */
-    @GET
-    @Path("{id}")
-    public [c.getDTOName()/] get[c.name/](@PathParam("id") Long id) {
-        return [logic/].get[c.name/](id);
-    }
-
-    /**
-     * @generated
-     */
     @POST
     public [c.getDTOName()/] create[c.name/]([c.getDTOName()/] dto) {
         [c.getDTOName()/] new_dto = [logic/].create[c.name/](dto);
@@ -82,8 +62,28 @@ public class [className/] {
     /**
      * @generated
      */
+    @GET
+    public List<[c.getDTOName()/]> get[c.name/]s() {
+        if (page != null && maxRecords != null) {
+            this.response.setIntHeader("X-Total-Count", [logic/].count[c.name/]s());
+        }
+        return [logic/].get[c.name/]s(page, maxRecords);
+    }
+
+    /**
+     * @generated
+     */
+    @GET
+    @Path("{id: \\d+}")
+    public [c.getDTOName()/] get[c.name/](@PathParam("id") Long id) {
+        return [logic/].get[c.name/](id);
+    }
+
+    /**
+     * @generated
+     */
     @PUT
-    @Path("{id}")
+    @Path("{id: \\d+}")
     public [c.getDTOName()/] update[c.name/](@PathParam("id") Long id, [c.getDTOName()/] dto) {
         dto.setId(id);
         return [logic/].update[c.name/](dto);
@@ -93,7 +93,7 @@ public class [className/] {
      * @generated
      */
     @DELETE
-    @Path("{id}")
+    @Path("{id: \\d+}")
     public void delete[c.name/](@PathParam("id") Long id) {
         [logic/].delete[c.name/](id);
     }
