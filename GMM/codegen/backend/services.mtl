@@ -4,7 +4,7 @@
 [import backend::services::jaxrs /]
 
 [template public genServices(c : Class, path : String)]
-[let project : String = path.concat(c.getModel().basePath().concat('service/'))]
+[let project : String = path.concat(c.getModel().basePath().concat('services/'))]
     [c.restMain(project)/]
 [/let]
 [/template]

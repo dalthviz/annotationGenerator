@@ -8,15 +8,12 @@
 
 [template protected restClass(c : Class, path : String) {className : String = c.getJaxRsName(); logic : String = c.getName().concat('Logic');}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
-package [c.getModel().baseGroup()/].service;
+package [c.getModel().baseGroup()/].services;
 
 import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
 import [c.getModel().baseGroup()/].dtos.[c.getDTOName()/];
-import java.io.IOException;
+import [c.getModel().baseGroup()/].providers.StatusCreated;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -48,15 +45,9 @@ public class [className/] {
      * @generated
      */
     @POST
+    @StatusCreated
     public [c.getDTOName()/] create[c.name/]([c.getDTOName()/] dto) {
-        [c.getDTOName()/] new_dto = [logic/].create[c.name/](dto);
-        response.setStatus(HttpServletResponse.SC_CREATED);
-        try {
-            response.flushBuffer();
-        } catch (IOException ex) {
-            Logger.getLogger([className/].class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return new_dto;
+        return [logic/].create[c.name/](dto);
     }
 
     /**
