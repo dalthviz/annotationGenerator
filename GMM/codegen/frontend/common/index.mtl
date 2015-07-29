@@ -12,14 +12,16 @@
 (function (ng) {
 
     var mainApp = ng.module('mainApp', ['['/]
-        [for (c : Class | m.getClasses())] 
+        'MockModule',
+        [for (c : Class | m.getRootClasses())] 
         '[c.getModule()/]',
         [if (c.isMaster())]
         '[c.getMasterModule()/]',
+        [else]
+        '[c.getModule()/]',
         [/if]
         [/for]
-        'ngRoute',
-        'MockModule'
+        'ngRoute'
     [']'/]);
 
     mainApp.config(['['/]'$routeProvider', function ($routeProvider) {
@@ -78,10 +80,12 @@
         <script src="src/shared/master/master.mod.js"></script>
         <script src="src/shared/master/master.svc.js"></script>
 
-        [for (c : Class | m.getRootClasses())]
+        [for (c : Class | m.getClasses())]
         <script src="src/modules/[c.getName()/]/[c.getName()/].mod.js"></script>
+        [if (not c.isChild())]
         <script src="src/modules/[c.getName()/]/[c.getName()/].svc.js"></script>
         <script src="src/modules/[c.getName()/]/[c.getName()/].ctrl.js"></script>
+        [/if]
 
         [/for]
     </head>

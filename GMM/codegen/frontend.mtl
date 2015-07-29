@@ -10,7 +10,7 @@
 [let root : String = m.getWebRoot()]
 	[m.genCommon(root)/]
     [m.genShared(root)/]
-    [for (c : Class | m.getRootClasses())]
+    [for (c : Class | m.getClasses())]
     	[c.genModules(root)/]
     [/for]
 [/let]
