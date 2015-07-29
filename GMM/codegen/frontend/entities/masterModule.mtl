@@ -10,17 +10,31 @@
 [/template]
 
 [template protected genMasterModule(c : Class, path : String)]
-[file (path.concat(c.getName()+'.master.mod.js'), false, 'UTF-8')]
+[file (path.concat(c.getName()+'.mod.js'), false, 'UTF-8')]
 (function (ng) {
     var mod = ng.module('[c.getMasterModule()/]', ['['/]'[c.getModule()/]', [for (asc : Association | c.getMasterAssociations())]'[asc.getChildProperty(c).getClass().getModule()/]', [/for]'masterModule'[']'/]);
 
     mod.constant('[c.getMasterContext()/]', '[c.getURI()/]');
+
+    mod.constant('[c.getEntityModel()/]', ['['/][for (a : Property | c.getAllAttribs()) separator(', ')]{
+            name: '[a.name/]',
+            displayName: '[a.getDisplayName()/]',
+            type: '[a.type.name/]',
+            required: [a.isRequired()/]
+        }[/for][if(c.hasReferences())], [for (a : Property | c.refAttributes()) separator(', ')]{
+            name: '[a.name/]',
+            displayName: '[a.getDisplayName()/]',
+            type: 'Reference',
+            service: '[a.getClass().getService()/]',
+            options: ['[]'/],
+            required: [a.isRequired()/]
+        }[/for][/if][']'/]);
 })(window.angular);
 [/file]
 [/template]
 
 [template protected genMasterService (c : Class, path : String)]
-[file (path.concat(c.getName()+'.master.svc.js'), false, 'UTF-8')]
+[file (path.concat(c.getName()+'.svc.js'), false, 'UTF-8')]
 (function(ng){
     var mod = ng.module('[c.getMasterModule()/]');
 
@@ -32,7 +46,7 @@
 [/template]
 
 [template protected genMasterController(c : Class, path : String)]
-[file (path.concat(c.getName()+'.master.ctrl.js'), false, 'UTF-8')]
+[file (path.concat(c.getName()+'.ctrl.js'), false, 'UTF-8')]
 (function (ng) {
     var mod = ng.module('[c.getMasterModule()/]');
 
@@ -61,7 +75,7 @@
 [/template]
 
 [template protected genMasterTemplate(c : Class, path : String)]
-[file (path.concat(c.getName()+'.master.tpl.html'), false, 'UTF-8')]
+[file (path.concat(c.getName()+'.tpl.html'), false, 'UTF-8')]
 [let tpl : String = 'src/shared/crud/crud.tpl.html']
 <div ng-include="'[tpl/]'"></div>
 <div id="childs" ng-show="ctrl.editMode">

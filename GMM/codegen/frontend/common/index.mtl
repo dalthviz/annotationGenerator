@@ -26,16 +26,17 @@
             var crudTpl = 'src/shared/crud/crud.tpl.html';
             var crudCtrl = 'ctrl';
             $routeProvider
-                [for (c : Class | m.getClasses())]
+                [for (c : Class | m.getRootClasses())]
+                [if (c.isMaster())]
+                .when('/[c.getName()/]', {
+                    templateUrl: 'src/modules/[c.getName()/]/[c.getName()/].tpl.html',
+                    controller: '[c.getMasterController()/]',
+                    controllerAs: crudCtrl
+                })
+                [else]
                 .when('/[c.getName()/]', {
                     templateUrl: crudTpl,
                     controller: '[c.getCtrl()/]',
-                    controllerAs: crudCtrl
-                })
-                [if (c.isMaster())]
-                .when('/[c.getName()/]/master', {
-                    templateUrl: 'src/modules/[c.getName()/]/master/[c.getName()/].master.tpl.html',
-                    controller: '[c.getMasterController()/]',
                     controllerAs: crudCtrl
                 })
                 [/if]
@@ -77,27 +78,22 @@
         <script src="src/shared/master/master.mod.js"></script>
         <script src="src/shared/master/master.svc.js"></script>
 
-        [for (c : Class | m.getClasses())]
+        [for (c : Class | m.getRootClasses())]
         <script src="src/modules/[c.getName()/]/[c.getName()/].mod.js"></script>
         <script src="src/modules/[c.getName()/]/[c.getName()/].svc.js"></script>
         <script src="src/modules/[c.getName()/]/[c.getName()/].ctrl.js"></script>
 
-        [if (c.isMaster())]
-        <script src="src/modules/[c.getName()/]/master/[c.getName()/].master.mod.js"></script>
-        <script src="src/modules/[c.getName()/]/master/[c.getName()/].master.svc.js"></script>
-        <script src="src/modules/[c.getName()/]/master/[c.getName()/].master.ctrl.js"></script>
-
-        [/if]
         [/for]
     </head>
     <body>
         <div class="container">
             <div class="col-md-2 well">
                 <ul class="nav nav-pills nav-stacked">
-				[for (c : Class | m.getClasses())]
-                    <li><a href="#/[c.getName()/]">[c.getDisplayName()/]</a></li>
+				[for (c : Class | m.getRootClasses())]
                 [if (c.isMaster())]
-                    <li><a href="#/[c.getName()/]/master">[c.getDisplayName()/] Master</a></li>
+                    <li><a href="#/[c.getName()/]">[c.getDisplayName()/] Master</a></li>
+                [else]
+                    <li><a href="#/[c.getName()/]">[c.getDisplayName()/]</a></li>
                 [/if]
 				[/for]
                 </ul>

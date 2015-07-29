@@ -11,6 +11,10 @@ c.allAttributes()->select( a | a.name <> 'id')
 m.packagedElement->filter(Class)->sortedBy(c | c.name)
 /]
 
+[query public getRootClasses(m : Model) : OrderedSet(Class) = 
+m.getClasses()->select(c | not c.isChild())
+/]
+
 [query public getChildProperty(asc : Association, c : Class) : Property =
 asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c)->asOrderedSet()->first()
 /]
@@ -136,19 +140,19 @@ c.getMasterAssociations()->notEmpty()
 [/template]
 
 [template public getMasterModule(c : Class)]
-[c.getName().concat('MasterModule')/]
+[c.getName().concat('Module')/]
 [/template]
 
 [template public getMasterService(c : Class)]
-[c.getName().concat('MasterService')/]
+[c.getName().concat('Service')/]
 [/template]
 
 [template public getMasterContext(c : Class)]
-[c.getName().concat('MasterContext')/]
+[c.getName().concat('Context')/]
 [/template]
 
 [template public getMasterController(c : Class)]
-[c.getName().concat('MasterCtrl')/]
+[c.getName().concat('Ctrl')/]
 [/template]
 
 [template public getContext(c : Class)]
