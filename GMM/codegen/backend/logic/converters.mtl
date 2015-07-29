@@ -71,7 +71,7 @@ public abstract class [className/] {
             [for (a : Property | c.allAttributes())]
             dto.[a.setter()/](entity.[a.getter()/]());
             [/for]
-            [for (a : Property | c.refAttributes())]
+            [for (a : Property | c.getReferences(true))]
             dto.[a.setter()/]([a.getClass().getConverterName()/].refEntity2DTO(entity.[a.getter()/]()));
             [/for]
 
@@ -90,7 +90,7 @@ public abstract class [className/] {
             [for (a : Property | c.allAttributes())]
             entity.[a.setter()/](dto.[a.getter()/]());
             [/for]
-            [for (a : Property | c.refAttributes())]
+            [for (a : Property | c.getReferences(true))]
             entity.[a.setter()/]([a.getClass().getConverterName()/].refDTO2Entity(dto.[a.getter()/]()));
             [/for]
 

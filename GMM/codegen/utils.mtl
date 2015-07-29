@@ -20,25 +20,27 @@ asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.ge
 /]
 
 [query public getAttributesWithRef(c : Class) : OrderedSet(Property) = 
-c.allAttributes()->union(c.refAttributes())->asOrderedSet()
+c.allAttributes()->union(c.getReferences(false))->asOrderedSet()
 /]
 
-[query public refAttributes(c : Class) : OrderedSet(Property) = 
+[query public getReferences(c : Class, includeParent : Boolean) : OrderedSet(Property) = 
 c.getAssociations()->collect(
-	getAllAttributes()->select(
-		a | (
-				a.isNavigable()
-			and a.getUpper() > 0
-			and a.getOtherEnd().type = c
-			and a.getOtherEnd().aggregation = AggregationKind::none
-			and not a.getOtherEnd().isNavigable()
-		) or (
-				a.getOtherEnd().isNavigable()
-			and a.getOtherEnd().getUpper() < 0
-			and a.getOtherEnd().type = c
-			and a.getOtherEnd().isComposite()
+    getAllAttributes()->select(
+        a | (
+                a.isNavigable()
+            and a.getUpper() > 0
+            and a.getOtherEnd().type = c
+            and a.getOtherEnd().aggregation = AggregationKind::none
+            and not a.getOtherEnd().isNavigable()
+        ) or ((
+                a.getOtherEnd().isNavigable()
+            and a.getOtherEnd().getUpper() < 0
+            and a.getOtherEnd().type = c
+            and a.getOtherEnd().isComposite()) and includeParent
 )))->flatten()->sortedBy(a | a.name)->asOrderedSet()
 /]
+
+[query public hasReferences(c : Class, includeParent : Boolean) : Boolean = c.getReferences(includeParent)->notEmpty() /]
 
 [query public getCompositeAssociations(c : Class) : Set(Association) =
 c.getAssociations()->select(
@@ -72,34 +74,29 @@ c.getCompositeAssociations()->notEmpty()
 c.getSharedAssociations()->notEmpty()
 /]
 
+[query public isMaster(c : Class) : Boolean =
+c.getMasterAssociations()->notEmpty()
+/]
+
 [query public isChild(c : Class) : Boolean = 
 c.getAssociations()->collect(
     getAllAttributes()->select(
-        a | 
-                a.getOtherEnd().isNavigable()
-            and a.getOtherEnd().getUpper() < 0
-            and a.getOtherEnd().type = c
-            and a.getOtherEnd().isComposite()
+        a | a.getOtherEnd().isNavigable()
+        and a.getOtherEnd().getUpper() < 0
+        and a.getOtherEnd().type = c
+        and a.getOtherEnd().isComposite()
 ))->flatten()->notEmpty()
  /]
 
 [query public getParentAttribute(c : Class) : Property = 
 c.getAssociations()->collect(
     getAllAttributes()->select(
-        a | 
-                a.getOtherEnd().isNavigable()
-            and a.getOtherEnd().getUpper() < 0
-            and a.getOtherEnd().type = c
-            and a.getOtherEnd().isComposite()
-))->flatten()->asOrderedSet()->first()
+        a | a.getOtherEnd().isNavigable()
+        and a.getOtherEnd().getUpper() < 0
+        and a.getOtherEnd().type = c
+        and a.getOtherEnd().isComposite()
+))->flatten()->asOrderedSet()->first() 
  /]
-
-
-[query public hasReferences(c : Class) : Boolean = c.refAttributes()->size()>0 /]
-
-[query public isMaster(c : Class) : Boolean =
-c.getMasterAssociations()->notEmpty()
-/]
 
 [query public acceptedTypes(a : Property) : Set(String) = Set{'String','Boolean', 'Date', 'Long', 'Integer'} /]
 

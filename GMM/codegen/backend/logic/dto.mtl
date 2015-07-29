@@ -33,7 +33,7 @@ public class [className/] {
     [/if]
     private [a.type.name/] [a.name/];
 [/for]
-[for (a : Property | c.refAttributes())]
+[for (a : Property | c.getReferences(true))]
     private [a.getClass().getDTOName()/] [a.name/];
 [/for]
 [for (asc : Association | c.getMasterAssociations())]
@@ -57,7 +57,7 @@ public class [className/] {
     }
 
 [/for]
-[for (a : Property | c.refAttributes())]
+[for (a : Property | c.getReferences(true))]
     /**
      * @generated
      */

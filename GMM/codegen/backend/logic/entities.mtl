@@ -19,7 +19,7 @@ import java.util.Date;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 [/if]
-[if (c.hasReferences())]
+[if (c.hasReferences(true))]
 import javax.persistence.ManyToOne;
 [/if]
 [if (c.isMaster())]
@@ -47,7 +47,7 @@ public class [className/] implements Serializable {
     private [a.type.name/] [a.name.toLowerFirst()/];
 
 [/for]
-[for (a : Property | c.refAttributes())]
+[for (a : Property | c.getReferences(true))]
     @ManyToOne
     private [a.getClass().getEntityName()/] [a.name/];
 [/for]
@@ -77,7 +77,7 @@ public class [className/] implements Serializable {
     }
 
 [/for]
-[for (a : Property | c.refAttributes())]
+[for (a : Property | c.getReferences(true))]
     /**
      * @generated
      */

@@ -29,7 +29,7 @@
             displayName: '[a.getDisplayName()/]',
             type: '[a.type.name/]',
             required: [a.isRequired()/]
-        }[/for][if(c.hasReferences())], [for (a : Property | c.refAttributes()) separator(', ')]{
+        }[/for][if(c.hasReferences(false))], [for (a : Property | c.getReferences(false)) separator(', ')]{
             name: '[a.name/]',
             displayName: '[a.getDisplayName()/]',
             type: 'Reference',
@@ -48,7 +48,7 @@
 
     mod.controller('[c.getCtrl()/]', ['['/]'$scope', '[c.getService()/]', '[c.getEntityModel()/]', function ($scope, svc, model) {
             svc.extendController(this, $scope, model, '[c.getName()/]', '[c.getDisplayName()/]');
-            [if (c.hasReferences())]
+            [if (c.hasReferences(false))]
             this.loadRefOptions();
             [/if]
             this.fetchRecords();

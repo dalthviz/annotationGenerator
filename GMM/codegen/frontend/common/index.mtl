@@ -12,7 +12,7 @@
 (function (ng) {
 
     var mainApp = ng.module('mainApp', ['['/]
-        'MockModule',
+        //'MockModule',
         [for (c : Class | m.getRootClasses())] 
         '[c.getModule()/]',
         [if (c.isMaster())]
