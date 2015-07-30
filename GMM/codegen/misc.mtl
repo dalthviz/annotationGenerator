@@ -1,8 +1,54 @@
 [comment encoding = UTF-8 /]
-[module readme('http://www.eclipse.org/uml2/5.0.0/UML')]
-[import utils /]
+[module misc('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
 
-[template public genReadMe(m : Model)]
+[template public generate(m : Model)]
+[comment @main/]
+[m.genPOM()/]
+[m.genTravis()/]
+[m.genReadMe()/]
+[m.genGitIgnore()/]
+[/template]
+
+[template protected genPOM(m : Model)]
+[file ('pom.xml', false, 'UTF-8')]
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>[m.baseGroup()/]</groupId>
+    <artifactId>[m.name/]</artifactId>
+    <version>1.0</version>
+    <packaging>pom</packaging>
+    <name>[m.name/]</name>
+    <modules>
+        <module>[m.getBackendProjectName()/]</module>
+        <module>[m.getWebProjectName()/]</module>
+    </modules>
+    <profiles>
+        <profile>
+            <id>sonar</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <sonar.jdbc.url>${sonar_jdbc_url}</sonar.jdbc.url>
+                <sonar.jdbc.username>${sonar_jdbc_username}</sonar.jdbc.username>
+                <sonar.jdbc.password>${sonar_jdbc_password}</sonar.jdbc.password>
+                <sonar.host.url>${sonar_host_url}</sonar.host.url>
+            </properties>
+        </profile>
+    </profiles>
+</project>
+[/file]
+[/template]
+
+[template protected genTravis(m : Model)]
+[file ('.travis.yml', false, 'UTF-8')]
+language: java
+[/file]
+[/template]
+
+[template protected genReadMe(m : Model)]
 [file ('README.md', false, 'UTF-8')]
 #Tabla de contenidos
 -  ['['/]Introducción[']'/](#introducción)
@@ -13,7 +59,7 @@
 
 #API Rest
 ##Introducción
-La comunicación entre cliente y servidor se realiza intercambiando objetos JSON. Para cada entidad se hace un mapeo a JSON, donde cada uno de sus atributos se transforma en una propiedad de un objeto JSON. Todos los servicios se generan en la URL /[m.getProjectName('/webresources')/]/. Por defecto, todas las entidades tienen un atributo `id`, con el cual se identifica cada registro:
+La comunicación entre cliente y servidor se realiza intercambiando objetos JSON. Para cada entidad se hace un mapeo a JSON, donde cada uno de sus atributos se transforma en una propiedad de un objeto JSON. Todos los servicios se generan en la URL /[m.getWebProjectName()/]/webresources/. Por defecto, todas las entidades tienen un atributo `id`, con el cual se identifica cada registro:
 
 ```javascript
 {
@@ -47,21 +93,21 @@ En la siguiente tabla se detalla los servicios REST generados para la entidad [ 
 #####Estructura de objeto [ class.name /]
 ```javascript
 {
-    [for(attr : Property | class.getAttributesWithRef()) separator(',\n')]
-    [if (attr.type.name <> 'Long' and attr.type.name <> 'Integer' and attr.type.name <> 'Date' and attr.type.name <> 'Boolean' and attr.type.name <> 'String')]
-    [ attr.name /]: '' /*Tipo Long que representa id de [attr.type.name/]*/[else]
-    [ attr.name /]: '' /*Tipo [ attr.type.name /]*/[/if][/for]
+    [for(a : Property | class.getAttributesWithRef()) separator(',\n')]
+    [if (a.isValidType())]
+    [ a.name /]: '' /*Tipo Long que representa id de [a.type.name/]*/[else]
+    [ a.name /]: '' /*Tipo [ a.type.name /]*/[/if][/for]
 
 }
 ```
 #####Servicios
 Método|URI|Acción|Parámetros|Cuerpo|Retorno
 :--:|:--:|:--:|:--:|:--:|:--:
-**GET**|/[ class.name.toLowerFirst() /]s|Obtener todos los objetos JSON de [ class.name /] (RETRIEVE)|**@QueryParam page**: página a consultar<br>**@QueryParam maxRecords**: cantidad de registros a consultar<br><br>*Si se omite alguno de estos parámetros se obtiene todos los registros en la base de datos*||Objeto JSON con colección de objetos JSON [class.name/] y el total de registros en la base de datos
+**GET**|/[ class.name.toLowerFirst() /]s|Obtener todos los objetos JSON de [ class.name /] (RETRIEVE)|**@QueryParam page**: página a consultar<br>**@QueryParam maxRecords**: cantidad de registros a consultar<br><br>*Si se omite alguno de estos parámetros se obtiene todos los registros en la base de datos*||Colección de objetos JSON [class.name/] y el total de registros en la base de datos en el header X-Total-Count
 **GET**|/[ class.name.toLowerFirst() /]s/:id|Obtener los atributos de una instancia de [ class.name /] en formato JSON(RETRIEVE)|**@PathParam id**: Identificador del registro||Objeto JSON con detalle de la instancia de [ class.name /]
 **POST**|/[ class.name.toLowerFirst() /]s|Crear una nueva instancia de la entidad [ class.name /] (CREATE)||Objeto JSON de [ class.name /] a crear|Objeto JSON de [ class.name /] creado
 **PUT**|/[ class.name.toLowerFirst() /]s/:id|Actualiza una instancia de la entidad [ class.name /] (UPDATE)|**@PathParam id**: Identificador del registro|Objeto JSON de [ class.name /]|Objeto JSON de [ class.name /] actualizado
-**DELETE**|/[ class.name.toLowerFirst() /]s/:id|Borra instancia de [ class.name /] en el servidor (DELETE)|re<strong>@PathParam id</strong>: Identificador del registro||
+**DELETE**|/[ class.name.toLowerFirst() /]s/:id|Borra instancia de [ class.name /] en el servidor (DELETE)|<strong>@PathParam id</strong>: Identificador del registro||
 
 [if (class.isMaster())]
 ####Maestros Detalle de [class.name/]
@@ -74,13 +120,11 @@ A diferencia del API para CRUD Básico, el API de Maestro/Detalle no provee un s
 Método|URI|Acción|Parámetros|Cuerpo|Retorno
 :--:|:--:|:--:|:--:|:--:|:--:
 [for (asc : Association | class.getCompositeAssociations())]
-    [let el : Set(Property) = asc.getChildProperty(class)]
-        [for (elem : Property | el)]
+    [let elem : Property = asc.getChildProperty(class)]
 **GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener Objetos JSON de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]||Colección de objetos JSON de [elem.name/]([elem.type.name/])
 **POST**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Creación de instancias de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de objetos JSON de [elem.name/]([elem.type.name/]) a crear|Colección de objetos JSON de [elem.name/]([elem.type.name/]) creados con sus respectivos ID
 **PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de instancias de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de objetos JSON de [elem.name/]([elem.type.name/]) a actualizar|Colección de objetos JSON de [elem.name/]([elem.type.name/]) actualizados
 **DELETE**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Eliminación de instancias de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de atributo `id` de [elem.name/]([elem.type.name/]) a eliminar|
-        [/for]
     [/let]
 [/for]
 [/if]
@@ -91,11 +135,9 @@ Método|URI|Acción|Parámetros|Cuerpo|Retorno
 Método|URI|Acción|Parámetros|Cuerpo|Retorno
 :--:|:--:|:--:|:--:|:--:|:--:
 [for (asc : Association | class.getSharedAssociations())]
-    [let el : Set(Property) = asc.getChildProperty(class)]
-        [for (elem : Property | el)]
+    [let elem : Property = asc.getChildProperty(class)]
 **GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener instancias de [elem.name/]([elem.type.name/]) asociados con [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]||Colección de `id` de [elem.name/]([elem.type.name/]) asociados con [class.name/]
 **PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de referencias a [elem.name/]([elem.type.name/]) desde [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de `id` de [elem.name/]([elem.type.name/]) a asociar|Colección de objetos JSON de [elem.name/]([elem.type.name/]) asociados
-        [/for]
     [/let]
 [/for]
 [/if]
@@ -103,5 +145,35 @@ Método|URI|Acción|Parámetros|Cuerpo|Retorno
 ['['/]Volver arriba[']'/](#tabla-de-contenidos)
 
 [/for]
+[/file]
+[/template]
+
+[template protected genGitIgnore(m : Model)]
+[file ('.gitignore', false, 'UTF-8')]
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+.tmp/
+/target/
+/[m.getBackendProjectName()/]/target/
+/[m.getWebProjectName()/]/target/
+
+#NetBeans
+nbactions.xml
+/[m.getWebProjectName()/]/nb-configuration.xml
+
+#Tests
+/[m.getBackendProjectName()/]/derby.log
+
 [/file]
 [/template]
