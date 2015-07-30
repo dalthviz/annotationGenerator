@@ -1,0 +1,81 @@
+[comment encoding = UTF-8 /]
+[module providers('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[template public mainProviders(m : Model, path : String)]
+[let basePath : String = path.concat('providers/')]
+    [m.genExceptionMapper(basePath)/]
+    [m.genStatusAnnotation(basePath)/]
+    [m.genCreatedFilter(basePath)/]
+[/let]
+[/template]
+
+[template protected genExceptionMapper(m : Model, path : String)]
+[file (path.concat('EJBExceptionMapper.java'), false, 'UTF-8')]
+package [m.baseGroup()/].providers;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
+import javax.ejb.EJBException;
+
+@Provider
+public class EJBExceptionMapper implements ExceptionMapper<EJBException> {
+
+    public Response toResponse(EJBException exception) {
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity(getInitCause(exception).getLocalizedMessage())
+                .type(MediaType.TEXT_PLAIN)
+                .build();
+    }
+
+    private Throwable getInitCause(Throwable e) {
+        if (e.getCause() != null) {
+            return getInitCause(e.getCause());
+        } else {
+            return e;
+        }
+    }
+}
+[/file]
+[/template]
+
+[template protected genStatusAnnotation(m : Model, path : String)]
+[file (path.concat('StatusCreated.java'), false, 'UTF-8')]
+package [m.baseGroup()/].providers;
+
+import javax.ws.rs.NameBinding;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+@NameBinding
+@Retention(RetentionPolicy.RUNTIME)
+public @interface StatusCreated {}
+[/file]
+[/template]
+
+[template protected genCreatedFilter(m : Model, path : String)]
+[file (path.concat('CreatedFilter.java'), false, 'UTF-8')]
+package [m.baseGroup()/].providers;
+
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.ext.Provider;
+
+@StatusCreated
+@Provider
+public class CreatedFilter implements ContainerResponseFilter{
+
+    @Override
+    public void filter(ContainerRequestContext req, ContainerResponseContext resp) throws IOException {
+        if (resp.getStatus() == HttpServletResponse.SC_OK) {
+            resp.setStatus(HttpServletResponse.SC_CREATED);
+        }
+    }
+}
+[/file]
+[/template]

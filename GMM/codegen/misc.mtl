@@ -94,7 +94,7 @@ En la siguiente tabla se detalla los servicios REST generados para la entidad [ 
 ```javascript
 {
     [for(a : Property | class.getAttributesWithRef()) separator(',\n')]
-    [if (a.acceptedTypes()->exists(self = a.type.name))]
+    [if (a.isValidType())]
     [ a.name /]: '' /*Tipo Long que representa id de [a.type.name/]*/[else]
     [ a.name /]: '' /*Tipo [ a.type.name /]*/[/if][/for]
 
