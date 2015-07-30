@@ -14,6 +14,7 @@
     [m.genDatePickerTemplate(filePath)/]
     [m.genFormTemplate(filePath)/]
     [m.genSearchTemplate(filePath)/]
+    [m.genGalleryTemplate(filePath)/]
 [/let]
 [/template]
 
@@ -70,6 +71,19 @@
                 restrict: 'E',
                 templateUrl: 'src/shared/crud/list.tpl.html',
                 controller: 'listCtrl'
+            };
+        }[']'/]);
+
+    mod.directive('gallery', ['['/]function () {
+            return {
+                scope: {
+                    records: '=*',
+                    model: '=*',
+                    actions: '=*?',
+                    checklist: '=?'
+                },
+                restrict: 'E',
+                templateUrl: 'src/shared/crud/gallery.tpl.html'
             };
         }[']'/]);
 
@@ -434,6 +448,8 @@
                     <div ng-switch-when="Date">{{record['[column.name]'/]| date}}</div>
                     <div ng-switch-when="Reference">{{record['[column.name]'/].name}}</div>
                     <div ng-switch-when="Boolean"><span ng-if="record['[column.name]'/] != undefined" class="glyphicon" ng-class="{'glyphicon-check': record['[column.name]'/], 'glyphicon-unchecked': !record['[column.name]'/]}"></span></div>
+                    <div ng-switch-when="Image"><a ng-href="{{record['[column.name]'/]}}">URL</a></div>
+                    <div ng-switch-when="String">{{record['[column.name]'/]}}</div>
                     <div ng-switch-default>{{record['[column.name]'/]}}</div>
                 </td>
                 <td ng-if="actions">
@@ -511,7 +527,9 @@
         records="records"
         actions="ctrl.recordActions">
     </list-records>
-    <pagination ng-show="ctrl.numPages > 1" num-pages="ctrl.numPages" total-items="ctrl.totalItems" ng-model="ctrl.currentPage" ng-change="ctrl.pageChanged()" items-per-page="ctrl.itemsPerPage" max-size="ctrl.maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+    <div class="text-center">
+        <pagination ng-show="ctrl.numPages > 1" num-pages="ctrl.numPages" total-items="ctrl.totalItems" ng-model="ctrl.currentPage" ng-change="ctrl.pageChanged()" items-per-page="ctrl.itemsPerPage" max-size="ctrl.maxSize" class="pagination-md" boundary-links="true" rotate="false"></pagination>
+    </div>
 </div>
 <div ng-show="ctrl.editMode" class="well">
     <crud-form name="name" model="model" record="currentRecord"></crud-form>
@@ -532,6 +550,7 @@
                 <input ng-switch-when="Long" id="{{column.name}}" name="{{column.name}}" class="form-control" type="number" ng-model="record['[column.name]'/]" ng-required="column.required" />
                 <input ng-switch-when="Boolean" id="{{column.name}}" name="{{column.name}}" ng-checked="record['[column.name]'/]" type="checkbox" ng-model="record['[column.name]'/]" ng-required="column.required && record['[column.name]'/].$isEmpty" />
                 <input ng-switch-when="Computed" id="{{column.name}}" name="{{column.name}}" class="form-control" type="text" ng-value="column.fn(record)" readonly />
+                <input ng-switch-when="Image" id="{{column.name}}" name="{{column.name}}" class="form-control" type="url" ng-model="record['[column.name]'/]" ng-required="column.required"/>
                 <select ng-switch-when="Reference" id="{{column.name}}" name="{{column.name}}" class="form-control" ng-options="rc.name for rc in column.options track by rc.id" ng-model="record['[column.name]'/]"></select>
                 <date-picker ng-switch-when="Date" value="record['[column.name]'/]" model="column"></date-picker>
             </div>
@@ -563,5 +582,34 @@
         </div>
     </fieldset>
 </form>
+[/file]
+[/template]
+
+[template protected genGalleryTemplate(m : Model, path : String)]
+[file (path.concat('gallery.tpl.html'), false, 'UTF-8')]
+<div class="col-sm-12">
+    <div ng-repeat="record in records">
+        <div class="col-md-4 col-sm-6 col-lg-3 well">
+            <div class="col-md-12">
+                <div class="img-thumbnail" ng-class="{'col-sm-4': !$first}" ng-repeat="column in model| filter: {type: 'Image'}" id="{{$parent.$index}}-{{column.name}}">
+                    <a ng-href="{{record['[column.name]'/]}}" target="_blank"><img class="img-responsive" ng-src="{{record['[column.name]'/]}}" alt="{{record['[column.name]'/]}}"></a>
+                </div>
+            </div>
+            <div class="caption" >
+                <div ng-repeat="column in model| filter: {type: '!Image'}" ng-switch="column.type" id="{{$parent.$index}}-{{column.name}}" ng-if="record['[column.name]'/] || column.fn">
+                    <p ng-switch-when="Computed"><strong>{{column.displayName}}:</strong> {{column.fn(record)}}</p>
+                    <p ng-switch-when="Date"><strong>{{column.displayName}}:</strong> {{record['[column.name]'/]| date}}</p>
+                    <p ng-switch-when="Reference"><strong>{{column.displayName}}:</strong> {{record['[column.name]'/].name}}</p>
+                    <p ng-switch-when="Boolean"><strong>{{column.displayName}}:</strong> <span ng-if="record['[column.name]'/] !== undefined" class="glyphicon" ng-class="{'glyphicon-check': record['[column.name]'/], 'glyphicon-unchecked': !record['[column.name]'/]}"></span></p>
+                    <p ng-switch-when="String"><strong>{{column.displayName}}:</strong> {{record['[column.name]'/]}}</p>
+                    <p ng-switch-default><strong>{{column.displayName}}:</strong> {{record['[column.name]'/]}}</p>
+                </div>
+            </div>
+            <p ng-if="actions" class="text-center">
+                <button ng-repeat="action in actions" id="{{$parent.$index}}-{{action.name}}-btn" class="btn btn-default btn-sm" ng-show="action.show()" ng-click="action.fn(record)"><span class="glyphicon glyphicon-{{action.icon}}"></span> {{action.displayName}}</button>
+            </p>
+        </div>
+    </div>
+</div>
 [/file]
 [/template]
