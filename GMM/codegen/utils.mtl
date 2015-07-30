@@ -98,11 +98,19 @@ c.getAssociations()->collect(
 ))->flatten()->asOrderedSet()->first() 
  /]
 
-[query public acceptedTypes(a : Property) : Set(String) = Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'} /]
+[query public isValidType(a : Property) : Boolean = 
+Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(type | type = a.type.name)
+/]
 
 [query public hasDateAttribute(c : Class) : Boolean = c.allAttributes()->exists(a|a.isDate()) /]
 
 [query public isDate(a : Property) : Boolean = a.type.name = 'Date' /]
+
+[query public isComputed(a : Property) : Boolean = a.type.name = 'Computed' /]
+
+[query public isID(a : Property) : Boolean = a.name = 'id' /]
+
+[query public isName(a : Property) : Boolean = a.name = 'name' /]
 
 [query public getter(a : Property) : String = 'get'.concat(a.name.toUpperFirst()) /]
 
@@ -114,7 +122,13 @@ c.getAssociations()->collect(
 
 [query public isRequired(a : Property) : Boolean = self.upperBound() > 0 /]
 
-[query public isID(a : Property) : Boolean = a.name = 'id' /]
+[template public getJavaType(a : Property)]
+[if (a.type.name = 'Image')]
+String
+[else]
+[a.type.name/]
+[/if]
+[/template]
 
 [template public getModelName(c : Class)]
 [c.getModel().name/]
