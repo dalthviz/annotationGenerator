@@ -62,7 +62,7 @@
     [let el : Property = asc.getChildProperty(c)]
     mod.controller('[el.name/]Ctrl', ['['/]'masterUtils', '$scope', '[el.getClass().getEntityModel()/]', function (masterSvc, $scope, model) {
             masterSvc.extendCompChildCtrl(this, $scope, model, '[el.name/]', '[el.getOtherEnd().name/]');
-            [if (c.hasReferences(false))]
+            [if (el.getClass().hasReferences(false))]
             this.loadRefOptions();
             [/if]
         }[']'/]);
@@ -73,7 +73,7 @@
     [let el : Property = asc.getChildProperty(c)]
     mod.controller('[el.name/]Ctrl', ['['/]'masterUtils', '$scope', '[el.getClass().getEntityModel()/]', '[el.getClass().getService()/]', function (masterSvc, $scope, model, svc) {
             masterSvc.extendAggChildCtrl(this, $scope, model, '[el.name/]', svc);
-            [if (c.hasReferences(false))]
+            [if (el.getClass().hasReferences(false))]
             this.loadRefOptions();
             [/if]
         }[']'/]);
