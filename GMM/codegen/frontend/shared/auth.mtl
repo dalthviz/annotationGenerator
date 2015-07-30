@@ -13,7 +13,7 @@
 [template protected genAuthModule(m : Model, path : String)]
 [file (path.concat('auth.mod.js'), false, 'UTF-8')]
 (function (ng) {
-    ng.module('auth', ['['/]'ngCookies'[']'/]);
+    ng.module('authModule', ['['/]'ngCookies'[']'/]);
 })(window.angular);
 [/file]
 [/template]
@@ -21,7 +21,7 @@
 [template protected genAuthService(m : Model, path : String)]
 [file (path.concat('auth.svc.js'), false, 'UTF-8')]
 (function (ng) {
-    var mod = ng.module('auth');
+    var mod = ng.module('authModule');
 
     mod.service('authUtils', ['['/]'$cookies', function ($cookies) {
             this.isAuthenticated = function () {
@@ -35,7 +35,7 @@
 [template protected genAuthController(m : Model, path : String)]
 [file (path.concat('auth.ctrl.js'), false, 'UTF-8')]
 (function (ng) {
-    var mod = ng.module('auth');
+    var mod = ng.module('authModule');
 
     mod.controller('authCtrl', ['['/]'authUtils', '$scope', function (authUtils, $scope) {
             $scope.isAuthenticated = authUtils.isAuthenticated();

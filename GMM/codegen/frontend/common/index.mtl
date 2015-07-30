@@ -13,6 +13,7 @@
 
     var mainApp = ng.module('mainApp', ['['/]
         //'MockModule',
+        'authModule'
         [for (c : Class | m.getRootClasses())] 
         '[c.getModule()/]',
         [if (c.isMaster())]
