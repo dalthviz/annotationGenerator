@@ -174,63 +174,97 @@
         }[']'/]);
 
     mod.service('CRUDBase', ['['/]'Restangular', 'actionsService', '$injector', function (RestAngular, actionsBuilder, $injector) {
-            function extendCtrl(scope, model, svc, name, displayName) {
+            function extendCommonCtrl(scope, model, name, displayName) {
                 //Variables para el scope
                 scope.name = name;
                 scope.displayName = displayName;
                 scope.model = model;
                 scope.currentRecord = {};
                 scope.records = ['[]'/];
+                scope.alerts = ['[]'/];
 
-                //Variables de paginacion
+                //Paginación
                 this.maxSize = 5;
-                this.itemsPerPage = 5;
+                this.itemsPerPage = 10;
                 this.totalItems = 0;
                 this.currentPage = 1;
+                this.numPages = 0;
 
-                this.readOnly = false;
-
-                //Variables para el controlador
-                this.editMode = false;
-                this.error = {show: false, type: 'danger'};
-                var self = this;
-
-                this.showMessage = function (msg, type) {
-                    var types = ['['/]'info', 'danger', 'warning', 'success'[']'/];
-                    if(types.some(function(rc){return type === rc;})){
-                        this.error.show = true;
-                        this.error.type = type;
-                        this.error.msg = msg;
-                    }
-                };
-
-                this.showError = function (msg) {
-                    this.showMessage(msg, 'danger');
-                };
-
-                this.showSuccess = function(msg){
-                    this.showMessage(msg, 'success');
-                };
-
-                this.showWarning = function(msg){
-                    this.showMessage(msg, 'warning');
-                };
-
-                this.showInfo = function(msg){
-                    this.showMessage(msg, 'info');
-                };
-
-                this.closeError = function () {
-                    this.error.show = false;
-                    this.error.msg = "";
-                };
-
-                //Funciones del controlador
                 this.pageChanged = function () {
                     this.fetchRecords();
                 };
 
-                function responseError(response){
+                //Variables para el controlador
+                this.readOnly = false;
+                this.editMode = false;
+
+                //Alertas
+                function showMessage(msg, type) {
+                    var types = ['['/]'info', 'danger', 'warning', 'success'[']'/];
+                    if (types.some(function (rc) {
+                        return type === rc;
+                    })) {
+                        scope.alerts.push({type: type, msg: msg});
+                    }
+                }
+
+                this.showError = function (msg) {
+                    showMessage(msg, 'danger');
+                };
+
+                this.showSuccess = function (msg) {
+                    showMessage(msg, 'success');
+                };
+
+                this.showWarning = function (msg) {
+                    showMessage(msg, 'warning');
+                };
+
+                this.showInfo = function (msg) {
+                    showMessage(msg, 'info');
+                };
+
+                this.closeAlert = function (index) {
+                    scope.alerts.splice(index, 1);
+                };
+
+                //Código para cargar los valores de las referencias
+                this.loadRefOptions = function () {
+                    function loadFieldOptions(field) {
+                        var svc = $injector.get(field.service);
+                        svc.fetchRecords().then(function (data) {
+                            field.options = data.plain();
+                            if (!field.required) {
+                                field.options.unshift(null);
+                            }
+                        });
+                    }
+                    var model = scope.model;
+                    for (var i in model) {
+                        if (model.hasOwnProperty(i)) {
+                            var field = model['[i]'/];
+                            if (field.type === 'Reference' && !!field.service) {
+                                if ($injector.has(field.service)) {
+                                    loadFieldOptions(field);
+                                }
+                            }
+                        }
+                    }
+                };
+
+                //Configuración de acciones
+                this.globalActions = actionsBuilder.buildGlobalActions(this);
+                this.recordActions = actionsBuilder.buildRecordActions(this);
+            }
+            this.extendCommonController = function (ctrl, scope, model, name, displayName) {
+                extendCommonCtrl.call(ctrl, scope, model, name, displayName);
+            };
+            function extendCtrl(scope, model, svc, name, displayName) {
+                extendCommonCtrl.call(this, scope, model, name, displayName);
+                var self = this;
+
+                //Funciones del controlador
+                function responseError(response) {
                     self.showError(response.data);
                 }
 
@@ -266,33 +300,6 @@
                         self.fetchRecords();
                     }, responseError);
                 };
-
-                //Código para cargar los valores de las referencias
-                this.loadRefOptions = function () {
-                    function loadFieldOptions(field) {
-                        var svc = $injector.get(field.service);
-                        svc.fetchRecords().then(function (data) {
-                            field.options = data.plain();
-                            if (!field.required) {
-                                field.options.unshift(null);
-                            }
-                        });
-                    }
-                    var model = scope.model;
-                    for (var i in model) {
-                        if (model.hasOwnProperty(i)) {
-                            var field = model['[i]'/];
-                            if (field.type === 'Reference' && !!field.service) {
-                                if ($injector.has(field.service)) {
-                                    loadFieldOptions(field);
-                                }
-                            }
-                        }
-                    }
-                };
-
-                this.globalActions = actionsBuilder.buildGlobalActions(this);
-                this.recordActions = actionsBuilder.buildRecordActions(this);
             }
             function extendSvc(url) {
                 this.url = url;
@@ -374,7 +381,7 @@
         }[']'/]);
 
     mod.controller('modalCtrl', ['['/]'$scope', '$modalInstance', 'items', 'name', function ($scope, $modalInstance, items, name) {
-            $scope.model = ['['/]{name: 'name', displayName: 'Name', type: 'String', order: 1}[']'/]            
+            $scope.model = ['['/]{name: 'name', displayName: 'Name', type: 'String', order: 1}[']'/];
             $scope.name = name;
             $scope.items = items;
 
@@ -483,17 +490,14 @@
 [template protected genCrudTemplate(m : Model, path : String)]
 [file (path.concat('crud.tpl.html'), false, 'UTF-8')]
 <toolbar name="name" display-name="displayName" actions="ctrl.globalActions"></toolbar>
-<div ng-show="ctrl.error.show" ng-message="show" class="alert alert-{{ctrl.error.type}}" role="alert">
-    <button type="button" class="close" ng-click="ctrl.closeError()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <strong>{{ctrl.error.type | uppercase}}:</strong> {{ctrl.error.msg}}
-</div>
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="ctrl.closeAlert($index)">{{alert.msg}}</alert>
 <div ng-hide="ctrl.editMode">
     <list-records
         model="model"
         records="records"
         actions="ctrl.recordActions">
     </list-records>
-    <pagination total-items="ctrl.totalItems" ng-model="ctrl.currentPage" ng-change="ctrl.pageChanged()" items-per-page="ctrl.itemsPerPage" max-size="ctrl.maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+    <pagination ng-show="ctrl.numPages > 1" num-pages="ctrl.numPages" total-items="ctrl.totalItems" ng-model="ctrl.currentPage" ng-change="ctrl.pageChanged()" items-per-page="ctrl.itemsPerPage" max-size="ctrl.maxSize" class="pagination-sm" boundary-links="true" rotate="false"></pagination>
 </div>
 <div ng-show="ctrl.editMode" class="well">
     <crud-form name="name" model="model" record="currentRecord"></crud-form>

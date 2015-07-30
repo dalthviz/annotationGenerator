@@ -52,6 +52,9 @@
 
     mod.controller('[c.getMasterController()/]', ['['/]'$scope', '[c.getMasterService()/]', '[c.getEntityModel()/]', function ($scope, svc, model) {
             svc.extendController(this, $scope, model, '[c.getName()/]Master', '[c.getDisplayName()/] Master');
+            [if (c.hasReferences(false))]
+            this.loadRefOptions();
+            [/if]
             this.fetchRecords();
         }[']'/]);
     [for (asc : Association | c.getCompositeAssociations())]
@@ -59,6 +62,9 @@
     [let el : Property = asc.getChildProperty(c)]
     mod.controller('[el.name/]Ctrl', ['['/]'masterUtils', '$scope', '[el.getClass().getEntityModel()/]', function (masterSvc, $scope, model) {
             masterSvc.extendCompChildCtrl(this, $scope, model, '[el.name/]', '[el.getOtherEnd().name/]');
+            [if (c.hasReferences(false))]
+            this.loadRefOptions();
+            [/if]
         }[']'/]);
     [/let]
     [/for]
@@ -67,6 +73,9 @@
     [let el : Property = asc.getChildProperty(c)]
     mod.controller('[el.name/]Ctrl', ['['/]'masterUtils', '$scope', '[el.getClass().getEntityModel()/]', '[el.getClass().getService()/]', function (masterSvc, $scope, model, svc) {
             masterSvc.extendAggChildCtrl(this, $scope, model, '[el.name/]', svc);
+            [if (c.hasReferences(false))]
+            this.loadRefOptions();
+            [/if]
         }[']'/]);
     [/let]
     [/for]
