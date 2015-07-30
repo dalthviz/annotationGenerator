@@ -124,10 +124,8 @@ Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <
 
 [template public getJavaType(a : Property)]
 [if (a.type.name = 'Image')]
-String
-[else]
-[a.type.name/]
-[/if]
+String[else]
+[a.type.name/][/if]
 [/template]
 
 [template public getModelName(c : Class)]
