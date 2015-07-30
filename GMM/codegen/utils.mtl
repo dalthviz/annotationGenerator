@@ -99,7 +99,7 @@ c.getAssociations()->collect(
  /]
 
 [query public isValidType(a : Property) : Boolean = 
-Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(type | type = a.type.name)
+Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <> null and t = a.type.name)
 /]
 
 [query public hasDateAttribute(c : Class) : Boolean = c.allAttributes()->exists(a|a.isDate()) /]
