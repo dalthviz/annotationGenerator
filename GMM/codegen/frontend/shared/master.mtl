@@ -136,6 +136,7 @@
                                 return !self.editMode;
                             }
                         }[']'/];
+                    delete this.recordActions;
                 }
                 aggregateRelCtrl.call(ctrl, scope, model, childName, svc);
             };
