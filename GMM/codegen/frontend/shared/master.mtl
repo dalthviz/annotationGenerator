@@ -117,7 +117,7 @@
                 function aggregateRelCtrl(scope, model, childName, svc) {
                     commonChildCtrl.call(this, scope, model, childName);
                     this.showList = function () {
-                        var modal = modalService.createSelectionModal(childName, svc.fetchRecords());
+                        var modal = modalService.createSelectionModal(childName, svc.fetchRecords(), scope.records);
                         modal.result.then(function (data) {
                             scope.records.splice.call(scope.records, 0, scope.records.length);
                             scope.records.push.apply(scope.records, data);
