@@ -12,7 +12,7 @@
 (function (ng) {
 
     var mainApp = ng.module('mainApp', ['['/]
-        //'MockModule',
+        //'ngCrudMock',
         'authModule',
         [for (c : Class | m.getRootClasses())]
         [if (c.isMaster())]
@@ -21,11 +21,11 @@
         '[c.getModule()/]',
         [/if]
         [/for]
-        'ngRoute'
+        'ngRoute',
+        'CrudModule'
     [']'/]);
 
-    mainApp.config(['['/]'$routeProvider', function ($routeProvider) {
-            var crudTpl = 'src/templates/crud.tpl.html';
+    mainApp.config(['['/]'$routeProvider', 'CrudTemplateURL', function ($routeProvider, tplUrl) {
             var crudCtrl = 'ctrl';
             $routeProvider
                 [for (c : Class | m.getRootClasses())]
@@ -37,7 +37,7 @@
                 })
                 [else]
                 .when('/[c.getName()/]', {
-                    templateUrl: crudTpl,
+                    templateUrl: tplUrl,
                     controller: '[c.getCtrl()/]',
                     controllerAs: crudCtrl
                 })
@@ -68,18 +68,13 @@
         <script src="https://code.angularjs.org/1.4.3/angular-cookies.min.js"></script>
         <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/restangular/1.4.0/restangular.min.js"></script>
+        <script src="https://rawgit.com/recursosCSWuniandes/ng-crud/master/dist/ngcrud.min.js"></script>
+        <script src="https://rawgit.com/recursosCSWuniandes/ng-crud/master/dist/ngcrud-mocks.min.js"></script>
 
         <script src="src/app.js"></script>
         <script src="src/shared/auth/auth.mod.js" type="text/javascript"></script>
         <script src="src/shared/auth/auth.svc.js" type="text/javascript"></script>
         <script src="src/shared/auth/auth.ctrl.js" type="text/javascript"></script>
-
-        <script src="https://rawgit.com/recursosCSWuniandes/ng-crud/master/dist/ngcrud.min.js"></script>
-
-        <script src="src/shared/mocks/mock.mod.js"></script>
-
-        <script src="src/shared/master/master.mod.js"></script>
-        <script src="src/shared/master/master.svc.js"></script>
 
         [for (c : Class | m.getClasses())]
         <script src="src/modules/[c.getName()/]/[c.getName()/].mod.js"></script>
