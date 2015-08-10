@@ -22,24 +22,24 @@
         [/if]
         [/for]
         'ngRoute',
-        'CrudModule'
+        'ngCrud'
     [']'/]);
 
-    mainApp.config(['['/]'$routeProvider', 'CrudTemplateURL', function ($routeProvider, tplUrl) {
+    mainApp.config(['['/]'$routeProvider', 'CrudTemplateURL', 'CrudCtrlAlias', function ($routeProvider, tplUrl, alias) {
             var crudCtrl = 'ctrl';
             $routeProvider
                 [for (c : Class | m.getRootClasses())]
                 [if (c.isMaster())]
                 .when('/[c.getName()/]', {
                     templateUrl: 'src/modules/[c.getName()/]/[c.getName()/].tpl.html',
-                    controller: '[c.getMasterController()/]',
-                    controllerAs: crudCtrl
+                    controller: '[c.getCtrl()/]',
+                    controllerAs: alias
                 })
                 [else]
                 .when('/[c.getName()/]', {
                     templateUrl: tplUrl,
                     controller: '[c.getCtrl()/]',
-                    controllerAs: crudCtrl
+                    controllerAs: alias
                 })
                 [/if]
                 [/for]
