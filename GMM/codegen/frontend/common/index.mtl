@@ -14,19 +14,14 @@
     var mainApp = ng.module('mainApp', ['['/]
         //'ngCrudMock',
         'authModule',
-        [for (c : Class | m.getRootClasses())]
-        [if (c.isMaster())]
-        '[c.getMasterModule()/]',
-        [else]
+        [for (c : Class | m.getClasses())]
         '[c.getModule()/]',
-        [/if]
         [/for]
         'ngRoute',
         'ngCrud'
     [']'/]);
 
     mainApp.config(['['/]'$routeProvider', 'CrudTemplateURL', 'CrudCtrlAlias', function ($routeProvider, tplUrl, alias) {
-            var crudCtrl = 'ctrl';
             $routeProvider
                 [for (c : Class | m.getRootClasses())]
                 [if (c.isMaster())]
@@ -78,8 +73,8 @@
 
         [for (c : Class | m.getClasses())]
         <script src="src/modules/[c.getName()/]/[c.getName()/].mod.js"></script>
-        [if (not c.isChild())]
         <script src="src/modules/[c.getName()/]/[c.getName()/].svc.js"></script>
+        [if (not c.isChild())]
         <script src="src/modules/[c.getName()/]/[c.getName()/].ctrl.js"></script>
         [/if]
 
