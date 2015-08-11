@@ -24,19 +24,11 @@
     mainApp.config(['['/]'$routeProvider', 'CrudTemplateURL', 'CrudCtrlAlias', function ($routeProvider, tplUrl, alias) {
             $routeProvider
                 [for (c : Class | m.getRootClasses())]
-                [if (c.isMaster())]
-                .when('/[c.getName()/]', {
-                    templateUrl: 'src/modules/[c.getName()/]/[c.getName()/].tpl.html',
-                    controller: '[c.getCtrl()/]',
-                    controllerAs: alias
-                })
-                [else]
                 .when('/[c.getName()/]', {
                     templateUrl: tplUrl,
                     controller: '[c.getCtrl()/]',
                     controllerAs: alias
                 })
-                [/if]
                 [/for]
                 .otherwise('/');
         }[']'/]);
