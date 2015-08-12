@@ -1,7 +1,6 @@
 [comment encoding = UTF-8 /]
 [module frontend('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import frontend::common /]
-[import frontend::shared /]
 [import frontend::modules /]
 [import ::utils /]
 
@@ -9,7 +8,6 @@
 [comment @main/]
 [let root : String = m.getWebRoot()]
 	[m.genCommon(root)/]
-    [m.genShared(root)/]
     [for (c : Class | m.getClasses())]
     	[c.genModules(root)/]
     [/for]
