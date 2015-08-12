@@ -125,7 +125,11 @@ public abstract class [className/] {
             [c.getEntityName()/] entity = basicDTO2Entity(dto);
             [for (asc : Association | c.getMasterAssociations())]
             [let a : Property = asc.getChildProperty(c)]
+            [if (a.isComposite())]
+            entity.[a.setter()/]([a.getClass().getConverterName()/].childListDTO2Entity(dto.[a.getter()/](), entity));
+            [else]
             entity.[a.setter()/]([a.getClass().getConverterName()/].listDTO2Entity(dto.[a.getter()/]()));
+            [/if]
             [/let]
             [/for]
             return entity;
