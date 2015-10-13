@@ -37,8 +37,9 @@ public abstract class [className/] {
     public static [c.getDTOName()/] refEntity2DTO([c.getEntityName()/] entity) {
         if (entity != null) {
             [c.getDTOName()/] dto = new [c.getDTOName()/]();
-            dto.setId(entity.getId());
-            dto.setName(entity.getName());
+            [for (a : Property | c.allAttributes())]
+            dto.[a.setter()/](entity.[a.getter()/]());
+            [/for]
 
             return dto;
         } else {
