@@ -245,11 +245,15 @@ String[else]
 [/template]
 
 [template public getWebProjectName(m : Model)]
+[m.name.concat('.api')/]
+[/template]
+
+[template public getHTMLProjectName(m : Model)]
 [m.name.concat('.web')/]
 [/template]
 
 [template public getWebRoot(m : Model)]
-[m.getWebProjectName().concat('/src/main/webapp/')/]
+[m.getHTMLProjectName().concat('/src/')/]
 [/template]
 
 [template public getPoolName(m : Model)]
