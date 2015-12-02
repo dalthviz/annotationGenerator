@@ -6,7 +6,7 @@
 
 [template public generate(m : Model)]
     [comment @main/]
-	[m.genCommon(m.getHTMLProjectName())/]
+	[m.genCommon(m.getWebProjectName())/]
     [m.genDevEnv(m.getWebRoot())/]
     [for (c : Class | m.getClasses())]
     	[c.genModules(m.getWebRoot())/]

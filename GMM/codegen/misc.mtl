@@ -16,28 +16,143 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>[m.baseGroup()/]</groupId>
-    <artifactId>[m.name/]</artifactId>
-    <version>1.0</version>
-    <packaging>pom</packaging>
+    <artifactId>[m.getArtifactId()/]</artifactId>
     <name>[m.name/]</name>
+    <packaging>pom</packaging>
+    <version>0.0.1-SNAPSHOT</version>
     <modules>
-        <module>[m.getBackendProjectName()/]</module>
-        <module>[m.getWebProjectName()/]</module>
+        <module>[m.getLogicArtifactId()/]</module>
+        <module>[m.getApiArtifactId()/]</module>
     </modules>
-    <profiles>
-        <profile>
-            <id>sonar</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <sonar.jdbc.url>${sonar_jdbc_url}</sonar.jdbc.url>
-                <sonar.jdbc.username>${sonar_jdbc_username}</sonar.jdbc.username>
-                <sonar.jdbc.password>${sonar_jdbc_password}</sonar.jdbc.password>
-                <sonar.host.url>${sonar_host_url}</sonar.host.url>
-            </properties>
-        </profile>
-    </profiles>
+    <repositories>
+        <repository>
+            <id>csw-snapshots</id>
+            <name>csw snapshots</name>
+            <url>http://157.253.238.75:8081/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+        <sonar.junit.reportsPath>target/surefire-reports</sonar.junit.reportsPath>
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.jacoco.reportPath>${project.basedir}/target/jacoco.exec</sonar.jacoco.reportPath>
+        <sonar.jacoco.itReportPath>${project.basedir}/target/jacoco-it.exec</sonar.jacoco.itReportPath>
+        <sonar.jacoco.outReportPath>target/jacoco</sonar.jacoco.outReportPath>
+        <sonar.jacoco.outItReportPath>target/jacoco-it</sonar.jacoco.outItReportPath>
+        <sonar.host.url>${sonar_host_url}</sonar.host.url>
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>1.1.10.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.main.extras</groupId>
+                <artifactId>glassfish-embedded-all</artifactId>
+                <version>4.1.1</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian.container</groupId>
+                <artifactId>arquillian-glassfish-embedded-3.1</artifactId>
+                <version>1.0.0.CR4</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>uk.co.jemos.podam</groupId>
+                <artifactId>podam</artifactId>
+                <version>6.0.2.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.persistence</groupId>
+                <artifactId>org.eclipse.persistence.moxy</artifactId>
+                <version>2.6.1</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- For executing & reporting ntegration tests -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>2.19</version>
+                    <configuration>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <argLine>${jacoco.agent.argLine} -XX:MaxPermSize=1024m</argLine>
+                        <reportsDirectory>${project.build.directory}/target/failsafe-reports</reportsDirectory>
+                        <excludes>
+                            <exclude>**/*Test.java</exclude>
+                        </excludes>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>failsafe-integration-tests</id>
+                            <phase>integration-test</phase>
+                            <goals>
+                                <goal>integration-test</goal>
+                                <goal>verify</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.19</version>
+                    <configuration>
+                        <!-- Sets the VM argument line used when unit tests are run. -->
+                        <argLine>${surefireArgLine}</argLine>
+                        <!-- Skips unit tests if the value of skip.unit.tests property is true -->
+                        <!-- Excludes integration tests when unit tests are run. -->
+                        <excludes>
+                            <exclude>**/*IT.java</exclude>
+                        </excludes>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>run-unit-tests</id>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.7.4.201502262128</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.3</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
 [/file]
 [/template]
@@ -45,6 +160,10 @@
 [template protected genTravis(m : Model)]
 [file ('.travis.yml', false, 'UTF-8')]
 language: java
+jdk:
+  - oraclejdk8
+after_success:
+  - mvn sonar:sonar
 [/file]
 [/template]
 
@@ -59,7 +178,7 @@ language: java
 
 #API Rest
 ##Introducción
-La comunicación entre cliente y servidor se realiza intercambiando objetos JSON. Para cada entidad se hace un mapeo a JSON, donde cada uno de sus atributos se transforma en una propiedad de un objeto JSON. Todos los servicios se generan en la URL /[m.getWebProjectName()/]/webresources/. Por defecto, todas las entidades tienen un atributo `id`, con el cual se identifica cada registro:
+La comunicación entre cliente y servidor se realiza intercambiando objetos JSON. Para cada entidad se hace un mapeo a JSON, donde cada uno de sus atributos se transforma en una propiedad de un objeto JSON. Todos los servicios se generan en la URL /[m.getApiProjectName()/]/webresources/. Por defecto, todas las entidades tienen un atributo `id`, con el cual se identifica cada registro:
 
 ```javascript
 {
@@ -166,11 +285,11 @@ hs_err_pid*
 .tmp/
 /target/
 /[m.getBackendProjectName()/]/target/
-/[m.getWebProjectName()/]/target/
+/[m.getApiProjectName()/]/target/
 
 #NetBeans
 nbactions.xml
-/[m.getWebProjectName()/]/nb-configuration.xml
+/[m.getApiProjectName()/]/nb-configuration.xml
 
 #Tests
 /[m.getBackendProjectName()/]/derby.log

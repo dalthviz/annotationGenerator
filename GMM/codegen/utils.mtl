@@ -244,16 +244,36 @@ String[else]
 [m.name.concat('.logic')/]
 [/template]
 
-[template public getWebProjectName(m : Model)]
+[template public getApiProjectName(m : Model)]
 [m.name.concat('.api')/]
 [/template]
 
-[template public getHTMLProjectName(m : Model)]
+[template public getWebProjectName(m : Model)]
 [m.name.concat('.web')/]
 [/template]
 
+[template private asArtifactId(s : String)]
+[s.replace('^\\W+','').replaceAll('(?!^)([A-Z])','-$1').replaceAll('\\W+', '-').toLowerCase()/]
+[/template]
+
+[template public getArtifactId(m : Model)]
+[m.name.asArtifactId()/]
+[/template]
+
+[template public getLogicArtifactId(m : Model)]
+[m.getBackendProjectName().asArtifactId()/]
+[/template]
+
+[template public getApiArtifactId(m : Model)]
+[m.getApiProjectName().asArtifactId()/]
+[/template]
+
+[template public getWebArtifactId(m : Model)]
+[m.getWebProjectName().asArtifactId()/]
+[/template]
+
 [template public getWebRoot(m : Model)]
-[m.getHTMLProjectName().concat('/src/')/]
+[m.getWebProjectName().concat('/app/')/]
 [/template]
 
 [template public getPoolName(m : Model)]
@@ -274,4 +294,8 @@ String[else]
 
 [template public getTestMetaInfPath(m : Model)]
 [m.getBackendProjectName().concat('/src/test/resources/META-INF/')/]
+[/template]
+
+[template public getProjectVersion(m : Model)]
+0.0.1-SNAPSHOT
 [/template]
