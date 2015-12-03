@@ -6,8 +6,8 @@
 
 [template public generate(m : Model)]
     [comment @main/]
-	[m.genCommon(m.getWebProjectName())/]
-    [m.genDevEnv(m.getWebRoot())/]
+    [m.genDevEnv(m.getWebArtifactId())/]
+	[m.genCommon(m.getWebRoot())/]
     [for (c : Class | m.getClasses())]
     	[c.genModules(m.getWebRoot())/]
     [/for]

@@ -293,8 +293,7 @@ String[else]
 [/template]
 
 [template public getWebRoot(m : Model)]
-[m.getWebProjectName().concat('/app/')/]
-[/template]
+[m.getWebProjectName().concat('/public_html/')/]
 
 [template public getPoolName(m : Model)]
 [m.name.concat('_pool')/]
@@ -309,15 +308,15 @@ String[else]
 [/template]
 
 [template public getMetaInfPath(m : Model)]
-[m.getBackendProjectName().concat('/src/main/resources/META-INF/')/]
+[m.getLogicArtifactId().concat('/src/main/resources/META-INF/')/]
 [/template]
 
 [template public getTestMetaInfPath(m : Model)]
-[m.getBackendProjectName().concat('/src/test/resources/META-INF/')/]
+[m.getLogicArtifactId().concat('/src/test/resources/META-INF/')/]
 [/template]
 
 [template public getTestServicesMetaInfPath(m : Model)]
-[m.getApiProjectName().concat('/src/test/resources/META-INF/')/]
+[m.getApiArtifactId().concat('/src/test/resources/META-INF/')/]
 [/template]
 
 [template public getProjectVersion(m : Model)]

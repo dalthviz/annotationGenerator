@@ -3,8 +3,8 @@
 [import ::utils /]
 
 [template public mainPOM(m : Model)]
-[m.genWebPOM(m.getApiProjectName().concat('/'))/]
-[m.genLogicPOM(m.getBackendProjectName().concat('/'))/]
+[m.genWebPOM(m.getApiArtifactId().concat('/'))/]
+[m.genLogicPOM(m.getLogicArtifactId().concat('/'))/]
 [/template]
 
 [template protected genWebPOM(m : Model, path : String)]

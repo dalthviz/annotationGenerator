@@ -284,15 +284,16 @@ hs_err_pid*
 
 .tmp/
 /target/
-/[m.getBackendProjectName()/]/target/
-/[m.getApiProjectName()/]/target/
+/[m.getLogicArtifactId()/]/target/
+/[m.getApiArtifactId()/]/target/
 
 #NetBeans
 nbactions.xml
-/[m.getApiProjectName()/]/nb-configuration.xml
+/[m.getApiArtifactId()/]/nb-configuration.xml
 
 #Tests
-/[m.getBackendProjectName()/]/derby.log
+/[m.getLogicArtifactId()/]/derby.log
+/[m.getApiArtifactId()/]/derby.log
 
 [/file]
 [/template]
