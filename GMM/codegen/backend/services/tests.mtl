@@ -1,0 +1,316 @@
+[comment encoding = UTF-8 /]
+[module tests('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /] 
+
+[template public mainTests(c : Class, path : String)]
+[c.genTests(path.concat('tests/'))/]
+[/template]
+
+[template protected genTests(c : Class, path : String) {className : String = c.getServiceTestName();}]
+[if (c.isChild()=false)]
+[file (path.concat(className+'.java'), false, 'UTF-8')]
+package [c.getModel().baseGroup()/].test.service;
+
+import co.edu.uniandes.csw.auth.model.UserDTO;
+import co.edu.uniandes.csw.auth.security.JWT;
+import [c.getModel().baseGroup()/].dtos.[c.getDTOName()/];
+[for (ass : Association | c.getMasterAssociations())]
+import [c.getModel().baseGroup()/].dtos.[ass.getChildProperty(c).getClass().getDTOName()/];
+[/for]
+import [c.getModel().baseGroup()/].services.[c.getServiceName()/];
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.filter.LoggingFilter;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
+import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
+import uk.co.jemos.podam.api.PodamFactory;
+import uk.co.jemos.podam.api.PodamFactoryImpl;
+
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@RunWith(Arquillian.class)
+public class [c.getServiceTestName()/] {
+
+    private final int Ok = Status.OK.getStatusCode();
+    private final int Created = Status.CREATED.getStatusCode();
+    private final int OkWithoutContent = Status.NO_CONTENT.getStatusCode();
+    private final String [c.testPath()/] = "[c.getURI()/]";
+    private final static List<[c.getDTOName()/]> oraculo = new ArrayList<>();
+    [for (ass : Association | c.getSharedAssociations())]
+    private final String [ass.getChildProperty(c).getClass().testPath()/] = "[ass.getChildProperty(c).getClass().getURI()/]";
+    private final static List<[ass.getChildProperty(c).getClass().getDTOName()/]> oraculo[ass.getChildProperty(c).getClass().name/]s = new ArrayList<>();
+    [/for]
+    private WebTarget target;
+    private final String apiPath = "api";
+    private final String username = System.getenv("USERNAME_USER");
+    private final String password = System.getenv("PASSWORD_USER");
+
+    @ArquillianResource
+    private URL deploymentURL;
+
+    @Deployment(testable = false)
+    public static Archive<?> createDeployment() {
+        return ShrinkWrap
+                // Nombre del Proyecto "[c.getModel().getWebProjectName()/]" seguido de ".war". Debe ser el mismo nombre del proyecto web que contiene los javascript y los  servicios Rest
+                .create(WebArchive.class, "[c.getModel().getWebProjectName()/].war")
+                // Se agrega la dependencia a la logica con el nombre groupid:artefactid:version (GAV)
+                .addAsLibraries(Maven.resolver()
+                        .resolve("[c.getModel().baseGroup()/]:[c.getModel().getBackendProjectName()/]:1.0-SNAPSHOT")
+                        .withTransitivity().asFile())
+                .addAsLibraries(Maven.resolver()
+                        .resolve("co.edu.uniandes.csw:AuthService:0.0.4-SNAPSHOT")
+                        .withTransitivity().asFile())
+                // Se agregan los compilados de los paquetes de servicios
+                .addPackage([c.getServiceName()/].class.getPackage())
+                // El archivo que contiene la configuracion a la base de datos.
+                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
+                // El archivo beans.xml es necesario para injeccion de dependencias.
+                .addAsWebInfResource(new File("src/main/webapp/WEB-INF/beans.xml"))
+                // El archivo shiro.ini es necesario para injeccion de dependencias
+                .addAsWebInfResource(new File("src/main/webapp/WEB-INF/shiro.ini"))
+                // El archivo web.xml es necesario para el despliegue de los servlets
+                .setWebXML(new File("src/main/webapp/WEB-INF/web.xml"));
+    }
+    
+    private WebTarget createWebTarget() {
+        ClientConfig config = new ClientConfig();
+        config.register(LoggingFilter.class);
+        return ClientBuilder.newClient(config).target(deploymentURL.toString()).path(apiPath);
+    }
+
+    @BeforeClass
+    public static void setUp() {
+        insertData();
+    }
+
+    public static void insertData() {
+        for (int i = 0; i < 5; i++) {
+            PodamFactory factory = new PodamFactoryImpl();
+            [c.getDTOName()/] [c.getName()/] = factory.manufacturePojo([c.getDTOName()/].class);
+            [c.getName()/].setId(i + 1L);
+            [for (ass : Association | c.getCompositeAssociations())]
+            List<[ass.getChildProperty(c).getClass().getDTOName()/]> [ass.getChildProperty(c).getClass().getName()/]List = new ArrayList<>();
+            for (int j = 0; j < 5; j++)
+            {
+                [ass.getChildProperty(c).getClass().getDTOName()/] [ass.getChildProperty(c).getClass().getName()/] = factory.manufacturePojo([ass.getChildProperty(c).getClass().getDTOName()/].class);
+                [ass.getChildProperty(c).getClass().getName()/].setId(i + 1L);
+                [ass.getChildProperty(c).getClass().getName()/]List.add([ass.getChildProperty(c).getClass().getName()/]);
+            }
+            
+            [c.getName()/].set[ass.getChildProperty(c).getClass().name/]s([ass.getChildProperty(c).getClass().getName()/]List);
+            [/for]
+            
+            oraculo.add([c.getName()/]);
+            
+            [for (ass : Association | c.getSharedAssociations())]
+            [ass.getChildProperty(c).getClass().getDTOName()/] [ass.getChildProperty(c).getClass().getName()/] = factory.manufacturePojo([ass.getChildProperty(c).getClass().getDTOName()/].class);
+            [ass.getChildProperty(c).getClass().getName()/].setId(i + 1L);
+            oraculo[ass.getChildProperty(c).getClass().name/]s.add([ass.getChildProperty(c).getClass().getName()/]);
+            [/for]
+
+            
+        }
+    }
+    
+    public Cookie login(String username, String password) {
+        UserDTO user = new UserDTO();
+        user.setUserName(username);
+        user.setPassword(password);
+        user.setRememberMe(true);
+        Response response = target.path("users").path("login").request()
+                .post(Entity.entity(user, MediaType.APPLICATION_JSON));
+        if (response.getStatus() == Ok) {
+            return response.getCookies().get(JWT.cookieName);
+        } else {
+            return null;
+        }
+    }
+
+    @Before
+    public void setUpTest() {
+        target = createWebTarget();
+    }
+
+    @Test
+    public void t1Create[c.getServiceTestName()/]() throws IOException {
+        [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
+        Cookie cookieSessionId = login(username, password);
+        Response response = target.path([c.testPath()/])
+                .request().cookie(cookieSessionId)
+                .post(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
+        [c.getDTOName()/]  [c.testName()/] = ([c.getDTOName()/]) response.readEntity([c.getDTOName()/].class);
+        [for (prop : Property | c.attribute)]
+        [if (prop.isDate()=false)]
+        Assert.assertEquals([c.getName()/].[prop.getter()/](), [c.testName()/].[prop.getter()/]());
+        [/if]
+        [/for]
+        Assert.assertEquals(Created, response.getStatus());
+    }
+    
+    @Test
+    public void t2Get[c.name/]ById() {
+        Cookie cookieSessionId = login(username, password);
+        [c.getDTOName()/] [c.testName()/] = target.path([c.testPath()/])
+                .path(oraculo.get(0).getId().toString())
+                .request().cookie(cookieSessionId).get([c.getDTOName()/].class);
+        [for (prop : Property | c.attribute)]
+        [if (prop.isDate()=false)]
+        Assert.assertEquals([c.testName()/].[prop.getter()/](), oraculo.get(0).[prop.getter()/]());
+        [/if]
+        [/for]                
+    }
+    
+    @Test
+    public void t3[c.getServiceTestName()/]() throws IOException {
+        Cookie cookieSessionId = login(username, password);
+        Response response = target.path([c.testPath()/])
+                .request().cookie(cookieSessionId).get();
+        String list[c.name/] = response.readEntity(String.class);
+        List<[c.getDTOName()/]> list[c.name/]Test = new ObjectMapper().readValue(list[c.name/], List.class);
+        Assert.assertEquals(Ok, response.getStatus());
+        Assert.assertEquals(1, list[c.name/]Test.size());
+    }
+    
+    @Test
+    public void t4Update[c.getServiceTestName()/]() throws IOException {
+        Cookie cookieSessionId = login(username, password);
+        [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
+        PodamFactory factory = new PodamFactoryImpl();
+        [c.getDTOName()/] [c.getName()/]Changed = factory.manufacturePojo([c.getDTOName()/].class);
+        [for (prop : Property | c.attribute)]
+        [if (prop.isDate()=false and prop.isID()=false)]
+        [c.getName()/].[prop.setter()/]([c.getName()/]Changed.[prop.getter()/]());
+        [/if]
+        [/for]
+        Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
+                .request().cookie(cookieSessionId).put(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
+        [c.getDTOName()/] [c.testName()/] = ([c.getDTOName()/]) response.readEntity([c.getDTOName()/].class);
+        Assert.assertEquals(Ok, response.getStatus());
+        [for (prop : Property | c.attribute)]
+        [if (prop.isDate()=false and prop.isID()=false)]
+        Assert.assertEquals([c.getName()/].[prop.getter()/](), [c.testName()/].[prop.getter()/]());
+        [/if]
+        [/for]
+
+    }
+    
+    [for (ass : Association | c.getSharedAssociations())]
+    @Test
+    public void t[(i * 4)+1/]Add[ass.getChildProperty(c).getClass().name/][c.getServiceTestName()/]() {
+        Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
+        
+        [ass.getChildProperty(c).getClass().getDTOName()/] [ass.getChildProperty(c).getClass().getName()/] = oraculo[ass.getChildProperty(c).getClass().name/]s.get(0);
+        [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
+        
+        
+        Response response = target.path([ass.getChildProperty(c).getClass().testPath()/])
+                .request().cookie(cookieSessionId)
+                .post(Entity.entity([ass.getChildProperty(c).getClass().getName()/], MediaType.APPLICATION_JSON));
+        
+        [ass.getChildProperty(c).getClass().getDTOName()/] [ass.getChildProperty(c).getClass().testName()/] = ([ass.getChildProperty(c).getClass().getDTOName()/]) response.readEntity([ass.getChildProperty(c).getClass().getDTOName()/].class);
+        [for (prop : Property | ass.getChildProperty(c).getClass().attribute)]
+        [if (prop.isDate()=false)]
+        Assert.assertEquals([ass.getChildProperty(c).getClass().getName()/].[prop.getter()/](), [ass.getChildProperty(c).getClass().testName()/].[prop.getter()/]());
+        [/if]
+        [/for]
+        Assert.assertEquals(Created, response.getStatus());
+        
+        response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
+                .path([ass.getChildProperty(c).getClass().testPath()/]).path([ass.getChildProperty(c).getClass().getName()/].getId().toString())
+                .request().cookie(cookieSessionId)
+                .post(Entity.entity([ass.getChildProperty(c).getClass().getName()/], MediaType.APPLICATION_JSON));
+        
+        [ass.getChildProperty(c).getClass().testName()/] = ([ass.getChildProperty(c).getClass().getDTOName()/]) response.readEntity([ass.getChildProperty(c).getClass().getDTOName()/].class);
+        Assert.assertEquals(Ok, response.getStatus());
+        [for (prop : Property | ass.getChildProperty(c).getClass().attribute)]
+        [if (prop.isDate()=false)]
+        Assert.assertEquals([ass.getChildProperty(c).getClass().getName()/].[prop.getter()/](), [ass.getChildProperty(c).getClass().testName()/].[prop.getter()/]());
+        [/if]
+        [/for]
+    }
+    
+    @Test
+    public void t[(i * 4)+2/]Get[ass.getChildProperty(c).getClass().getServiceTestName()/]List() throws IOException {
+        Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
+        [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
+        
+        Response response = target.path([c.testPath()/])
+                .path([c.getName()/].getId().toString())
+                .path([ass.getChildProperty(c).getClass().testPath()/])
+                .request().cookie(cookieSessionId).get();
+        
+        String [ass.getChildProperty(c).getClass().getName()/]List = response.readEntity(String.class);
+        List<[ass.getChildProperty(c).getClass().getDTOName()/]> [ass.getChildProperty(c).getClass().getName()/]ListTest = new ObjectMapper().readValue([ass.getChildProperty(c).getClass().getName()/]List, List.class);
+        Assert.assertEquals(Ok, response.getStatus());
+        Assert.assertEquals(1, [ass.getChildProperty(c).getClass().getName()/]ListTest.size());
+    }
+    
+    @Test
+    public void t[(i * 4)+3/]Get[ass.getChildProperty(c).getClass().getServiceTestName()/]() throws IOException {
+        Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
+        [ass.getChildProperty(c).getClass().getDTOName()/] [ass.getChildProperty(c).getClass().getName()/] = oraculo[ass.getChildProperty(c).getClass().name/]s.get(0);
+        [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
+        
+        [ass.getChildProperty(c).getClass().getDTOName()/] [ass.getChildProperty(c).getClass().testName()/] = target.path([c.testPath()/])
+                .path([c.getName()/].getId().toString()).path([ass.getChildProperty(c).getClass().testPath()/])
+                .path([ass.getChildProperty(c).getClass().getName()/].getId().toString())
+                .request().cookie(cookieSessionId).get([ass.getChildProperty(c).getClass().getDTOName()/].class);
+                
+        [for (prop : Property | ass.getChildProperty(c).getClass().attribute)]
+        [if (prop.isDate()=false)]
+        Assert.assertEquals([ass.getChildProperty(c).getClass().getName()/].[prop.getter()/](), [ass.getChildProperty(c).getClass().testName()/].[prop.getter()/]());
+        [/if]
+        [/for]
+    }
+    
+    @Test
+    public void t[(i * 4)+4/]Remove[ass.getChildProperty(c).getClass().name/][c.getServiceTestName()/]() {
+        Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
+        
+        [ass.getChildProperty(c).getClass().getDTOName()/] [ass.getChildProperty(c).getClass().getName()/] = oraculo[ass.getChildProperty(c).getClass().name/]s.get(0);
+        [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
+        
+        Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
+                .path([ass.getChildProperty(c).getClass().testPath()/]).path([ass.getChildProperty(c).getClass().getName()/].getId().toString())
+                .request().cookie(cookieSessionId).delete();
+        Assert.assertEquals(OkWithoutContent, response.getStatus());
+    }
+    [/for]
+    
+    @Test
+    public void t[(c.getSharedAssociations()->size()*4)+5/]Delete[c.getServiceTestName()/]() {
+        Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
+        [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
+        Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
+                .request().cookie(cookieSessionId).delete();
+        Assert.assertEquals(OkWithoutContent, response.getStatus());
+    } 
+    
+
+}
+[/file]
+[/if]
+[/template]
