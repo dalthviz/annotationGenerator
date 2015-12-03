@@ -9,6 +9,6 @@
     [c.restMain(project)/]	
 [/let]
 [let baseTests : String = path.concat(c.getModel().baseTestPath().concat('test/service/'))]
-    [c.mainTests(project)/]
+    [c.mainTests(baseTests)/]
 [/let]
 [/template]
