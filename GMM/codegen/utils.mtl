@@ -122,6 +122,26 @@ Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <
 
 [query public isRequired(a : Property) : Boolean = self.upperBound() > 0 /]
 
+[template public testName(c : Class)]
+[c.name.toLower().concat('Test')/]
+[/template]
+
+[template public testURI(c : Class)]
+[c.name.toLower().concat('Path')/]
+[/template]
+
+[template public testPath(c : Class)]
+[c.name.toLower().concat('Path')/]
+[/template]
+
+[template public getServiceName(c : Class)]
+[c.name.toUpperFirst().concat('Service')/]
+[/template]
+
+[template public getServiceTestName(c : Class)]
+[c.name.concat('Test')/]
+[/template]
+
 [template public getJavaType(a : Property)]
 [if (a.type.name = 'Image')]
 String[else]
