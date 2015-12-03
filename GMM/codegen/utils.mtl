@@ -294,6 +294,7 @@ String[else]
 
 [template public getWebRoot(m : Model)]
 [m.getWebProjectName().concat('/public_html/')/]
+[/template]
 
 [template public getPoolName(m : Model)]
 [m.name.concat('_pool')/]
