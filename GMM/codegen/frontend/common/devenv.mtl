@@ -6,6 +6,8 @@
     [m.genPackageJson(path)/]
     [m.genBowerJson(path)/]
     [m.genGruntFile(path)/]
+    [m.genGitIgnore(path)/]
+    [m.genTravis(path)/]
 [/template]
 
 [template protected genPackageJson(m : Model, path : String)]
@@ -429,4 +431,27 @@ module.exports = function (grunt) {
     grunt.registerTask('default', ['['/]'test', 'build'[']'/]);
 };
 [/file]
+[/template]
+[template protected genGitIgnore(m : Model, path : String)]
+[file (path.concat(''), false, 'UTF-8')]
+node_modules
+bower_components
+.tmp
+.idea
+nbproject/private
+dist
+npm-debug.log
+[/file]
+[/template]
+
+[template protected genTravis(m : Model, path : String)]
+language: node_js
+node_js:
+  - "0.12"
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - "npm install -g bower grunt-cli && bower install"
+after_success:
+  - grunt sonarRunner
 [/template]
