@@ -433,7 +433,7 @@ module.exports = function (grunt) {
 [/file]
 [/template]
 [template protected genGitIgnore(m : Model, path : String)]
-[file (path.concat(''), false, 'UTF-8')]
+[file (path.concat('.gitignore'), false, 'UTF-8')]
 node_modules
 bower_components
 .tmp
@@ -445,6 +445,7 @@ npm-debug.log
 [/template]
 
 [template protected genTravis(m : Model, path : String)]
+[file (path.concat('.travis.yml'), false, 'UTF-8')]
 language: node_js
 node_js:
   - "0.12"
@@ -454,4 +455,5 @@ before_install:
   - "npm install -g bower grunt-cli && bower install"
 after_success:
   - grunt sonarRunner
+[/file]
 [/template]
