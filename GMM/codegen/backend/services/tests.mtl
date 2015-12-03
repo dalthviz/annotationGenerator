@@ -9,7 +9,7 @@
 [template protected genTests(c : Class, path : String) {className : String = c.getServiceTestName();}]
 [if (c.isChild()=false)]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
-package [c.getModel().baseGroup()/].test.service;
+package [c.getModel().baseGroup()/].tests;
 
 import co.edu.uniandes.csw.auth.model.UserDTO;
 import co.edu.uniandes.csw.auth.security.JWT;
