@@ -2,9 +2,11 @@
 [module services('http://www.eclipse.org/uml2/5.0.0/UML')/]
 [import ::utils /]
 [import backend::services::jaxrs /]
+[import backend::services::tests /]
 
 [template public genServices(c : Class, path : String)]
 [let project : String = path.concat(c.getModel().basePath().concat('services/'))]
     [c.restMain(project)/]
+	[c.mainTests(project)/]
 [/let]
 [/template]
