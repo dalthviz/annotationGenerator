@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module tests('http://www.eclipse.org/uml2/5.0.0/UML')]
-[import ::utils /]
+[import ::utils /] 
 
 [template public mainTests(c : Class, path : String)]
 [c.genTests(path.concat('tests/'))/]
