@@ -316,6 +316,10 @@ String[else]
 [m.getBackendProjectName().concat('/src/test/resources/META-INF/')/]
 [/template]
 
+[template public getTestServicesMetaInfPath(m : Model)]
+[m.getApiProjectName().concat('/src/test/resources/META-INF/')/]
+[/template]
+
 [template public getProjectVersion(m : Model)]
 0.0.1-SNAPSHOT
 [/template]

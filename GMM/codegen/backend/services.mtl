@@ -8,7 +8,7 @@
 [let project : String = path.concat(c.getModel().basePath().concat('services/'))]
     [c.restMain(project)/]	
 [/let]
-[let baseTests : String = path.concat(c.getModel().baseTestPath().concat('test/service/'))]
+[let baseTests : String = path.concat(c.getModel().baseTestPath())]
     [c.mainTests(baseTests)/]
 [/let]
 [/template]
