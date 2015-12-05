@@ -10,27 +10,27 @@
 [template protected appjs(m : Model, path : String)]
 [file (path.concat('app.js'), false, 'UTF-8')]
 (function (ng) {
-
     var mainApp = ng.module('mainApp', ['['/]
         //'ngCrudMock',
-        'authModule',
         [for (c : Class | m.getClasses())]
         '[c.getModule()/]',
         [/for]
-        'ngRoute',
+        'authModule',
+        'ui.router',
         'ngCrud'
     [']'/]);
 
-    mainApp.config(['['/]'$routeProvider', 'CrudTemplateURL', 'CrudCtrlAlias', function ($routeProvider, tplUrl, alias) {
-            $routeProvider
+    mainApp.config(['['/]'$stateProvider', '$urlRouterProvider', 'CrudTemplateURL', 'CrudCtrlAlias', function ($stateProvider, $urlRouterProvider, tplUrl, alias) {
+            $stateProvider
                 [for (c : Class | m.getRootClasses())]
-                .when('/[c.getName()/]', {
+                .state('[c.getName()/]', {
+                    url: '/[c.getName()/]',
                     templateUrl: tplUrl,
                     controller: '[c.getCtrl()/]',
                     controllerAs: alias
                 })
                 [/for]
-                .otherwise('/');
+                $urlRouterProvider.otherwise('/');
         }[']'/]);
 })(window.angular);
 [/file]
@@ -80,18 +80,14 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="#">[m.name/]</a>
+                            <a class="navbar-brand" href>[m.name/]</a>
                         </div>
 
                         <!-- Collect the nav links, forms, and other content for toggling -->
                         <div class="collapse navbar-collapse" id="main-bar">
                             <ul class="nav navbar-nav">
                                 [for (c : Class | m.getRootClasses())]
-                                [if (c.isMaster())]
-                                <li><a href="#/[c.getName()/]">[c.getDisplayName()/] Master</a></li>
-                                [else]
-                                <li><a href="#/[c.getName()/]">[c.getDisplayName()/]</a></li>
-                                [/if]
+                                <li><a ui-sref="[c.getName()/]">[c.getDisplayName()/]</a></li>
                                 [/for]
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
@@ -101,7 +97,7 @@
                     </div> <!-- /.container-fluid -->
                 </nav>
             </div>
-            <div ng-view></div>
+            <div ui-view></div>
         </div>
     </body>
 </html>
