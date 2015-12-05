@@ -4,7 +4,7 @@
 
 [template public restMain(c : Class, path : String)]
 [let filePath : String = path.concat('services/')]
-    [c.restClass(path)/]
+    [c.restClass(filePath)/]
 [/let]
 [/template]
 
