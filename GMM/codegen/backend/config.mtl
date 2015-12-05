@@ -11,7 +11,7 @@
 [template public genConfig(m : Model)]
 [m.mainPOM()/]
 [m.mainXML()/]
-[m.mainProviders(m.getApiArtifactId().concat(m.basePath()))/]
+[comment][m.mainProviders(m.getApiArtifactId().concat(m.basePath())))/][/comment]
 [m.mainPersistence(m.getLogicArtifactId().concat(m.basePath()))/]
 [m.mainTests(m.getLogicArtifactId().concat(m.baseTestPath()))/]
 [m.genDateAdapter(m.getLogicArtifactId().concat(m.basePath()))/]
