@@ -66,6 +66,14 @@ c.getAssociations()->select(
 )
 /]
 
+[query public getOne2OneAssociations(c : Class) : Set(Association) =
+c.getAssociations()->select(
+    asc | asc.getAllAttributes()->select(
+        a | a.isNavigable() and a.getUpper() = 1 and a.getOtherEnd().type = c and not a.isComposite()
+    )->notEmpty()
+)
+/]
+
 [query public hasCompositeAssociations(c : Class) : Boolean =
 c.getCompositeAssociations()->notEmpty()
 /]
@@ -124,6 +132,10 @@ Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <
 
 [template public testName(c : Class)]
 [c.name.toLower().concat('Test')/]
+[/template]
+
+[template public specName(c : Class)]
+[c.name.toLower()/]
 [/template]
 
 [template public testURI(c : Class)]
