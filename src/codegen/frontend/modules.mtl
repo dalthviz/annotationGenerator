@@ -1,7 +1,16 @@
 [comment encoding = UTF-8 /]
 [module modules('http://www.eclipse.org/uml2/5.0.0/UML')/]
 [import frontend::entities::entities /]
+[import frontend::entities::tests /]
+[import ::utils /]
 
 [template public genModules(c : Class, path : String)]
 [c.moduleMain(path.concat('src/modules/'))/]
+[/template]
+
+[template public genIntTests(m : Model, path : String)]
+	[m.mainIntConfig(path)/]
+	[for (c : Class | m.getClasses())]
+    	[c.genIntTest(path.concat('test/'))/]
+    [/for]
 [/template]

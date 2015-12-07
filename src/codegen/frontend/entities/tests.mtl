@@ -2,12 +2,16 @@
 [module tests('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
 
-[template public mainTests(c : Class, path : String)]
-[c.genE2EConf(path)/]
-[c.genTests(path.concat('test/'))/]
+[template public mainIntConfig(m : Model, path : String)]
+[m.genE2EConf(path)/]
 [/template]
 
-[template protected genE2EConf(c : Class, path : String)]
+[template public genIntTest(c : Class, path : String)]
+[c.genTests(path)/]
+[/template]
+
+
+[template protected genE2EConf(m : Model, path : String)]
 [file (path.concat('e2e.conf.js'), false, 'UTF-8')]
 exports.config = {
     allScriptsTimeout: 11000,
