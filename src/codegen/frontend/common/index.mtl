@@ -22,14 +22,13 @@
 
     mainApp.config(['['/]'$stateProvider', '$urlRouterProvider', 'CrudTemplateURL', 'CrudCtrlAlias', function ($stateProvider, $urlRouterProvider, tplUrl, alias) {
             $stateProvider
-                [for (c : Class | m.getRootClasses())]
+                [for (c : Class | m.getRootClasses()) separator ('\n')]
                 .state('[c.getName()/]', {
                     url: '/[c.getName()/]',
                     templateUrl: tplUrl,
                     controller: '[c.getCtrl()/]',
                     controllerAs: alias
-                })
-                [/for]
+                })[/for];
                 $urlRouterProvider.otherwise('/');
         }[']'/]);
 })(window.angular);

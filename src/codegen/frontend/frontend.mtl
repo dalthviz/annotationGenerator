@@ -10,6 +10,6 @@
 	[m.genCommon(m.getWebRoot())/]
 	[m.genIntTests(m.getWebArtifactId().concat('/'))/]
     [for (c : Class | m.getClasses())]
-    	[c.genModules(m.getWebArtifactId().concat('/'))/]
+    	[c.genModules(m.getWebRoot())/]
     [/for]
 [/template]
