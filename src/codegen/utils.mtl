@@ -19,6 +19,10 @@ m.getClasses()->select(c | not c.isChild())
 asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c)->asOrderedSet()->first()
 /]
 
+[query public getParentProperty(asc : Association, c : Class) : Property =
+asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() = 1 and a.getOtherEnd().type = c)->asOrderedSet()->first()
+/]
+
 [query public getAttributesWithRef(c : Class) : OrderedSet(Property) = 
 c.allAttributes()->union(c.getReferences(false))->asOrderedSet()
 /]
