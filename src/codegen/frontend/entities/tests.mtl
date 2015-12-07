@@ -73,7 +73,7 @@ describe('[c.name/] E2E Testing', function () {
 							
 							if (entity == "[a.name/]s")
                             {
-                                var record = JSON.parse('{[for (p : Property | a.getClass().getAllAttribs())]"[p.name/]": "Val[(i+1)/]"[if (i = a.getClass().getAllAttribs()->asOrderedSet().size())],[/if][/for] }');
+                                var record = JSON.parse('{[for (p : Property | a.getClass().getAllAttribs())]"[p.name/]": "Val[(i+1)/]"[if (i = a.getClass().getAllAttribs()->size())],[/if][/for] }');
                                 record.id = 100;
                                 mockRecords['['/]entity].push(record);
                             }
