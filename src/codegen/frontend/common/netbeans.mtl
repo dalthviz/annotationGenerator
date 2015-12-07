@@ -1,0 +1,59 @@
+[comment encoding = UTF-8 /]
+[**
+ * Creates files for Netbeans Project configuration.
+ */]
+[module netbeans('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[**
+ * Entry point for generating files for NetBeans project nature.
+ * @param m Model
+ * @param path Path where files will be generated
+ */]
+[template public netbeansConfig(m : Model, path : String)]
+[m.genProjectXML(path)/]
+[m.genProjectProps(path)/]
+[/template]
+
+[**
+ * Generates file project.xml for NetBeans project.
+ * @param m Model containing project name
+ * @param path Path where files will be generated
+*/]
+[template protected genProjectXML(m : Model, path : String)]
+[file (path.concat('project.xml'), false, 'UTF-8')]
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.web.clientproject</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/clientside-project/1">
+            <name>[m.getArtifactId()/]</name>
+        </data>
+    </configuration>
+</project>
+[/file]
+[/template]
+
+[**
+ * Generates file project.properties for NetBeans project.
+ * @param m Model containing project name
+ * @param path Path where files will be generated
+*/]
+[template protected genProjectProps(m : Model, path : String)]
+[file (path.concat('project.properties'), false, 'UTF-8')]
+auxiliary.org-netbeans-modules-javascript-grunt.action_2e_build=build
+auxiliary.org-netbeans-modules-javascript-grunt.action_2e_clean=clean
+auxiliary.org-netbeans-modules-javascript-grunt.action_2e_rebuild=clean build
+auxiliary.org-netbeans-modules-web-clientproject-api.Grunt_2e_task_2e_1=test
+auxiliary.org-netbeans-modules-web-clientproject-api.js_2e_libs_2e_folder=js/libs
+browser.autorefresh.Chrome.INTEGRATED=true
+browser.highlightselection.Chrome.INTEGRATED=true
+file.reference.[m.getArtifactId()/]-public_html=public_html
+file.reference.[m.getArtifactId()/]-test=test
+files.encoding=UTF-8
+site.root.folder=${file.reference.[m.getArtifactId()/]-public_html}
+start.file=index.html
+test.folder=${file.reference.[m.getArtifactId()/]-test}
+web.context.root=/[m.getArtifactId()/]
+[/file]
+[/template]
