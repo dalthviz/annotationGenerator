@@ -11,6 +11,6 @@
 [template public genIntTests(m : Model, path : String)]
 	[m.mainIntConfig(path)/]
 	[for (c : Class | m.getClasses())]
-    	[c.genIntTest(path.concat('test/'))/]
+    	[c.genIntTest(path)/]
     [/for]
 [/template]

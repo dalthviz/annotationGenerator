@@ -3,11 +3,11 @@
 [import ::utils /]
 
 [template public mainIntConfig(m : Model, path : String)]
-[m.genE2EConf(path)/]
+[m.genE2EConf(path.concat('test/'))/]
 [/template]
 
 [template public genIntTest(c : Class, path : String)]
-[c.genTests(path)/]
+[c.genTests(path.concat('test/'))/]
 [/template]
 
 
@@ -145,6 +145,7 @@ describe('[c.name/] E2E Testing', function () {
         element(by.id('[a.name/]')).sendKeys('Val[(i+1)/]');
 		[/for]
 		[for (asc : Association | c.getOne2OneAssociations())]
+		[asc.name/]
 		[/for]
         element(by.id('save-[c.specName()/]')).click();
         expect(element.all(by.repeater('record in records')).count()).toEqual(1);
