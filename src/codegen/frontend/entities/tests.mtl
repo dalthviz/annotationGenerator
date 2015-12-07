@@ -146,7 +146,7 @@ describe('[c.name/] E2E Testing', function () {
 		[/for]
 		[for (asc : Association | c.getOne2OneAssociations())]
 		[let a : Property = asc.getChildProperty(c)]
-		[if (a.isComposite() = false)]
+		[if (not a.isComposite())]
 		
 		private List<[a.getClass().getEntityName()/]> [a.name/];
 		
