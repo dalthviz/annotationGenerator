@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module devenv('http://www.eclipse.org/uml2/5.0.0/UML')]
-
+[import ::utils /]
 
 [template public mainEnv(m : Model, path : String)]
     [m.genPackageJson(path)/]
@@ -13,7 +13,7 @@
 [template protected genPackageJson(m : Model, path : String)]
 [file (path.concat('package.json'), false, 'UTF-8')]
 {
-  "name": "[m.name/]",
+  "name": "[m.getArtifactId()/]",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-angular-templates": "^0.5.7",
@@ -23,18 +23,23 @@
     "grunt-contrib-copy": "^0.7.0",
     "grunt-contrib-cssmin": "^0.12.0",
     "grunt-contrib-htmlmin": "^0.4.0",
+    "grunt-contrib-jshint": "^0.11.3",
     "grunt-contrib-uglify": "^0.9.1",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-filerev": "^2.1.2",
     "grunt-include-source": "*",
-    "grunt-protractor-runner": "*",
+    "grunt-jscs": "^2.3.0",
+    "grunt-protractor-runner": "2.1.0",
+    "grunt-sonar-runner": "^2.4.4",
     "grunt-usemin": "^3.1.1",
     "grunt-wiredep": "^2.0.0",
     "jit-grunt": "^0.9.1",
+    "jshint-stylish": "^2.1.0",
     "time-grunt": "^1.0.0"
   },
   "engines": {
-    "node": ">=0.12.0"
+    "node": "^0.12.7",
+    "npm": "^2.14.0"
   },
   "scripts": {
     "test": "grunt test",

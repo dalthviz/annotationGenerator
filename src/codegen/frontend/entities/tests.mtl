@@ -2,12 +2,16 @@
 [module tests('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
 
-[template public mainTests(c : Class, path : String)]
-[c.genE2EConf(path)/]
+[template public mainIntConfig(m : Model, path : String)]
+[m.genE2EConf(path.concat('test/'))/]
+[/template]
+
+[template public genIntTest(c : Class, path : String)]
 [c.genTests(path.concat('test/'))/]
 [/template]
 
-[template protected genE2EConf(c : Class, path : String)]
+
+[template protected genE2EConf(m : Model, path : String)]
 [file (path.concat('e2e.conf.js'), false, 'UTF-8')]
 exports.config = {
     allScriptsTimeout: 11000,
@@ -64,15 +68,6 @@ describe('[c.name/] E2E Testing', function () {
                         if (mockRecords['['/]entity] === undefined) {
                             mockRecords['['/]entity] = ['['/]];
 							[for (asc : Association | c.getOne2OneAssociations())]
-							    [let elem : Property = asc.getChildProperty(c)]
-							
-							if (entity == "[elem.name/]")
-                            {
-                                var record = JSON.parse('{ "name": "Planeta" }');
-                                record.id = 100;
-                                mockRecords['['/]entity].push(record);
-                            }    
-								[/let]
 							[/for]
                         }
                         return mockRecords['['/]entity];
@@ -150,12 +145,7 @@ describe('[c.name/] E2E Testing', function () {
         element(by.id('[a.name/]')).sendKeys('Val[(i+1)/]');
 		[/for]
 		[for (asc : Association | c.getOne2OneAssociations())]
-		    [let elem : Property = asc.getChildProperty(c)]
-		
-		var select[elem.getDisplayName()/] = element(by.id('[elem.name/]'));
-        select[elem.getDisplayName()/].$('['['/]value="100"]').click();
- 
-			[/let]
+		[asc.getChildProperty(c).getClass().name/]
 		[/for]
         element(by.id('save-[c.specName()/]')).click();
         expect(element.all(by.repeater('record in records')).count()).toEqual(1);
