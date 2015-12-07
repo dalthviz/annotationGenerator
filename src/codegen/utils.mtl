@@ -124,7 +124,7 @@ Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <
 
 [query public setter(a : Property) : String = 'set'.concat(a.name.toUpperFirst()) /]
 
-[query public getClass(a : Property) : Class = Class.allInstances()->select(c|c.name = a.type.name)->asOrderedSet()->first() /]
+[query public getClass(a : Property) : Class = Class.allInstances()->select(class | class.name = a.type.name)->asOrderedSet()->first() /]
 
 [query public getDisplayName(a : Property) : String = a.name.toUpperFirst() /]
 
