@@ -10,9 +10,8 @@
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].entities;
 
+import co.edu.uniandes.csw.crud.spi.entity.BaseEntity;
 import java.io.Serializable;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Entity;
 [if (c.hasDateAttribute())]
 import java.util.Date;
@@ -29,33 +28,35 @@ import javax.persistence.OneToMany;
 import javax.persistence.CascadeType;
 [/if]
 [/if]
+import uk.co.jemos.podam.common.PodamExclude;
 
 /**
  * @generated
  */
 @Entity
-public class [className/] implements Serializable {
+public class [className/] extends BaseEntity implements Serializable {
 
 [for (a : Property | c.allAttributes())]
-    [if (a.isID())]
-    @Id
-    @GeneratedValue(generator = "[c.name/]")
-    [/if]
     [if (a.isDate())]
     @Temporal(TemporalType.DATE)
     [/if]
+	[if (a.isID() = false and a.isName() = false)]
     private [a.type.name/] [a.name.toLowerFirst()/];
+	[/if]
 
 [/for]
 [for (a : Property | c.getReferences(true))]
+    @PodamExclude
     @ManyToOne
     private [a.getClass().getEntityName()/] [a.name/];
 [/for]
 [for (asc : Association | c.getMasterAssociations())]
 [let a : Property = asc.getChildProperty(c)]
 [if (a.isComposite())]
+	@PodamExclude
     @OneToMany(mappedBy = "[a.getOtherEnd().name/]", cascade = CascadeType.ALL, orphanRemoval = true)
 [else]
+	@PodamExclude
     @OneToMany
 [/if]
     private List<[a.getClass().getEntityName()/]> [a.name/];
