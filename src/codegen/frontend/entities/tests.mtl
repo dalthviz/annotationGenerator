@@ -68,6 +68,18 @@ describe('[c.name/] E2E Testing', function () {
                         if (mockRecords['['/]entity] === undefined) {
                             mockRecords['['/]entity] = ['['/]];
 							[for (asc : Association | c.getOne2OneAssociations())]
+							[let a : Property = asc.getParentProperty(c)]
+							[if (not a.isComposite())]
+							
+							if (entity == "[a.name/]s")
+                            {
+                                var record = JSON.parse('{[for (a : Property | c.getAllAttribs())]"[a.name/]": "Val[(i+1)/]"[if (a = c.getAllAttribs().last())],[/if][/for] }');
+                                record.id = 100;
+                                mockRecords['['/]entity].push(record);
+                            }
+
+							[/if]
+							[/let]
 							[/for]
                         }
                         return mockRecords['['/]entity];
@@ -147,14 +159,10 @@ describe('[c.name/] E2E Testing', function () {
 		[for (asc : Association | c.getOne2OneAssociations())]
 		[let a : Property = asc.getParentProperty(c)]
 		[if (not a.isComposite())]
-		
 		private List<[a.getClass().getEntityName()/]> [a.name/];
-		
 		[/if]
 		[/let]
 		[/for]
-
-
         element(by.id('save-[c.specName()/]')).click();
         expect(element.all(by.repeater('record in records')).count()).toEqual(1);
     });
