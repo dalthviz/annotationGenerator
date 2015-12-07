@@ -1,6 +1,6 @@
 *.class
 *.java
-
+tasks/
 # Package Files #
 *.jar
 *.war
@@ -9,16 +9,12 @@
 # Java/Acceleo Compil #
 target/
 bin/
-META-INF/
 *.acceleo
-*.properties
 *.java.lost
 
 # Emacs Files #
 *~
 
 # Eclipse Files #
-.classpath
-.project
 .settings/
 .metadata
