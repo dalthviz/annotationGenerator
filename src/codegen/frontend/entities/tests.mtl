@@ -145,7 +145,7 @@ describe('[c.name/] E2E Testing', function () {
         element(by.id('[a.name/]')).sendKeys('Val[(i+1)/]');
 		[/for]
 		[for (asc : Association | c.getOne2OneAssociations())]
-		[asc.getChildProperty(c).getClass().name/]
+		[asc.getChildProperty(c).first().getClass().name/]
 		[/for]
         element(by.id('save-[c.specName()/]')).click();
         expect(element.all(by.repeater('record in records')).count()).toEqual(1);
