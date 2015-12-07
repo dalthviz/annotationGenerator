@@ -230,8 +230,8 @@ module.exports = function (grunt) {
                 tasks: ['['/]'wiredep'[']'/]
             },
             js: {
-                files: ['['/]'<%= meta.src %>/scripts/{,*/}*.js'[']'/],
-                tasks: ['['/]'newer:jshint:all'[']'/],
+                files: ['['/]'<%= meta.src %>/**/*.js'[']'/],
+                tasks: ['['/]'build'[']'/],
                 options: {
                     livereload: '<%= connect.options.livereload %>'
                 }
