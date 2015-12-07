@@ -73,7 +73,7 @@ describe('[c.name/] E2E Testing', function () {
 							
 							if (entity == "[a.name/]s")
                             {
-                                var record = JSON.parse('{[for (p : Property | a.getClass().getAllAttribs())]"[p.name/]": "Val[(i+1)/]"[if (i = 1)],[/if][/for] }');
+                                var record = JSON.parse('{[for (p : Property | a.getClass().getAllAttribs())]"[p.name/]": "Val[(i+1)/]"[if (i = a.getClass().getAllAttribs().size())],[/if][/for] }');
                                 record.id = 100;
                                 mockRecords['['/]entity].push(record);
                             }
@@ -159,7 +159,8 @@ describe('[c.name/] E2E Testing', function () {
 		[for (asc : Association | c.getOne2OneAssociations())]
 		[let a : Property = asc.getParentProperty(c)]
 		[if (not a.isComposite())]
-		private List<[a.getClass().getEntityName()/]> [a.name/];
+		var select[a.getClass().getEntityName()/] = element(by.id('[a.name/]'));
+        select[a.getClass().getEntityName()/].$('['['/]value="100"]').click();
 		[/if]
 		[/let]
 		[/for]
