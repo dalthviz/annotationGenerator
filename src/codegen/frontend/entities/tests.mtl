@@ -33,7 +33,7 @@ exports.config = {
 
 [template protected genTests(c : Class, path : String)]
 [if (c.isChild()=false)]
-[file (path.concat('e2e/' + c.specName() + 'specs.js'), false, 'UTF-8')]
+[file (path.concat('e2e/' + c.specName() + '.specs.js'), false, 'UTF-8')]
 describe('[c.name/] E2E Testing', function () {
     
     beforeEach(function () {
