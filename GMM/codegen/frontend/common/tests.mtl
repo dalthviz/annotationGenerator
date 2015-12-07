@@ -1,0 +1,193 @@
+[comment encoding = UTF-8 /]
+[module tests('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[template public mainTests(c : Class, path : String)]
+[c.genE2EConf(path)/]
+[c.genTests(path.concat('test/'))/]
+[/template]
+
+[template protected genE2EConf(c : Class, path : String)]
+[file (path.concat('e2e.conf.js'), false, 'UTF-8')]
+exports.config = {
+    allScriptsTimeout: 11000,
+    specs: ['['/]
+        'e2e/*.js'
+    ],
+    capabilities: {
+        'browserName': 'firefox'
+    },
+    baseUrl: 'http://localhost:9001/',
+    framework: 'jasmine2',
+    jasmineNodeOpts: {
+        showColors: true,
+        defaultTimeoutInterval: 30000
+    }
+};
+[/file]
+[/template]
+
+[template protected genTests(c : Class, path : String)]
+[if (c.isChild()=false)]
+[file (path.concat('e2e/' + c.specName() + 'specs.js'), false, 'UTF-8')]
+describe('[c.name/] E2E Testing', function () {
+    
+    beforeEach(function () {
+        browser.addMockModule('ngCrudMock', function () {
+            var mod = angular.module('ngCrudMock', ['['/]'ngMockE2E']);
+
+            mod.constant('ngCrudMock.baseUrl', 'api');
+
+            mod.value('ngCrudMock.mockRecords', {});
+
+            mod.run(['['/]'$httpBackend', 'ngCrudMock.mockRecords', 'ngCrudMock.baseUrl', function ($httpBackend, mockRecords, baseUrl) {                    
+                    
+                    function getQueryParams(url) {
+                        var vars = {}, hash;
+                        var hashes = url.slice(url.indexOf('?') + 1).split('&');
+                        for (var i = 0; i < hashes.length; i++) {
+                            hash = hashes['['/]i].split('=');
+                            vars['['/]hash['['/]0]] = hash['['/]1];
+                        }
+                        return vars;
+                    }
+
+                    function getEntityName(req_url) {
+                        var url = req_url.split("?")['['/]0];
+                        var baseRegex = new RegExp(baseUrl + "/");
+                        var urlSuffix = url.split(baseRegex).pop();
+                        return urlSuffix.split("/")['['/]0];
+                    }
+
+                    function getRecords(url) {
+                        var entity = getEntityName(url);
+                        if (mockRecords['['/]entity] === undefined) {
+                            mockRecords['['/]entity] = ['['/]];
+							[for (asc : Association | c.getOne2OneAssociations())]
+							    [let elem : Property = asc.getChildProperty(c)]
+							
+							if (entity == "[elem.name/]")
+                            {
+                                var record = JSON.parse('{ "name": "Planeta" }');
+                                record.id = 100;
+                                mockRecords['['/]entity].push(record);
+                            }    
+								[/let]
+							[/for]
+                        }
+                        return mockRecords['['/]entity];
+                    }
+
+                    var queryParamsRegex = '((['['/]?](\\w+=\\w+))(['['/]&](\\w+=\\w+))*)?$';
+                    var collectionUrl = new RegExp(baseUrl + '/(\\w+)(/master)?' + queryParamsRegex);
+                    var recordUrl = new RegExp(baseUrl + '/(\\w+)(/master)?/(['['/]0-9]+)' + queryParamsRegex);
+                    var ignore_regexp = new RegExp('^((?!' + baseUrl + ').)*$');
+
+                    $httpBackend.whenGET(ignore_regexp).passThrough();
+                    $httpBackend.whenGET(collectionUrl).respond(function (method, url) {
+                        var records = getRecords(url);
+                        var responseObj = ['['/]];
+                        var queryParams = getQueryParams(url);
+                        var page = queryParams.page;
+                        var maxRecords = queryParams.maxRecords;
+                        var headers = {};
+                        if (page && maxRecords) {
+                            var start_index = (page - 1) * maxRecords;
+                            var end_index = start_index + maxRecords;
+                            responseObj = records.slice(start_index, end_index);
+                            headers = {"X-Total-Count": records.length};
+                        } else {
+                            responseObj = records;
+                        }
+                        return ['['/]200, responseObj, headers];
+                    });
+                    $httpBackend.whenGET(recordUrl).respond(function (method, url) {
+                        var records = getRecords(url);
+                        var id = parseInt(url.split('/').pop());
+                        var record;
+                        angular.forEach(records, function (value) {
+                            if (value.id === id) {
+                                record = angular.copy(value);
+                            }
+                        });
+                        return ['['/]200, record, {}];
+                    });
+                    $httpBackend.whenPOST(collectionUrl).respond(function (method, url, data) {
+                        var records = getRecords(url);
+                        var record = angular.fromJson(data);
+                        record.id = Math.floor(Math.random() * 10000);
+                        records.push(record);
+                        return ['['/]201, record, {}];
+                    });
+                    $httpBackend.whenPUT(recordUrl).respond(function (method, url, data) {
+                        var records = getRecords(url);
+                        var record = angular.fromJson(data);
+                        angular.forEach(records, function (value, key) {
+                            if (value.id === record.id) {
+                                records.splice(key, 1, record);
+                            }
+                        });
+                        return ['['/]200, null, {}];
+                    });
+                    $httpBackend.whenDELETE(recordUrl).respond(function (method, url) {
+                        var records = getRecords(url);
+                        var id = parseInt(url.split('/').pop());
+                        angular.forEach(records, function (value, key) {
+                            if (value.id === id) {
+                                records.splice(key, 1);
+                            }
+                        });
+                        return ['['/]204, null, {}];
+                    });
+                }]);
+        });
+    });
+
+    it('should create one [c.specName()/]', function () {
+        browser.get('#/[c.specName()/]');
+        element(by.id('create-[c.specName()/]')).click();
+		[for (a : Property | c.getAllAttribs())]
+        element(by.id('[a.name/]')).sendKeys('Val[(i+1)/]');
+		[/for]
+		[for (asc : Association | c.getOne2OneAssociations())]
+		    [let elem : Property = asc.getChildProperty(c)]
+		
+		var select[elem.getDisplayName()/] = element(by.id('[elem.name/]'));
+        select[elem.getDisplayName()/].$('['['/]value="100"]').click();
+ 
+			[/let]
+		[/for]
+        element(by.id('save-[c.specName()/]')).click();
+        expect(element.all(by.repeater('record in records')).count()).toEqual(1);
+    });
+    
+    it('should read one [c.specName()/]', function () {
+        [for (a : Property | c.getAllAttribs())]
+        expect(element.all(by.cssContainingText('.ng-binding', 'Val[(i+1)/]')).count()).toEqual(1);
+        [/for]
+    });
+    
+    it('should edit one [c.specName()/]', function () {
+        element(by.id('0-edit-btn')).click();
+		
+		[for (a : Property | c.getAllAttribs())]
+        element(by.id('[a.name/]')).clear().sendKeys('NewVal[(i+1)/]');
+        [/for]
+
+        element(by.id('save-[c.specName()/]')).click();
+
+		[for (a : Property | c.getAllAttribs())]
+		expect(element.all(by.cssContainingText('.ng-binding', 'NewVal[(i+1)/]')).count()).toEqual(1);
+        [/for]
+    });
+    
+    it('should delete the [c.specName()/]', function () {
+        element(by.id('0-delete-btn')).click();
+		[for (a : Property | c.getAllAttribs())]
+		expect(element.all(by.cssContainingText('.ng-binding', 'NewVal[(i+1)/]')).count()).toEqual(0);
+        [/for]
+    });
+});
+[/file]
+[/if]
+[/template]

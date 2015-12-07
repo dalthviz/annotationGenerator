@@ -8,6 +8,7 @@
     [comment @main/]
     [m.genDevEnv(m.getWebArtifactId().concat('/'))/]
 	[m.genCommon(m.getWebRoot())/]
+	[m.genIntTests(m.getWebRoot())/]
     [for (c : Class | m.getClasses())]
     	[c.genModules(m.getWebRoot())/]
     [/for]

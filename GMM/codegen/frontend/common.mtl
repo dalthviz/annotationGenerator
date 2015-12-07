@@ -2,6 +2,7 @@
 [module common('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import frontend::common::index /]
 [import frontend::common::devenv /]
+[import frontend::common::tests /]
 
 [template public genCommon(m : Model, path : String)]
     [m.indexMain(path)/]
@@ -9,4 +10,8 @@
 
 [template public genDevEnv(m : Model, path : String)]
     [m.mainEnv(path)/]
+[/template]
+
+[template public genIntTests(m : Model, path : String)]
+    [m.mainTests(path)/]
 [/template]
