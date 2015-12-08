@@ -14,6 +14,8 @@
 [file (path.concat('package.json'), false, 'UTF-8')]
 {
   "name": "[m.getArtifactId()/]",
+  "description": "[m.name/]",
+  "version": "0.1.0",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-angular-templates": "^0.5.7",

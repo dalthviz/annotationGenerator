@@ -39,8 +39,7 @@
                 displayName: '[a.getDisplayName()/]',
                 //template: '', //override generic template
                 ctrl: '[asc.name/]Ctrl'[/let]
-            }
-        [/for]
+            }[/for]
         [']'/][/if]});
 })(window.angular);
 [/file]
