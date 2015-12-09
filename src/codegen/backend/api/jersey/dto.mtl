@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 [if (c.hasDateAttribute())]
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Date;
+import co.edu.uniandes.csw.auth.model.DateAdapter;
 [/if]
 [if (c.isMaster())]
 import java.util.List;

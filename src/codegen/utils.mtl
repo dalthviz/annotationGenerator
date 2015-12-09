@@ -32,7 +32,7 @@ c.getAssociations()->collect(
     getAllAttributes()->select(
         a | (
                 a.isNavigable()
-            and a.getUpper() > 0
+            and a.getUpper() = 1
             and a.getOtherEnd().type = c
             and a.getOtherEnd().aggregation = AggregationKind::none
             and not a.getOtherEnd().isNavigable()
@@ -57,7 +57,11 @@ c.getAssociations()->select(
 [query public getSharedAssociations(c : Class) : Set(Association) =
 c.getAssociations()->select(
     asc | asc.getAllAttributes()->select(
-        a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c and not a.isComposite()
+        a |
+            a.isNavigable()
+            and a.getUpper() < 0
+            and a.getOtherEnd().type = c
+            and not a.isComposite()
     )->notEmpty()
 )
 /]
@@ -65,7 +69,9 @@ c.getAssociations()->select(
 [query public getMasterAssociations(c : Class) : Set(Association) = 
 c.getAssociations()->select(
     asc | asc.getAllAttributes()->select(
-        a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c
+        a |
+            a.isNavigable()
+            and a.getUpper() < 0 and a.getOtherEnd().type = c
     )->notEmpty()
 )
 /]
