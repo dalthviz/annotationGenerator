@@ -170,7 +170,7 @@ describe('[c.name/] E2E Testing', function () {
     
     it('should read one [c.specName()/]', function () {
         [for (a : Property | c.getAllAttribs())]
-        expect(element.all(by.cssContainingText('.ng-binding', 'Val[(i+1)/]')).count()).toEqual(1);
+		expect(element(by.id('0-[a.name/]')).getText()).toBe("Val[(i+1)/]");
         [/for]
     });
     
@@ -184,14 +184,14 @@ describe('[c.name/] E2E Testing', function () {
         element(by.id('save-[c.specName()/]')).click();
 
 		[for (a : Property | c.getAllAttribs())]
-		expect(element.all(by.cssContainingText('.ng-binding', 'NewVal[(i+1)/]')).count()).toEqual(1);
+		expect(element(by.id('0-[a.name/]')).getText()).toBe("NewVal[(i+1)/]");
         [/for]
     });
     
     it('should delete the [c.specName()/]', function () {
         element(by.id('0-delete-btn')).click();
 		[for (a : Property | c.getAllAttribs())]
-		expect(element.all(by.cssContainingText('.ng-binding', 'NewVal[(i+1)/]')).count()).toEqual(0);
+		expect(element.all(by.id('0-[a.name/]')).count()).toEqual(0);
         [/for]
     });
 });
