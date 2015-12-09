@@ -33,7 +33,7 @@ exports.config = {
 
 [template protected genTests(c : Class, path : String)]
 [if (c.isChild()=false)]
-[file (path.concat('e2e/' + c.specName() + 'specs.js'), false, 'UTF-8')]
+[file (path.concat('e2e/' + c.specName() + '.specs.js'), false, 'UTF-8')]
 describe('[c.name/] E2E Testing', function () {
     
     beforeEach(function () {
@@ -68,6 +68,18 @@ describe('[c.name/] E2E Testing', function () {
                         if (mockRecords['['/]entity] === undefined) {
                             mockRecords['['/]entity] = ['['/]];
 							[for (asc : Association | c.getOne2OneAssociations())]
+							[let a : Property = asc.getParentProperty(c)]
+							[if (not a.isComposite())]
+							
+							if (entity == "[a.name/]s")
+                            {
+                                var record = JSON.parse('{[for (p : Property | a.getClass().getAllAttribs()) separator(',')]"[p.name/]": "Val[(i+1)/]"[/for] }');
+                                record.id = 100;
+                                mockRecords['['/]entity].push(record);
+                            }
+
+							[/if]
+							[/let]
 							[/for]
                         }
                         return mockRecords['['/]entity];
@@ -145,7 +157,12 @@ describe('[c.name/] E2E Testing', function () {
         element(by.id('[a.name/]')).sendKeys('Val[(i+1)/]');
 		[/for]
 		[for (asc : Association | c.getOne2OneAssociations())]
-		[asc.getChildProperty(c).getClass().name/]
+		[let a : Property = asc.getParentProperty(c)]
+		[if (not a.isComposite())]
+		var select[a.getClass().getEntityName()/] = element(by.id('[a.name/]'));
+        select[a.getClass().getEntityName()/].$('['['/]value="100"]').click();
+		[/if]
+		[/let]
 		[/for]
         element(by.id('save-[c.specName()/]')).click();
         expect(element.all(by.repeater('record in records')).count()).toEqual(1);
@@ -153,7 +170,7 @@ describe('[c.name/] E2E Testing', function () {
     
     it('should read one [c.specName()/]', function () {
         [for (a : Property | c.getAllAttribs())]
-        expect(element.all(by.cssContainingText('.ng-binding', 'Val[(i+1)/]')).count()).toEqual(1);
+		expect(element(by.id('0-[a.name/]')).getText()).toBe("Val[(i+1)/]");
         [/for]
     });
     
@@ -167,14 +184,14 @@ describe('[c.name/] E2E Testing', function () {
         element(by.id('save-[c.specName()/]')).click();
 
 		[for (a : Property | c.getAllAttribs())]
-		expect(element.all(by.cssContainingText('.ng-binding', 'NewVal[(i+1)/]')).count()).toEqual(1);
+		expect(element(by.id('0-[a.name/]')).getText()).toBe("NewVal[(i+1)/]");
         [/for]
     });
     
     it('should delete the [c.specName()/]', function () {
         element(by.id('0-delete-btn')).click();
 		[for (a : Property | c.getAllAttribs())]
-		expect(element.all(by.cssContainingText('.ng-binding', 'NewVal[(i+1)/]')).count()).toEqual(0);
+		expect(element.all(by.id('0-[a.name/]')).count()).toEqual(0);
         [/for]
     });
 });

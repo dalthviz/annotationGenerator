@@ -14,6 +14,8 @@
 [file (path.concat('package.json'), false, 'UTF-8')]
 {
   "name": "[m.getArtifactId()/]",
+  "description": "[m.name/]",
+  "version": "0.1.0",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-angular-templates": "^0.5.7",
@@ -27,9 +29,9 @@
     "grunt-contrib-uglify": "^0.9.1",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-filerev": "^2.1.2",
-    "grunt-include-source": "*",
+    "grunt-include-source": "^0.7.1",
     "grunt-jscs": "^2.3.0",
-    "grunt-protractor-runner": "2.1.0",
+    "grunt-protractor-runner": "^2.1.0",
     "grunt-sonar-runner": "^2.4.4",
     "grunt-usemin": "^3.1.1",
     "grunt-wiredep": "^2.0.0",
@@ -230,8 +232,8 @@ module.exports = function (grunt) {
                 tasks: ['['/]'wiredep'[']'/]
             },
             js: {
-                files: ['['/]'<%= meta.src %>/scripts/{,*/}*.js'[']'/],
-                tasks: ['['/]'newer:jshint:all'[']'/],
+                files: ['['/]'<%= meta.src %>/**/*.js'[']'/],
+                tasks: ['['/]'build'[']'/],
                 options: {
                     livereload: '<%= connect.options.livereload %>'
                 }

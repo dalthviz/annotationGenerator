@@ -2,124 +2,77 @@
 [module persistence('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
 
-[template public mainPersistence(m : Model, path : String)]
-[m.genPersistenceBean(path.concat('persistence/'))/]
+[template public mainXML(m : Model)]
+[m.genTestPersistence(m.getTestMetaInfPath())/]
+[m.genTestServicePersistence(m.getTestServicesMetaInfPath())/]
+[let metainf : String = m.getMetaInfPath()]
+    [m.genBeansXml(metainf)/]
+    [m.genPersistence(metainf)/]
+[/let]
 [/template]
 
-[template protected genPersistenceBean(m : Model, path : String)]
-[file (path.concat('CrudPersistence.java'), false, 'UTF-8')]
-package [m.baseGroup()/].persistence;
+[template protected genPersistence(m : Model, path : String)]
+[file (path.concat('persistence.xml'), false, 'UTF-8')]
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <persistence-unit name="[m.getPUName()/]" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>[m.getJNDIName()/]</jta-data-source>
+    <properties>
+      <property name="eclipselink.logging.level" value="FINE"/>
+      <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
+      <property name="eclipselink.cache.type.default" value="NONE" />
+    </properties>
+  </persistence-unit>
+</persistence>
+[/file]
+[/template]
 
-import java.util.List;
-import java.util.Map;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-/**
- * @generated
- */
-public abstract class CrudPersistence<T> {
+[template protected genTestPersistence(m : Model, path : String)]
+[file (path.concat('persistence.xml'), false, 'UTF-8')]
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+    <persistence-unit name="[m.getPUName()/]" transaction-type="JTA"> 
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <shared-cache-mode>NONE</shared-cache-mode>
+        <properties>
+            <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+            <property name="eclipselink.target-database" value="Derby"/>            
+            <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/jdbc[m.name/]Test"/>
+            <property name="javax.persistence.jdbc.user" value="APP"/>
+            <property name="javax.persistence.jdbc.password" value="APP"/>
+            <property name="eclipselink.logging.level" value="FINE"/>     
+            <property name="eclipselink.logging.parameters" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>
+[/file]
+[/template]
 
-    @PersistenceContext(unitName = "[m.getPUName()/]")
-    protected EntityManager em;
-
-    protected Class<T> entityClass;
-
-    /**
-     * @generated
-     */
-    public int count() {
-        Query count = em.createQuery("select count(u) from " + entityClass.getSimpleName() + " u");
-        int regCount = Integer.parseInt(count.getSingleResult().toString());
-        return regCount;
-    }
-
-    /**
-     * @generated
-     */
-    public T create(T entity){
-        em.persist(entity);
-        return entity;
-    }
-
-    /**
-     * @generated
-     */
-    public T update(T entity){
-        return em.merge(entity);
-    }
-
-    /**
-     * @generated
-     */
-    public void delete(Long id) {
-        T entity = em.find(entityClass, id);
-        em.remove(entity);
-    }
-
-    /**
-     * @generated
-     */
-    public T find(Long id){
-        return em.find(entityClass, id);
-    }
-
-    /**
-     * @generated
-     */
-    public List<T> findAll(Integer page, Integer maxRecords) {
-        Query q = em.createQuery("select u from " + entityClass.getSimpleName() + " u");
-        if (page != null && maxRecords != null) {
-            q.setFirstResult((page - 1) * maxRecords);
-            q.setMaxResults(maxRecords);
-        }
-        return q.getResultList();
-    }
-
-    /**
-     * @generated
-     */
-    public<V> List<V> executeListNamedQuery(String name){
-        return em.createNamedQuery(name).getResultList();
-    }
-
-    /**
-     * @generated
-     */
-    public<V> List<V> executeListNamedQuery(String name, Map<String,Object> params){
-        Query q = em.createNamedQuery(name);
-        for (Map.Entry<String, Object> entry : params.entrySet()) {
-            q.setParameter(entry.getKey(), entry.getValue());
-        }
-        return q.getResultList();
-    }
-
-    /**
-     * @generated
-     */
-    public<V> V executeSingleNamedQuery(String name){
-        return (V)em.createNamedQuery(name).getSingleResult();
-    }
-
-    /**
-     * @generated
-     */
-    public<V> V executeSingleNamedQuery(String name, Map<String,Object> params){
-        Query q = em.createNamedQuery(name);
-        for (Map.Entry<String, Object> entry : params.entrySet()) {
-            q.setParameter(entry.getKey(), entry.getValue());
-        }
-        return (V)q.getSingleResult();
-    }
-
-    /**
-     * @generated
-     */
-    public List<T> findByName(String name){
-        Query q = em.createQuery("select u from " + entityClass.getSimpleName() + " u where u.name like :name");
-        q.setParameter("name", "%"+name+"%");
-        return q.getResultList();
-    }
-}
+[template protected genTestServicePersistence(m : Model, path : String)]
+[file (path.concat('persistence.xml'), false, 'UTF-8')]
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+    <persistence-unit name="[m.getPUName()/]" transaction-type="JTA"> 
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		[for (cl : Class | m.getClasses())]
+		<class>[m.baseGroup()/].entities.[cl.name/]Entity</class>						
+		[/for]
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <shared-cache-mode>NONE</shared-cache-mode>
+        <properties>
+            <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+            <property name="eclipselink.target-database" value="Derby"/>            
+            <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/jdbc[m.name/]Test"/>
+            <property name="javax.persistence.jdbc.user" value="APP"/>
+            <property name="javax.persistence.jdbc.password" value="APP"/>
+            <property name="eclipselink.logging.level" value="FINE"/>     
+            <property name="eclipselink.logging.parameters" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>
 [/file]
 [/template]

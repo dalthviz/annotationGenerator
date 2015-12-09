@@ -38,7 +38,7 @@
                 name: '[a.name/]',
                 displayName: '[a.getDisplayName()/]',
                 //template: '', //override generic template
-                ctrl: '[a.name/]Ctrl'[/let]
+                ctrl: '[asc.name/]Ctrl'[/let]
             }[/for]
         [']'/][/if]});
 })(window.angular);
@@ -61,7 +61,7 @@
     [for (asc : Association | c.getCompositeAssociations())]
 
     [let el : Property = asc.getChildProperty(c)]
-    mod.controller('[el.name/]Ctrl', ['['/]'CrudCreator', '$scope', '[el.getClass().getEntityModel()/]', function (CrudCreator, $scope, model) {
+    mod.controller('[asc.name/]Ctrl', ['['/]'CrudCreator', '$scope', '[el.getClass().getEntityModel()/]', function (CrudCreator, $scope, model) {
             CrudCreator.extendCompChildCtrl(this, $scope, model, '[el.name/]', '[el.getOtherEnd().name/]');
             [if (el.getClass().hasReferences(false))]
             this.loadRefOptions();
@@ -72,7 +72,7 @@
     [for (asc : Association | c.getSharedAssociations())]
 
     [let el : Property = asc.getChildProperty(c)]
-    mod.controller('[el.name/]Ctrl', ['['/]'CrudCreator', '$scope', '[el.getClass().getEntityModel()/]', '[el.getClass().getService()/]', function (CrudCreator, $scope, model, svc) {
+    mod.controller('[asc.name/]Ctrl', ['['/]'CrudCreator', '$scope', '[el.getClass().getEntityModel()/]', '[el.getClass().getService()/]', function (CrudCreator, $scope, model, svc) {
             CrudCreator.extendAggChildCtrl(this, $scope, model, '[el.name/]', svc);
             [if (el.getClass().hasReferences(false))]
             this.loadRefOptions();

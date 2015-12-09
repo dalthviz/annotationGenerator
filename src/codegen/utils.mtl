@@ -19,6 +19,10 @@ m.getClasses()->select(c | not c.isChild())
 asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c)->asOrderedSet()->first()
 /]
 
+[query public getParentProperty(asc : Association, c : Class) : Property =
+asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() = 1 and a.getOtherEnd().type = c)->asOrderedSet()->first()
+/]
+
 [query public getAttributesWithRef(c : Class) : OrderedSet(Property) = 
 c.allAttributes()->union(c.getReferences(false))->asOrderedSet()
 /]
@@ -28,7 +32,7 @@ c.getAssociations()->collect(
     getAllAttributes()->select(
         a | (
                 a.isNavigable()
-            and a.getUpper() > 0
+            and a.getUpper() = 1
             and a.getOtherEnd().type = c
             and a.getOtherEnd().aggregation = AggregationKind::none
             and not a.getOtherEnd().isNavigable()
@@ -53,7 +57,11 @@ c.getAssociations()->select(
 [query public getSharedAssociations(c : Class) : Set(Association) =
 c.getAssociations()->select(
     asc | asc.getAllAttributes()->select(
-        a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c and not a.isComposite()
+        a |
+            a.isNavigable()
+            and a.getUpper() < 0
+            and a.getOtherEnd().type = c
+            and not a.isComposite()
     )->notEmpty()
 )
 /]
@@ -61,7 +69,9 @@ c.getAssociations()->select(
 [query public getMasterAssociations(c : Class) : Set(Association) = 
 c.getAssociations()->select(
     asc | asc.getAllAttributes()->select(
-        a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c
+        a |
+            a.isNavigable()
+            and a.getUpper() < 0 and a.getOtherEnd().type = c
     )->notEmpty()
 )
 /]
@@ -69,7 +79,7 @@ c.getAssociations()->select(
 [query public getOne2OneAssociations(c : Class) : Set(Association) =
 c.getAssociations()->select(
     asc | asc.getAllAttributes()->select(
-        a | a.isNavigable() and a.getUpper() = 1 and a.getOtherEnd().type = c and not a.isComposite()
+        a | a.isNavigable() and a.getUpper() = 1 and a.getLower() = 1 and a.getOtherEnd().type = c
     )->notEmpty()
 )
 /]
@@ -338,4 +348,14 @@ String[else]
 
 [template public getProjectVersion(m : Model)]
 0.0.1-SNAPSHOT
+[/template]
+
+[template public genBeansXml(m : Model, path : String)]
+[file(path.concat('beans.xml'), false, 'UTF-8')]
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://java.sun.com/xml/ns/javaee"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
+</beans>
+[/file]
 [/template]

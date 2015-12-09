@@ -1,8 +1,8 @@
 [comment encoding = UTF-8 /]
-[module jaxrs('http://www.eclipse.org/uml2/5.0.0/UML')]
+[module services('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
 
-[template public restMain(c : Class, path : String)]
+[template public mainJersey(c : Class, path : String)]
 [let filePath : String = path.concat('services/')]
     [c.restClass(filePath)/]
 [/let]
@@ -14,7 +14,7 @@ package [c.getModel().baseGroup()/].services;
 
 import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
 import [c.getModel().baseGroup()/].dtos.[c.getDTOName()/];
-import [c.getModel().baseGroup()/].providers.StatusCreated;
+import co.edu.uniandes.csw.auth.provider.StatusCreated;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
