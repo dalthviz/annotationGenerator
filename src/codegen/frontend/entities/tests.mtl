@@ -67,7 +67,7 @@ describe('[c.name/] E2E Testing', function () {
                         var entity = getEntityName(url);
                         if (mockRecords['['/]entity] === undefined) {
                             mockRecords['['/]entity] = ['['/]];
-							[for (a : Property | c.getReferences(false))]
+							[for (a : Property | c.getReferences(true))]
 							[if (not a.isComposite())]
 							
 							if (entity == "[a.name/]s")
