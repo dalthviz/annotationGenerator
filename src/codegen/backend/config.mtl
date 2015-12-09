@@ -3,12 +3,10 @@
 [import ::utils /]
 [import backend::config::pom /]
 [import backend::config::persistence /]
-[import backend::config::persistence /]
 [import backend::config::tests /]
 
 [template public genConfig(m : Model)]
 [m.mainPOM()/]
 [m.mainXML()/]
-[m.mainPersistence(m.getLogicArtifactId().concat(m.basePath()))/]
 [m.mainTests(m.getLogicArtifactId().concat(m.baseTestPath()))/]
 [/template]
