@@ -58,7 +58,9 @@ public class [className/] extends BaseEntity implements Serializable {
 [elseif (a.getUpper()=-1 and a.getOtherEnd().getUpper()=-1)]    
     [if (a.isNavigable() and a.getOtherEnd().isNavigable())]
     	[if (a.getClass().name>a.getOtherEnd().getClass().name)]
-    		@ManyToMany(mappedBy = "[a.getClass().getName()/]s")
+    @ManyToMany(mappedBy = "[a.getOtherEnd().getClass().getName()/]s")
+        [else]
+    @ManyToMany
     	[/if]
     [else]
     @ManyToMany
@@ -121,6 +123,16 @@ public class [className/] extends BaseEntity implements Serializable {
 [/let]
 
 [/for]
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.getId().equals(((BookEntity)obj).getId()); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getId().hashCode(); //To change body of generated methods, choose Tools | Templates.
+    }
 }
 [/file]
 [/template]
