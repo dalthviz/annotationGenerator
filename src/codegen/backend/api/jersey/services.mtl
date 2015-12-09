@@ -46,15 +46,6 @@ public class [className/] {
     /**
      * @generated
      */
-    @POST
-    @StatusCreated
-    public [c.getDTOName()/] create[c.name/]([c.getDTOName()/] dto) {
-        return [logic/].create[c.name/](dto);
-    }
-
-    /**
-     * @generated
-     */
     @GET
     public List<[c.getDTOName()/]> get[c.name/]s() {
         if (page != null && maxRecords != null) {
@@ -70,6 +61,15 @@ public class [className/] {
     @Path("{id: \\d+}")
     public [c.getDTOName()/] get[c.name/](@PathParam("id") Long id) {
         return [logic/].get[c.name/](id);
+    }
+
+    /**
+     * @generated
+     */
+    @POST
+    @StatusCreated
+    public [c.getDTOName()/] create[c.name/]([c.getDTOName()/] dto) {
+        return [logic/].create[c.name/](dto);
     }
 
     /**
