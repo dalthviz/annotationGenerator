@@ -13,6 +13,7 @@
 [template public mainXML(m : Model, path : String)]
 [m.genWebXML(path)/]
 [m.genResources(path)/]
+[m.genBeansXml(path)/]
 [/template]
 
 [template protected genWebXML(m : Model, path : String)]
