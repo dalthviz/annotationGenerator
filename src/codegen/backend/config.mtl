@@ -2,7 +2,7 @@
 [module config('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
 [import backend::config::pom /]
-[import backend::config::xml /]
+[import backend::config::persistence /]
 [import backend::config::persistence /]
 [import backend::config::tests /]
 

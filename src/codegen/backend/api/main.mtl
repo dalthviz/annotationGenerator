@@ -20,7 +20,7 @@
 
 [for (c : Class | m.getClasses())]
     [let project : String = path.concat(c.getModel().basePath())]
-        [c.restMain(project)/]	
+        [c.mainJersey(project)/]	
     	[c.mainDTOs(project)/]
     	[c.mainConverter(project)/]
     [/let]
