@@ -34,6 +34,8 @@ c.getAssociations()->collect(
                 a.isNavigable()
             and a.getUpper() > 0
             and a.getOtherEnd().type = c
+            and a.getOtherEnd().aggregation = AggregationKind::none
+            and not a.getOtherEnd().isNavigable()
         ) or ((
                 a.getOtherEnd().isNavigable()
             and a.getOtherEnd().getUpper() < 0
