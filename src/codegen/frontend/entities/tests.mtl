@@ -68,6 +68,7 @@ describe('[c.name/] E2E Testing', function () {
                         if (mockRecords['['/]entity] === undefined) {
                             mockRecords['['/]entity] = ['['/]];
 							[for (a : Property | c.getReferences(true))]
+							[if (not a.isComposite())]
 							
 							if (entity == "[a.name/]s")
                             {
@@ -76,6 +77,7 @@ describe('[c.name/] E2E Testing', function () {
                                 mockRecords['['/]entity].push(record);
                             }
 
+							[/if]
 							[/for]
                         }
                         return mockRecords['['/]entity];
