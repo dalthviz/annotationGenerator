@@ -67,8 +67,7 @@ describe('[c.name/] E2E Testing', function () {
                         var entity = getEntityName(url);
                         if (mockRecords['['/]entity] === undefined) {
                             mockRecords['['/]entity] = ['['/]];
-							[for (asc : Association | c.getOne2OneAssociations())]
-							[let a : Property = asc.getParentProperty(c)]
+							[for (a : Property | c.getReferences(false))]
 							[if (not a.isComposite())]
 							
 							if (entity == "[a.name/]s")
@@ -79,7 +78,6 @@ describe('[c.name/] E2E Testing', function () {
                             }
 
 							[/if]
-							[/let]
 							[/for]
                         }
                         return mockRecords['['/]entity];
