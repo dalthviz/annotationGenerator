@@ -1,5 +1,5 @@
 [comment encoding = UTF-8 /]
-[module jaxrs('http://www.eclipse.org/uml2/5.0.0/UML')]
+[module services('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
 
 [template public restMain(c : Class, path : String)]

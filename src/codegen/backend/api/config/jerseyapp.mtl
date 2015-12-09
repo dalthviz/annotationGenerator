@@ -1,0 +1,34 @@
+[comment encoding = UTF-8 /]
+[**
+ * The documentation of the module jerseyapp.
+ */]
+[module jerseyapp('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[**
+ * The documentation of the template genJerseyApp.
+ * @param m
+ */]
+
+[template public mainJerseyApp(m : Model, path : String)]
+[m.genJerseyApp(path.concat('services/'))/]
+[/template]
+
+[template protected genJerseyApp(m : Model, path : String)]
+[file (path.concat('RestConfig.java'), false, 'UTF-8')]
+package [m.baseGroup()/].services;
+
+import org.glassfish.jersey.server.ResourceConfig;
+import javax.ws.rs.ApplicationPath;
+
+@ApplicationPath("api")
+public class RestConfig extends ResourceConfig {
+
+    public RestConfig() {
+        packages("[m.baseGroup()/].services");
+        packages("co.edu.uniandes.csw.auth.service");
+        packages("co.edu.uniandes.csw.auth.provider");
+    }
+}
+[/file]
+[/template]
