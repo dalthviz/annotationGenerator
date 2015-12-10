@@ -10,5 +10,5 @@
 [m.mainPOM()/]
 [m.mainXML()/]
 [m.mainTests(m.getLogicArtifactId().concat(m.baseTestPath()))/]
-[c.mainExceptions(m.getLogicArtifactId())/]
+[m.mainExceptions(m.getLogicArtifactId())/]
 [/template]
