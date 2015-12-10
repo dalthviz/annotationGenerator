@@ -8,6 +8,7 @@
 [/template]
 
 [template protected genLogicInterface(c : Class, path : String) {className : String = c.getAPIName();}]
+[if (c.isChild()=false)]
 [file (path.concat(className + '.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].api;
 
@@ -35,6 +36,7 @@ public interface [className/] {
     [/for]    
 }
 [/file]
+[/if]
 [/template]
 
 [template protected genLogicBean(c : Class, path : String) {className : String = c.getBeanName();}]
