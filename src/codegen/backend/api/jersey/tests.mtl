@@ -14,8 +14,8 @@ package [c.getModel().baseGroup()/].tests;
 import co.edu.uniandes.csw.auth.model.UserDTO;
 import co.edu.uniandes.csw.auth.security.JWT;
 import [c.getModel().baseGroup()/].dtos.[c.getDTOName()/];
-[for (ass : Association | c.getMasterAssociations())]
-import [c.getModel().baseGroup()/].dtos.[ass.getChildProperty(c).getClass().getDTOName()/];
+[for (a : Property | c.getCollectionAttributes())]
+import [c.getModel().baseGroup()/].dtos.[a.getClass().getDTOName()/];
 [/for]
 import [c.getModel().baseGroup()/].services.[c.getServiceName()/];
 import java.io.File;
