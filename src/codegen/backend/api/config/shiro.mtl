@@ -50,7 +50,7 @@ securityManager.realm = $stormpathRealm
 /api/users/logout = noSessionCreation, cors, jwt
 /api/users/me = noSessionCreation, cors, jwt['['/]permissive]
 [for (c : Class | m.getClasses())]
-/api/[c.getURI()/]/** = noSessionCreation, cors, jwt, restFilter['['.concat(c.getName()).concat(']')/]]
+/api/[c.getURI()/]/** = noSessionCreation, cors, jwt, restFilter['['.concat(c.getName()).concat(']')/]
 [/for]
 /** = noSessionCreation, cors
 [/file]
