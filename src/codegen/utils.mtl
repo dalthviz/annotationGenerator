@@ -92,6 +92,14 @@ c.getCompositeAssociations()->notEmpty()
 c.getSharedAssociations()->notEmpty()
 /]
 
+[query public hasManyToManyAssociations(c : Class) : Boolean =
+c.getAssociations()->select(
+    asc | asc.getAllAttributes()->select(
+        a | (a.isNavigable() or a.getOtherEnd().isNavigable()) and a.getUpper() < 0 and a.getOtherEnd().getUpper()<0
+        and a.getOtherEnd().type = c)->notEmpty()
+)->notEmpty()
+/]
+
 [query public isMaster(c : Class) : Boolean =
 c.getMasterAssociations()->notEmpty()
 /]

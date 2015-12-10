@@ -28,6 +28,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.CascadeType;
 [/if]
 [/if]
+[if (c.hasManyToManyAssociations())]
+import javax.persistence.ManyToMany;
+[/if]
 import uk.co.jemos.podam.common.PodamExclude;
 
 /**
@@ -55,7 +58,7 @@ public class [className/] extends BaseEntity implements Serializable {
     @PodamExclude
 [if (a.isComposite())]    
     @OneToMany(mappedBy = "[a.getOtherEnd().name/]", cascade = CascadeType.ALL, orphanRemoval = true)
-[elseif (a.getUpper()=-1 and a.getOtherEnd().getUpper()=-1)]    
+[elseif (a.getUpper()<0 and a.getOtherEnd().getUpper()<0)]    
     [if (a.isNavigable() and a.getOtherEnd().isNavigable())]
     	[if (a.getClass().name>a.getOtherEnd().getClass().name)]
     @ManyToMany(mappedBy = "[a.getOtherEnd().getClass().getName()/]s")
