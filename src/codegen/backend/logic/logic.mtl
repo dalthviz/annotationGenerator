@@ -31,10 +31,12 @@ public interface [className/] {
 package [c.getModel().baseGroup()/].ejbs;
 
 import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
-import [c.getModel().baseGroup()/].converters.[c.getConverterName()/];
-import [c.getModel().baseGroup()/].dtos.[c.getDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
+[for (ass : Association | c.getSharedAssociations())]
+import [c.getModel().baseGroup()/].persistence.[ass.getChildProperty(c).getClass().getPersistenceName()/];
+import [c.getModel().baseGroup()/].entities.[ass.getChildProperty(c).getClass().getPersistenceName()/];
+[/for]
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -47,57 +49,105 @@ public class [className/] implements [c.getAPIName()/] {
 
     @Inject private [c.getPersistenceName()/] persistence;
 
+    [for (ass : Association | c.getSharedAssociations())]
+    @Inject private [ass.getChildProperty(c).getClass().getPersistenceName()/] [ass.getChildProperty(c).getClass().getName()/]Persistence;
+    [/for]
+
     /**
      * @generated
      */
-    public int count[c.name/]s() {
-        return persistence.count();
+    @Override
+    public List<[c.getEntityName()/]> get[c.name/]s() {
+        return persistence.findAll();
     }
 
     /**
      * @generated
      */
-    public List<[c.getDTOName()/]> get[c.name/]s(Integer page, Integer maxRecords) {
-        return [c.getConverterName()/].listEntity2DTO(persistence.findAll(page, maxRecords));
+    @Override
+    public [c.getEntityName()/] get[c.name/](Long id) {
+        return persistence.find(id);
     }
 
     /**
      * @generated
      */
-    public [c.getDTOName()/] get[c.name/](Long id) {
-        return [c.getConverterName()/].fullEntity2DTO(persistence.find(id));
-    }
-
-    /**
-     * @generated
-     */
-    public [c.getDTOName()/] create[c.name/]([c.getDTOName()/] dto) {
-        [c.getEntityName()/] entity = [c.getConverterName()/].fullDTO2Entity(dto);
+    @Override
+    public [c.getEntityName()/] create[c.name/]([c.getEntityName()/] entity) {
         persistence.create(entity);
-        return [c.getConverterName()/].fullEntity2DTO(entity);
+        return entity;
     }
 
     /**
      * @generated
      */
-    public [c.getDTOName()/] update[c.name/]([c.getDTOName()/] dto) {
-        [c.getEntityName()/] entity = persistence.update([c.getConverterName()/].fullDTO2Entity(dto));
-        return [c.getConverterName()/].fullEntity2DTO(entity);
+    @Override
+    public [c.getEntityName()/] update[c.name/]([c.getEntityName()/] entity) {
+        [c.getEntityName()/] newEntity = entity;
+        [c.getEntityName()/] oldEntity = persistence.find(entity.getId());
+        [for (ass : Association | c.getSharedAssociations())]        
+        import [c.getModel().baseGroup()/].entities.[ass.getChildProperty(c).getClass().getPersistenceName()/];
+        newEntity.set[ass.getChildProperty(c).getClass().name/]s(oldEntity.get[ass.getChildProperty(c).getClass().name/]s());
+        [/for]
+        newEntity.setAuthors(oldEntity.getAuthors());
+        return persistence.update(newEntity);
     }
 
     /**
      * @generated
      */
+    @Override
     public void delete[c.name/](Long id) {
         persistence.delete(id);
     }
 
+    [for (asc : Association | c.getSharedAssociations())]
+    [let a : Property = asc.getChildProperty(c)]
     /**
      * @generated
      */
-    public List<[c.getDTOName()/]> findByName(String name) {
-        return [c.getConverterName()/].listEntity2DTO(persistence.findByName(name));
+    @Override
+    public [a.getClass().getEntityName()/] add[a.getClass().name/](Long [a.getClass().getEntityId()/], Long [c.getEntityId()/]) throws BusinessLogicException {
+        [c.getEntityName()/] [c.getEntityLower()/]  = persistence.find([c.getEntityId()/]);
+        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = [a.getClass().getName()/]Persistence.find([a.getClass().getEntityId()/]);
+        [c.getEntityLower()/].get[a.getClass().name/]s().add([a.getClass().getEntityLower()/]);
+        return [a.getClass().getEntityLower()/];
     }
+
+    @Override
+    public void remove[a.getClass().name/](Long [a.getClass().getEntityId()/], Long [c.getEntityId()/]) {
+        [c.getEntityName()/] [c.getEntityLower()/]  = persistence.find([c.getEntityId()/]);
+        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = new [a.getClass().getEntityName()/]();
+        [a.getClass().getEntityLower()/].setId([a.getClass().getEntityId()/]);
+        [c.getEntityLower()/].get[a.getClass().name/]s().remove([a.getClass().getEntityLower()/]);
+    }
+    
+    @Override
+    public List<[a.getClass().getEntityName()/]> replace[a.getClass().name/]s(List<[a.getClass().name/]> [a.getClass().getName()/]s, Long [c.getEntityId()/]) throws BusinessLogicException {
+        [c.getEntityName()/] [c.getEntityLower()/]  = persistence.find([c.getEntityId()/]);
+        List<[a.getClass().name/]> [a.getClass().getName()/]List = [a.getClass().getName()/]Persistence.findAll();
+        [c.getEntityLower()/].set[a.getClass().name/]([a.getClass().getName()/]s);
+        return [c.getEntityLower()/].get[a.getClass().name/]s();
+    }
+
+    @Override
+    public List<[a.getClass().getEntityName()/]> get[a.getClass().name/]s(Long [c.getEntityId()/]) {
+        return persistence.find([c.getEntityId()/]).get[a.getClass().name/]s();
+    }
+
+    @Override
+    public [a.getClass().getEntityName()/] get[a.getClass().name/](Long [c.getEntityId()/], Long [a.getClass().getEntityId()/]) {
+        List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]s = persistence.find([c.getEntityId()/]).get[a.getClass().name/]s();
+        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = new [a.getClass().getEntityName()/]();
+        [a.getClass().getEntityLower()/].setId([a.getClass().getEntityId()/]);
+        int index = [a.getClass().getName()/]s.indexOf([a.getClass().getEntityLower()/]);
+        if (index >= 0) {
+            return [a.getClass().getName()/]s.get(index);
+        }
+        return null;
+    }
+    [/let]
+    [/for]
 }
 [/file]
 [/template]
