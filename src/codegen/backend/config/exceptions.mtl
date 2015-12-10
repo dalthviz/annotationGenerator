@@ -3,7 +3,7 @@
 [import ::utils /]
 
 [template public mainExceptions(m : Model, path : String)]
-[m.genExceptions(path.concat(c.getModel().basePath().concat('exceptions/')))/]
+[m.genExceptions(path.concat(m.basePath().concat('exceptions/')))/]
 [/template]
 
 [template public genExceptions(m : Model, path : String)]
