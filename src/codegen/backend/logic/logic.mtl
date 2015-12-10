@@ -102,8 +102,7 @@ public class [className/] implements [c.getAPIName()/] {
         [c.getEntityName()/] oldEntity = persistence.find(entity.getId());
         [for (ass : Association | c.getSharedAssociations())]         
         newEntity.set[ass.getChildProperty(c).getClass().name/]s(oldEntity.get[ass.getChildProperty(c).getClass().name/]s());
-        [/for]
-        newEntity.setAuthors(oldEntity.getAuthors());
+        [/for]        
         return persistence.update(newEntity);
     }
 
