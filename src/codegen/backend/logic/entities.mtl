@@ -43,7 +43,7 @@ public class [className/] extends BaseEntity implements Serializable {
     [if (a.isDate())]
     @Temporal(TemporalType.DATE)
     [/if]
-	[if (a.isID() = false and a.isName() = false)]
+	[if (not(a.isID() or a.isName()))]
     private [a.type.name/] [a.name.toLowerFirst()/];
 	[/if]
 
@@ -58,16 +58,8 @@ public class [className/] extends BaseEntity implements Serializable {
     @PodamExclude
 [if (a.isComposite())]    
     @OneToMany(mappedBy = "[a.getOtherEnd().name/]", cascade = CascadeType.ALL, orphanRemoval = true)
-[elseif (a.getUpper()<0 and a.getOtherEnd().getUpper()<0)]    
-    [if (a.isNavigable() and a.getOtherEnd().isNavigable())]
-    	[if (a.getClass().name>a.getOtherEnd().getClass().name)]
-    @ManyToMany(mappedBy = "[a.getOtherEnd().getClass().getName()/]s")
-        [else]
-    @ManyToMany
-    	[/if]
-    [else]
-    @ManyToMany
-    [/if]    
+[elseif (asc.isMany2Many())]
+    @ManyToMany[if (not a.isRelationshipOwner())][a.genMappedBy(false)/][/if]
 [else]    
     @OneToMany
 [/if]
@@ -138,4 +130,8 @@ public class [className/] extends BaseEntity implements Serializable {
     }
 }
 [/file]
+[/template]
+
+[template protected genMappedBy(a : Property, composite : Boolean)]
+(mappedBy = "[a.getOtherEnd().name/]"[if(composite)], cascade = CascadeType.ALL, orphanRemoval = true[/if])
 [/template]
