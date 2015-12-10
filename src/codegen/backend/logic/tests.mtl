@@ -3,13 +3,13 @@
 [import ::utils /] 
 
 [template public mainTests(c : Class, path : String)]
-[c.genTests(path.concat('tests/'))/]
+[c.genTests(path.concat('test/logic/'))/]
 [/template]
 
 [template protected genTests(c : Class, path : String) {className : String = c.getTestName();}]
 [let bean : String = c.getName().concat('Logic')]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
-package [c.getModel().baseGroup()/].tests;
+package [c.getModel().baseGroup()/].test.logic;
 
 import [c.getModel().baseGroup()/].ejbs.[c.getBeanName()/];
 import [c.getModel().baseGroup()/].api.[c.getAPIName()/];

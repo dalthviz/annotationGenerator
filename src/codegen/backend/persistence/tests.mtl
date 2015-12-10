@@ -3,13 +3,13 @@
 [import ::utils /]
 
 [template public mainDataTests(c : Class, path : String)]
-[c.genTests(path.concat('tests/'))/]
+[c.genTests(path.concat('test/persistence/'))/]
 [/template]
 
 [template protected genTests(c : Class, path : String) {className : String = c.getPersistenceTestName();}]
 [let bean : String = c.getName().concat('Persistence')]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
-package [c.getModel().baseGroup()/].tests;
+package [c.getModel().baseGroup()/].test.persistence;
 
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];

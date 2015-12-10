@@ -355,7 +355,7 @@ String[else]
 [/template]
 
 [template public getProjectVersion(m : Model)]
-0.0.1-SNAPSHOT
+0.1.0-SNAPSHOT
 [/template]
 
 [template public genBeansXml(m : Model, path : String)]

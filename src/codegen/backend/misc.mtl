@@ -19,7 +19,7 @@
     <artifactId>[m.getArtifactId()/]</artifactId>
     <name>[m.name/]</name>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>[m.getProjectVersion()/]</version>
     <modules>
         <module>[m.getLogicArtifactId()/]</module>
         <module>[m.getApiArtifactId()/]</module>
