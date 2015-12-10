@@ -30,6 +30,7 @@ public interface [className/] {
 [file (path.concat(className.concat('.java')), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].ejbs;
 
+import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;
 import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
@@ -85,8 +86,7 @@ public class [className/] implements [c.getAPIName()/] {
     public [c.getEntityName()/] update[c.name/]([c.getEntityName()/] entity) {
         [c.getEntityName()/] newEntity = entity;
         [c.getEntityName()/] oldEntity = persistence.find(entity.getId());
-        [for (ass : Association | c.getSharedAssociations())]        
-        import [c.getModel().baseGroup()/].entities.[ass.getChildProperty(c).getClass().getPersistenceName()/];
+        [for (ass : Association | c.getSharedAssociations())]         
         newEntity.set[ass.getChildProperty(c).getClass().name/]s(oldEntity.get[ass.getChildProperty(c).getClass().name/]s());
         [/for]
         newEntity.setAuthors(oldEntity.getAuthors());
