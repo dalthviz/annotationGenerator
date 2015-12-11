@@ -75,18 +75,13 @@ c.allAttributes()->union(c.getReferences(false))->asOrderedSet()
 [query public getReferences(c : Class, includeParent : Boolean) : OrderedSet(Property) = 
 c.getAssociations()->collect(
     getAllAttributes()->select(
-        a | (
-                a.isNavigable()
-            and a.getUpper() = 1
-            and a.getOtherEnd().type = c
-            and a.getOtherEnd().aggregation = AggregationKind::none
-            and not a.getOtherEnd().isNavigable()
-        ) or ((
-                a.getOtherEnd().isNavigable()
-            and a.getOtherEnd().getUpper() < 0
-            and a.getOtherEnd().type = c
-            and a.getOtherEnd().isComposite()) and includeParent
-)))->flatten()->sortedBy(a | a.name)->asOrderedSet()
+        a | a.isNavigable()
+        and a.getUpper() = 1
+        and a.getOtherEnd().type = c
+        and not a.isComposite()
+        and (a.getOtherEnd().isComposite() implies includeParent)
+    )
+)->flatten()->sortedBy(a | a.name)->asOrderedSet()
 /]
 
 [query public getOne2OneAssociations(c : Class) : Set(Association) =
@@ -138,6 +133,16 @@ c.getAssociations()->select(
 )
 /]
 
+[query public getCollectionAttributes(c : Class) : Set(Property) = 
+c.getAssociations()->collect(
+    asc | asc.getAllAttributes()->select(
+        a | a.isNavigable()
+        and a.getUpper() <> 1
+        and a.getOtherEnd().type = c
+    )
+)->asSet()
+/]
+
 [query public hasCompositeAssociations(c : Class) : Boolean =
 c.getCompositeAssociations()->notEmpty()
 /]
@@ -147,14 +152,7 @@ c.getSharedAssociations()->notEmpty()
 /]
 
 [query public hasManyToManyAssociations(c : Class) : Boolean =
-c.getAssociations()->exists(
-    getAllAttributes()->exists(
-        a | a.isNavigable()
-        and a.getUpper() <> 1
-        and a.getOtherEnd().getUpper() <> 1
-        and a.getOtherEnd().type = c
-    )
-)
+c.getCollectionAttributes()->exists(a|a.association.isMany2Many())
 /]
 
 [query public isMaster(c : Class) : Boolean =
@@ -324,6 +322,14 @@ String[else]
 
 [template public getEntityName(c : Class)]
 [c.name.concat('Entity')/]
+[/template]
+
+[template public getEntityLower(c : Class)]
+[c.name.toLowerFirst().concat('Entity')/]
+[/template]
+
+[template public getEntityId(c : Class)]
+[c.name.toLowerFirst().concat('Id')/]
 [/template]
 
 [template public getPersistenceName(c : Class)]

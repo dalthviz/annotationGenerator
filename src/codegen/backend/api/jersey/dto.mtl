@@ -37,10 +37,8 @@ public class [className/] {
 [for (a : Property | c.getReferences(true))]
     private [a.getClass().getDTOName()/] [a.name/];
 [/for]
-[for (asc : Association | c.getMasterAssociations())]
-[let a : Property = asc.getChildProperty(c)]
+[for (a : Property | c.getCollectionAttributes())]
     private List<[a.getClass().getDTOName()/]> [a.name/];
-[/let]
 [/for]
 [for (a : Property | c.allAttributes())]
     /**
@@ -74,8 +72,7 @@ public class [className/] {
     }
 
 [/for]
-[for (asc : Association | c.getMasterAssociations())]
-[let a : Property = asc.getChildProperty(c)]
+[for (a : Property | c.getCollectionAttributes())]
     /**
      * @generated
      */
@@ -89,7 +86,6 @@ public class [className/] {
     public void [a.setter()/](List<[a.getClass().getDTOName()/]> [a.name.toLower()/]) {
         this.[a.name/] = [a.name.toLower()/];
     }
-[/let]
 
 [/for]
 }
