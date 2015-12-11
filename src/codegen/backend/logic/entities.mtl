@@ -49,18 +49,22 @@ public class [className/] extends BaseEntity implements Serializable {
 
 [/for]
 [for (a : Property | c.getReferences(true))]
+    [if (not a.isRelationshipOwner())]
     @PodamExclude
-    @ManyToOne
+    [/if]
+[if (a.association.isOne2One())]
+	@OneToOne[a.genParameters()/]
+[else]
+    @ManyToOne[a.genParameters()/]
+[/if]
     private [a.getClass().getEntityName()/] [a.name/];
 [/for]
 [for (a : Property | c.getCollectionAttributes())]
     @PodamExclude
-[if (a.isComposite())]
-    @OneToMany(mappedBy = "[a.getOtherEnd().name/]", cascade = CascadeType.ALL, orphanRemoval = true)
-[elseif (a.association.isMany2Many())]
-    @ManyToMany[if (not a.isRelationshipOwner())][a.genMappedBy(false)/][/if]
+[if (a.association.isMany2Many())]
+    @ManyToMany[a.genParameters()/]
 [else]
-    @OneToMany
+    @OneToMany[a.genParameters()/]
 [/if]
     private List<[a.getClass().getEntityName()/]> [a.name/];
 [/for]
@@ -117,17 +121,23 @@ public class [className/] extends BaseEntity implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        return this.getId().equals(((BookEntity)obj).getId()); //To change body of generated methods, choose Tools | Templates.
+        return this.getId().equals(((BookEntity)obj).getId());
     }
 
     @Override
     public int hashCode() {
-        return this.getId().hashCode(); //To change body of generated methods, choose Tools | Templates.
+        return this.getId().hashCode();
     }
 }
 [/file]
 [/template]
 
-[template protected genMappedBy(a : Property, composite : Boolean)]
-(mappedBy = "[a.getOtherEnd().name/]"[if(composite)], cascade = CascadeType.ALL, orphanRemoval = true[/if])
+[template protected genParameters(a : Property)]
+[if (not a.isRelationshipOwner() and a.isComposite())]
+(mappedBy = "[a.getOtherEnd().name/]", cascade = CascadeType.ALL, orphanRemoval = true)
+[elseif (not a.isRelationshipOwner())]
+(mappedBy = "[a.getOtherEnd().name/]")
+[elseif (a.isComposite())]
+(cascade = CascadeType.ALL, orphanRemoval = true)
+[/if]
 [/template]
