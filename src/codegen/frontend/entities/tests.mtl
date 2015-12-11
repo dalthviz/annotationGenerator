@@ -46,7 +46,7 @@ describe('[c.name/] E2E Testing', function () {
 
                 [for (a : Property | c.getReferences(false)) separator('\n')]
                 records['['/]'[a.getClass().getURI()/]'] = ['[]'/];
-                records['['/]'[a.getClass().getURI()/]'].push({id: 100, name: '[a.name/]'});
+                records['['/]'[a.getClass().getURI()/]'].push({id: Math.floor(Math.random() * 10000), name: '[a.name/]'});
                 [/for]
             }]);
         });
