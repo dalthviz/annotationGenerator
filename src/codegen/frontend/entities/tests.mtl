@@ -45,7 +45,7 @@ describe('[c.name/] E2E Testing', function () {
 							
 						var record = JSON.parse('{[for (p : Property | a.getClass().getAllAttribs()) separator(',')]"[p.name/]": "Val[(i+1)/]"[/for] }');
 	                    record.id = 100;
-	                    mockRecords['['/][a.getClass().specName()/]].push(record);
+	                    mockRecords['['/][a.getClass().specName()/]s].push(record);
 	
 						[/for]
 	                }
