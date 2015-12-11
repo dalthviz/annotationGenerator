@@ -70,7 +70,6 @@ c.getAssociations()->collect(
         a | a.isNavigable()
         and a.getUpper() = 1
         and a.getOtherEnd().type = c
-        and not a.isComposite()
         and (a.getOtherEnd().isComposite() implies includeParent)
     )
 )->asOrderedSet()
@@ -85,6 +84,7 @@ c.getAssociations()->collect(
     getAllAttributes()->select(
         a | a.isNavigable()
         and a.getUpper() <> 1
+        and a.getUpper() <> 0
         and a.getOtherEnd().type = c
         and (a.aggregation <> AggregationKind::none implies a.getOtherEnd().getUpper() = 1)
     )
