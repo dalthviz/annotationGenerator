@@ -1,0 +1,110 @@
+[comment encoding = UTF-8 /]
+[**
+ * The documentation of the module docs.
+ */]
+[module docs('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[**
+ * The documentation of the template mainDocs.
+ * @param aModel
+ */]
+[template public mainDocs(m : Model)]
+[m.genReadMe()/]
+[/template]
+
+[template protected genReadMe(m : Model)]
+[file ('README.md', false, 'UTF-8')]
+#Tabla de contenidos
+-  ['['/]Introducción[']'/](#introducción)
+-  ['['/]API[']'/](#api-de-la-aplicación-[m.name.toLowerCase()/])
+[for (c : Class | m.getClasses())]
+  - ['['/]Entidad [c.name+']'/](#entidad-[c.name.toLowerCase()/])
+[/for]
+
+#API Rest
+##Introducción
+La comunicación entre cliente y servidor se realiza intercambiando objetos JSON. Para cada entidad se hace un mapeo a JSON, donde cada uno de sus atributos se transforma en una propiedad de un objeto JSON. Todos los servicios se generan en la URL /[m.getApiProjectName()/]/webresources/. Por defecto, todas las entidades tienen un atributo `id`, con el cual se identifica cada registro:
+
+```javascript
+{
+    id: '',
+    attribute_1: '',
+    attribute_2: '',
+    ...
+    attribute_n: ''
+}
+```
+
+###CRUD Básico
+Para los servicios de CRUD Básico, Cuando se transmite información sobre un registro específico, se realiza enviando un objeto con la estructura mencionada en la sección anterior.
+La única excepción se presenta al solicitar al servidor una lista de los registros en la base de datos, que incluye información adicional para manejar paginación de lado del servidor.
+
+La respuesta del servidor al solicitar una colección presenta el siguiente formato:
+
+```javascript
+{
+    totalRecords: 0, //cantidad de registros en la base de datos
+    records: ['[]'/] //collección con los datos solicitados. cada objeto tiene la estructura de la entidad.
+}
+```
+
+##API de la aplicación [m.name/]
+[for(class : Class | m.getClasses()) ]
+###Entidad [ class.name /]
+####CRUD Básico
+En la siguiente tabla se detalla los servicios REST generados para la entidad [ class.name /], la estructura del objeto que intercambian y sus respectivas funciones.
+
+#####Estructura de objeto [ class.name /]
+```javascript
+{
+    [for(a : Property | class.getAttributesWithRef()) separator(',\n')]
+    [if (a.isValidType())]
+    [ a.name /]: '' /*Tipo [ a.type.name /]*/[else]
+    [ a.name /]: '' /*Objeto que representa instancia de [a.type.name/]*/[/if][/for]
+
+}
+```
+#####Servicios
+Método|URI|Acción|Parámetros|Cuerpo|Retorno
+:--:|:--:|:--:|:--:|:--:|:--:
+**GET**|/[ class.name.toLowerFirst() /]s|Obtener todos los objetos JSON de [ class.name /] (RETRIEVE)|**@QueryParam page**: página a consultar<br>**@QueryParam maxRecords**: cantidad de registros a consultar<br><br>*Si se omite alguno de estos parámetros se obtiene todos los registros en la base de datos*||Colección de objetos JSON [class.name/] y el total de registros en la base de datos en el header X-Total-Count
+**GET**|/[ class.name.toLowerFirst() /]s/:id|Obtener los atributos de una instancia de [ class.name /] en formato JSON(RETRIEVE)|**@PathParam id**: Identificador del registro||Objeto JSON con detalle de la instancia de [ class.name /]
+**POST**|/[ class.name.toLowerFirst() /]s|Crear una nueva instancia de la entidad [ class.name /] (CREATE)||Objeto JSON de [ class.name /] a crear|Objeto JSON de [ class.name /] creado
+**PUT**|/[ class.name.toLowerFirst() /]s/:id|Actualiza una instancia de la entidad [ class.name /] (UPDATE)|**@PathParam id**: Identificador del registro|Objeto JSON de [ class.name /]|Objeto JSON de [ class.name /] actualizado
+**DELETE**|/[ class.name.toLowerFirst() /]s/:id|Borra instancia de [ class.name /] en el servidor (DELETE)|<strong>@PathParam id</strong>: Identificador del registro||
+
+[if (class.isMaster())]
+####Maestros Detalle de [class.name/]
+#####Servicios
+A diferencia del API para CRUD Básico, el API de Maestro/Detalle no provee un servicio para listar los registros de la entidad maestra. Los servicios generados para el componente Maestro/Detalle de [class.name/] son los siguientes:
+
+[if(class.hasCompositeAssociations())]
+######Relaciones Composite
+
+Método|URI|Acción|Parámetros|Cuerpo|Retorno
+:--:|:--:|:--:|:--:|:--:|:--:
+[for (elem : Property | class.getCompositeCollectionAttributes())]
+**GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener Objetos JSON de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]||Colección de objetos JSON de [elem.name/]([elem.type.name/])
+**POST**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Creación de instancias de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de objetos JSON de [elem.name/]([elem.type.name/]) a crear|Colección de objetos JSON de [elem.name/]([elem.type.name/]) creados con sus respectivos ID
+**PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de instancias de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de objetos JSON de [elem.name/]([elem.type.name/]) a actualizar|Colección de objetos JSON de [elem.name/]([elem.type.name/]) actualizados
+**DELETE**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Eliminación de instancias de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de atributo `id` de [elem.name/]([elem.type.name/]) a eliminar|
+[/for]
+[/if]
+
+[if(class.hasSharedAssociations())]
+######Relaciones Shared
+
+Método|URI|Acción|Parámetros|Cuerpo|Retorno
+:--:|:--:|:--:|:--:|:--:|:--:
+[for (elem : Property | class.getNonCompositeCollectionAttributes())]
+**GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener instancias de [elem.name/]([elem.type.name/]) asociados con [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]||Colección de `id` de [elem.name/]([elem.type.name/]) asociados con [class.name/]
+**PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de referencias a [elem.name/]([elem.type.name/]) desde [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de `id` de [elem.name/]([elem.type.name/]) a asociar|Colección de objetos JSON de [elem.name/]([elem.type.name/]) asociados
+[/for]
+[/if]
+[/if]
+['['/]Volver arriba[']'/](#tabla-de-contenidos)
+
+[/for]
+[/file]
+[/template]
