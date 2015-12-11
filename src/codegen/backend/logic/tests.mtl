@@ -7,17 +7,23 @@
 [/template]
 
 [template protected genTests(c : Class, path : String) {className : String = c.getTestName();}]
+[if (c.isChild()=false)]
 [let bean : String = c.getName().concat('Logic')]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].test.logic;
 
+import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;
 import [c.getModel().baseGroup()/].ejbs.[c.getBeanName()/];
 import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
-import [c.getModel().baseGroup()/].converters.[c.getConverterName()/];
-import [c.getModel().baseGroup()/].dtos.[c.getDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
-import static [c.getModel().baseGroup()/].tests._TestUtil.*;
+[for (a : Property | c.getNonCompositeCollectionAttributes())]
+import [c.getModel().baseGroup()/].api.[a.getClass().getAPIName()/];
+import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
+[/for]
+[for (a : Property | c.getCollectionAttributes())]
+import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
+[/for]
 import java.util.ArrayList;
 import java.util.List;
 [if (c.hasDateAttribute())]import java.util.Date;[/if]
@@ -33,6 +39,8 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import uk.co.jemos.podam.api.PodamFactory;
+import uk.co.jemos.podam.api.PodamFactoryImpl;
 
 /**
  * @generated
@@ -48,8 +56,6 @@ public class [className/] {
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class, DEPLOY + ".war")
                 .addPackage([c.getEntityName()/].class.getPackage())
-                .addPackage([c.getDTOName()/].class.getPackage())
-                .addPackage([c.getConverterName()/].class.getPackage())
                 .addPackage([c.getBeanName()/].class.getPackage())
                 .addPackage([c.getAPIName()/].class.getPackage())
                 .addPackage([c.getPersistenceName()/].class.getPackage())
@@ -62,6 +68,14 @@ public class [className/] {
      */
     @Inject
     private [c.getAPIName()/] [bean/];
+
+    [for (a : Property | c.getNonCompositeCollectionAttributes())]
+    /**
+     * @generated
+     */
+    @Inject
+    private [a.getClass().getAPIName()/] [a.getClass().getBeanLower()/];
+    [/for]
 
     /**
      * @generated
@@ -112,10 +126,20 @@ public class [className/] {
      */
     private void insertData() {
         for (int i = 0; i < 3; i++) {
-            [c.getEntityName()/] entity = new [c.getEntityName()/]();
-            [for (a : Property | c.getAllAttribs())]
-        	entity.[a.setter()/](generateRandom([a.type.name/].class));
-            [/for]
+            PodamFactory factory = new PodamFactoryImpl();
+            [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);            
+
+            [for (a : Property | c.getCompositeCollectionAttributes())]
+            List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]List = new ArrayList<>();
+            for (int j = 0; j < 5; j++)
+            {
+                [a.getClass().getEntityName()/] [a.getClass().getName()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+                [a.getClass().getName()/]List.add([a.getClass().getName()/]);
+            }
+            
+            entity.set[a.getClass().name/]s([a.getClass().getName()/]List);
+            [/for]            
+            
             em.persist(entity);
             data.add(entity);
         }
@@ -126,19 +150,14 @@ public class [className/] {
      */
     @Test
     public void create[c.name/]Test() {
-        [c.getDTOName()/] dto = new [c.getDTOName()/]();
-        [for (a : Property | c.getAllAttribs())]
-        dto.[a.setter()/](generateRandom([a.type.name/].class));
-        [/for]
-
-        [c.getDTOName()/] result = [bean/].create[c.name/](dto);
-
+        PodamFactory factory = new PodamFactoryImpl();
+        [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);
+        [c.getEntityName()/] result = [bean/].create[c.name/](entity);
         Assert.assertNotNull(result);
-
-        [c.getEntityName()/] entity = em.find([c.getEntityName()/].class, result.getId());
-
         [for (a : Property | c.getAllAttribs())]
-        Assert.assertEquals(dto.[a.getter()/](), entity.[a.getter()/]());
+        [if (a.isDate()=false)]
+        Assert.assertEquals(result.[a.getter()/](), entity.[a.getter()/]());
+        [/if]
         [/for]
     }
 
@@ -147,12 +166,12 @@ public class [className/] {
      */
     @Test
     public void get[c.name/]sTest() {
-        List<[c.getDTOName()/]> list = [bean/].get[c.name/]s(null, null);
+        List<[c.getEntityName()/]> list = [bean/].get[c.name/]s();
         Assert.assertEquals(data.size(), list.size());
-        for ([c.getDTOName()/] dto : list) {
+        for ([c.getEntityName()/] entity : list) {
             boolean found = false;
-            for ([c.getEntityName()/] entity : data) {
-                if (dto.getId().equals(entity.getId())) {
+            for ([c.getEntityName()/] storedEntity : data) {
+                if (entity.getId().equals(storedEntity.getId())) {
                     found = true;
                 }
             }
@@ -166,10 +185,12 @@ public class [className/] {
     @Test
     public void get[c.name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
-        [c.getDTOName()/] dto = [bean/].get[c.name/](entity.getId());
+        [c.getEntityName()/] resultEntity = [bean/].get[c.name/](entity.getId());
         Assert.assertNotNull(dto);
         [for (a : Property | c.getAllAttribs())]
-        Assert.assertEquals(entity.[a.getter()/](), dto.[a.getter()/]());
+        [if (a.isDate()=false)]
+        Assert.assertEquals(entity.[a.getter()/](), resultEntity.[a.getter()/]());
+        [/if]
         [/for]
     }
 
@@ -190,55 +211,45 @@ public class [className/] {
     @Test
     public void update[c.name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
+        PodamFactory factory = new PodamFactoryImpl();
+        [c.getEntityName()/] pojoEntity = factory.manufacturePojo([c.getEntityName()/].class);
 
-        [c.getDTOName()/] dto = new [c.getDTOName()/]();
+        pojoEntity.setId(entity.getId());
 
-        dto.setId(entity.getId());
-        [for (a : Property | c.getAllAttribs())]
-        dto.[a.setter()/](generateRandom([a.type.name/].class));
-        [/for]
-
-        [bean/].update[c.name/](dto);
+        [bean/].update[c.name/](pojoEntity);
 
         [c.getEntityName()/] resp = em.find([c.getEntityName()/].class, entity.getId());
 
         [for (a : Property | c.getAllAttribs())]
-        Assert.assertEquals(dto.[a.getter()/](), resp.[a.getter()/]());
+        [if (a.isDate()=false)]
+        Assert.assertEquals(pojoEntity.[a.getter()/](), resp.[a.getter()/]());
+        [/if]
         [/for]
     }
 
+    [for (a : Property | c.getNonCompositeCollectionAttributes())]
     /**
      * @generated
      */
     @Test
-    public void get[c.name/]PaginationTest() {
-        //Page 1
-        List<[c.getDTOName()/]> dto1 = [bean/].get[c.name/]s(1, 2);
-        Assert.assertNotNull(dto1);
-        Assert.assertEquals(2, dto1.size());
-        //Page 2
-        List<[c.getDTOName()/]> dto2 = [bean/].get[c.name/]s(2, 2);
-        Assert.assertNotNull(dto2);
-        Assert.assertEquals(1, dto2.size());
+    public void add[a.getClass().name/]Test() {
+        [c.getEntityName()/] entity = data.get(0);
+        PodamFactory factory = new PodamFactoryImpl();
+        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+        [a.getClass().getEntityLower()/] = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]);
 
-        for ([c.getDTOName()/] dto : dto1) {
-            boolean found = false;
-            for ([c.getEntityName()/] entity : data) {
-                if (dto.getId().equals(entity.getId())) {
-                    found = true;
-                }
-            }
-            Assert.assertTrue(found);
+        try{
+            [a.getClass().getEntityName()/] response = [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
+            Assert.assertNotNull(em);
+            [for (a : Property | a.getClass().getAllAttribs())]
+            [if (a.isDate()=false)]
+            Assert.assertEquals(response.[a.getter()/](), [a.getClass().getEntityLower()/].[a.getter()/]());
+            [/if]
+            [/for]
         }
-
-        for ([c.getDTOName()/] dto : dto2) {
-            boolean found = false;
-            for ([c.getEntityName()/] entity : data) {
-                if (dto.getId().equals(entity.getId())) {
-                    found = true;
-                }
-            }
-            Assert.assertTrue(found);
+        catch (BusinessLogicException bslexception)
+        {
+            Assert.fail("No debe haber excepción");
         }
     }
 
@@ -246,31 +257,148 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void findByName() {
-        String name = data.get(0).getName();
-        List<[c.getEntityName()/]> cache = new ArrayList<[c.getEntityName()/]>();
-        List<[c.getDTOName()/]> list = [bean/].findByName(name);
+    public void get[a.getClass().name/]Test() {
+        [c.getEntityName()/] entity = data.get(0);
+        PodamFactory factory = new PodamFactoryImpl();
+        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+        [a.getClass().getEntityLower()/]  = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/] );
 
-        for ([c.getEntityName()/] entity : data) {
-            if (entity.getName().equals(name)) {
-                cache.add(entity);
-            }
+        try{
+            [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
+            [a.getClass().getEntityName()/] get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
+            [for (a : Property | a.getClass().getAllAttribs())]
+            [if (a.isDate()=false)]
+            Assert.assertEquals([a.getClass().getEntityLower()/].[a.getter()/](), get[a.getClass().name/]Response.[a.getter()/]());
+            [/if]
+            [/for]
+
+            [bean/].update[c.name/](entity);
+
+            [a.getClass().getEntityName()/] listResponse = entity.get[a.getClass().name/]s().get(entity.get[a.getClass().name/]s().size() - 1);
+            [for (a : Property | a.getClass().getAllAttribs())]
+            [if (a.isDate()=false)]
+            Assert.assertEquals(listResponse.[a.getter()/](), [a.getClass().getEntityLower()/].[a.getter()/]());
+            [/if]
+            [/for]
         }
-        Assert.assertEquals(cache.size(), list.size());
-        for ([c.getDTOName()/] dto : list) {
-            boolean found = false;
-            for ([c.getEntityName()/] cacheEntity : cache) {
-                if (cacheEntity.getName().equals(dto.getName())) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                Assert.fail();
-            }
+        catch (BusinessLogicException bslexception)
+        {
+            Assert.fail("No debe haber excepción");
         }
     }
+
+    /**
+     * @generated
+     */
+    @Test
+    public void remove[a.getClass().name/]Test() {
+        [c.getEntityName()/] entity = data.get(0);
+        PodamFactory factory = new PodamFactoryImpl();
+        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+        [a.getClass().getEntityLower()/]  = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/] );
+
+        try{
+            [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
+            [a.getClass().getEntityName()/] get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
+            [bean/].update[c.name/](entity);
+            Assert.assertNotNull(get[a.getClass().name/]Response);
+            [bean/].remove[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
+            [bean/].update[c.name/](entity);
+            get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
+            Assert.assertNull(get[a.getClass().name/]Response);
+        }
+        catch (BusinessLogicException bslexception)
+        {
+            Assert.fail("No debe haber excepción");
+        }
+    }
+
+    /**
+     * @generated
+     */
+    @Test
+    public void replace[a.getClass().name/]sTest() {
+        [c.getEntityName()/] entity = data.get(0);
+        PodamFactory factory = new PodamFactoryImpl();
+        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/]2 = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/]3 = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+
+        [a.getClass().getEntityLower()/] = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]);
+        [a.getClass().getEntityLower()/]2 = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]2);
+        [a.getClass().getEntityLower()/]3 = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]3);
+
+        try{
+            [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
+        }
+        catch (BusinessLogicException bslexception)
+        {
+            Assert.fail("No debe haber excepción");
+        }
+
+        [a.getClass().getEntityName()/] get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
+        [a.getClass().getEntityName()/] get[a.getClass().name/]Response2 = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/]2.getId());
+        [a.getClass().getEntityName()/] get[a.getClass().name/]Response3 = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/]3.getId());
+        Assert.assertNotNull(get[a.getClass().name/]Response);
+        Assert.assertNull(get[a.getClass().name/]Response2);
+        Assert.assertNull(get[a.getClass().name/]Response3);
+
+        try{
+            List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]List = new ArrayList<[a.getClass().getEntityName()/]>() {};
+            [a.getClass().getName()/]List.add([a.getClass().getEntityLower()/]2);
+            [a.getClass().getName()/]List.add([a.getClass().getEntityLower()/]3);
+            [bean/].replace[a.getClass().name/]s([a.getClass().getName()/]List, entity.getId());
+        }
+        catch (BusinessLogicException bslexception)
+        {
+            Assert.fail("No debe haber excepción");
+        }
+
+        get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
+        get[a.getClass().name/]Response2 = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/]2.getId());
+        get[a.getClass().name/]Response3 = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/]3.getId());
+        Assert.assertNull(get[a.getClass().name/]Response);
+        Assert.assertNotNull(get[a.getClass().name/]Response2);
+        Assert.assertNotNull(get[a.getClass().name/]Response3);
+    }
+
+    /**
+     * @generated
+     */
+    @Test
+    public void get[a.getClass().name/]sTest() {
+        [c.getEntityName()/] entity = data.get(0);
+        List<[a.getClass().getEntityName()/]> listado = new ArrayList<[a.getClass().getEntityName()/]>();
+        entity.set[a.getClass().name/]s(listado);
+        [bean/].update[c.name/](entity);
+
+        Assert.assertEquals(entity.get[a.getClass().name/]s().size(), 0);
+
+        PodamFactory factory = new PodamFactoryImpl();
+        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/]2 = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/]3 = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+
+        [a.getClass().getEntityLower()/] = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]);
+        [a.getClass().getEntityLower()/]2 = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]2);
+        [a.getClass().getEntityLower()/]3 = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]3);
+
+        try{
+            [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
+            [bean/].addAuthor([a.getClass().getEntityLower()/]2.getId(), entity.getId());
+            [bean/].addAuthor([a.getClass().getEntityLower()/]3.getId(), entity.getId());
+        }
+        catch (BusinessLogicException bslexception)
+        {
+            Assert.fail("No debe haber excepción");
+        }
+
+        entity = [bean/].update[c.name/](entity);
+        Assert.assertEquals(entity.get[a.getClass().name/]s().size(), 3);
+    }
+    [/for]
 }
 [/file]
 [/let]
+[/if]
 [/template]
