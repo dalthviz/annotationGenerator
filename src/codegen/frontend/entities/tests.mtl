@@ -67,9 +67,7 @@ describe('[c.name/] E2E Testing', function () {
                         var entity = getEntityName(url);
                         if (mockRecords['['/]entity] === undefined) {
                             mockRecords['['/]entity] = ['['/]];
-							[for (asc : Association | c.getOne2OneAssociations())]
-							[let a : Property = asc.getParentProperty(c)]
-							[if (not a.isComposite())]
+							[for (a : Property | c.getReferences(false))]
 							
 							if (entity == "[a.name/]s")
                             {
@@ -78,8 +76,6 @@ describe('[c.name/] E2E Testing', function () {
                                 mockRecords['['/]entity].push(record);
                             }
 
-							[/if]
-							[/let]
 							[/for]
                         }
                         return mockRecords['['/]entity];
@@ -156,7 +152,7 @@ describe('[c.name/] E2E Testing', function () {
 		[for (a : Property | c.getAllAttribs())]
         element(by.id('[a.name/]')).sendKeys('Val[(i+1)/]');
 		[/for]
-		[for (a : Property | c.getReferences())]
+		[for (a : Property | c.getReferences(false))]
 		var select[a.getClass().getEntityName()/] = element(by.id('[a.name/]'));
         select[a.getClass().getEntityName()/].$('['['/]value="100"]').click();
 		[/for]
