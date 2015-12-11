@@ -104,9 +104,10 @@ c.getReferences(includeParent)->notEmpty()
 c.getAssociations()->select(
     asc | asc.getAllAttributes()->exists(
         a | a.isNavigable()
+        and a.isComposite()
         and a.getUpper() <> 1
         and a.getOtherEnd().type = c
-        and a.isComposite()
+        and a.getOtherEnd().getUpper() = 1
     )
 )
 /]
@@ -122,22 +123,13 @@ c.getAssociations()->select(
 )
 /]
 
-[query public getMasterAssociations(c : Class) : Set(Association) = 
-c.getAssociations()->select(
-    asc | asc.getAllAttributes()->exists(
-        a | a.isNavigable()
-        and a.getUpper() <> 1
-        and a.getOtherEnd().type = c
-    )
-)
-/]
-
 [query public getCollectionAttributes(c : Class) : Set(Property) = 
 c.getAssociations()->collect(
     asc | asc.getAllAttributes()->select(
         a | a.isNavigable()
         and a.getUpper() <> 1
         and a.getOtherEnd().type = c
+        and (a.aggregation <> AggregationKind::none implies a.getOtherEnd().getUpper() = 1)
     )
 )->asSet()
 /]
@@ -155,7 +147,7 @@ c.getCollectionAttributes()->exists(a|a.association.isMany2Many())
 /]
 
 [query public isMaster(c : Class) : Boolean =
-c.getMasterAssociations()->notEmpty()
+c.getCollectionAttributes()->notEmpty()
 /]
 
 [query public isChild(c : Class) : Boolean = 

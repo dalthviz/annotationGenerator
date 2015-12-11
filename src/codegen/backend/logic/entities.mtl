@@ -53,18 +53,16 @@ public class [className/] extends BaseEntity implements Serializable {
     @ManyToOne
     private [a.getClass().getEntityName()/] [a.name/];
 [/for]
-[for (asc : Association | c.getMasterAssociations())]
-[let a : Property = asc.getChildProperty(c)]
+[for (a : Property | c.getCollectionAttributes())]
     @PodamExclude
-[if (a.isComposite())]    
+[if (a.isComposite())]
     @OneToMany(mappedBy = "[a.getOtherEnd().name/]", cascade = CascadeType.ALL, orphanRemoval = true)
-[elseif (asc.isMany2Many())]
+[elseif (a.association.isMany2Many())]
     @ManyToMany[if (not a.isRelationshipOwner())][a.genMappedBy(false)/][/if]
-[else]    
+[else]
     @OneToMany
 [/if]
     private List<[a.getClass().getEntityName()/]> [a.name/];
-[/let]
 [/for]
 [for (a : Property | c.allAttributes())]
     [if (a.isID() = false and a.isName() = false)]
@@ -100,8 +98,7 @@ public class [className/] extends BaseEntity implements Serializable {
     }
 
 [/for]
-[for (asc : Association | c.getMasterAssociations())]
-[let a : Property = asc.getChildProperty(c)]
+[for (a : Property | c.getCollectionAttributes())]
     /**
      * @generated
      */
@@ -115,7 +112,6 @@ public class [className/] extends BaseEntity implements Serializable {
     public void [a.setter()/](List<[a.getClass().getEntityName()/]> [a.name.toLower()/]) {
         this.[a.name/] = [a.name.toLower()/];
     }
-[/let]
 
 [/for]
 
