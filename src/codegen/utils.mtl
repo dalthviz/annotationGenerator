@@ -21,10 +21,6 @@ m.getClasses()->reject(c | c.isChild())
 asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c)->asOrderedSet()->first()
 /]
 
-[query public getParentProperty(asc : Association, c : Class) : Property =
-asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() = 1 and a.getOtherEnd().type = c)->asOrderedSet()->first()
-/]
-
 [query public isMany2Many(asc : Association) : Boolean = 
 asc.getAllAttributes()->exists(
     a | a.isNavigable()
@@ -81,19 +77,7 @@ c.getAssociations()->collect(
         and not a.isComposite()
         and (a.getOtherEnd().isComposite() implies includeParent)
     )
-)->flatten()->sortedBy(a | a.name)->asOrderedSet()
-/]
-
-[query public getOne2OneAssociations(c : Class) : Set(Association) =
-c.getAssociations()->select(
-    asc | asc.getAllAttributes()->exists(
-        a | 
-            a.isNavigable() 
-        and a.getUpper() = 1
-        and a.getOtherEnd().getUpper() = 1
-        and a.getOtherEnd().type = c
-    )
-)
+)->asOrderedSet()
 /]
 
 [query public hasReferences(c : Class, includeParent : Boolean) : Boolean =
@@ -102,7 +86,7 @@ c.getReferences(includeParent)->notEmpty()
 
 [query public getCompositeAssociations(c : Class) : Set(Association) =
 c.getAssociations()->select(
-    asc | asc.getAllAttributes()->exists(
+    getAllAttributes()->exists(
         a | a.isNavigable()
         and a.isComposite()
         and a.getUpper() <> 1
@@ -114,11 +98,12 @@ c.getAssociations()->select(
 
 [query public getSharedAssociations(c : Class) : Set(Association) =
 c.getAssociations()->select(
-    asc | asc.getAllAttributes()->exists(
+    getAllAttributes()->exists(
         a | a.isNavigable()
             and a.getUpper() <> 1
             and a.getOtherEnd().type = c
             and not a.isComposite()
+            and (a.aggregation <> AggregationKind::none implies a.getOtherEnd().getUpper() = 1)
     )
 )
 /]
@@ -134,12 +119,20 @@ c.getAssociations()->collect(
 )->asSet()
 /]
 
+[query public getCompositeCollectionAttributes(c : Class) : Set(Property) =
+c.getCollectionAttributes()->select(isComposite())
+/]
+
+[query public getNonCompositeCollectionAttributes(c : Class) : Set(Property) =
+c.getCollectionAttributes()->select(not isComposite())
+/]
+
 [query public hasCompositeAssociations(c : Class) : Boolean =
-c.getCompositeAssociations()->notEmpty()
+c.getCompositeCollectionAttributes()->notEmpty()
 /]
 
 [query public hasSharedAssociations(c : Class) : Boolean =
-c.getSharedAssociations()->notEmpty()
+c.getNonCompositeCollectionAttributes()->notEmpty()
 /]
 
 [query public hasManyToManyAssociations(c : Class) : Boolean =
