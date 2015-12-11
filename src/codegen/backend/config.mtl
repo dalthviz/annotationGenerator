@@ -9,6 +9,6 @@
 [template public genConfig(m : Model)]
 [m.mainPOM()/]
 [m.mainXML()/]
-[m.mainTests(m.getLogicArtifactId().concat(m.baseTestPath()))/]
+[comment][m.mainTests(m.getLogicArtifactId().concat(m.baseTestPath()))/][/comment]
 [m.mainExceptions(m.getLogicArtifactId())/]
 [/template]
