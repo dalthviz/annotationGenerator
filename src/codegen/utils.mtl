@@ -353,7 +353,7 @@ String[else]
 [/template]
 
 [template public getWebRoot(m : Model)]
-[m.getWebArtifactId().concat('/public_html/')/]
+[m.getWebArtifactId().concat('/app/')/]
 [/template]
 
 [template public getPoolName(m : Model)]

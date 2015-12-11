@@ -41,11 +41,11 @@
   },
   "engines": {
     "node": "^0.12.7",
-    "npm": "^2.14.0"
+    "npm": "^3.0.0"
   },
   "scripts": {
     "test": "grunt test",
-    "install": "node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update"
+    "install": "node node_modules/protractor/bin/webdriver-manager update"
   }
 }
 [/file]
@@ -89,7 +89,7 @@ module.exports = function (grunt) {
     });
 
     var appConfig = {
-        src: 'public_html',
+        src: 'app',
         tmp: '.tmp',
         dist: 'dist',
         bower: 'bower_components',
@@ -237,10 +237,6 @@ module.exports = function (grunt) {
                 options: {
                     livereload: '<%= connect.options.livereload %>'
                 }
-            },
-            jsTest: {
-                files: ['['/]'test/spec/{,*/}*.js'[']'/],
-                tasks: ['['/]'newer:jshint:test', 'karma'[']'/]
             },
             gruntfile: {
                 files: ['['/]'Gruntfile.js'[']'/]
@@ -396,7 +392,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('run', ['['/]'build', 'connect:dist:keepalive'[']'/]);
 
-    grunt.registerTask('rundev', ['['/]
+    grunt.registerTask('debug', ['['/]
         'jshint',
         'jscs',
         'clean:server',
@@ -435,7 +431,7 @@ module.exports = function (grunt) {
         'protractor'
     [']'/]);
 
-    grunt.registerTask('default', ['['/]'test', 'build'[']'/]);
+    grunt.registerTask('default', ['['/]'clean', 'test', 'build'[']'/]);
 };
 [/file]
 [/template]
@@ -459,6 +455,7 @@ node_js:
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
+  - "npm update -g npm"
   - "npm install -g bower grunt-cli && bower install"
 after_success:
   - grunt sonarRunner

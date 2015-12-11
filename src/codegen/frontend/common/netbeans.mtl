@@ -11,27 +11,7 @@
  * @param path Path where files will be generated
  */]
 [template public netbeansConfig(m : Model, path : String)]
-[m.genProjectXML(path)/]
 [m.genProjectProps(path)/]
-[/template]
-
-[**
- * Generates file project.xml for NetBeans project.
- * @param m Model containing project name
- * @param path Path where files will be generated
-*/]
-[template protected genProjectXML(m : Model, path : String)]
-[file (path.concat('project.xml'), false, 'UTF-8')]
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://www.netbeans.org/ns/project/1">
-    <type>org.netbeans.modules.web.clientproject</type>
-    <configuration>
-        <data xmlns="http://www.netbeans.org/ns/clientside-project/1">
-            <name>[m.getArtifactId()/]</name>
-        </data>
-    </configuration>
-</project>
-[/file]
 [/template]
 
 [**
@@ -43,17 +23,18 @@
 [file (path.concat('project.properties'), false, 'UTF-8')]
 auxiliary.org-netbeans-modules-javascript-grunt.action_2e_build=build
 auxiliary.org-netbeans-modules-javascript-grunt.action_2e_clean=clean
+auxiliary.org-netbeans-modules-javascript-grunt.action_2e_debug=debug
 auxiliary.org-netbeans-modules-javascript-grunt.action_2e_rebuild=clean build
-auxiliary.org-netbeans-modules-web-clientproject-api.Grunt_2e_task_2e_1=test
-auxiliary.org-netbeans-modules-web-clientproject-api.js_2e_libs_2e_folder=js/libs
-browser.autorefresh.Chrome.INTEGRATED=true
-browser.highlightselection.Chrome.INTEGRATED=true
-file.reference.[m.getArtifactId()/]-public_html=public_html
-file.reference.[m.getArtifactId()/]-test=test
+auxiliary.org-netbeans-modules-javascript-grunt.action_2e_run=run
+auxiliary.org-netbeans-modules-javascript-grunt.action_2e_test=test
+file.reference.[m.getWebArtifactId()/]-app=app
+file.reference.[m.getWebArtifactId()/]-dist=dist
+file.reference.[m.getWebArtifactId()/]-e2e=e2e
+file.reference.[m.getWebArtifactId()/]-test=test
 files.encoding=UTF-8
-site.root.folder=${file.reference.[m.getArtifactId()/]-public_html}
-start.file=index.html
-test.folder=${file.reference.[m.getArtifactId()/]-test}
-web.context.root=/[m.getArtifactId()/]
+site.root.folder=${file.reference.[m.getWebArtifactId()/]-dist}
+source.folder=${file.reference.[m.getWebArtifactId()/]-app}
+test.folder=${file.reference.[m.getWebArtifactId()/]-test}
+test.selenium.folder=${file.reference.[m.getWebArtifactId()/]-e2e}
 [/file]
 [/template]
