@@ -59,9 +59,9 @@ public class [c.getServiceTestName()/] {
     private final int OkWithoutContent = Status.NO_CONTENT.getStatusCode();
     private final String [c.testPath()/] = "[c.getURI()/]";
     private final static List<[c.getDTOName()/]> oraculo = new ArrayList<>();
-    [for (ass : Association | c.getSharedAssociations())]
-    private final String [ass.getChildProperty(c).getClass().testPath()/] = "[ass.getChildProperty(c).getClass().getURI()/]";
-    private final static List<[ass.getChildProperty(c).getClass().getDTOName()/]> oraculo[ass.getChildProperty(c).getClass().name/]s = new ArrayList<>();
+    [for (a : Property | c.getNonCompositeCollectionAttributes())]
+    private final String [a.getClass().testPath()/] = "[a.getClass().getURI()/]";
+    private final static List<[a.getClass().getDTOName()/]> oraculo[a.getClass().name/]s = new ArrayList<>();
     [/for]
     private WebTarget target;
     private final String apiPath = "api";
@@ -111,24 +111,24 @@ public class [c.getServiceTestName()/] {
             PodamFactory factory = new PodamFactoryImpl();
             [c.getDTOName()/] [c.getName()/] = factory.manufacturePojo([c.getDTOName()/].class);
             [c.getName()/].setId(i + 1L);
-            [for (ass : Association | c.getCompositeAssociations())]
-            List<[ass.getChildProperty(c).getClass().getDTOName()/]> [ass.getChildProperty(c).getClass().getName()/]List = new ArrayList<>();
+            [for (a : Property | c.getCompositeCollectionAttributes())]
+            List<[a.getClass().getDTOName()/]> [a.getClass().getName()/]List = new ArrayList<>();
             for (int j = 0; j < 5; j++)
             {
-                [ass.getChildProperty(c).getClass().getDTOName()/] [ass.getChildProperty(c).getClass().getName()/] = factory.manufacturePojo([ass.getChildProperty(c).getClass().getDTOName()/].class);
-                [ass.getChildProperty(c).getClass().getName()/].setId(i + 1L);
-                [ass.getChildProperty(c).getClass().getName()/]List.add([ass.getChildProperty(c).getClass().getName()/]);
+                [a.getClass().getDTOName()/] [a.getClass().getName()/] = factory.manufacturePojo([a.getClass().getDTOName()/].class);
+                [a.getClass().getName()/].setId(i + 1L);
+                [a.getClass().getName()/]List.add([a.getClass().getName()/]);
             }
             
-            [c.getName()/].set[ass.getChildProperty(c).getClass().name/]s([ass.getChildProperty(c).getClass().getName()/]List);
+            [c.getName()/].set[a.getClass().name/]s([a.getClass().getName()/]List);
             [/for]
             
             oraculo.add([c.getName()/]);
             
-            [for (ass : Association | c.getSharedAssociations())]
-            [ass.getChildProperty(c).getClass().getDTOName()/] [ass.getChildProperty(c).getClass().getName()/] = factory.manufacturePojo([ass.getChildProperty(c).getClass().getDTOName()/].class);
-            [ass.getChildProperty(c).getClass().getName()/].setId(i + 1L);
-            oraculo[ass.getChildProperty(c).getClass().name/]s.add([ass.getChildProperty(c).getClass().getName()/]);
+            [for (a : Property | c.getNonCompositeCollectionAttributes())]
+            [a.getClass().getDTOName()/] [a.getClass().getName()/] = factory.manufacturePojo([a.getClass().getDTOName()/].class);
+            [a.getClass().getName()/].setId(i + 1L);
+            oraculo[a.getClass().name/]s.add([a.getClass().getName()/]);
             [/for]
 
             
@@ -217,91 +217,91 @@ public class [c.getServiceTestName()/] {
 
     }
     
-    [for (ass : Association | c.getSharedAssociations())]
+    [for (a : Property | c.getNonCompositeCollectionAttributes())]
     @Test
-    public void t[(i * 4)+1/]Add[ass.getChildProperty(c).getClass().name/][c.getServiceTestName()/]() {
+    public void t[(i * 4)+1/]Add[a.getClass().name/][c.getServiceTestName()/]() {
         Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
         
-        [ass.getChildProperty(c).getClass().getDTOName()/] [ass.getChildProperty(c).getClass().getName()/] = oraculo[ass.getChildProperty(c).getClass().name/]s.get(0);
+        [a.getClass().getDTOName()/] [a.getClass().getName()/] = oraculo[a.getClass().name/]s.get(0);
         [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
         
         
-        Response response = target.path([ass.getChildProperty(c).getClass().testPath()/])
+        Response response = target.path([a.getClass().testPath()/])
                 .request().cookie(cookieSessionId)
-                .post(Entity.entity([ass.getChildProperty(c).getClass().getName()/], MediaType.APPLICATION_JSON));
+                .post(Entity.entity([a.getClass().getName()/], MediaType.APPLICATION_JSON));
         
-        [ass.getChildProperty(c).getClass().getDTOName()/] [ass.getChildProperty(c).getClass().testName()/] = ([ass.getChildProperty(c).getClass().getDTOName()/]) response.readEntity([ass.getChildProperty(c).getClass().getDTOName()/].class);
-        [for (prop : Property | ass.getChildProperty(c).getClass().attribute)]
+        [a.getClass().getDTOName()/] [a.getClass().testName()/] = ([a.getClass().getDTOName()/]) response.readEntity([a.getClass().getDTOName()/].class);
+        [for (prop : Property | a.getClass().attribute)]
         [if (prop.isDate()=false)]
-        Assert.assertEquals([ass.getChildProperty(c).getClass().getName()/].[prop.getter()/](), [ass.getChildProperty(c).getClass().testName()/].[prop.getter()/]());
+        Assert.assertEquals([a.getClass().getName()/].[prop.getter()/](), [a.getClass().testName()/].[prop.getter()/]());
         [/if]
         [/for]
         Assert.assertEquals(Created, response.getStatus());
         
         response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
-                .path([ass.getChildProperty(c).getClass().testPath()/]).path([ass.getChildProperty(c).getClass().getName()/].getId().toString())
+                .path([a.getClass().testPath()/]).path([a.getClass().getName()/].getId().toString())
                 .request().cookie(cookieSessionId)
-                .post(Entity.entity([ass.getChildProperty(c).getClass().getName()/], MediaType.APPLICATION_JSON));
+                .post(Entity.entity([a.getClass().getName()/], MediaType.APPLICATION_JSON));
         
-        [ass.getChildProperty(c).getClass().testName()/] = ([ass.getChildProperty(c).getClass().getDTOName()/]) response.readEntity([ass.getChildProperty(c).getClass().getDTOName()/].class);
+        [a.getClass().testName()/] = ([a.getClass().getDTOName()/]) response.readEntity([a.getClass().getDTOName()/].class);
         Assert.assertEquals(Ok, response.getStatus());
-        [for (prop : Property | ass.getChildProperty(c).getClass().attribute)]
+        [for (prop : Property | a.getClass().attribute)]
         [if (prop.isDate()=false)]
-        Assert.assertEquals([ass.getChildProperty(c).getClass().getName()/].[prop.getter()/](), [ass.getChildProperty(c).getClass().testName()/].[prop.getter()/]());
+        Assert.assertEquals([a.getClass().getName()/].[prop.getter()/](), [a.getClass().testName()/].[prop.getter()/]());
         [/if]
         [/for]
     }
     
     @Test
-    public void t[(i * 4)+2/]Get[ass.getChildProperty(c).getClass().getServiceTestName()/]List() throws IOException {
+    public void t[(i * 4)+2/]Get[a.getClass().getServiceTestName()/]List() throws IOException {
         Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
         [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
         
         Response response = target.path([c.testPath()/])
                 .path([c.getName()/].getId().toString())
-                .path([ass.getChildProperty(c).getClass().testPath()/])
+                .path([a.getClass().testPath()/])
                 .request().cookie(cookieSessionId).get();
         
-        String [ass.getChildProperty(c).getClass().getName()/]List = response.readEntity(String.class);
-        List<[ass.getChildProperty(c).getClass().getDTOName()/]> [ass.getChildProperty(c).getClass().getName()/]ListTest = new ObjectMapper().readValue([ass.getChildProperty(c).getClass().getName()/]List, List.class);
+        String [a.getClass().getName()/]List = response.readEntity(String.class);
+        List<[a.getClass().getDTOName()/]> [a.getClass().getName()/]ListTest = new ObjectMapper().readValue([a.getClass().getName()/]List, List.class);
         Assert.assertEquals(Ok, response.getStatus());
-        Assert.assertEquals(1, [ass.getChildProperty(c).getClass().getName()/]ListTest.size());
+        Assert.assertEquals(1, [a.getClass().getName()/]ListTest.size());
     }
     
     @Test
-    public void t[(i * 4)+3/]Get[ass.getChildProperty(c).getClass().getServiceTestName()/]() throws IOException {
+    public void t[(i * 4)+3/]Get[a.getClass().getServiceTestName()/]() throws IOException {
         Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
-        [ass.getChildProperty(c).getClass().getDTOName()/] [ass.getChildProperty(c).getClass().getName()/] = oraculo[ass.getChildProperty(c).getClass().name/]s.get(0);
+        [a.getClass().getDTOName()/] [a.getClass().getName()/] = oraculo[a.getClass().name/]s.get(0);
         [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
         
-        [ass.getChildProperty(c).getClass().getDTOName()/] [ass.getChildProperty(c).getClass().testName()/] = target.path([c.testPath()/])
-                .path([c.getName()/].getId().toString()).path([ass.getChildProperty(c).getClass().testPath()/])
-                .path([ass.getChildProperty(c).getClass().getName()/].getId().toString())
-                .request().cookie(cookieSessionId).get([ass.getChildProperty(c).getClass().getDTOName()/].class);
+        [a.getClass().getDTOName()/] [a.getClass().testName()/] = target.path([c.testPath()/])
+                .path([c.getName()/].getId().toString()).path([a.getClass().testPath()/])
+                .path([a.getClass().getName()/].getId().toString())
+                .request().cookie(cookieSessionId).get([a.getClass().getDTOName()/].class);
                 
-        [for (prop : Property | ass.getChildProperty(c).getClass().attribute)]
+        [for (prop : Property | a.getClass().attribute)]
         [if (prop.isDate()=false)]
-        Assert.assertEquals([ass.getChildProperty(c).getClass().getName()/].[prop.getter()/](), [ass.getChildProperty(c).getClass().testName()/].[prop.getter()/]());
+        Assert.assertEquals([a.getClass().getName()/].[prop.getter()/](), [a.getClass().testName()/].[prop.getter()/]());
         [/if]
         [/for]
     }
     
     @Test
-    public void t[(i * 4)+4/]Remove[ass.getChildProperty(c).getClass().name/][c.getServiceTestName()/]() {
+    public void t[(i * 4)+4/]Remove[a.getClass().name/][c.getServiceTestName()/]() {
         Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
         
-        [ass.getChildProperty(c).getClass().getDTOName()/] [ass.getChildProperty(c).getClass().getName()/] = oraculo[ass.getChildProperty(c).getClass().name/]s.get(0);
+        [a.getClass().getDTOName()/] [a.getClass().getName()/] = oraculo[a.getClass().name/]s.get(0);
         [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
         
         Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
-                .path([ass.getChildProperty(c).getClass().testPath()/]).path([ass.getChildProperty(c).getClass().getName()/].getId().toString())
+                .path([a.getClass().testPath()/]).path([a.getClass().getName()/].getId().toString())
                 .request().cookie(cookieSessionId).delete();
         Assert.assertEquals(OkWithoutContent, response.getStatus());
     }
     [/for]
     
     @Test
-    public void t[(c.getSharedAssociations()->size()*4)+5/]Delete[c.getServiceTestName()/]() {
+    public void t[(c.getNonCompositeCollectionAttributes()->size()*4)+5/]Delete[c.getServiceTestName()/]() {
         Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
         [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
         Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())

@@ -84,30 +84,6 @@ c.getAssociations()->collect(
 c.getReferences(includeParent)->notEmpty()
 /]
 
-[query public getCompositeAssociations(c : Class) : Set(Association) =
-c.getAssociations()->select(
-    getAllAttributes()->exists(
-        a | a.isNavigable()
-        and a.isComposite()
-        and a.getUpper() <> 1
-        and a.getOtherEnd().type = c
-        and a.getOtherEnd().getUpper() = 1
-    )
-)
-/]
-
-[query public getSharedAssociations(c : Class) : Set(Association) =
-c.getAssociations()->select(
-    getAllAttributes()->exists(
-        a | a.isNavigable()
-            and a.getUpper() <> 1
-            and a.getOtherEnd().type = c
-            and not a.isComposite()
-            and (a.aggregation <> AggregationKind::none implies a.getOtherEnd().getUpper() = 1)
-    )
-)
-/]
-
 [query public getCollectionAttributes(c : Class) : Set(Property) = 
 c.getAssociations()->collect(
     asc | asc.getAllAttributes()->select(

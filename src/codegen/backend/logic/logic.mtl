@@ -14,8 +14,8 @@ package [c.getModel().baseGroup()/].api;
 
 import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
-[for (ass : Association | c.getSharedAssociations())]
-import [c.getModel().baseGroup()/].entities.[ass.getChildProperty(c).getClass().getEntityName()/];
+[for (a : Property | c.getNonCompositeCollectionAttributes())]
+import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 [/for]
 import java.util.List;
 
@@ -25,14 +25,12 @@ public interface [className/] {
     public [c.getEntityName()/] create[c.name/]([c.getEntityName()/] entity);
     public [c.getEntityName()/] update[c.name/]([c.getEntityName()/] entity);
     public void delete[c.name/](Long id);
-    [for (asc : Association | c.getSharedAssociations())]
-    [let a : Property = asc.getChildProperty(c)]
+    [for (a : Property | c.getNonCompositeCollectionAttributes())]
     public [a.getClass().getEntityName()/] add[a.getClass().name/](Long [a.getClass().getEntityId()/], Long [c.getEntityId()/]) throws BusinessLogicException;
     public void remove[a.getClass().name/](Long [a.getClass().getEntityId()/], Long [c.getEntityId()/]);
     public List<[a.getClass().getEntityName()/]> replace[a.getClass().name/]s(List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]s, Long [c.getEntityId()/]) throws BusinessLogicException;
     public List<[a.getClass().getEntityName()/]> get[a.getClass().name/]s(Long [c.getEntityId()/]);
     public [a.getClass().getEntityName()/] get[a.getClass().name/](Long [c.getEntityId()/], Long [a.getClass().getEntityId()/]);
-    [/let]
     [/for]    
 }
 [/file]
@@ -48,9 +46,9 @@ import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;
 import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
-[for (ass : Association | c.getSharedAssociations())]
-import [c.getModel().baseGroup()/].persistence.[ass.getChildProperty(c).getClass().getPersistenceName()/];
-import [c.getModel().baseGroup()/].entities.[ass.getChildProperty(c).getClass().getEntityName()/];
+[for (a : Property | c.getNonCompositeCollectionAttributes())]
+import [c.getModel().baseGroup()/].persistence.[a.getClass().getPersistenceName()/];
+import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 [/for]
 import java.util.List;
 import javax.ejb.Stateless;
@@ -64,8 +62,8 @@ public class [className/] implements [c.getAPIName()/] {
 
     @Inject private [c.getPersistenceName()/] persistence;
 
-    [for (ass : Association | c.getSharedAssociations())]
-    @Inject private [ass.getChildProperty(c).getClass().getPersistenceName()/] [ass.getChildProperty(c).getClass().getName()/]Persistence;
+    [for (a : Property | c.getNonCompositeCollectionAttributes())]
+    @Inject private [a.getClass().getPersistenceName()/] [a.getClass().getName()/]Persistence;
     [/for]
 
     /**
@@ -100,8 +98,8 @@ public class [className/] implements [c.getAPIName()/] {
     public [c.getEntityName()/] update[c.name/]([c.getEntityName()/] entity) {
         [c.getEntityName()/] newEntity = entity;
         [c.getEntityName()/] oldEntity = persistence.find(entity.getId());
-        [for (ass : Association | c.getSharedAssociations())]         
-        newEntity.set[ass.getChildProperty(c).getClass().name/]s(oldEntity.get[ass.getChildProperty(c).getClass().name/]s());
+        [for (a : Property | c.getNonCompositeCollectionAttributes())]         
+        newEntity.set[a.getClass().name/]s(oldEntity.get[a.getClass().name/]s());
         [/for]        
         return persistence.update(newEntity);
     }
@@ -114,8 +112,7 @@ public class [className/] implements [c.getAPIName()/] {
         persistence.delete(id);
     }
 
-    [for (asc : Association | c.getSharedAssociations())]
-    [let a : Property = asc.getChildProperty(c)]
+    [for (a : Property | c.getNonCompositeCollectionAttributes())]
     /**
      * @generated
      */
@@ -171,7 +168,6 @@ public class [className/] implements [c.getAPIName()/] {
         }
         return null;
     }
-    [/let]
     [/for]
 }
 [/file]

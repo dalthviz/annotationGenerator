@@ -238,13 +238,11 @@ A diferencia del API para CRUD Básico, el API de Maestro/Detalle no provee un s
 
 Método|URI|Acción|Parámetros|Cuerpo|Retorno
 :--:|:--:|:--:|:--:|:--:|:--:
-[for (asc : Association | class.getCompositeAssociations())]
-    [let elem : Property = asc.getChildProperty(class)]
+[for (elem : Property | class.getCompositeCollectionAttributes())]
 **GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener Objetos JSON de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]||Colección de objetos JSON de [elem.name/]([elem.type.name/])
 **POST**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Creación de instancias de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de objetos JSON de [elem.name/]([elem.type.name/]) a crear|Colección de objetos JSON de [elem.name/]([elem.type.name/]) creados con sus respectivos ID
 **PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de instancias de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de objetos JSON de [elem.name/]([elem.type.name/]) a actualizar|Colección de objetos JSON de [elem.name/]([elem.type.name/]) actualizados
 **DELETE**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Eliminación de instancias de [elem.name/]([elem.type.name/]) dependientes de [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de atributo `id` de [elem.name/]([elem.type.name/]) a eliminar|
-    [/let]
 [/for]
 [/if]
 
@@ -253,11 +251,9 @@ Método|URI|Acción|Parámetros|Cuerpo|Retorno
 
 Método|URI|Acción|Parámetros|Cuerpo|Retorno
 :--:|:--:|:--:|:--:|:--:|:--:
-[for (asc : Association | class.getSharedAssociations())]
-    [let elem : Property = asc.getChildProperty(class)]
+[for (elem : Property | class.getNonCompositeCollectionAttributes())]
 **GET**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Obtener instancias de [elem.name/]([elem.type.name/]) asociados con [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]||Colección de `id` de [elem.name/]([elem.type.name/]) asociados con [class.name/]
 **PUT**|[class.name.toLowerFirst()/]s/:id/[elem.name/]|Actualización de referencias a [elem.name/]([elem.type.name/]) desde [class.name/]|**@PathParam id**: `id` de instancia de [class.name/]|Colección de `id` de [elem.name/]([elem.type.name/]) a asociar|Colección de objetos JSON de [elem.name/]([elem.type.name/]) asociados
-    [/let]
 [/for]
 [/if]
 [/if]
