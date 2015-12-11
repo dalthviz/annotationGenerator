@@ -36,59 +36,59 @@ exports.config = {
 [file (path.concat('e2e/' + c.specName() + '.specs.js'), false, 'UTF-8')]
 describe('[c.name/] E2E Testing', function () {
 
-	beforeEach(function () {
+    beforeEach(function () {
         browser.addMockModule('ngCrudMock', function () {
             browser.driver.manage().window().maximize();
-			var mod = angular.module('ngCrudMock');
-            [if(c.hasReferences(false))]
+            var mod = angular.module('ngCrudMock');
 
             mod.run(['['/]'ngCrudMock.mockRecords', function(records){
+                records['['/]'[c.getURI()/]'] = ['[]'/];
+
                 [for (a : Property | c.getReferences(false)) separator('\n')]
                 records['['/]'[a.getClass().getURI()/]'] = ['[]'/];
                 records['['/]'[a.getClass().getURI()/]'].push({id: 100, name: '[a.name/]'});
                 [/for]
             }]);
-            [/if]
         });
     });
 
     it('should create one [c.specName()/]', function () {
         browser.get('#/[c.specName()/]');
         element(by.id('create-[c.specName()/]')).click();
-		[for (a : Property | c.getAllAttribs())]
+        [for (a : Property | c.getAllAttribs())]
         element(by.id('[a.name/]')).sendKeys('Val[(i+1)/]');
-		[/for]
-		[for (a : Property | c.getReferences(false))]
-        element(by.id('[a.name/]')).;
-		[/for]
+        [/for]
+        [for (a : Property | c.getReferences(false))]
+        element(by.id('[a.name/]')).all(by.css('option')).last().click();
+        [/for]
         element(by.id('save-[c.specName()/]')).click();
         expect(element.all(by.repeater('record in records')).count()).toEqual(1);
     });
     
     it('should read one [c.specName()/]', function () {
         [for (a : Property | c.getAllAttribs())]
-		expect(element(by.id('0-[a.name/]')).getText()).toBe("Val[(i+1)/]");
+        expect(element(by.id('0-[a.name/]')).getText()).toBe("Val[(i+1)/]");
         [/for]
     });
     
     it('should edit one [c.specName()/]', function () {
         element(by.id('0-edit-btn')).click();
-		
-		[for (a : Property | c.getAllAttribs())]
+
+        [for (a : Property | c.getAllAttribs())]
         element(by.id('[a.name/]')).clear().sendKeys('NewVal[(i+1)/]');
         [/for]
 
         element(by.id('save-[c.specName()/]')).click();
 
-		[for (a : Property | c.getAllAttribs())]
-		expect(element(by.id('0-[a.name/]')).getText()).toBe("NewVal[(i+1)/]");
+        [for (a : Property | c.getAllAttribs())]
+        expect(element(by.id('0-[a.name/]')).getText()).toBe("NewVal[(i+1)/]");
         [/for]
     });
     
     it('should delete the [c.specName()/]', function () {
         element(by.id('0-delete-btn')).click();
-		[for (a : Property | c.getAllAttribs())]
-		expect(element.all(by.id('0-[a.name/]')).count()).toEqual(0);
+        [for (a : Property | c.getAllAttribs())]
+        expect(element.all(by.id('0-[a.name/]')).count()).toEqual(0);
         [/for]
     });
 });
