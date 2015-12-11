@@ -284,10 +284,6 @@ String[else]
 [c.name.concat('Entity')/]
 [/template]
 
-[template public getEntityLower(c : Class)]
-[c.name.toLowerFirst().concat('Entity')/]
-[/template]
-
 [template public getEntityId(c : Class)]
 [c.name.toLowerFirst().concat('Id')/]
 [/template]

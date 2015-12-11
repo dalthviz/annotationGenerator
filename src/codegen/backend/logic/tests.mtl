@@ -154,9 +154,9 @@ public class [className/] {
         [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);
         [c.getEntityName()/] result = [bean/].create[c.name/](entity);
         Assert.assertNotNull(result);
-        [for (a : Property | c.getAllAttribs())]
-        [if (a.isDate()=false)]
-        Assert.assertEquals(result.[a.getter()/](), entity.[a.getter()/]());
+        [for (prop : Property | c.attribute)]
+        [if (prop.isDate()=false)]
+        Assert.assertEquals(result.[prop.getter()/](), entity.[prop.getter()/]());
         [/if]
         [/for]
     }
@@ -187,9 +187,9 @@ public class [className/] {
         [c.getEntityName()/] entity = data.get(0);
         [c.getEntityName()/] resultEntity = [bean/].get[c.name/](entity.getId());
         Assert.assertNotNull(dto);
-        [for (a : Property | c.getAllAttribs())]
-        [if (a.isDate()=false)]
-        Assert.assertEquals(entity.[a.getter()/](), resultEntity.[a.getter()/]());
+        [for (prop : Property | c.attribute)]
+        [if (prop.isDate()=false)]
+        Assert.assertEquals(entity.[prop.getter()/](), resultEntity.[prop.getter()/]());
         [/if]
         [/for]
     }
@@ -220,9 +220,9 @@ public class [className/] {
 
         [c.getEntityName()/] resp = em.find([c.getEntityName()/].class, entity.getId());
 
-        [for (a : Property | c.getAllAttribs())]
-        [if (a.isDate()=false)]
-        Assert.assertEquals(pojoEntity.[a.getter()/](), resp.[a.getter()/]());
+        [for (prop : Property | c.attribute)]
+        [if (prop.isDate()=false)]
+        Assert.assertEquals(pojoEntity.[prop.getter()/](), resp.[prop.getter()/]());
         [/if]
         [/for]
     }
@@ -241,9 +241,9 @@ public class [className/] {
         try{
             [a.getClass().getEntityName()/] response = [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
             Assert.assertNotNull(em);
-            [for (a : Property | a.getClass().getAllAttribs())]
-            [if (a.isDate()=false)]
-            Assert.assertEquals(response.[a.getter()/](), [a.getClass().getEntityLower()/].[a.getter()/]());
+            [for (prop : Property | a.getClass().attribute)]
+            [if (prop.isDate()=false)]
+            Assert.assertEquals(response.[prop.getter()/](), [a.getClass().getEntityLower()/].[prop.getter()/]());
             [/if]
             [/for]
         }
@@ -266,18 +266,18 @@ public class [className/] {
         try{
             [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
             [a.getClass().getEntityName()/] get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
-            [for (a : Property | a.getClass().getAllAttribs())]
-            [if (a.isDate()=false)]
-            Assert.assertEquals([a.getClass().getEntityLower()/].[a.getter()/](), get[a.getClass().name/]Response.[a.getter()/]());
+            [for (prop : Property | a.getClass().attribute)]
+            [if (prop.isDate()=false)]
+            Assert.assertEquals([a.getClass().getEntityLower()/].[prop.getter()/](), get[a.getClass().name/]Response.[prop.getter()/]());
             [/if]
             [/for]
 
             [bean/].update[c.name/](entity);
 
             [a.getClass().getEntityName()/] listResponse = entity.get[a.getClass().name/]s().get(entity.get[a.getClass().name/]s().size() - 1);
-            [for (a : Property | a.getClass().getAllAttribs())]
-            [if (a.isDate()=false)]
-            Assert.assertEquals(listResponse.[a.getter()/](), [a.getClass().getEntityLower()/].[a.getter()/]());
+            [for (prop : Property | a.getClass().attribute)]
+            [if (prop.isDate()=false)]
+            Assert.assertEquals(listResponse.[prop.getter()/](), [a.getClass().getEntityLower()/].[prop.getter()/]());
             [/if]
             [/for]
         }
@@ -401,4 +401,8 @@ public class [className/] {
 [/file]
 [/let]
 [/if]
+[/template]
+
+[template protected getEntityLower(c : Class)]
+[c.name.toLowerFirst().concat('Entity')/]
 [/template]
