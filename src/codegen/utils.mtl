@@ -6,19 +6,15 @@ m.packagedElement->filter(Class)->sortedBy(c | c.name)
 /]
 
 [query public getAllAttribs(c : Class) : OrderedSet(Property) = 
-c.allAttributes()->reject( a | a.isID())
+c.allAttributes()->reject(isID())
 /]
 
 [query public getId(c : Class) : Property =
-c.allAttributes()->select( a | a.isID())->first()
+c.allAttributes()->select(isID())->first()
 /]
 
 [query public getRootClasses(m : Model) : OrderedSet(Class) = 
-m.getClasses()->reject(c | c.isChild())
-/]
-
-[query public getChildProperty(asc : Association, c : Class) : Property =
-asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c)->asOrderedSet()->first()
+m.getClasses()->reject(isChild())
 /]
 
 [query public isMany2Many(asc : Association) : Boolean = 
@@ -86,7 +82,7 @@ c.getReferences(includeParent)->notEmpty()
 
 [query public getCollectionAttributes(c : Class) : Set(Property) = 
 c.getAssociations()->collect(
-    asc | asc.getAllAttributes()->select(
+    getAllAttributes()->select(
         a | a.isNavigable()
         and a.getUpper() <> 1
         and a.getOtherEnd().type = c
@@ -157,11 +153,11 @@ Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <
 
 [query public setter(a : Property) : String = 'set'.concat(a.name.toUpperFirst()) /]
 
-[query public getClass(a : Property) : Class = Class.allInstances()->select(class | class.name = a.type.name)->asOrderedSet()->first() /]
+[query public getClass(a : Property) : Class = Class.allInstances()->select(c | c.name = a.type.name)->asOrderedSet()->first() /]
 
 [query public getDisplayName(a : Property) : String = a.name.toUpperFirst() /]
 
-[query public isRequired(a : Property) : Boolean = self.upperBound() > 0 /]
+[query public isRequired(a : Property) : Boolean = self.getLower() > 0 /]
 
 [query public isRelationshipOwner(a : Property) : Boolean = 
     a.isNavigable()
