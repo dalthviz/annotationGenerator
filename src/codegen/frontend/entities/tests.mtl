@@ -38,19 +38,17 @@ describe('[c.name/] E2E Testing', function () {
 
 	beforeEach(function () {
         browser.addMockModule('ngCrudMock', function () {
-			angular.module('ngCrudMock').constant('ngCrudMock.baseUrl','api')[if(c.hasReferences(false))].run(
-	                function()
-	                {
-	                    [for (a : Property | c.getReferences(false))]
-							
-						var record = JSON.parse('{[for (p : Property | a.getClass().getAllAttribs()) separator(',')]"[p.name/]": "Val[(i+1)/]"[/for] }');
-	                    record.id = 100;
-	                    mockRecords['['/][a.getClass().specName()/]s].push(record);
-	
-						[/for]
-	                }
-	        )[/if];
-		
+            browser.driver.manage().window().maximize();
+			var mod = angular.module('ngCrudMock');
+            [if(c.hasReferences(false))]
+
+            mod.run(['['/]'ngCrudMock.mockRecords', function(records){
+                [for (a : Property | c.getReferences(false)) separator('\n')]
+                records['['/]'[a.getClass().getURI()/]'] = ['[]'/];
+                records['['/]'[a.getClass().getURI()/]'].push({id: 100, name: '[a.name/]'});
+                [/for]
+            }]);
+            [/if]
         });
     });
 
@@ -61,8 +59,7 @@ describe('[c.name/] E2E Testing', function () {
         element(by.id('[a.name/]')).sendKeys('Val[(i+1)/]');
 		[/for]
 		[for (a : Property | c.getReferences(false))]
-		var select[a.getClass().getEntityName()/] = element(by.id('[a.name/]'));
-        select[a.getClass().getEntityName()/].$('['['/]value="100"]').click();
+        element(by.id('[a.name/]')).;
 		[/for]
         element(by.id('save-[c.specName()/]')).click();
         expect(element.all(by.repeater('record in records')).count()).toEqual(1);
