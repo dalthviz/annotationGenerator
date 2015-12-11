@@ -33,12 +33,11 @@
                 options: ['[]'/],
                 required: [a.isRequired()/]
             }[/for][/if][']'/][if (c.isMaster())], 
-        childs: ['['/][for (asc : Association | c.getMasterAssociations()) separator(', ')]{
-        [let a : Property = asc.getChildProperty(c)]
+        childs: ['['/][for (a : Property | c.getCollectionAttributes()) separator(', ')]{
                 name: '[a.name/]',
                 displayName: '[a.getDisplayName()/]',
                 //template: '', //override generic template
-                ctrl: '[asc.name/]Ctrl'[/let]
+                ctrl: '[a.association.name/]Ctrl'
             }[/for]
         [']'/][/if]});
 })(window.angular);

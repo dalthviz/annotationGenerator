@@ -107,10 +107,8 @@ public abstract class [className/] {
     public static [c.getDTOName()/] fullEntity2DTO([c.getEntityName()/] entity) {
         if (entity != null) {
             [c.getDTOName()/] dto = basicEntity2DTO(entity);
-            [for (asc : Association | c.getMasterAssociations())]
-            [let a : Property = asc.getChildProperty(c)]
+            [for (a : Property | c.getCollectionAttributes())]
             dto.[a.setter()/]([a.getClass().getConverterName()/].listEntity2DTO(entity.[a.getter()/]()));
-            [/let]
             [/for]
             return dto;
         } else {
@@ -124,14 +122,12 @@ public abstract class [className/] {
     public static [c.getEntityName()/] fullDTO2Entity([c.getDTOName()/] dto) {
         if (dto != null) {
             [c.getEntityName()/] entity = basicDTO2Entity(dto);
-            [for (asc : Association | c.getMasterAssociations())]
-            [let a : Property = asc.getChildProperty(c)]
+            [for (a : Property | c.getCollectionAttributes())]
             [if (a.isComposite())]
             entity.[a.setter()/]([a.getClass().getConverterName()/].childListDTO2Entity(dto.[a.getter()/](), entity));
             [else]
             entity.[a.setter()/]([a.getClass().getConverterName()/].listDTO2Entity(dto.[a.getter()/]()));
             [/if]
-            [/let]
             [/for]
             return entity;
         } else {
