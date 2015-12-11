@@ -6,23 +6,15 @@ m.packagedElement->filter(Class)->sortedBy(c | c.name)
 /]
 
 [query public getAllAttribs(c : Class) : OrderedSet(Property) = 
-c.allAttributes()->reject( a | a.isID())
+c.allAttributes()->reject(isID())
 /]
 
 [query public getId(c : Class) : Property =
-c.allAttributes()->select( a | a.isID())->first()
+c.allAttributes()->select(isID())->first()
 /]
 
 [query public getRootClasses(m : Model) : OrderedSet(Class) = 
-m.getClasses()->reject(c | c.isChild())
-/]
-
-[query public getChildProperty(asc : Association, c : Class) : Property =
-asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() < 0 and a.getOtherEnd().type = c)->asOrderedSet()->first()
-/]
-
-[query public getParentProperty(asc : Association, c : Class) : Property =
-asc.getAllAttributes()->select(a | a.isNavigable() and a.getUpper() = 1 and a.getOtherEnd().type = c)->asOrderedSet()->first()
+m.getClasses()->reject(isChild())
 /]
 
 [query public isMany2Many(asc : Association) : Boolean = 
@@ -75,89 +67,52 @@ c.allAttributes()->union(c.getReferences(false))->asOrderedSet()
 [query public getReferences(c : Class, includeParent : Boolean) : OrderedSet(Property) = 
 c.getAssociations()->collect(
     getAllAttributes()->select(
-        a | (
-                a.isNavigable()
-            and a.getUpper() = 1
-            and a.getOtherEnd().type = c
-            and a.getOtherEnd().aggregation = AggregationKind::none
-            and not a.getOtherEnd().isNavigable()
-        ) or ((
-                a.getOtherEnd().isNavigable()
-            and a.getOtherEnd().getUpper() < 0
-            and a.getOtherEnd().type = c
-            and a.getOtherEnd().isComposite()) and includeParent
-)))->flatten()->sortedBy(a | a.name)->asOrderedSet()
-/]
-
-[query public getOne2OneAssociations(c : Class) : Set(Association) =
-c.getAssociations()->select(
-    asc | asc.getAllAttributes()->exists(
-        a | 
-            a.isNavigable() 
+        a | a.isNavigable()
         and a.getUpper() = 1
-        and a.getOtherEnd().getUpper() = 1
         and a.getOtherEnd().type = c
+        and (a.getOtherEnd().isComposite() implies includeParent)
     )
-)
+)->asOrderedSet()
 /]
 
 [query public hasReferences(c : Class, includeParent : Boolean) : Boolean =
 c.getReferences(includeParent)->notEmpty()
 /]
 
-[query public getCompositeAssociations(c : Class) : Set(Association) =
-c.getAssociations()->select(
-    asc | asc.getAllAttributes()->exists(
+[query public getCollectionAttributes(c : Class) : Set(Property) = 
+c.getAssociations()->collect(
+    getAllAttributes()->select(
         a | a.isNavigable()
         and a.getUpper() <> 1
+        and a.getUpper() <> 0
         and a.getOtherEnd().type = c
-        and a.isComposite()
+        and (a.aggregation <> AggregationKind::none implies a.getOtherEnd().getUpper() = 1)
     )
-)
+)->asSet()
 /]
 
-[query public getSharedAssociations(c : Class) : Set(Association) =
-c.getAssociations()->select(
-    asc | asc.getAllAttributes()->exists(
-        a | a.isNavigable()
-            and a.getUpper() <> 1
-            and a.getOtherEnd().type = c
-            and not a.isComposite()
-    )
-)
+[query public getCompositeCollectionAttributes(c : Class) : Set(Property) =
+c.getCollectionAttributes()->select(isComposite())
 /]
 
-[query public getMasterAssociations(c : Class) : Set(Association) = 
-c.getAssociations()->select(
-    asc | asc.getAllAttributes()->exists(
-        a | a.isNavigable()
-        and a.getUpper() <> 1
-        and a.getOtherEnd().type = c
-    )
-)
+[query public getNonCompositeCollectionAttributes(c : Class) : Set(Property) =
+c.getCollectionAttributes()->select(not isComposite())
 /]
 
 [query public hasCompositeAssociations(c : Class) : Boolean =
-c.getCompositeAssociations()->notEmpty()
+c.getCompositeCollectionAttributes()->notEmpty()
 /]
 
 [query public hasSharedAssociations(c : Class) : Boolean =
-c.getSharedAssociations()->notEmpty()
+c.getNonCompositeCollectionAttributes()->notEmpty()
 /]
 
 [query public hasManyToManyAssociations(c : Class) : Boolean =
-c.getAssociations()->exists(
-    getAllAttributes()->exists(
-        a | a.isNavigable()
-        and a.getUpper() <> 1
-        and a.getOtherEnd().getUpper() <> 1
-        and a.getOtherEnd().type = c
-    )
-)
+c.getCollectionAttributes()->exists(a|a.association.isMany2Many())
 /]
 
 [query public isMaster(c : Class) : Boolean =
-c.getMasterAssociations()->notEmpty()
+c.getCollectionAttributes()->notEmpty()
 /]
 
 [query public isChild(c : Class) : Boolean = 
@@ -198,11 +153,11 @@ Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <
 
 [query public setter(a : Property) : String = 'set'.concat(a.name.toUpperFirst()) /]
 
-[query public getClass(a : Property) : Class = Class.allInstances()->select(class | class.name = a.type.name)->asOrderedSet()->first() /]
+[query public getClass(a : Property) : Class = Class.allInstances()->select(c | c.name = a.type.name)->asOrderedSet()->first() /]
 
 [query public getDisplayName(a : Property) : String = a.name.toUpperFirst() /]
 
-[query public isRequired(a : Property) : Boolean = self.upperBound() > 0 /]
+[query public isRequired(a : Property) : Boolean = self.getLower() > 0 /]
 
 [query public isRelationshipOwner(a : Property) : Boolean = 
     a.isNavigable()

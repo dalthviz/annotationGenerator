@@ -33,12 +33,11 @@
                 options: ['[]'/],
                 required: [a.isRequired()/]
             }[/for][/if][']'/][if (c.isMaster())], 
-        childs: ['['/][for (asc : Association | c.getMasterAssociations()) separator(', ')]{
-        [let a : Property = asc.getChildProperty(c)]
+        childs: ['['/][for (a : Property | c.getCollectionAttributes()) separator(', ')]{
                 name: '[a.name/]',
                 displayName: '[a.getDisplayName()/]',
                 //template: '', //override generic template
-                ctrl: '[asc.name/]Ctrl'[/let]
+                ctrl: '[a.name/][a.getOtherEnd().name/]Ctrl'
             }[/for]
         [']'/][/if]});
 })(window.angular);
@@ -57,30 +56,24 @@
             [/if]
             this.fetchRecords();
         }[']'/]);
-    [if (c.isMaster())]
-    [for (asc : Association | c.getCompositeAssociations())]
+    [for (a : Property | c.getCollectionAttributes())]
 
-    [let el : Property = asc.getChildProperty(c)]
-    mod.controller('[asc.name/]Ctrl', ['['/]'CrudCreator', '$scope', '[el.getClass().getEntityModel()/]', function (CrudCreator, $scope, model) {
-            CrudCreator.extendCompChildCtrl(this, $scope, model, '[el.name/]', '[el.getOtherEnd().name/]');
-            [if (el.getClass().hasReferences(false))]
+    [if (a.isComposite())]	
+    mod.controller('[a.name/][a.getOtherEnd().name/]Ctrl', ['['/]'CrudCreator', '$scope', '[a.getClass().getEntityModel()/]', function (CrudCreator, $scope, model) {
+            CrudCreator.extendCompChildCtrl(this, $scope, model, '[a.name/]', '[a.getOtherEnd().name/]');
+            [if (a.getClass().hasReferences(false))]
             this.loadRefOptions();
             [/if]
         }[']'/]);
-    [/let]
-    [/for]
-    [for (asc : Association | c.getSharedAssociations())]
-
-    [let el : Property = asc.getChildProperty(c)]
-    mod.controller('[asc.name/]Ctrl', ['['/]'CrudCreator', '$scope', '[el.getClass().getEntityModel()/]', '[el.getClass().getService()/]', function (CrudCreator, $scope, model, svc) {
-            CrudCreator.extendAggChildCtrl(this, $scope, model, '[el.name/]', svc);
-            [if (el.getClass().hasReferences(false))]
+    [else]	
+    mod.controller('[a.name/][a.getOtherEnd().name/]Ctrl', ['['/]'CrudCreator', '$scope', '[a.getClass().getEntityModel()/]', '[a.getClass().getService()/]', function (CrudCreator, $scope, model, svc) {
+            CrudCreator.extendAggChildCtrl(this, $scope, model, '[a.name/]', svc);
+            [if (a.getClass().hasReferences(false))]
             this.loadRefOptions();
             [/if]
         }[']'/]);
-    [/let]
-    [/for]
     [/if]
+    [/for]
 })(window.angular);
 [/file]
 [/template]
