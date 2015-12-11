@@ -156,13 +156,9 @@ describe('[c.name/] E2E Testing', function () {
 		[for (a : Property | c.getAllAttribs())]
         element(by.id('[a.name/]')).sendKeys('Val[(i+1)/]');
 		[/for]
-		[for (asc : Association | c.getOne2OneAssociations())]
-		[let a : Property = asc.getParentProperty(c)]
-		[if (not a.isComposite())]
+		[for (a : Property | c.getReferences())]
 		var select[a.getClass().getEntityName()/] = element(by.id('[a.name/]'));
         select[a.getClass().getEntityName()/].$('['['/]value="100"]').click();
-		[/if]
-		[/let]
 		[/for]
         element(by.id('save-[c.specName()/]')).click();
         expect(element.all(by.repeater('record in records')).count()).toEqual(1);
