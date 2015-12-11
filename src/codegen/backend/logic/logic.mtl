@@ -173,3 +173,7 @@ public class [className/] implements [c.getAPIName()/] {
 [/file]
 [/if]
 [/template]
+
+[template private getEntityLower(c : Class)]
+[c.name.toLowerFirst().concat('Entity')/]
+[/template]
