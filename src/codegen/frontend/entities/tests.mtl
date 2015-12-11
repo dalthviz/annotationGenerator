@@ -49,7 +49,7 @@ describe('[c.name/] E2E Testing', function () {
 	
 						[/for]
 	                }
-	        [/if]);
+	        )[/if];
 		
         });
     });
