@@ -56,7 +56,17 @@ describe('[c.name/] E2E Testing', function () {
         browser.get('#/[c.specName()/]');
         element(by.id('create-[c.specName()/]')).click();
         [for (a : Property | c.getAllAttribs())]
+		[if(a.type.name = "String")]
         element(by.id('[a.name/]')).sendKeys('Val[(i+1)/]');
+		[/if]
+		[if(a.isDate())]
+		[/if]
+		[if (a.type.name = "Boolean")]
+		element(by.id('[a.name/]')).click();
+		[/if]
+		[if (a.type.name = "Integer" or a.type.name = "Long")]
+		element(by.id('[a.name/]')).sendKeys('[(i+1)/]');
+		[/if]
         [/for]
         [for (a : Property | c.getReferences(false))]
         element(by.id('[a.name/]')).all(by.css('option')).last().click();
