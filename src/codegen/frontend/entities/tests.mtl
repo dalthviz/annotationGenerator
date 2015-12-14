@@ -77,7 +77,17 @@ describe('[c.name/] E2E Testing', function () {
     
     it('should read one [c.specName()/]', function () {
         [for (a : Property | c.getAllAttribs())]
+		[if(a.type.name = 'String')]
         expect(element(by.id('0-[a.name/]')).getText()).toBe("Val[(i+1)/]");
+		[/if]
+		[if(a.isDate())]
+		[/if]
+		[if (a.type.name = 'Boolean')]
+		expect(element(by.id('0-[a.name/]')).element('.ng-scope').element('span').getAttribute('class')).toBe('glyphicon ng-scope glyphicon-check');
+		[/if]
+		[if (a.type.name = 'Integer' or a.type.name = 'Long')]
+		expect(element(by.id('0-[a.name/]')).getText()).toBe("[(i+1)/]");
+		[/if]
         [/for]
     });
     
@@ -85,13 +95,33 @@ describe('[c.name/] E2E Testing', function () {
         element(by.id('0-edit-btn')).click();
 
         [for (a : Property | c.getAllAttribs())]
+		[if(a.type.name = 'String')]
         element(by.id('[a.name/]')).clear().sendKeys('NewVal[(i+1)/]');
+		[/if]
+		[if(a.isDate())]
+		[/if]
+		[if (a.type.name = 'Boolean')]
+		element(by.id('[a.name/]')).click();
+		[/if]
+		[if (a.type.name = 'Integer' or a.type.name = 'Long')]
+		element(by.id('[a.name/]')).clear().sendKeys('[(i+1)/]');
+		[/if]
         [/for]
 
         element(by.id('save-[c.specName()/]')).click();
 
         [for (a : Property | c.getAllAttribs())]
-        expect(element(by.id('0-[a.name/]')).getText()).toBe("NewVal[(i+1)/]");
+        [if(a.type.name = 'String')]
+        expect(element(by.id('0-[a.name/]')).getText()).toBe("Val[(i+1)/]");
+		[/if]
+		[if(a.isDate())]
+		[/if]
+		[if (a.type.name = 'Boolean')]
+		expect(element(by.id('0-[a.name/]')).element('.ng-scope').element('span').getAttribute('class')).toBe('glyphicon ng-scope glyphicon-check');
+		[/if]
+		[if (a.type.name = 'Integer' or a.type.name = 'Long')]
+		expect(element(by.id('0-[a.name/]')).getText()).toBe("[(i+1)/]");
+		[/if]
         [/for]
     });
     
