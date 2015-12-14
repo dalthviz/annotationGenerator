@@ -47,7 +47,7 @@ describe('[c.name/] E2E Testing', function () {
 
     beforeEach(function () {
         browser.addMockModule('ngCrudMock', function () {
-            browser.driver.manage().window().maximize();
+            // browser.driver.manage().window().maximize();
             var mod = angular.module('ngCrudMock');
 
             mod.run(['['/]'ngCrudMock.mockRecords', function(records){
@@ -126,7 +126,7 @@ describe('[c.name/] E2E Testing', function () {
 		[if(a.isDate())]
 		[/if]
 		[if (a.type.name = 'Boolean')]
-		expect(element(by.id('0-[a.name/]')).element('.ng-scope').element('span').getAttribute('class')).toBe('glyphicon ng-scope glyphicon-check');
+		expect(element(by.id('0-[a.name/]')).element('.ng-scope').element('span').getAttribute('class')).toBe('glyphicon ng-scope glyphicon-unchecked');
 		[/if]
 		[if (a.type.name = 'Integer' or a.type.name = 'Long')]
 		expect(element(by.id('0-[a.name/]')).getText()).toBe([a.name.toLower()/]VarTest + 1);
