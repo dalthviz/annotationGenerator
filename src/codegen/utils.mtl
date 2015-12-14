@@ -115,24 +115,28 @@ c.getCollectionAttributes()->exists(a|a.association.isMany2Many())
 c.getCollectionAttributes()->notEmpty()
 /]
 
-[query public isChild(c : Class) : Boolean = 
-c.getAssociations()->collect(
-    getAllAttributes()->select(
-        a | a.getOtherEnd().isNavigable()
-        and a.getOtherEnd().getUpper() < 0
-        and a.getOtherEnd().type = c
-        and a.getOtherEnd().isComposite()
-))->flatten()->notEmpty()
- /]
-
-[query public getParentAttribute(c : Class) : Property = 
+[**
+ * Permite buscar los atributos que hace parte de una relación cuyo extremo opuesto es composite.
+ * No debería existir más de uno, sin embargo las herramientas permiten modelarlo.
+ * Por esta razón se hace la consulta privada: Para poder reutilizar los criterios de búsqueda
+ * sin ofrecerla en el API
+*/]
+[query private getParents(c : Class) : Bag(Property) =
 c.getAssociations()->collect(
     getAllAttributes()->select(
         a | a.isNavigable()
         and a.getUpper() = 1
         and a.getOtherEnd().type = c
         and a.getOtherEnd().isComposite()
-))->flatten()->asOrderedSet()->first() 
+))
+/]
+
+[query public isChild(c : Class) : Boolean = 
+c.getParents()->notEmpty()
+ /]
+
+[query public getParentAttribute(c : Class) : Property = 
+c.getParents()->asOrderedSet()->first()
  /]
 
 [query public isValidType(a : Property) : Boolean = 
@@ -159,14 +163,19 @@ Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <
 
 [query public isRequired(a : Property) : Boolean = self.getLower() > 0 /]
 
+[**
+ * Permite identificar si el atributo es el dueño de una relación.
+ * Esto se da cuando el atributo es navegable y:
+ * - La relación es unidireccional
+ * - La relación es bidireccional, uno a muchos, y el atributo es de cardinalidad 1 o 0..1
+ * - La relación es bidireccional, muchos a muchos o uno a uno, entonces se decide cualquiera (se implementa comparando nombres y aquel que sea mayor que el otro)
+*/]
 [query public isRelationshipOwner(a : Property) : Boolean = 
     a.isNavigable()
 and (
     not a.getOtherEnd().isNavigable()
-    or  (
-        (a.getUpper() = 1 and a.getOtherEnd().getUpper() <> 1)
-        or  a.name > a.getOtherEnd().name
-    )
+    or  (a.association.isOne2Many() and a.getUpper() = 1)
+    or  ((a.association.isMany2Many() or a.association.isOne2One()) and a.name > a.getOtherEnd().name)
 )
 /]
 

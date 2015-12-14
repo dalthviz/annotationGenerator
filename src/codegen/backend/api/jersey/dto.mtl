@@ -13,6 +13,7 @@
 package [c.getModel().baseGroup()/].dtos;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import uk.co.jemos.podam.common.PodamExclude;
 [if (c.hasDateAttribute())]
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Date;
@@ -35,9 +36,15 @@ public class [className/] {
     private [a.type.name/] [a.name/];
 [/for]
 [for (a : Property | c.getReferences(true))]
+    [if (not a.isRelationshipOwner())]
+    @PodamExclude
+    [/if]
     private [a.getClass().getDTOName()/] [a.name/];
 [/for]
 [for (a : Property | c.getCollectionAttributes())]
+    [if (not a.isRelationshipOwner())]
+	@PodamExclude
+    [/if]
     private List<[a.getClass().getDTOName()/]> [a.name/];
 [/for]
 [for (a : Property | c.allAttributes())]
