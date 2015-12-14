@@ -24,14 +24,19 @@ import [c.getModel().baseGroup()/].entities.[c.getParentAttribute().getClass().g
 public abstract class [className/] {
 
     /**
+     * Constructor privado para evitar la creación del constructor implícito de Java
      * @generated
      */
     private [className/]() {
     }
 
     /**
-     * @param entity
-     * @return
+     * Realiza la conversión de [c.getEntityName()/] a [c.getDTOName()/].
+     * Se invoca cuando otra entidad tiene una referencia a [c.getEntityName()/].
+     * Entrega únicamente los atributos proprios de la entidad.
+     *
+     * @param entity instancia de [c.getEntityName()/] a convertir
+     * @return instancia de [c.getDTOName()/] con los datos recibidos por parámetro
      * @generated
      */
     public static [c.getDTOName()/] refEntity2DTO([c.getEntityName()/] entity) {
@@ -48,8 +53,12 @@ public abstract class [className/] {
     }
 
     /**
-     * @param dto
-     * @return
+     * Realiza la conversión de [c.getDTOName()/] a [c.getEntityName()/] Se invoca cuando otro DTO
+     * tiene una referencia a [c.getDTOName()/] Convierte únicamente el ID ya que es el
+     * único atributo necesario para guardar la relación en la base de datos
+     *
+     * @param dto instancia de [c.getDTOName()/] a convertir
+     * @return instancia de [c.getEntityName()/] con los datos recibidos por parámetro
      * @generated
      */
     public static [c.getEntityName()/] refDTO2Entity([c.getDTOName()/] dto) {
@@ -64,6 +73,11 @@ public abstract class [className/] {
     }
 
     /**
+     * Convierte una instancia de [c.getEntityName()/] a [c.getDTOName()/] Se invoca cuando se desea
+     * consultar la entidad y sus relaciones muchos a uno o uno a uno
+     *
+     * @param entity instancia de [c.getEntityName()/] a convertir
+     * @return Instancia de [c.getDTOName()/] con los datos recibidos por parámetro
      * @generated
      */
     private static [c.getDTOName()/] basicEntity2DTO([c.getEntityName()/] entity) {
@@ -83,6 +97,12 @@ public abstract class [className/] {
     }
 
     /**
+     * Convierte una instancia de [c.getDTOName()/] a [c.getEntityName()/] Se invoca cuando se
+     * necesita convertir una instancia de [c.getDTOName()/] con los atributos propios de
+     * la entidad y con las relaciones uno a uno o muchos a uno
+     *
+     * @param dto instancia de [c.getDTOName()/] a convertir
+     * @return Instancia de [c.getEntityName()/] creada a partir de los datos de dto
      * @generated
      */
     private static [c.getEntityName()/] basicDTO2Entity([c.getDTOName()/] dto) {
@@ -102,6 +122,11 @@ public abstract class [className/] {
     }
 
     /**
+     * Convierte instancias de [c.getEntityName()/] a [c.getDTOName()/] incluyendo sus relaciones
+     * Uno a muchos y Muchos a muchos
+     *
+     * @param entity Instancia de [c.getEntityName()/] a convertir
+     * @return Instancia de [c.getDTOName()/] con los datos recibidos por parámetro
      * @generated
      */
     public static [c.getDTOName()/] fullEntity2DTO([c.getEntityName()/] entity) {
@@ -117,6 +142,11 @@ public abstract class [className/] {
     }
 
     /**
+     * Convierte una instancia de [c.getDTOName()/] a [c.getEntityName()/].
+     * Incluye todos los atributos de [c.getEntityName()/].
+     *
+     * @param dto Instancia de [c.getDTOName()/] a convertir
+     * @return Instancia de [c.getEntityName()/] con los datos recibidos por parámetro
      * @generated
      */
     public static [c.getEntityName()/] fullDTO2Entity([c.getDTOName()/] dto) {
@@ -136,9 +166,14 @@ public abstract class [className/] {
     }
 
     /**
+     * Convierte una colección de instancias de [c.getEntityName()/] a [c.getDTOName()/]. Para cada
+     * instancia de [c.getEntityName()/] en la lista, invoca basicEntity2DTO y añade el
+     * nuevo [c.getDTOName()/] a una nueva lista
+     *
+     * @param entities Colección de entidades a convertir
+     * @return Collección de instancias de [c.getDTOName()/]
      * @generated
      */
-
     public static List<[c.getDTOName()/]> listEntity2DTO(List<[c.getEntityName()/]> entities) {
         List<[c.getDTOName()/]> dtos = new ArrayList<[c.getDTOName()/]>();
         if (entities != null) {
@@ -150,6 +185,11 @@ public abstract class [className/] {
     }
 
     /**
+     * Convierte una colección de instancias de [c.getDTOName()/] a instancias de
+     * [c.getEntityName()/] Para cada instancia se invoca el método basicDTO2Entity
+     *
+     * @param dtos entities Colección de [c.getDTOName()/] a convertir
+     * @return Collección de instancias de [c.getEntityName()/]
      * @generated
      */
     public static List<[c.getEntityName()/]> listDTO2Entity(List<[c.getDTOName()/]> dtos) {
@@ -161,10 +201,16 @@ public abstract class [className/] {
         }
         return entities;
     }
-
     [if (c.isChild())]
+
     [let parent : Property = c.getParentAttribute()]
     /**
+     * Convierte una instancia de [c.getDTOName()/] a [c.getEntityName()/] asignando un valor
+     * al atributo [parent/] de [c.getEntityName()/]. Se usa cuando se necesita convertir 
+     * un [c.getDTOName()/] asignando el libro asociado
+     * @param dto Instancia de [c.getDTOName()/]
+     * @param parent Instancia de [parent.getClass().getEntityName()/]
+     * @return Instancia de [c.getEntityName()/] con [parent.getClass().getEntityName()/] asociado
      * @generated
      */
     public static [c.getEntityName()/] childDTO2Entity([c.getDTOName()/] dto, [parent.getClass().getEntityName()/] parent){
@@ -174,6 +220,12 @@ public abstract class [className/] {
     }
 
     /**
+     * Convierte una colección de instancias de [c.getDTOName()/] a [c.getEntityName()/] 
+     * asignando el mismo padre para todos. Se usa cuando se necesita crear o 
+     * actualizar varios [c.getEntityName()/] con el mismo [parent/]
+     * @param dtos Colección de instancias de [c.getDTOName()/]
+     * @param parent Instancia de [parent.getClass().getEntityName()/]
+     * @return Colección de [c.getEntityName()/] con el atributo [parent/] asignado
      * @generated
      */
     public static List<[c.getEntityName()/]> childListDTO2Entity(List<[c.getDTOName()/]> dtos, [parent.getClass().getEntityName()/] parent) {

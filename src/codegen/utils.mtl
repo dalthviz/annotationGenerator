@@ -128,8 +128,8 @@ c.getAssociations()->collect(
 [query public getParentAttribute(c : Class) : Property = 
 c.getAssociations()->collect(
     getAllAttributes()->select(
-        a | a.getOtherEnd().isNavigable()
-        and a.getOtherEnd().getUpper() < 0
+        a | a.isNavigable()
+        and a.getUpper() = 1
         and a.getOtherEnd().type = c
         and a.getOtherEnd().isComposite()
 ))->flatten()->asOrderedSet()->first() 
