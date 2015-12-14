@@ -13,7 +13,6 @@ package [c.getModel().baseGroup()/].test.persistence;
 
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
-import static [c.getModel().baseGroup()/].tests._TestUtil.*;
 import java.util.ArrayList;
 import java.util.List;
 [if (c.hasDateAttribute())]import java.util.Date;[/if]
@@ -29,6 +28,8 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import uk.co.jemos.podam.api.PodamFactory;
+import uk.co.jemos.podam.api.PodamFactoryImpl;
 
 /**
  * @generated
@@ -104,10 +105,8 @@ public class [className/] {
      */
     private void insertData() {
         for (int i = 0; i < 3; i++) {
-            [c.getEntityName()/] entity = new [c.getEntityName()/]();
-            [for (a : Property | c.getAllAttribs())]
-            entity.[a.setter()/](generateRandom([a.type.name/].class));
-            [/for]
+			PodamFactory factory = new PodamFactoryImpl();
+            [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);
             em.persist(entity);
             data.add(entity);
         }
@@ -118,11 +117,8 @@ public class [className/] {
      */
     @Test
     public void create[c.name/]Test() {
-        [c.getEntityName()/] newEntity = new [c.getEntityName()/]();
-        [for (a : Property | c.getAllAttribs())]
-        newEntity.[a.setter()/](generateRandom([a.type.name/].class));
-        [/for]
-
+		PodamFactory factory = new PodamFactoryImpl();
+        [c.getEntityName()/] newEntity = factory.manufacturePojo(BookEntity.class);
         [c.getEntityName()/] result = [bean/].create(newEntity);
 
         Assert.assertNotNull(result);
@@ -130,7 +126,9 @@ public class [className/] {
         [c.getEntityName()/] entity = em.find([c.getEntityName()/].class, result.getId());
 
         [for (a : Property | c.getAllAttribs())]
+		[if (not a.isDate())]
         Assert.assertEquals(newEntity.[a.getter()/](), entity.[a.getter()/]());
+		[/if]
         [/for]
     }
 
@@ -182,85 +180,20 @@ public class [className/] {
     @Test
     public void update[c.name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
-
-        [c.getEntityName()/] newEntity = new [c.getEntityName()/]();
+        PodamFactory factory = new PodamFactoryImpl();
+        [c.getEntityName()/] newEntity = factory.manufacturePojo(BookEntity.class);
 
         newEntity.setId(entity.getId());
-        [for (a : Property | c.getAllAttribs())]
-        newEntity.[a.setter()/](generateRandom([a.type.name/].class));
-        [/for]
 
         [bean/].update(newEntity);
 
         [c.getEntityName()/] resp = em.find([c.getEntityName()/].class, entity.getId());
 
         [for (a : Property | c.getAllAttribs())]
+		[if (not a.isDate())]
         Assert.assertEquals(newEntity.[a.getter()/](), resp.[a.getter()/]());
+		[/if]
         [/for]
-    }
-
-    /**
-     * @generated
-     */
-    @Test
-    public void get[c.name/]PaginationTest() {
-        //Page 1
-        List<[c.getEntityName()/]> ent1 = [bean/].findAll(1, 2);
-        Assert.assertNotNull(ent1);
-        Assert.assertEquals(2, ent1.size());
-        //Page 2
-        List<[c.getEntityName()/]> ent2 = [bean/].findAll(2, 2);
-        Assert.assertNotNull(ent2);
-        Assert.assertEquals(1, ent2.size());
-
-        for ([c.getEntityName()/] ent : ent1) {
-            boolean found = false;
-            for ([c.getEntityName()/] entity : data) {
-                if (ent.getId().equals(entity.getId())) {
-                    found = true;
-                }
-            }
-            Assert.assertTrue(found);
-        }
-
-        for ([c.getEntityName()/] ent : ent2) {
-            boolean found = false;
-            for ([c.getEntityName()/] entity : data) {
-                if (ent.getId().equals(entity.getId())) {
-                    found = true;
-                }
-            }
-            Assert.assertTrue(found);
-        }
-    }
-
-    /**
-     * @generated
-     */
-    @Test
-    public void findByName() {
-        String name = data.get(0).getName();
-        List<[c.getEntityName()/]> cache = new ArrayList<[c.getEntityName()/]>();
-        List<[c.getEntityName()/]> list = [bean/].findByName(name);
-
-        for ([c.getEntityName()/] entity : data) {
-            if (entity.getName().equals(name)) {
-                cache.add(entity);
-            }
-        }
-        Assert.assertEquals(list.size(), cache.size());
-        for ([c.getEntityName()/] ent : list) {
-            boolean found = false;
-            for ([c.getEntityName()/] cacheEntity : cache) {
-                if (cacheEntity.getName().equals(ent.getName())) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                Assert.fail();
-            }
-        }
     }
 }
 [/file]

@@ -155,7 +155,7 @@ public class [className/] {
         [c.getEntityName()/] result = [bean/].create[c.name/](entity);
         Assert.assertNotNull(result);
         [for (prop : Property | c.attribute)]
-        [if (prop.isDate()=false)]
+        [if (not prop.isDate())]
         Assert.assertEquals(result.[prop.getter()/](), entity.[prop.getter()/]());
         [/if]
         [/for]
@@ -188,7 +188,7 @@ public class [className/] {
         [c.getEntityName()/] resultEntity = [bean/].get[c.name/](entity.getId());
         Assert.assertNotNull(dto);
         [for (prop : Property | c.attribute)]
-        [if (prop.isDate()=false)]
+        [if (not prop.isDate())]
         Assert.assertEquals(entity.[prop.getter()/](), resultEntity.[prop.getter()/]());
         [/if]
         [/for]
@@ -221,7 +221,7 @@ public class [className/] {
         [c.getEntityName()/] resp = em.find([c.getEntityName()/].class, entity.getId());
 
         [for (prop : Property | c.attribute)]
-        [if (prop.isDate()=false)]
+        [if (not prop.isDate())]
         Assert.assertEquals(pojoEntity.[prop.getter()/](), resp.[prop.getter()/]());
         [/if]
         [/for]
@@ -242,7 +242,7 @@ public class [className/] {
             [a.getClass().getEntityName()/] response = [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
             Assert.assertNotNull(em);
             [for (prop : Property | a.getClass().attribute)]
-            [if (prop.isDate()=false)]
+            [if (not prop.isDate())]
             Assert.assertEquals(response.[prop.getter()/](), [a.getClass().getEntityLower()/].[prop.getter()/]());
             [/if]
             [/for]
@@ -267,7 +267,7 @@ public class [className/] {
             [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
             [a.getClass().getEntityName()/] get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
             [for (prop : Property | a.getClass().attribute)]
-            [if (prop.isDate()=false)]
+            [if (not prop.isDate())]
             Assert.assertEquals([a.getClass().getEntityLower()/].[prop.getter()/](), get[a.getClass().name/]Response.[prop.getter()/]());
             [/if]
             [/for]
@@ -276,7 +276,7 @@ public class [className/] {
 
             [a.getClass().getEntityName()/] listResponse = entity.get[a.getClass().name/]s().get(entity.get[a.getClass().name/]s().size() - 1);
             [for (prop : Property | a.getClass().attribute)]
-            [if (prop.isDate()=false)]
+            [if (not prop.isDate())]
             Assert.assertEquals(listResponse.[prop.getter()/](), [a.getClass().getEntityLower()/].[prop.getter()/]());
             [/if]
             [/for]
