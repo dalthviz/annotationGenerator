@@ -7,6 +7,7 @@
 [/template]
 
 [template protected genTests(c : Class, path : String) {className : String = c.getPersistenceTestName();}]
+[if (not c.isChild())]
 [let bean : String = c.getName().concat('Persistence')]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].test.persistence;
@@ -137,7 +138,7 @@ public class [className/] {
      */
     @Test
     public void get[c.name/]sTest() {
-        List<[c.getEntityName()/]> list = [bean/].findAll(null, null);
+        List<[c.getEntityName()/]> list = [bean/].findAll();
         Assert.assertEquals(data.size(), list.size());
         for ([c.getEntityName()/] ent : list) {
             boolean found = false;
@@ -198,4 +199,5 @@ public class [className/] {
 }
 [/file]
 [/let]
+[/if]
 [/template]
