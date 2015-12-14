@@ -64,7 +64,7 @@ describe('[c.name/] E2E Testing', function () {
 		[if (a.type.name = "Boolean")]
 		element(by.id('[a.name/]')).click();
 		[/if]
-		[if (a.type.name = "Integer" or a.type.name = "Long")]
+		[if (a.type.name = 'Integer' or a.type.name = 'Long')]
 		element(by.id('[a.name/]')).sendKeys('[(i+1)/]');
 		[/if]
         [/for]
