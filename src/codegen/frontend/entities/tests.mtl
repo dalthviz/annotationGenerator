@@ -16,11 +16,12 @@
 exports.config = {
     allScriptsTimeout: 11000,
     specs: ['['/]
-        'e2e/*.js'
+        'test/e2e/*.js'
     ],
     capabilities: {
         'browserName': 'firefox'
     },
+    directConnect: true,
     baseUrl: 'http://localhost:9001/',
     framework: 'jasmine2',
     jasmineNodeOpts: {
@@ -36,9 +37,18 @@ exports.config = {
 [file (path.concat('e2e/' + c.specName() + '.specs.js'), false, 'UTF-8')]
 describe('[c.name/] E2E Testing', function () {
 
+	[for (a : Property | c.getAllAttribs())]
+	[if(a.type.name = 'String')]
+	var [a.name.toLower()/]VarTest = 'Val' + Math.floor(Math.random() * 10000);
+	[/if]
+	[if(a.type.name = 'Long' or a.type.name = 'Integer')]
+	var [a.name.toLower()/]VarTest = Math.floor(Math.random() * 10000).toString();
+	[/if]
+	[/for]
+
     beforeEach(function () {
         browser.addMockModule('ngCrudMock', function () {
-            browser.driver.manage().window().maximize();
+            // browser.driver.manage().window().maximize();
             var mod = angular.module('ngCrudMock');
 
             mod.run(['['/]'ngCrudMock.mockRecords', function(records){
@@ -57,7 +67,7 @@ describe('[c.name/] E2E Testing', function () {
         element(by.id('create-[c.specName()/]')).click();
         [for (a : Property | c.getAllAttribs())]
 		[if(a.type.name = 'String')]
-        element(by.id('[a.name/]')).sendKeys('Val[(i+1)/]');
+        element(by.id('[a.name/]')).sendKeys([a.name.toLower()/]VarTest);
 		[/if]
 		[if(a.isDate())]
 		[/if]
@@ -65,7 +75,7 @@ describe('[c.name/] E2E Testing', function () {
 		element(by.id('[a.name/]')).click();
 		[/if]
 		[if (a.type.name = 'Integer' or a.type.name = 'Long')]
-		element(by.id('[a.name/]')).sendKeys('[(i+1)/]');
+		element(by.id('[a.name/]')).sendKeys([a.name.toLower()/]VarTest);
 		[/if]
         [/for]
         [for (a : Property | c.getReferences(false))]
@@ -78,15 +88,15 @@ describe('[c.name/] E2E Testing', function () {
     it('should read one [c.specName()/]', function () {
         [for (a : Property | c.getAllAttribs())]
 		[if(a.type.name = 'String')]
-        expect(element(by.id('0-[a.name/]')).getText()).toBe("Val[(i+1)/]");
+        expect(element(by.id('0-[a.name/]')).getText()).toBe([a.name.toLower()/]VarTest);
 		[/if]
 		[if(a.isDate())]
 		[/if]
 		[if (a.type.name = 'Boolean')]
-		expect(element(by.id('0-[a.name/]')).element('.ng-scope').element('span').getAttribute('class')).toBe('glyphicon ng-scope glyphicon-check');
+		expect(element(by.id('0-[a.name/]')).element(by.tagName('span')).getAttribute('class')).toBe('glyphicon ng-scope glyphicon-check');
 		[/if]
 		[if (a.type.name = 'Integer' or a.type.name = 'Long')]
-		expect(element(by.id('0-[a.name/]')).getText()).toBe("[(i+1)/]");
+		expect(element(by.id('0-[a.name/]')).getText()).toBe([a.name.toLower()/]VarTest);
 		[/if]
         [/for]
     });
@@ -96,7 +106,7 @@ describe('[c.name/] E2E Testing', function () {
 
         [for (a : Property | c.getAllAttribs())]
 		[if(a.type.name = 'String')]
-        element(by.id('[a.name/]')).clear().sendKeys('NewVal[(i+1)/]');
+        element(by.id('[a.name/]')).clear().sendKeys('New' + [a.name.toLower()/]VarTest);
 		[/if]
 		[if(a.isDate())]
 		[/if]
@@ -104,7 +114,7 @@ describe('[c.name/] E2E Testing', function () {
 		element(by.id('[a.name/]')).click();
 		[/if]
 		[if (a.type.name = 'Integer' or a.type.name = 'Long')]
-		element(by.id('[a.name/]')).clear().sendKeys('[(i+1)/]');
+		element(by.id('[a.name/]')).clear().sendKeys([a.name.toLower()/]VarTest + 1);
 		[/if]
         [/for]
 
@@ -112,15 +122,15 @@ describe('[c.name/] E2E Testing', function () {
 
         [for (a : Property | c.getAllAttribs())]
         [if(a.type.name = 'String')]
-        expect(element(by.id('0-[a.name/]')).getText()).toBe("Val[(i+1)/]");
+        expect(element(by.id('0-[a.name/]')).getText()).toBe('New' + [a.name.toLower()/]VarTest);
 		[/if]
 		[if(a.isDate())]
 		[/if]
 		[if (a.type.name = 'Boolean')]
-		expect(element(by.id('0-[a.name/]')).element('.ng-scope').element('span').getAttribute('class')).toBe('glyphicon ng-scope glyphicon-check');
+		expect(element(by.id('0-[a.name/]')).element(by.tagName('span')).getAttribute('class')).toBe('glyphicon ng-scope glyphicon-unchecked');
 		[/if]
 		[if (a.type.name = 'Integer' or a.type.name = 'Long')]
-		expect(element(by.id('0-[a.name/]')).getText()).toBe("[(i+1)/]");
+		expect(element(by.id('0-[a.name/]')).getText()).toBe([a.name.toLower()/]VarTest + 1);
 		[/if]
         [/for]
     });
