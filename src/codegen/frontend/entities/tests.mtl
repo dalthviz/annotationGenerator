@@ -41,7 +41,7 @@ describe('[c.name/] E2E Testing', function () {
 	var [a.name.toLower()/]VarTest = 'Val' + Math.floor(Math.random() * 10000);
 	[/if]
 	[if(a.type.name = 'Long' or a.type.name = 'Integer')]
-	var [a.name.toLower()/]VarTest = Math.floor(Math.random() * 10000);
+	var [a.name.toLower()/]VarTest = Math.floor(Math.random() * 10000).toString();
 	[/if]
 	[/for]
 
@@ -92,7 +92,7 @@ describe('[c.name/] E2E Testing', function () {
 		[if(a.isDate())]
 		[/if]
 		[if (a.type.name = 'Boolean')]
-		expect(element(by.id('0-[a.name/]')).element('.ng-scope').element('span').getAttribute('class')).toBe('glyphicon ng-scope glyphicon-check');
+		expect(element(by.id('0-[a.name/]')).element(by.tagName('span')).getAttribute('class')).toBe('glyphicon ng-scope glyphicon-check');
 		[/if]
 		[if (a.type.name = 'Integer' or a.type.name = 'Long')]
 		expect(element(by.id('0-[a.name/]')).getText()).toBe([a.name.toLower()/]VarTest);
@@ -126,7 +126,7 @@ describe('[c.name/] E2E Testing', function () {
 		[if(a.isDate())]
 		[/if]
 		[if (a.type.name = 'Boolean')]
-		expect(element(by.id('0-[a.name/]')).element('.ng-scope').element('span').getAttribute('class')).toBe('glyphicon ng-scope glyphicon-unchecked');
+		expect(element(by.id('0-[a.name/]')).element(by.tagName('span')).getAttribute('class')).toBe('glyphicon ng-scope glyphicon-unchecked');
 		[/if]
 		[if (a.type.name = 'Integer' or a.type.name = 'Long')]
 		expect(element(by.id('0-[a.name/]')).getText()).toBe([a.name.toLower()/]VarTest + 1);
