@@ -16,6 +16,9 @@ import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
+[if (not a.isRelationshipOwner())]
+import [c.getModel().baseGroup()/].api.[a.getClass().getAPIName()/];
+[/if]
 [/for]
 import java.util.List;
 
@@ -152,10 +155,10 @@ public class [className/] implements [c.getAPIName()/] {
     public List<[a.getClass().getEntityName()/]> replace[a.getClass().name/]s(List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]s, Long [c.getEntityId()/]) throws BusinessLogicException {
         [c.getEntityName()/] [c.getEntityLower()/]  = persistence.find([c.getEntityId()/]);
         List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]List = [a.getClass().getName()/]Persistence.findAll();
-		[if (isRelationshipOwner)]
-		for ([a.getClass().getEntityName()/] [a.getClass().getName()/] : [a.getClass().getName()/]List) {
+		[if (not isRelationshipOwner)]
+        for ([a.getClass().getEntityName()/] [a.getClass().getName()/] : [a.getClass().getName()/]List) {
             if ([a.getClass().getName()/]s.contains([a.getClass().getName()/])) {
-                if (![a.getClass().getName()/].[a.getClass().name/]s().contains([c.getEntityLower()/])) {
+                if (![a.getClass().getName()/].get[a.getClass().name/]s().contains([c.getEntityLower()/])) {
                     [a.getClass().getBeanLower()/].add[a.getClass().name/]([c.getEntityId()/], [a.getClass().getName()/].getId());
                 }
             } else {
@@ -198,4 +201,8 @@ public class [className/] implements [c.getAPIName()/] {
 
 [template private getEntityLower(c : Class)]
 [c.name.toLowerFirst().concat('Entity')/]
+[/template]
+
+[template public getBeanLower(c : Class)]
+[c.name.toLowerFirst().concat('Logic')/]
 [/template]

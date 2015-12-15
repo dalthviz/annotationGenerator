@@ -285,10 +285,6 @@ String[else]
 [c.name.concat('Logic')/]
 [/template]
 
-[template public getBeanLower(c : Class)]
-[c.name.toLowerFirst().concat('Logic')/]
-[/template]
-
 [template public getEntityName(c : Class)]
 [c.name.concat('Entity')/]
 [/template]
