@@ -7,7 +7,6 @@
 [/template]
 
 [template protected genTests(c : Class, path : String) {className : String = c.getServiceTestName();}]
-[if (c.isChild()=false)]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].tests;
 
@@ -312,5 +311,4 @@ public class [c.getServiceTestName()/] {
 
 }
 [/file]
-[/if]
 [/template]
