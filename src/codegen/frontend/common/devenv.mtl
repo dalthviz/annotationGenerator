@@ -30,13 +30,15 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-filerev": "^2.1.2",
     "grunt-include-source": "^0.7.1",
+	"grunt-istanbul": "^0.6.1",
     "grunt-jscs": "^2.3.0",
-    "grunt-protractor-runner": "^2.1.0",
+    "grunt-protractor-coverage": "^0.2.15",
     "grunt-sonar-runner": "^2.4.4",
     "grunt-usemin": "^3.1.1",
     "grunt-wiredep": "^2.0.0",
     "jit-grunt": "^0.9.1",
     "jshint-stylish": "^2.1.0",
+	"protractor": "^3.0.0",
     "time-grunt": "^1.0.0"
   },
   "engines": {
@@ -84,7 +86,8 @@ module.exports = function (grunt) {
     require('jit-grunt')(grunt, {
         useminPrepare: 'grunt-usemin',
         ngtemplates: 'grunt-angular-templates',
-        protractor: 'grunt-protractor-runner',
+        protractor_coverage: 'grunt-protractor-coverage',
+		instrument: 'grunt-istanbul',
         sonarRunner: 'grunt-sonar-runner'
     });
 
@@ -92,6 +95,7 @@ module.exports = function (grunt) {
         src: 'app',
         tmp: '.tmp',
         dist: 'dist',
+		instrumented: 'instrumented',
         bower: 'bower_components',
         includeJsFiles: ['['/]
             'src/app.js',
@@ -122,6 +126,16 @@ module.exports = function (grunt) {
         },
         // Copies remaining files to places other tasks can use
         copy: {
+			coverageE2E: {
+                files: ['['/]{
+                        expand: true,
+                        dot: true,
+                        dest: '<%= meta.instrumented %>',
+                        src: ['['/]
+                            '<%= meta.src %>/**/*'
+                        ]
+                    }]
+            },
             dist: {
                 files: ['['/]{
                         expand: true,
@@ -283,13 +297,13 @@ module.exports = function (grunt) {
                     port: 9001,
                     middleware: function (connect) {
                         return ['['/]
-                            connect.static(appConfig.tmp),
+                            connect.static(appConfig.instrumented),
                             connect.static('test'),
                             connect().use(
                                     '/bower_components',
                                     connect.static('./bower_components')
                                     ),
-                            connect.static(appConfig.src)
+                            connect.static(appConfig.instrumented + '/' + appConfig.src)
                         [']'/];
                     }
                 }
@@ -328,11 +342,29 @@ module.exports = function (grunt) {
                     }[']'/]
             }
         },
-        protractor: {
+        instrument: {
+            files: '<%= meta.src %>/src/**/*.js',
+            options: {
+                lazy: false,
+                basePath: "<%= meta.instrumented %>"
+            }
+        },
+        protractor_coverage: {
+            options: {
+                coverageDir: "<%= meta.instrumented %>"
+            },
             test: {
                 options: {
                     configFile: "test/e2e.conf.js"
                 }
+            }
+        },
+        makeReport: {
+            src: '<%= meta.instrumented %>/*.json',
+            options: {
+                type: 'lcov',
+                dir: 'reports/',
+                print: 'detail'
             }
         },
         sonarRunner: {
@@ -346,7 +378,12 @@ module.exports = function (grunt) {
                         projectName: '<%= pkg.description %>',
                         projectVersion: '<%= pkg.version %>',
                         sources: '<%= meta.src %>',
-                        sourceEncoding: 'UTF-8'
+                        sourceEncoding: 'UTF-8',
+                        javascript: {
+                            lcov: {
+                                itReportPath: 'reports/lcov.info'
+                            }
+                        }
                     }
                 }
             }
@@ -426,10 +463,12 @@ module.exports = function (grunt) {
         'clean:server',
         'wiredep:test',
         'includeSource',
-        'copy:styles',
+        'copy:coverageE2E',
+        'instrument',
         'connect:test',
-        'protractor'
-    [']'/]);
+        'protractor_coverage',
+        'makeReport'
+    ]);
 
     grunt.registerTask('default', ['['/]'clean', 'test', 'build'[']'/]);
 };
@@ -441,6 +480,8 @@ node_modules
 bower_components
 .tmp
 .idea
+instrumented
+reports
 nbproject/private
 dist
 npm-debug.log
