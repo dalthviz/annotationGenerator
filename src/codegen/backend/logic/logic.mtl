@@ -16,9 +16,6 @@ import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
-[if (not a.isRelationshipOwner())]
-import [c.getModel().baseGroup()/].api.[a.getClass().getAPIName()/];
-[/if]
 [/for]
 import java.util.List;
 
@@ -52,6 +49,9 @@ import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
 import [c.getModel().baseGroup()/].persistence.[a.getClass().getPersistenceName()/];
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
+[if (not a.isRelationshipOwner())]
+import [c.getModel().baseGroup()/].api.[a.getClass().getAPIName()/];
+[/if]
 [/for]
 import java.util.List;
 import javax.ejb.Stateless;
@@ -67,6 +67,10 @@ public class [className/] implements [c.getAPIName()/] {
 
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
     @Inject private [a.getClass().getPersistenceName()/] [a.getClass().getName()/]Persistence;
+    [if (not a.isRelationshipOwner())]
+    @Inject
+    [a.getClass().getAPIName()/] [a.getClass().getBeanLower()/];
+    [/if]
     [/for]
 
     /**
@@ -158,11 +162,11 @@ public class [className/] implements [c.getAPIName()/] {
 		[if (not isRelationshipOwner)]
         for ([a.getClass().getEntityName()/] [a.getClass().getName()/] : [a.getClass().getName()/]List) {
             if ([a.getClass().getName()/]s.contains([a.getClass().getName()/])) {
-                if (![a.getClass().getName()/].get[a.getClass().name/]s().contains([c.getEntityLower()/])) {
-                    [a.getClass().getBeanLower()/].add[a.getClass().name/]([c.getEntityId()/], [a.getClass().getName()/].getId());
+                if (![a.getClass().getName()/].get[c.name/]s().contains([c.getEntityLower()/])) {
+                    [a.getClass().getBeanLower()/].add[c.name/]([c.getEntityId()/], [a.getClass().getName()/].getId());
                 }
             } else {
-                [a.getClass().getBeanLower()/].remove[a.getClass().name/]([c.getEntityId()/], [a.getClass().getName()/].getId());
+                [a.getClass().getBeanLower()/].remove[c.name/]([c.getEntityId()/], [a.getClass().getName()/].getId());
             }
         }
 		[/if]
