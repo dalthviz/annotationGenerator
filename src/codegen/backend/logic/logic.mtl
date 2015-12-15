@@ -125,7 +125,7 @@ public class [className/] implements [c.getAPIName()/] {
         [c.getEntityLower()/].get[a.getClass().name/]s().add([a.getClass().getEntityLower()/]);
         return [a.getClass().getEntityLower()/];
 		[else]
-		[a.getClass().getBeanLower()/].add[c.name()/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
+		[a.getClass().getBeanLower()/].add[c.name/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
         return [a.getClass().getName()/]Persistence.find(bookId);
 		[/if]
     }
@@ -141,7 +141,7 @@ public class [className/] implements [c.getAPIName()/] {
         [a.getClass().getEntityLower()/].setId([a.getClass().getEntityId()/]);
         [c.getEntityLower()/].get[a.getClass().name/]s().remove([a.getClass().getEntityLower()/]);
 		[else]
-		[a.getClass().getBeanLower()/].remove[c.name()/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
+		[a.getClass().getBeanLower()/].remove[c.name/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
 		[/if]
     }
     
