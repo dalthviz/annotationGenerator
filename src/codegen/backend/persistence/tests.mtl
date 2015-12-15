@@ -119,7 +119,7 @@ public class [className/] {
     @Test
     public void create[c.name/]Test() {
 		PodamFactory factory = new PodamFactoryImpl();
-        [c.getEntityName()/] newEntity = factory.manufacturePojo(BookEntity.class);
+        [c.getEntityName()/] newEntity = factory.manufacturePojo([c.getEntityName()/].class);
         [c.getEntityName()/] result = [bean/].create(newEntity);
 
         Assert.assertNotNull(result);
@@ -182,7 +182,7 @@ public class [className/] {
     public void update[c.name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
         PodamFactory factory = new PodamFactoryImpl();
-        [c.getEntityName()/] newEntity = factory.manufacturePojo(BookEntity.class);
+        [c.getEntityName()/] newEntity = factory.manufacturePojo([c.getEntityName()/].class);
 
         newEntity.setId(entity.getId());
 

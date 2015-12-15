@@ -186,7 +186,7 @@ public class [className/] {
     public void get[c.name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
         [c.getEntityName()/] resultEntity = [bean/].get[c.name/](entity.getId());
-        Assert.assertNotNull(dto);
+        Assert.assertNotNull(resultEntity);
         [for (prop : Property | c.attribute)]
         [if (not prop.isDate())]
         Assert.assertEquals(entity.[prop.getter()/](), resultEntity.[prop.getter()/]());
@@ -385,8 +385,8 @@ public class [className/] {
 
         try{
             [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
-            [bean/].addAuthor([a.getClass().getEntityLower()/]2.getId(), entity.getId());
-            [bean/].addAuthor([a.getClass().getEntityLower()/]3.getId(), entity.getId());
+            [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/]2.getId(), entity.getId());
+            [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/]3.getId(), entity.getId());
         }
         catch (BusinessLogicException bslexception)
         {
