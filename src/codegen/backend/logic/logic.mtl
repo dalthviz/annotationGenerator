@@ -12,7 +12,6 @@
 [file (path.concat(className + '.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].api;
 
-import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
@@ -20,15 +19,16 @@ import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 import java.util.List;
 
 public interface [className/] {
+    public int count[c.name/]s();
     public List<[c.getEntityName()/]> get[c.name/]s();
     public [c.getEntityName()/] get[c.name/](Long id);
     public [c.getEntityName()/] create[c.name/]([c.getEntityName()/] entity);
     public [c.getEntityName()/] update[c.name/]([c.getEntityName()/] entity);
     public void delete[c.name/](Long id);
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
-    public [a.getClass().getEntityName()/] add[a.getClass().name/](Long [a.getClass().getEntityId()/], Long [c.getEntityId()/]) throws BusinessLogicException;
+    public [a.getClass().getEntityName()/] add[a.getClass().name/](Long [a.getClass().getEntityId()/], Long [c.getEntityId()/]);
     public void remove[a.getClass().name/](Long [a.getClass().getEntityId()/], Long [c.getEntityId()/]);
-    public List<[a.getClass().getEntityName()/]> replace[a.getClass().name/]s(List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]s, Long [c.getEntityId()/]) throws BusinessLogicException;
+    public List<[a.getClass().getEntityName()/]> replace[a.getClass().name/]s(List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]s, Long [c.getEntityId()/]);
     public List<[a.getClass().getEntityName()/]> get[a.getClass().name/]s(Long [c.getEntityId()/]);
     public [a.getClass().getEntityName()/] get[a.getClass().name/](Long [c.getEntityId()/], Long [a.getClass().getEntityId()/]);
     [/for]    
@@ -42,7 +42,6 @@ public interface [className/] {
 [file (path.concat(className.concat('.java')), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].ejbs;
 
-import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;
 import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
@@ -72,6 +71,14 @@ public class [className/] implements [c.getAPIName()/] {
     [a.getClass().getAPIName()/] [a.getClass().getBeanLower()/];
     [/if]
     [/for]
+
+    /**
+     * @generated
+     */
+    @Override
+    public int count[c.name/]() {
+        return persistence.count();
+    }
 
     /**
      * @generated
@@ -125,7 +132,7 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
-    public [a.getClass().getEntityName()/] add[a.getClass().name/](Long [a.getClass().getEntityId()/], Long [c.getEntityId()/]) throws BusinessLogicException {
+    public [a.getClass().getEntityName()/] add[a.getClass().name/](Long [a.getClass().getEntityId()/], Long [c.getEntityId()/]) {
 		[if (isRelationshipOwner)]
         [a.getClass().getBeanLower()/].add[c.name/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
         return [a.getClass().getName()/]Persistence.find(bookId);        
@@ -156,7 +163,7 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
-    public List<[a.getClass().getEntityName()/]> replace[a.getClass().name/]s(List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]s, Long [c.getEntityId()/]) throws BusinessLogicException {
+    public List<[a.getClass().getEntityName()/]> replace[a.getClass().name/]s(List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]s, Long [c.getEntityId()/]) {
         [c.getEntityName()/] [c.getEntityLower()/]  = persistence.find([c.getEntityId()/]);
         List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]List = [a.getClass().getName()/]Persistence.findAll();
 		[if (isRelationshipOwner)]

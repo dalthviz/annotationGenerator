@@ -72,7 +72,7 @@ public class [className/] {
     @GET
     @Path("{id: \\d+}")
     public [c.getDTOName()/] get[c.name/](@PathParam("id") Long id) {
-        return [c.getConverterName()/].basicEntity2DTO([logic/].get[c.name/](id));
+        return [c.getConverterName()/].fullEntity2DTO([logic/].get[c.name/](id));
     }
 
     /**
@@ -85,7 +85,7 @@ public class [className/] {
     @POST
     @StatusCreated
     public [c.getDTOName()/] create[c.name/]([c.getDTOName()/] dto) {
-        return [c.getConverterName()/].basicEntity2DTO([logic/].create[c.name/](dto));
+        return [c.getConverterName()/].fullEntity2DTO([logic/].create[c.name/](dto));
     }
 
     /**
@@ -100,7 +100,7 @@ public class [className/] {
     @Path("{id: \\d+}")
     public [c.getDTOName()/] update[c.name/](@PathParam("id") Long id, [c.getDTOName()/] dto) {
         dto.setId(id);
-        return [c.getConverterName()/].basicEntity2DTO([logic/].update[c.name/](dto));
+        return [c.getConverterName()/].fullEntity2DTO([logic/].update[c.name/](dto));
     }
 
     /**
@@ -140,7 +140,7 @@ public class [className/] {
     @GET
     @Path("{[c.getEntityId()/]: \\d+}/[a.getClass().getURI()/]/{[a.getClass().getEntityId()/]: \\d+}")
     public [a.getClass().getDTOName()/] get[a.getClass().name/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
-        return [a.getClass().getConverterName()/].basicEntity2DTO([logic/].get[a.getClass().name/]([c.getEntityId()/], [a.getClass().getEntityId()/]));
+        return [a.getClass().getConverterName()/].fullEntity2DTO([logic/].get[a.getClass().name/]([c.getEntityId()/], [a.getClass().getEntityId()/]));
     }
 
     /**
@@ -154,7 +154,7 @@ public class [className/] {
     @POST
     @Path("{[c.getEntityId()/]: \\d+}/[a.getClass().getURI()/]/{[a.getClass().getEntityId()/]: \\d+}")
     public [a.getClass().getDTOName()/] add[a.getClass().name/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
-        return [a.getClass().getConverterName()/].basicEntity2DTO([logic/].add[a.getClass().name/]([a.getClass().getEntityId()/], [c.getEntityId()/]));
+        return [a.getClass().getConverterName()/].fullEntity2DTO([logic/].add[a.getClass().name/]([a.getClass().getEntityId()/], [c.getEntityId()/]));
     }
 
     /** 
