@@ -31,7 +31,7 @@ exports.config = {
 [/template]
 
 [template protected genE2ETests(c : Class, path : String)]
-[file (path.concat('e2e/' + c.specName() + '.specs.js'), false, 'UTF-8')]
+[file (path.concat(c.specName() + '.specs.js'), false, 'UTF-8')]
 describe('[c.name/] E2E Testing', function () {
 
 	[for (a : Property | c.getAllAttribs())]
