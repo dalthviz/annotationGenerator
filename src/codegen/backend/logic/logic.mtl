@@ -8,7 +8,7 @@
 [/template]
 
 [template protected genLogicInterface(c : Class, path : String) {className : String = c.getAPIName();}]
-[if (c.isChild()=false)]
+[if (not c.isChild())]
 [file (path.concat(className + '.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].api;
 
@@ -21,6 +21,7 @@ import java.util.List;
 public interface [className/] {
     public int count[c.name/]s();
     public List<[c.getEntityName()/]> get[c.name/]s();
+    public List<[c.getEntityName()/]> get[c.name/]s(Integer page, Integer maxRecords);
     public [c.getEntityName()/] get[c.name/](Long id);
     public [c.getEntityName()/] create[c.name/]([c.getEntityName()/] entity);
     public [c.getEntityName()/] update[c.name/]([c.getEntityName()/] entity);
@@ -31,14 +32,14 @@ public interface [className/] {
     public List<[a.getClass().getEntityName()/]> replace[a.getClass().name/]s(List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]s, Long [c.getEntityId()/]);
     public List<[a.getClass().getEntityName()/]> get[a.getClass().name/]s(Long [c.getEntityId()/]);
     public [a.getClass().getEntityName()/] get[a.getClass().name/](Long [c.getEntityId()/], Long [a.getClass().getEntityId()/]);
-    [/for]    
+    [/for]
 }
 [/file]
 [/if]
 [/template]
 
 [template protected genLogicBean(c : Class, path : String) {className : String = c.getBeanName();}]
-[if (c.isChild()=false)]
+[if (not c.isChild())]
 [file (path.concat(className.concat('.java')), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].ejbs;
 
@@ -88,6 +89,13 @@ public class [className/] implements [c.getAPIName()/] {
         return persistence.findAll();
     }
 
+    /**
+     * @generated
+     */
+    @Override
+    public List<[c.getEntityName()/]> get[c.name/]s(Integer page, Integer maxRecords) {
+        return persistence.findAll(page, maxRecords);
+    }
     /**
      * @generated
      */
