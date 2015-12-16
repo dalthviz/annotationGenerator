@@ -7,10 +7,3 @@
 [template public genModules(c : Class, path : String)]
 [c.moduleMain(path.concat('src/modules/'))/]
 [/template]
-
-[template public genIntTests(m : Model, path : String)]
-	[m.mainIntConfig(path)/]
-	[for (c : Class | m.getClasses())]
-    	[c.genIntTest(path)/]
-    [/for]
-[/template]

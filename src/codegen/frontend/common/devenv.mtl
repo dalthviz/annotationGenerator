@@ -38,7 +38,7 @@
     "grunt-wiredep": "^2.0.0",
     "jit-grunt": "^0.9.1",
     "jshint-stylish": "^2.1.0",
-	"protractor": "^3.0.0",
+	"protractor": "^2.5.0",
     "time-grunt": "^1.0.0"
   },
   "engines": {
@@ -95,6 +95,8 @@ module.exports = function (grunt) {
         src: 'app',
         tmp: '.tmp',
         dist: 'dist',
+		test: 'test',
+		e2e: 'e2e',
 		instrumented: 'instrumented',
         bower: 'bower_components',
         includeJsFiles: ['['/]
@@ -298,7 +300,7 @@ module.exports = function (grunt) {
                     middleware: function (connect) {
                         return ['['/]
                             connect.static(appConfig.instrumented),
-                            connect.static('test'),
+                            connect.static(appConfig.e2e),
                             connect().use(
                                     '/bower_components',
                                     connect.static('./bower_components')
@@ -355,7 +357,7 @@ module.exports = function (grunt) {
             },
             test: {
                 options: {
-                    configFile: "test/e2e.conf.js"
+                    configFile: "<%= meta.e2e %>/e2e.conf.js"
                 }
             }
         },

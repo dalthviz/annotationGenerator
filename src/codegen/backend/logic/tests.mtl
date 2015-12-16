@@ -12,16 +12,14 @@
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].test.logic;
 
-import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;
 import [c.getModel().baseGroup()/].ejbs.[c.getBeanName()/];
 import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
-[for (a : Property | c.getNonCompositeCollectionAttributes())]
-import [c.getModel().baseGroup()/].api.[a.getClass().getAPIName()/];
-import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
-[/for]
 [for (a : Property | c.getCollectionAttributes())]
+[if (not a.isComposite())]
+import [c.getModel().baseGroup()/].api.[a.getClass().getAPIName()/];
+[/if]
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 [/for]
 import java.util.ArrayList;
@@ -254,19 +252,13 @@ public class [className/] {
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
         [a.getClass().getEntityLower()/] = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]);
 
-        try{
-            [a.getClass().getEntityName()/] response = [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
-            Assert.assertNotNull(em);
-            [for (prop : Property | a.getClass().attribute)]
-            [if (not prop.isDate())]
-            Assert.assertEquals(response.[prop.getter()/](), [a.getClass().getEntityLower()/].[prop.getter()/]());
-            [/if]
-            [/for]
-        }
-        catch (BusinessLogicException bslexception)
-        {
-            Assert.fail("No debe haber excepción");
-        }
+        [a.getClass().getEntityName()/] response = [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
+        Assert.assertNotNull(em);
+        [for (prop : Property | a.getClass().attribute)]
+        [if (not prop.isDate())]
+        Assert.assertEquals(response.[prop.getter()/](), [a.getClass().getEntityLower()/].[prop.getter()/]());
+        [/if]
+        [/for]
     }
 
     /**
@@ -279,28 +271,22 @@ public class [className/] {
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
         [a.getClass().getEntityLower()/]  = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/] );
 
-        try{
-            [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
-            [a.getClass().getEntityName()/] get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
-            [for (prop : Property | a.getClass().attribute)]
-            [if (not prop.isDate())]
-            Assert.assertEquals([a.getClass().getEntityLower()/].[prop.getter()/](), get[a.getClass().name/]Response.[prop.getter()/]());
-            [/if]
-            [/for]
+        [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
+        [a.getClass().getEntityName()/] get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
+        [for (prop : Property | a.getClass().attribute)]
+        [if (not prop.isDate())]
+        Assert.assertEquals([a.getClass().getEntityLower()/].[prop.getter()/](), get[a.getClass().name/]Response.[prop.getter()/]());
+        [/if]
+        [/for]
 
-            [bean/].update[c.name/](entity);
+        [bean/].update[c.name/](entity);
 
-            [a.getClass().getEntityName()/] listResponse = entity.get[a.getClass().name/]s().get(entity.get[a.getClass().name/]s().size() - 1);
-            [for (prop : Property | a.getClass().attribute)]
-            [if (not prop.isDate())]
-            Assert.assertEquals(listResponse.[prop.getter()/](), [a.getClass().getEntityLower()/].[prop.getter()/]());
-            [/if]
-            [/for]
-        }
-        catch (BusinessLogicException bslexception)
-        {
-            Assert.fail("No debe haber excepción");
-        }
+        [a.getClass().getEntityName()/] listResponse = entity.get[a.getClass().name/]s().get(entity.get[a.getClass().name/]s().size() - 1);
+        [for (prop : Property | a.getClass().attribute)]
+        [if (not prop.isDate())]
+        Assert.assertEquals(listResponse.[prop.getter()/](), [a.getClass().getEntityLower()/].[prop.getter()/]());
+        [/if]
+        [/for]
     }
 
     /**
@@ -313,20 +299,14 @@ public class [className/] {
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
         [a.getClass().getEntityLower()/]  = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/] );
 
-        try{
-            [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
-            [a.getClass().getEntityName()/] get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
-            [bean/].update[c.name/](entity);
-            Assert.assertNotNull(get[a.getClass().name/]Response);
-            [bean/].remove[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
-            [bean/].update[c.name/](entity);
-            get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
-            Assert.assertNull(get[a.getClass().name/]Response);
-        }
-        catch (BusinessLogicException bslexception)
-        {
-            Assert.fail("No debe haber excepción");
-        }
+        [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
+        [a.getClass().getEntityName()/] get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
+        [bean/].update[c.name/](entity);
+        Assert.assertNotNull(get[a.getClass().name/]Response);
+        [bean/].remove[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
+        [bean/].update[c.name/](entity);
+        get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
+        Assert.assertNull(get[a.getClass().name/]Response);
     }
 
     /**
@@ -344,13 +324,7 @@ public class [className/] {
         [a.getClass().getEntityLower()/]2 = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]2);
         [a.getClass().getEntityLower()/]3 = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]3);
 
-        try{
-            [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
-        }
-        catch (BusinessLogicException bslexception)
-        {
-            Assert.fail("No debe haber excepción");
-        }
+        [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
 
         [a.getClass().getEntityName()/] get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
         [a.getClass().getEntityName()/] get[a.getClass().name/]Response2 = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/]2.getId());
@@ -359,16 +333,10 @@ public class [className/] {
         Assert.assertNull(get[a.getClass().name/]Response2);
         Assert.assertNull(get[a.getClass().name/]Response3);
 
-        try{
-            List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]List = new ArrayList<[a.getClass().getEntityName()/]>() {};
-            [a.getClass().getName()/]List.add([a.getClass().getEntityLower()/]2);
-            [a.getClass().getName()/]List.add([a.getClass().getEntityLower()/]3);
-            [bean/].replace[a.getClass().name/]s([a.getClass().getName()/]List, entity.getId());
-        }
-        catch (BusinessLogicException bslexception)
-        {
-            Assert.fail("No debe haber excepción");
-        }
+        List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]List = new ArrayList<[a.getClass().getEntityName()/]>() {};
+        [a.getClass().getName()/]List.add([a.getClass().getEntityLower()/]2);
+        [a.getClass().getName()/]List.add([a.getClass().getEntityLower()/]3);
+        [bean/].replace[a.getClass().name/]s([a.getClass().getName()/]List, entity.getId());
 
         get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
         get[a.getClass().name/]Response2 = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/]2.getId());
@@ -399,15 +367,9 @@ public class [className/] {
         [a.getClass().getEntityLower()/]2 = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]2);
         [a.getClass().getEntityLower()/]3 = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]3);
 
-        try{
-            [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
-            [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/]2.getId(), entity.getId());
-            [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/]3.getId(), entity.getId());
-        }
-        catch (BusinessLogicException bslexception)
-        {
-            Assert.fail("No debe haber excepción");
-        }
+        [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
+        [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/]2.getId(), entity.getId());
+        [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/]3.getId(), entity.getId());
 
         entity = [bean/].update[c.name/](entity);
         Assert.assertEquals(entity.get[a.getClass().name/]s().size(), 3);
@@ -423,6 +385,6 @@ public class [className/] {
 [c.name.toLowerFirst().concat('Entity')/]
 [/template]
 
-[template public getBeanLower(c : Class)]
+[template private getBeanLower(c : Class)]
 [c.name.toLowerFirst().concat('Logic')/]
 [/template]

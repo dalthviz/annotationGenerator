@@ -77,10 +77,10 @@ public class [c.getServiceTestName()/] {
                 .create(WebArchive.class, "[c.getModel().getWebProjectName()/].war")
                 // Se agrega la dependencia a la logica con el nombre groupid:artefactid:version (GAV)
                 .addAsLibraries(Maven.resolver()
-                        .resolve("[c.getModel().baseGroup()/]:[c.getModel().getBackendProjectName()/]:[c.getModel().getProjectVersion()/]")
+                        .resolve("[c.getModel().baseGroup()/]:[c.getModel().getLogicArtifactId()/]:[c.getModel().getProjectVersion()/]")
                         .withTransitivity().asFile())
                 .addAsLibraries(Maven.resolver()
-                        .resolve("co.edu.uniandes.csw:AuthService:0.0.4-SNAPSHOT")
+                        .resolve("[c.getModel().getCSWGroupId()/]:[c.getModel().getAuthLibArtifactId()/]:[c.getModel().getAuthLibVersion()/]")
                         .withTransitivity().asFile())
                 // Se agregan los compilados de los paquetes de servicios
                 .addPackage([c.getServiceName()/].class.getPackage())

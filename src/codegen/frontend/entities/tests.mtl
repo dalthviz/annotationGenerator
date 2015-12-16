@@ -2,21 +2,19 @@
 [module tests('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
 
-[template public mainIntConfig(m : Model, path : String)]
-[m.genE2EConf(path.concat('test/'))/]
+[template public mainE2E(m : Model, path : String)]
+[m.genE2EConf(path)/]
+[for (c : Class | m.getRootClasses())]
+    [c.genE2ETests(path.concat('specs/'))/]
+[/for]
 [/template]
-
-[template public genIntTest(c : Class, path : String)]
-[c.genTests(path.concat('test/'))/]
-[/template]
-
 
 [template protected genE2EConf(m : Model, path : String)]
 [file (path.concat('e2e.conf.js'), false, 'UTF-8')]
 exports.config = {
     allScriptsTimeout: 11000,
     specs: ['['/]
-        'test/e2e/*.js'
+        'e2e/specs/*.js'
     ],
     capabilities: {
         'browserName': 'firefox'
@@ -32,10 +30,11 @@ exports.config = {
 [/file]
 [/template]
 
-[template protected genTests(c : Class, path : String)]
-[if (c.isChild()=false)]
-[file (path.concat('e2e/' + c.specName() + '.specs.js'), false, 'UTF-8')]
+[template protected genE2ETests(c : Class, path : String)]
+[file (path.concat(c.specName() + '.specs.js'), false, 'UTF-8')]
 describe('[c.name/] E2E Testing', function () {
+
+	browser.driver.manage().window().maximize();
 
 	[for (a : Property | c.getAllAttribs())]
 	[if(a.type.name = 'String')]
@@ -48,7 +47,6 @@ describe('[c.name/] E2E Testing', function () {
 
     beforeEach(function () {
         browser.addMockModule('ngCrudMock', function () {
-            // browser.driver.manage().window().maximize();
             var mod = angular.module('ngCrudMock');
 
             mod.run(['['/]'ngCrudMock.mockRecords', function(records){
@@ -143,5 +141,4 @@ describe('[c.name/] E2E Testing', function () {
     });
 });
 [/file]
-[/if]
 [/template]

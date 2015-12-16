@@ -59,9 +59,9 @@
             <artifactId>podam</artifactId>
         </dependency>
         <dependency>
-            <groupId>co.edu.uniandes.csw</groupId>
-            <artifactId>CrudUtils</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>[m.getCSWGroupId()/]</groupId>
+            <artifactId>[m.getCrudLibArtifactId()/]</artifactId>
+            <version>[m.getCrudLibVersion()/]</version>
         </dependency>
     </dependencies>
     <build>

@@ -10,7 +10,6 @@
 [file (path.concat('BusinessLogicException.java'), false, 'UTF-8')]
 package [m.baseGroup()/].exceptions;
 
-
 import javax.ejb.ApplicationException;
 
 @ApplicationException(rollback = true)
@@ -33,6 +32,5 @@ public class BusinessLogicException extends Exception {
     }
 
 }
-
 [/file]
 [/template]
