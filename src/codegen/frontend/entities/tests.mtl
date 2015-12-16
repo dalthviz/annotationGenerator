@@ -34,6 +34,8 @@ exports.config = {
 [file (path.concat(c.specName() + '.specs.js'), false, 'UTF-8')]
 describe('[c.name/] E2E Testing', function () {
 
+	browser.driver.manage().window().maximize();
+
 	[for (a : Property | c.getAllAttribs())]
 	[if(a.type.name = 'String')]
 	var [a.name.toLower()/]VarTest = 'Val' + Math.floor(Math.random() * 10000);
@@ -45,7 +47,6 @@ describe('[c.name/] E2E Testing', function () {
 
     beforeEach(function () {
         browser.addMockModule('ngCrudMock', function () {
-            browser.driver.manage().window().maximize();
             var mod = angular.module('ngCrudMock');
 
             mod.run(['['/]'ngCrudMock.mockRecords', function(records){
