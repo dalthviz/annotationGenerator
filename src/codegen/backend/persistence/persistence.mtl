@@ -10,11 +10,11 @@
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].persistence;
 
-import co.edu.uniandes.csw.crud.spi.persistence.CrudPersistence;
-import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
+import co.edu.uniandes.csw.crud.spi.persistence.CrudPersistence;
 
 /**
  * @generated
@@ -22,7 +22,7 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class [className/] extends CrudPersistence<[c.getEntityName()/]> {
 
-    @PersistenceContext(unitName = "[c.getModel().getPUName()/]")
+    @PersistenceContext
     protected EntityManager em;
 
     /**
@@ -30,6 +30,22 @@ public class [className/] extends CrudPersistence<[c.getEntityName()/]> {
      */
     public [className/]() {
         this.entityClass = [c.getEntityName()/].class;
+    }
+
+    /**
+     * @generated
+     */
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    /**
+     * @generated
+     */
+    @Override
+    protected Class<[c.getEntityName()/]> getEntityClass() {
+        return [c.getEntityName()/].class;
     }
 }
 [/file]
