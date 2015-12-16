@@ -95,6 +95,8 @@ module.exports = function (grunt) {
         src: 'app',
         tmp: '.tmp',
         dist: 'dist',
+		test: 'test',
+		e2e: 'e2e',
 		instrumented: 'instrumented',
         bower: 'bower_components',
         includeJsFiles: ['['/]

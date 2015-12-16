@@ -48,7 +48,7 @@ describe('[c.name/] E2E Testing', function () {
 
     beforeEach(function () {
         browser.addMockModule('ngCrudMock', function () {
-            // browser.driver.manage().window().maximize();
+            browser.driver.manage().window().maximize();
             var mod = angular.module('ngCrudMock');
 
             mod.run(['['/]'ngCrudMock.mockRecords', function(records){
