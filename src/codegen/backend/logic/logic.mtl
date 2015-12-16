@@ -77,7 +77,7 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
-    public int count[c.name/]() {
+    public int count[c.name/]s() {
         return persistence.count();
     }
 
