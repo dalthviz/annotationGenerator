@@ -23,7 +23,7 @@ import co.edu.uniandes.csw.crud.spi.persistence.CrudPersistence;
 public class [className/] extends CrudPersistence<[c.getEntityName()/]> {
 
     @PersistenceContext
-    protected EntityManager em;
+    private EntityManager em;
 
     /**
      * @generated
