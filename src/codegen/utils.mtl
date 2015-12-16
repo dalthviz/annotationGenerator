@@ -402,3 +402,23 @@ String[else]
 </beans>
 [/file]
 [/template]
+
+[template public getCSWGroupId(m : Model)]
+co.edu.uniandes.csw
+[/template]
+
+[template public getAuthLibArtifactId(m : Model)]
+AuthService
+[/template]
+
+[template public getAuthLibVersion(m : Model)]
+0.0.4-SNAPSHOT
+[/template]
+
+[template public getCrudLibArtifactId(m : Model)]
+CrudUtils
+[/template]
+
+[template public getCrudLibVersion(m : Model)]
+0.0.1-SNAPSHOT
+[/template]

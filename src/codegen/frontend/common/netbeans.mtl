@@ -47,7 +47,7 @@ test.selenium.folder=${file.reference.[m.getWebArtifactId()/]-e2e}
     <type>org.netbeans.modules.web.clientproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/clientside-project/1">
-            <name>[m.getWebArtifactId()/]</name>
+            <name>[m.getWebProjectName()/]</name>
         </data>
     </configuration>
 </project>

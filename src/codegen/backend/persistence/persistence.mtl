@@ -13,12 +13,17 @@ package [c.getModel().baseGroup()/].persistence;
 import co.edu.uniandes.csw.crud.spi.persistence.CrudPersistence;
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  * @generated
  */
 @Stateless
 public class [className/] extends CrudPersistence<[c.getEntityName()/]> {
+
+    @PersistenceContext(unitName = "[c.getModel().getPUName()/]")
+    protected EntityManager em;
 
     /**
      * @generated
