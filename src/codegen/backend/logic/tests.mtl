@@ -126,7 +126,7 @@ public class [className/] {
     /**
      * @generated
      */
-    private List<[a.getClass().getDTOName()/]> data[a.getClass().name/]s = new ArrayList<>();
+    private List<[a.getClass().getEntityName()/]> data[a.getClass().name/]s = new ArrayList<>();
     [/for]
 
     /**
