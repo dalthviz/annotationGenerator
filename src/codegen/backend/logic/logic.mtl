@@ -130,7 +130,7 @@ public class [className/] implements [c.getAPIName()/] {
         [a.getClass().getBeanLower()/].add[c.name/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
         return [a.getClass().getName()/]Persistence.find(bookId);        
 		[else]
-		[c.getEntityName()/] [c.getEntityLower()/]  = persistence.find([c.getEntityId()/]);
+        [c.getEntityName()/] [c.getEntityLower()/]  = persistence.find([c.getEntityId()/]);
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = [a.getClass().getName()/]Persistence.find([a.getClass().getEntityId()/]);
         [c.getEntityLower()/].get[a.getClass().name/]s().add([a.getClass().getEntityLower()/]);
         return [a.getClass().getEntityLower()/];

@@ -114,12 +114,22 @@ public class [className/] {
      */
     private void clearData() {
         em.createQuery("delete from [c.getEntityName()/]").executeUpdate();
+        [for (a : Property | c.getNonCompositeCollectionAttributes())]
+        em.createQuery("delete from [a.getClass().getEntityName()/]").executeUpdate();
+        [/for]
     }
 
     /**
      * @generated
      */
     private List<[c.getEntityName()/]> data = new ArrayList<[c.getEntityName()/]>();
+    [for (a : Property | c.getNonCompositeCollectionAttributes())]
+
+    /**
+     * @generated
+     */
+    private List<[a.getClass().getDTOName()/]> data[a.getClass().name/]s = new ArrayList<>();
+    [/for]
 
     /**
      * @generated
@@ -128,7 +138,7 @@ public class [className/] {
         for (int i = 0; i < 3; i++) {
             PodamFactory factory = new PodamFactoryImpl();
             [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);            
-
+            entity.setId(i+1L);
             [for (a : Property | c.getCompositeCollectionAttributes())]
             List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]List = new ArrayList<>();
             for (int j = 0; j < 5; j++)
@@ -142,6 +152,12 @@ public class [className/] {
             
             em.persist(entity);
             data.add(entity);
+
+            [for (a : Property | c.getNonCompositeCollectionAttributes())]
+            [a.getClass().getEntityName()/] [a.getClass().getName()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+            [a.getClass().getName()/].setId(i + 1L);
+            data[a.getClass().name/]s.add([a.getClass().getName()/]);
+            [/for]
         }
     }
 
