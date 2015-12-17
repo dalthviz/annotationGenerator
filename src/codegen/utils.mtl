@@ -53,13 +53,6 @@ asc.getAllAttributes()->exists(
 )
 /]
 
-[query public isComposite(asc : Association) : Boolean = 
-asc.getAllAttributes()->exists(
-    a | a.isComposite()
-    or  a.getOtherEnd().isComposite()
-)
-/]
-
 [query public getAttributesWithRef(c : Class) : OrderedSet(Property) = 
 c.allAttributes()->union(c.getReferences(false))->asOrderedSet()
 /]
@@ -90,6 +83,10 @@ c.getRelationshipAttributes()->select(getUpper() <> 1)->asSet()
 c.getReferences(includeParent)->notEmpty()
 /]
 
+[query public isMaster(c : Class) : Boolean =
+c.getCollectionAttributes()->notEmpty()
+/]
+
 [query public getCompositeCollectionAttributes(c : Class) : Set(Property) =
 c.getCollectionAttributes()->select(isComposite())
 /]
@@ -104,10 +101,6 @@ c.getCompositeCollectionAttributes()->notEmpty()
 
 [query public hasSharedAssociations(c : Class) : Boolean =
 c.getNonCompositeCollectionAttributes()->notEmpty()
-/]
-
-[query public isMaster(c : Class) : Boolean =
-c.getCollectionAttributes()->notEmpty()
 /]
 
 [**
@@ -218,32 +211,12 @@ String[else]
 [c.getName().concat('Module')/]
 [/template]
 
-[template public getMasterModule(c : Class)]
-[c.getName().concat('Module')/]
-[/template]
-
-[template public getMasterService(c : Class)]
-[c.getName().concat('Service')/]
-[/template]
-
-[template public getMasterContext(c : Class)]
-[c.getName().concat('Context')/]
-[/template]
-
-[template public getMasterController(c : Class)]
-[c.getName().concat('Ctrl')/]
-[/template]
-
 [template public getContext(c : Class)]
 [c.getName().concat('Context')/]
 [/template]
 
 [template public getURI(c : Class)]
 [c.getName().concat('s')/]
-[/template]
-
-[template public getMasterURI(c : Class)]
-[c.getName().concat('s').concat('/master')/]
 [/template]
 
 [template public getName(c : Class)]
@@ -260,10 +233,6 @@ String[else]
 
 [template public getJaxRsName(c : Class)]
 [c.name.concat('Service')/]
-[/template]
-
-[template public getMasterJaxRsName(c : Class)]
-[c.name.concat('MasterService')/]
 [/template]
 
 [template public getAPIName(c : Class)]
