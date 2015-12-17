@@ -136,9 +136,9 @@ c.getRelationshipAttributes()->collect(
 
 [query private getJPAAnnotation(p : Property) : String =
 Set{'OneToMany','ManyToOne','OneToOne','ManyToMany'}->any(
-    a | (a = 'OneToMany' and p.association.isOne2Many() and p.getUpper() <> 1)
-    or  (a = 'ManyToOne' and p.association.isMany2One() and p.getUpper() = 1)
-    or  (a = 'OneToOne' and p.association.isOne2One())
-    or  (a = 'ManyToMany' and p.association.isMany2Many())
+    a | (a = 'OneToMany' and p.isOne2Many())
+    or  (a = 'ManyToOne' and p.isMany2One())
+    or  (a = 'OneToOne' and p.isOne2One())
+    or  (a = 'ManyToMany' and p.isMany2Many())
 )
 /]

@@ -147,7 +147,7 @@ public class [className/] implements [c.getAPIName()/] {
 		[else]
         [c.getEntityName()/] [c.getEntityLower()/]  = persistence.find([c.getEntityId()/]);
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = [a.getClass().getName()/]Persistence.find([a.getClass().getEntityId()/]);
-        [if (a.association.isMany2One())]
+        [if (a.isMany2One())]
         [c.getEntityLower()/].get[a.getClass().name/]s().add([a.getClass().getEntityLower()/]);
         [else]
         [c.getEntityLower()/].set[c.name/]([c.getEntityLower()/]);    
@@ -165,7 +165,7 @@ public class [className/] implements [c.getAPIName()/] {
         [a.getClass().getBeanLower()/].remove[c.name/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
 		[else]
         [c.getEntityName()/] [c.getEntityLower()/]  = persistence.find([c.getEntityId()/]);
-        [if (a.association.isMany2One())]
+        [if (a.isMany2One())]
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = new [a.getClass().getEntityName()/]();
         [a.getClass().getEntityLower()/].setId([a.getClass().getEntityId()/]);
         [else]
@@ -194,7 +194,7 @@ public class [className/] implements [c.getAPIName()/] {
             }
         }
 		[/if]
-        [if (a.association.isMany2One())]  
+        [if (a.isMany2One())]  
         for ([a.getClass().getEntityName()/] [a.getClass().getName()/] : [a.getClass().getName()/]List) {
             if ([a.getClass().getName()/]s.contains([a.getClass().getName()/])) {
                 [a.getClass().getName()/].set[c.name/](null);                

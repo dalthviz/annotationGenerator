@@ -17,40 +17,33 @@ c.allAttributes()->any(isID())
 m.getClasses()->reject(isChild())
 /]
 
-[query public isMany2Many(asc : Association) : Boolean =
-asc.getAllAttributes()->exists(
-    a | a.isNavigable()
-    and a.getUpper() <> 1 
-    and a.aggregation = AggregationKind::none
-    and a.getOtherEnd().getUpper() <> 1
-    and a.getOtherEnd().aggregation = AggregationKind::none
-)
+[query public isMany2Many(a : Property) : Boolean =
+    a.isNavigable()
+and a.getUpper() <> 1
+and a.aggregation = AggregationKind::none
+and a.getOtherEnd().getUpper() <> 1
+and a.getOtherEnd().aggregation = AggregationKind::none
 /]
 
-[query public isOne2One(asc : Association) : Boolean =
-asc.getAllAttributes()->exists(
-    a | a.isNavigable()
-    and a.getUpper() = 1
-    and a.aggregation = AggregationKind::none
-    and a.getOtherEnd().getUpper() = 1
-    and a.getOtherEnd().aggregation = AggregationKind::none
-)
+[query public isOne2One(a : Property) : Boolean =
+    a.isNavigable()
+and a.getUpper() = 1
+and a.aggregation = AggregationKind::none
+and a.getOtherEnd().getUpper() = 1
+and a.getOtherEnd().aggregation = AggregationKind::none
 /]
 
-[query public isOne2Many(asc : Association) : Boolean = 
-asc.getAllAttributes()->exists(
-    a | a.isNavigable()
-    and a.getUpper() <> 1 
-    and a.getOtherEnd().getUpper() = 1
-)
+[query public isOne2Many(a : Property) : Boolean = 
+    a.isNavigable()
+and a.getUpper() <> 1 
+and a.getOtherEnd().getUpper() = 1
 /]
 
-[query public isMany2One(asc : Association) : Boolean = 
-asc.getAllAttributes()->exists(
-    a | a.isNavigable()
-    and a.getUpper() = 1 
-    and a.getOtherEnd().getUpper() <> 1
-)
+[query public isMany2One(a : Property) : Boolean = 
+    a.isNavigable()
+and a.getUpper() = 1 
+and a.aggregation = AggregationKind::none
+and a.getOtherEnd().getUpper() <> 1
 /]
 
 [query public getAttributesWithRef(c : Class) : OrderedSet(Property) = 
@@ -146,8 +139,8 @@ Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <
     a.isNavigable()
 and (
     not a.getOtherEnd().isNavigable()
-    or  (a.association.isMany2One() and a.getUpper() = 1)
-    or  ((a.association.isMany2Many() or a.association.isOne2One()) and a.name > a.getOtherEnd().name)
+    or  (a.isMany2One())
+    or  ((a.isMany2Many() or a.isOne2One()) and a.name > a.getOtherEnd().name)
 )
 /]
 
