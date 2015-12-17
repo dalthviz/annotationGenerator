@@ -25,7 +25,7 @@ import org.junit.Assert;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,18 +37,17 @@ import uk.co.jemos.podam.api.PodamFactoryImpl;
  */
 @RunWith(Arquillian.class)
 public class [className/] {
-    public static final String DEPLOY = "Prueba";
 
     /**
      * @generated
      */
     @Deployment
-    public static WebArchive createDeployment() {
-        return ShrinkWrap.create(WebArchive.class, DEPLOY + ".war")
+    public static JavaArchive createDeployment() {
+        return ShrinkWrap.create(JavaArchive.class)
                 .addPackage([c.getEntityName()/].class.getPackage())
                 .addPackage([c.getPersistenceName()/].class.getPackage())
-                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
-                .addAsWebInfResource("META-INF/beans.xml", "beans.xml");
+                .addAsManifestResource("META-INF/persistence.xml", "persistence.xml")
+                .addAsManifestResource("META-INF/beans.xml", "beans.xml");
     }
 
     /**
@@ -76,6 +75,7 @@ public class [className/] {
     public void configTest() {
         try {
             utx.begin();
+            em.joinTransaction();
             clearData();
             insertData();
             utx.commit();
@@ -94,6 +94,12 @@ public class [className/] {
      */
     private void clearData() {
         em.createQuery("delete from [c.getEntityName()/]").executeUpdate();
+        [for (a : Property | c.getNonCompositeCollectionAttributes())]
+        em.createQuery("delete from [a.getClass().getEntityName()/]").executeUpdate();
+        [/for]
+        [for (a : Property | c.getReferences(false))]
+        em.createQuery("delete from [a.getClass().getEntityName()/]").executeUpdate();
+        [/for]
     }
 
     /**
@@ -105,9 +111,16 @@ public class [className/] {
      * @generated
      */
     private void insertData() {
+		PodamFactory factory = new PodamFactoryImpl();
+        [for (a : Property | c.getReferences(false))]
+        [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+        em.persist(entity);
+        [/for]
         for (int i = 0; i < 3; i++) {
-			PodamFactory factory = new PodamFactoryImpl();
             [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);
+            [for (a : Property | c.getReferences(false))]
+            entity.[a.setter()/]([a.name/]);
+            [/for]
             em.persist(entity);
             data.add(entity);
         }
