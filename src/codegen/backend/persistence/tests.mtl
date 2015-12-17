@@ -13,6 +13,9 @@
 package [c.getModel().baseGroup()/].test.persistence;
 
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
+[for (a : Property | c.getReferences(false))]
+import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
+[/for]
 import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
 import java.util.ArrayList;
 import java.util.List;
@@ -111,10 +114,10 @@ public class [className/] {
      * @generated
      */
     private void insertData() {
-		PodamFactory factory = new PodamFactoryImpl();
+        PodamFactory factory = new PodamFactoryImpl();
         [for (a : Property | c.getReferences(false))]
         [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
-        em.persist(entity);
+        em.persist([a.name/]);
         [/for]
         for (int i = 0; i < 3; i++) {
             [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);
