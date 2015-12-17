@@ -147,7 +147,11 @@ public class [className/] implements [c.getAPIName()/] {
 		[else]
         [c.getEntityName()/] [c.getEntityLower()/]  = persistence.find([c.getEntityId()/]);
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = [a.getClass().getName()/]Persistence.find([a.getClass().getEntityId()/]);
+        [if (a.isOne2Many())]
         [c.getEntityLower()/].get[a.getClass().name/]s().add([a.getClass().getEntityLower()/]);
+        [else]
+        [c.getEntityLower()/].set[c.name/]([c.getEntityLower()/]);    
+        [/if]        
         return [a.getClass().getEntityLower()/];
 		[/if]
     }
@@ -161,8 +165,13 @@ public class [className/] implements [c.getAPIName()/] {
         [a.getClass().getBeanLower()/].remove[c.name/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
 		[else]
         [c.getEntityName()/] [c.getEntityLower()/]  = persistence.find([c.getEntityId()/]);
+        [if (a.isOne2Many())]
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = new [a.getClass().getEntityName()/]();
         [a.getClass().getEntityLower()/].setId([a.getClass().getEntityId()/]);
+        [else]
+        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = [a.getClass().getName()/]Persistence.find([a.getClass().getEntityId()/]);
+        [a.getClass().getEntityLower()/].set[c.name/](null);    
+        [/if]        
         [c.getEntityLower()/].get[a.getClass().name/]s().remove([a.getClass().getEntityLower()/]);		
 		[/if]
     }
@@ -185,6 +194,17 @@ public class [className/] implements [c.getAPIName()/] {
             }
         }
 		[/if]
+        [if (a.isOne2Many())]  
+        for ([a.getClass().getEntityName()/] [a.getClass().getName()/] : [a.getClass().getName()/]List) {
+            if ([a.getClass().getName()/]s.contains([a.getClass().getName()/])) {
+                [a.getClass().getName()/].set[c.name/](null);                
+            } else {
+                if ([a.getClass().getName()/].get[c.name/]() != null && [a.getClass().getName()/].get[c.name/]().equals([c.getEntityLower()/])) {
+                    [a.getClass().getName()/].set[c.name/](null);
+                }
+            }
+        } 
+        [/if]  
         [c.getEntityLower()/].set[a.getClass().name/]s([a.getClass().getName()/]s);
         return [c.getEntityLower()/].get[a.getClass().name/]s();
     }
