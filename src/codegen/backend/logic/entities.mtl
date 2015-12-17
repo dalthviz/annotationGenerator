@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 import uk.co.jemos.podam.common.PodamStrategyValue;
 import co.edu.uniandes.csw.crud.api.podam.strategy.DateStrategy;
 [/if]
-[if (c.getRelationshipAttributes()->notEmpty())]
+[if (c.getRelationshipAttributes()->select(not isComposite())->notEmpty())]
 import uk.co.jemos.podam.common.PodamExclude;
 [for (s : String | c.getJPAAnnotations())]
 import javax.persistence.[s/];
