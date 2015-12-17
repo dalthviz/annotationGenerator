@@ -135,7 +135,7 @@ public class [className/] implements [c.getAPIName()/] {
     }
 
     [for (a : Property | c.getRelationshipAttributes()->reject(isComposite()))]
-    [if (a.isMany2One())]
+    [if (a.isOne2Many() or a.isMany2Many())]
 	[let isRelationshipOwner : Boolean = a.isRelationshipOwner()]
     /**
      * @generated
