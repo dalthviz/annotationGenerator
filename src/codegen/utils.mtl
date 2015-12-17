@@ -2,7 +2,7 @@
 [module utils('http://www.eclipse.org/uml2/5.0.0/UML')]
 
 [query public getClasses(m : Model) : OrderedSet(Class) =
-m.packagedElement->filter(Class)->sortedBy(c | c.name)
+m.packagedElement->filter(Class)->sortedBy(name)
 /]
 
 [query public getAllAttribs(c : Class) : OrderedSet(Property) = 
@@ -10,14 +10,14 @@ c.allAttributes()->reject(isID())
 /]
 
 [query public getId(c : Class) : Property =
-c.allAttributes()->select(isID())->first()
+c.allAttributes()->any(isID())
 /]
 
 [query public getRootClasses(m : Model) : OrderedSet(Class) = 
 m.getClasses()->reject(isChild())
 /]
 
-[query public isMany2Many(asc : Association) : Boolean = 
+[query public isMany2Many(asc : Association) : Boolean =
 asc.getAllAttributes()->exists(
     a | a.isNavigable()
     and a.getUpper() <> 1 
@@ -27,7 +27,7 @@ asc.getAllAttributes()->exists(
 )
 /]
 
-[query public isOne2One(asc : Association) : Boolean = 
+[query public isOne2One(asc : Association) : Boolean =
 asc.getAllAttributes()->exists(
     a | a.isNavigable()
     and a.getUpper() = 1
@@ -53,37 +53,14 @@ asc.getAllAttributes()->exists(
 )
 /]
 
-[query public isComposite(asc : Association) : Boolean = 
-asc.getAllAttributes()->exists(
-    a | a.isComposite()
-    or  a.getOtherEnd().isComposite()
-)
-/]
-
 [query public getAttributesWithRef(c : Class) : OrderedSet(Property) = 
 c.allAttributes()->union(c.getReferences(false))->asOrderedSet()
 /]
 
-[query public getReferences(c : Class, includeParent : Boolean) : OrderedSet(Property) = 
+[query public getRelationshipAttributes(c : Class) : Set(Property) =
 c.getAssociations()->collect(
     getAllAttributes()->select(
         a | a.isNavigable()
-        and a.getUpper() = 1
-        and a.getOtherEnd().type = c
-        and (a.getOtherEnd().isComposite() implies includeParent)
-    )
-)->asOrderedSet()
-/]
-
-[query public hasReferences(c : Class, includeParent : Boolean) : Boolean =
-c.getReferences(includeParent)->notEmpty()
-/]
-
-[query public getCollectionAttributes(c : Class) : Set(Property) = 
-c.getAssociations()->collect(
-    getAllAttributes()->select(
-        a | a.isNavigable()
-        and a.getUpper() <> 1
         and a.getUpper() <> 0
         and a.getOtherEnd().type = c
         and (a.aggregation <> AggregationKind::none implies a.getOtherEnd().getUpper() = 1)
@@ -91,12 +68,31 @@ c.getAssociations()->collect(
 )->asSet()
 /]
 
+[query public getReferences(c : Class, includeParent : Boolean) : OrderedSet(Property) = 
+c.getRelationshipAttributes()->select(
+    a | a.getUpper() = 1
+    and (a.getOtherEnd().isComposite() implies includeParent)
+)->asOrderedSet()
+/]
+
+[query public getCollectionAttributes(c : Class) : Set(Property) = 
+c.getRelationshipAttributes()->select(getUpper() <> 1)->asSet()
+/]
+
+[query public hasReferences(c : Class, includeParent : Boolean) : Boolean =
+c.getReferences(includeParent)->notEmpty()
+/]
+
+[query public isMaster(c : Class) : Boolean =
+c.getCollectionAttributes()->notEmpty()
+/]
+
 [query public getCompositeCollectionAttributes(c : Class) : Set(Property) =
 c.getCollectionAttributes()->select(isComposite())
 /]
 
 [query public getNonCompositeCollectionAttributes(c : Class) : Set(Property) =
-c.getCollectionAttributes()->select(not isComposite())
+c.getCollectionAttributes()->reject(isComposite())
 /]
 
 [query public hasCompositeAssociations(c : Class) : Boolean =
@@ -107,43 +103,19 @@ c.getCompositeCollectionAttributes()->notEmpty()
 c.getNonCompositeCollectionAttributes()->notEmpty()
 /]
 
-[query public hasManyToManyAssociations(c : Class) : Boolean =
-c.getCollectionAttributes()->exists(a|a.association.isMany2Many())
-/]
-
-[query public isMaster(c : Class) : Boolean =
-c.getCollectionAttributes()->notEmpty()
-/]
-
-[**
- * Permite buscar los atributos que hace parte de una relación cuyo extremo opuesto es composite.
- * No debería existir más de uno, sin embargo las herramientas permiten modelarlo.
- * Por esta razón se hace la consulta privada: Para poder reutilizar los criterios de búsqueda
- * sin ofrecerla en el API
-*/]
-[query private getParents(c : Class) : Bag(Property) =
-c.getAssociations()->collect(
-    getAllAttributes()->select(
-        a | a.isNavigable()
-        and a.getUpper() = 1
-        and a.getOtherEnd().type = c
-        and a.getOtherEnd().isComposite()
-))
-/]
-
 [query public isChild(c : Class) : Boolean = 
-c.getParents()->notEmpty()
+c.getParentAttribute() <> null
  /]
 
 [query public getParentAttribute(c : Class) : Property = 
-c.getParents()->asOrderedSet()->first()
- /]
+c.getReferences(true)->any(getOtherEnd().isComposite())
+/]
 
 [query public isValidType(a : Property) : Boolean = 
 Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <> null and t = a.type.name)
 /]
 
-[query public hasDateAttribute(c : Class) : Boolean = c.allAttributes()->exists(a|a.isDate()) /]
+[query public hasDateAttribute(c : Class) : Boolean = c.allAttributes()->exists(isDate()) /]
 
 [query public isDate(a : Property) : Boolean = a.type.name = 'Date' /]
 
@@ -157,7 +129,7 @@ Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <
 
 [query public setter(a : Property) : String = 'set'.concat(a.name.toUpperFirst()) /]
 
-[query public getClass(a : Property) : Class = Class.allInstances()->select(c | c.name = a.type.name)->asOrderedSet()->first() /]
+[query public getClass(a : Property) : Class = Class.allInstances()->any(c | c.name = a.type.name) /]
 
 [query public getDisplayName(a : Property) : String = a.name.toUpperFirst() /]
 
@@ -229,32 +201,12 @@ String[else]
 [c.getName().concat('Module')/]
 [/template]
 
-[template public getMasterModule(c : Class)]
-[c.getName().concat('Module')/]
-[/template]
-
-[template public getMasterService(c : Class)]
-[c.getName().concat('Service')/]
-[/template]
-
-[template public getMasterContext(c : Class)]
-[c.getName().concat('Context')/]
-[/template]
-
-[template public getMasterController(c : Class)]
-[c.getName().concat('Ctrl')/]
-[/template]
-
 [template public getContext(c : Class)]
 [c.getName().concat('Context')/]
 [/template]
 
 [template public getURI(c : Class)]
 [c.getName().concat('s')/]
-[/template]
-
-[template public getMasterURI(c : Class)]
-[c.getName().concat('s').concat('/master')/]
 [/template]
 
 [template public getName(c : Class)]
@@ -271,10 +223,6 @@ String[else]
 
 [template public getJaxRsName(c : Class)]
 [c.name.concat('Service')/]
-[/template]
-
-[template public getMasterJaxRsName(c : Class)]
-[c.name.concat('MasterService')/]
 [/template]
 
 [template public getAPIName(c : Class)]

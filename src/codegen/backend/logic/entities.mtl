@@ -10,28 +10,28 @@
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].entities;
 
-import co.edu.uniandes.csw.crud.spi.entity.BaseEntity;
 import java.io.Serializable;
 import javax.persistence.Entity;
+import co.edu.uniandes.csw.crud.spi.entity.BaseEntity;
 [if (c.hasDateAttribute())]
 import java.util.Date;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import uk.co.jemos.podam.common.PodamStrategyValue;
+import co.edu.uniandes.csw.crud.api.podam.strategy.DateStrategy;
 [/if]
-[if (c.hasReferences(true))]
-import javax.persistence.ManyToOne;
-[/if]
+[if (c.getRelationshipAttributes()->notEmpty())]
+import uk.co.jemos.podam.common.PodamExclude;
+[for (s : String | c.getJPAAnnotations())]
+import javax.persistence.[s/];
+[/for]
 [if (c.isMaster())]
 import java.util.List;
-import javax.persistence.OneToMany;
 [if (c.hasCompositeAssociations())]
 import javax.persistence.CascadeType;
 [/if]
 [/if]
-[if (c.hasManyToManyAssociations())]
-import javax.persistence.ManyToMany;
 [/if]
-import uk.co.jemos.podam.common.PodamExclude;
 
 /**
  * @generated
@@ -39,37 +39,24 @@ import uk.co.jemos.podam.common.PodamExclude;
 @Entity
 public class [className/] extends BaseEntity implements Serializable {
 
-[for (a : Property | c.allAttributes())]
+[for (a : Property | c.allAttributes()->select(not(isID() or isName())))]
     [if (a.isDate())]
     @Temporal(TemporalType.DATE)
+    @PodamStrategyValue(DateStrategy.class)
     [/if]
-	[if (not(a.isID() or a.isName()))]
     private [a.type.name/] [a.name.toLowerFirst()/];
-	[/if]
 
 [/for]
-[for (a : Property | c.getReferences(true))]
-    [if (not a.isRelationshipOwner())]
+[for (a : Property | c.getRelationshipAttributes())]
     @PodamExclude
-    [/if]
-[if (a.association.isOne2One())]
-	@OneToOne[a.genParameters()/]
-[else]
-    @ManyToOne[a.genParameters()/]
-[/if]
+    @[a.getJPAAnnotation()/]
+    [if (a.getUpper() = 1)]
     private [a.getClass().getEntityName()/] [a.name/];
-[/for]
-[for (a : Property | c.getCollectionAttributes())]
-    @PodamExclude
-[if (a.association.isMany2Many())]
-    @ManyToMany[a.genParameters()/]
-[else]
-    @OneToMany[a.genParameters()/]
-[/if]
+    [else]
     private List<[a.getClass().getEntityName()/]> [a.name/];
+    [/if]
 [/for]
-[for (a : Property | c.allAttributes())]
-    [if (a.isID() = false and a.isName() = false)]
+[for (a : Property | c.allAttributes()->select(not(isID() or isName())))]
     /**
      * @generated
      */
@@ -83,7 +70,6 @@ public class [className/] extends BaseEntity implements Serializable {
     public void [a.setter()/]([a.type.name/] [a.name.toLowerFirst()/]){
         this.[a.name.toLowerFirst()/] = [a.name.toLowerFirst()/];
     }
-    [/if]
 
 [/for]
 [for (a : Property | c.getReferences(true))]
@@ -141,3 +127,18 @@ public class [className/] extends BaseEntity implements Serializable {
 (cascade = CascadeType.ALL, orphanRemoval = true)
 [/if]
 [/template]
+
+[query private getJPAAnnotations(c : Class) : Set(String) =
+c.getRelationshipAttributes()->collect(
+    getJPAAnnotation()
+)->asSet()
+/]
+
+[query private getJPAAnnotation(p : Property) : String =
+Set{'OneToMany','ManyToOne','OneToOne','ManyToMany'}->any(
+    a | (a = 'OneToMany' and p.association.isOne2Many() and p.getUpper() <> 1)
+    or  (a = 'ManyToOne' and p.association.isMany2One() and p.getUpper() = 1)
+    or  (a = 'OneToOne' and p.association.isOne2One())
+    or  (a = 'ManyToMany' and p.association.isMany2Many())
+)
+/]

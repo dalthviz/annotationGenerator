@@ -28,13 +28,6 @@ public class [className/] extends CrudPersistence<[c.getEntityName()/]> {
     /**
      * @generated
      */
-    public [className/]() {
-        this.entityClass = [c.getEntityName()/].class;
-    }
-
-    /**
-     * @generated
-     */
     @Override
     protected EntityManager getEntityManager() {
         return em;
