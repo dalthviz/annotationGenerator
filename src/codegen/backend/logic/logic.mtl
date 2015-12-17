@@ -134,7 +134,7 @@ public class [className/] implements [c.getAPIName()/] {
         persistence.delete(id);
     }
 
-    [for (a : Property | c.getNonCompositeCollectionAttributes())]
+    [for (a : Property | c.getRelationshipAttributes()->reject(isComposite()))]
 	[let isRelationshipOwner : Boolean = a.isRelationshipOwner()]
     /**
      * @generated
