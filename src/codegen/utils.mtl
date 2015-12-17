@@ -92,7 +92,7 @@ c.getCollectionAttributes()->select(isComposite())
 /]
 
 [query public getNonCompositeCollectionAttributes(c : Class) : Set(Property) =
-c.getCollectionAttributes()->select(not isComposite())
+c.getCollectionAttributes()->reject(isComposite())
 /]
 
 [query public hasCompositeAssociations(c : Class) : Boolean =
@@ -103,23 +103,13 @@ c.getCompositeCollectionAttributes()->notEmpty()
 c.getNonCompositeCollectionAttributes()->notEmpty()
 /]
 
-[**
- * Permite buscar los atributos que hace parte de una relación cuyo extremo opuesto es composite.
- * No debería existir más de uno, sin embargo las herramientas permiten modelarlo.
- * Por esta razón se hace la consulta privada: Para poder reutilizar los criterios de búsqueda
- * sin ofrecerla en el API
-*/]
-[query private getParents(c : Class) : OrderedSet(Property) =
-c.getReferences(true)->select(getOtherEnd().isComposite())->asOrderedSet()
-/]
-
 [query public isChild(c : Class) : Boolean = 
-c.getParents()->notEmpty()
+c.getParentAttribute() <> null
  /]
 
 [query public getParentAttribute(c : Class) : Property = 
-c.getParents()->first()
- /]
+c.getReferences(true)->any(getOtherEnd().isComposite())
+/]
 
 [query public isValidType(a : Property) : Boolean = 
 Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <> null and t = a.type.name)
