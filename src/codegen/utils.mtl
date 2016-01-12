@@ -101,7 +101,11 @@ c.getParentAttribute() <> null
  /]
 
 [query public getParentAttribute(c : Class) : Property = 
-c.getReferences(true)->any(getOtherEnd().isComposite())
+c.getReferences(true)->any(isParentAttribute())
+/]
+
+[query public isParentAttribute(a : Property) : Boolean = 
+getOtherEnd().isComposite()
 /]
 
 [query public isValidType(a : Property) : Boolean = 

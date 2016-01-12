@@ -115,10 +115,6 @@ public class [className/] {
      */
     private void insertData() {
         PodamFactory factory = new PodamFactoryImpl();
-        [for (a : Property | c.getReferences(false))]
-        [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
-        em.persist([a.name/]);
-        [/for]
         for (int i = 0; i < 3; i++) {
             [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);
             [for (a : Property | c.getReferences(false))]
