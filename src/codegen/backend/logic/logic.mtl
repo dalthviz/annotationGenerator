@@ -3,7 +3,7 @@
 [import ::utils /]
 
 [template public mainLogic(c : Class, path : String)]
-[file ('t.txt', true, 'UTF-8')]
+[file (c.name + '.txt', false, 'UTF-8')]
 [c.name/] [c.isChild()/]
 [/file]
 [if (not c.isChild())]
