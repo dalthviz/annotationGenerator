@@ -371,7 +371,7 @@ auth-utils
 [/template]
 
 [template public getAuthLibVersion(m : Model)]
-0.1.0-SNAPSHOT
+0.1.0
 [/template]
 
 [template public getCrudLibArtifactId(m : Model)]
@@ -379,5 +379,5 @@ crud-utils
 [/template]
 
 [template public getCrudLibVersion(m : Model)]
-0.1.0-SNAPSHOT
+0.1.0
 [/template]
