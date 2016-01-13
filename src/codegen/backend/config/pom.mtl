@@ -123,9 +123,9 @@
     </modules>
     <repositories>
         <repository>
-            <id>csw-snapshots</id>
-            <name>csw snapshots</name>
-            <url>http://157.253.238.75:8081/content/repositories/snapshots/</url>
+            <id>csw-releases</id>
+            <name>csw release</name>
+            <url>http://157.253.238.75:8081/content/repositories/releases/</url>
         </repository>
     </repositories>
     <properties>
