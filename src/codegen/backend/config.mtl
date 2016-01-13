@@ -14,4 +14,5 @@
 [m.mainPOM()/]
 [m.mainXML()/]
 [m.mainExceptions(m.getLogicArtifactId())/]
+[m.mainTests(m.getTestMetaInfPath())/]
 [/template]

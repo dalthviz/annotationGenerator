@@ -50,13 +50,27 @@ and a.getOtherEnd().getUpper() <> 1
 c.allAttributes()->union(c.getReferences(false))->asOrderedSet()
 /]
 
+
+[**
+ * Obtiene la colección de atributos de la clase, cuyo tipo es otra clase del modelo y son aceptados por el generador
+ * Actualmente los atributos válidos cumplen con las siguientes características:
+ * - Es navegable
+ * - Su límite máximo de objetos es diferente de cero
+ * - El otro extremo de la relación apunta a la clase que realiza la consulta
+ * - En caso de haber agregación, el otro extremo de la relación no puede tener agregación y su límite máximo debe ser 1
+ * - En caso del atributo ser composite, el extremo opuesto debe ser navegable
+*/]
 [query public getRelationshipAttributes(c : Class) : Set(Property) =
 c.getAssociations()->collect(
     getAllAttributes()->select(
         a | a.isNavigable()
         and a.getUpper() <> 0
         and a.getOtherEnd().type = c
-        and (a.aggregation <> AggregationKind::none implies a.getOtherEnd().getUpper() = 1)
+        and (a.aggregation <> AggregationKind::none implies (
+                a.getOtherEnd().getUpper() = 1
+            and a.getOtherEnd().aggregation = AggregationKind::none)
+        )
+        and a.isComposite() implies a.getOtherEnd().isNavigable()
     )
 )->asSet()
 /]
