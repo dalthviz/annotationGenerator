@@ -61,8 +61,8 @@ c.allAttributes()->union(c.getReferences(false))->asOrderedSet()
  * - En caso del atributo ser composite, el extremo opuesto debe ser navegable
 */]
 [query public getRelationshipAttributes(c : Class) : Set(Property) =
-c.getAssociations()->collect(
-    getAllAttributes()->select(
+c.getAssociations()->collect( asc |
+    asc.getAllAttributes()->select(
         a | a.isNavigable()
         and a.getUpper() <> 0
         and a.getOtherEnd().type = c
@@ -70,7 +70,7 @@ c.getAssociations()->collect(
                 a.getOtherEnd().getUpper() = 1
             and a.getOtherEnd().aggregation = AggregationKind::none)
         )
-        and a.isComposite() implies a.getOtherEnd().isNavigable()
+        and (a.isComposite() implies a.getOtherEnd().isNavigable())
     )
 )->asSet()
 /]
