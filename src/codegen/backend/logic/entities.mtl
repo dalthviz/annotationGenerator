@@ -108,7 +108,7 @@ public class [className/] extends BaseEntity implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        return this.getId().equals(((BookEntity)obj).getId());
+        return this.getId().equals((([className/])obj).getId());
     }
 
     @Override

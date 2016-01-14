@@ -45,21 +45,11 @@ import uk.co.jemos.podam.api.PodamFactoryImpl;
  */
 @RunWith(Arquillian.class)
 public class [className/] {
-    public static final String DEPLOY = "Prueba";
 
     /**
      * @generated
      */
-    @Deployment
-    public static WebArchive createDeployment() {
-        return ShrinkWrap.create(WebArchive.class, DEPLOY + ".war")
-                .addPackage([c.getEntityName()/].class.getPackage())
-                .addPackage([c.getBeanName()/].class.getPackage())
-                .addPackage([c.getAPIName()/].class.getPackage())
-                .addPackage([c.getPersistenceName()/].class.getPackage())
-                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
-                .addAsWebInfResource("META-INF/beans.xml", "beans.xml");
-    }
+    private PodamFactory factory = new PodamFactoryImpl();
 
     /**
      * @generated
@@ -86,6 +76,32 @@ public class [className/] {
      */
     @Inject
     UserTransaction utx;
+
+    /**
+     * @generated
+     */
+    private List<[c.getEntityName()/]> data = new ArrayList<[c.getEntityName()/]>();
+    [for (a : Property | c.getRelationshipAttributes()->select(isComposite()))]
+
+    /**
+     * @generated
+     */
+    private List<[a.getClass().getEntityName()/]> [a.getListVar()/] = new ArrayList<>();
+    [/for]
+
+    /**
+     * @generated
+     */
+    @Deployment
+    public static WebArchive createDeployment() {
+        return ShrinkWrap.create(WebArchive.class)
+                .addPackage([c.getEntityName()/].class.getPackage())
+                .addPackage([c.getBeanName()/].class.getPackage())
+                .addPackage([c.getAPIName()/].class.getPackage())
+                .addPackage([c.getPersistenceName()/].class.getPackage())
+                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
+                .addAsWebInfResource("META-INF/beans.xml", "beans.xml");
+    }
 
     /**
      * @generated
@@ -123,26 +139,18 @@ public class [className/] {
     /**
      * @generated
      */
-    private List<[c.getEntityName()/]> data = new ArrayList<[c.getEntityName()/]>();
-    [for (a : Property | c.getRelationshipAttributes()->select(isComposite()))]
-
-    /**
-     * @generated
-     */
-    private List<[a.getClass().getEntityName()/]> [a.getListVar()/] = new ArrayList<>();
-    [/for]
-
-    /**
-     * @generated
-     */
     private void insertData() {
-        PodamFactory factory = new PodamFactoryImpl();
-
         [for (a : Property | c.getRelationshipAttributes()->reject(isComposite()))]
         [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
         em.persist([a.name/]);
         [a.getListVar()/].add([a.name/]);
 
+        [if (a.getUpper() <> 1)]
+        [a.getClass().getEntityName()/] [a.name/]2 = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+        em.persist([a.name/]2);
+        [a.getListVar()/].add([a.name/]2);
+
+        [/if]
         [/for]
         for (int i = 0; i < 3; i++) {
             [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);            
@@ -156,7 +164,7 @@ public class [className/] {
             [/if]
             [/for]
 
-            [for (a : Property | c.getRelationshipAttributes()->reject(isComposite()))]
+            [for (a : Property | c.getRelationshipAttributes()->reject(isComposite() or not isRelationshipOwner()))]
             [if (a.getUpper() = 1)]
             entity.[a.setter()/]([a.getListVar()/].get(0));
             [else]
@@ -166,6 +174,14 @@ public class [className/] {
 
             em.persist(entity);
             data.add(entity);
+
+            [for (a : Property | c.getRelationshipAttributes()->reject(isComposite() or isRelationshipOwner()))]
+            [if (a.getOtherEnd().getUpper() = 1)]
+            [a.getListVar()/].get(0).[a.getOtherEnd().setter()/](entity);
+            [else]
+            [a.getListVar()/].get(0).[a.getOtherEnd().getter()/]().add(entity);
+            [/if]
+            [/for]
         }
     }
 
@@ -174,7 +190,6 @@ public class [className/] {
      */
     @Test
     public void create[c.name/]Test() {
-        PodamFactory factory = new PodamFactoryImpl();
         [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);
         [c.getEntityName()/] result = [bean/].create[c.name/](entity);
         Assert.assertNotNull(result);
@@ -235,7 +250,6 @@ public class [className/] {
     @Test
     public void update[c.name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
-        PodamFactory factory = new PodamFactoryImpl();
         [c.getEntityName()/] pojoEntity = factory.manufacturePojo([c.getEntityName()/].class);
 
         pojoEntity.setId(entity.getId());
@@ -258,16 +272,12 @@ public class [className/] {
     @Test
     public void add[a.getClass().name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
-        PodamFactory factory = new PodamFactoryImpl();
-        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
-        [a.getClass().getEntityLower()/] = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]);
-
+        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = [a.getListVar()/].get(1);
         [a.getClass().getEntityName()/] response = [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
-        Assert.assertNotNull(em);
-        [for (prop : Property | a.getClass().attribute)]
-        [if (not prop.isDate())]
+
+        Assert.assertNotNull(response);
+        [for (prop : Property | a.getClass().allAttributes())]
         Assert.assertEquals(response.[prop.getter()/](), [a.getClass().getEntityLower()/].[prop.getter()/]());
-        [/if]
         [/for]
     }
 
@@ -277,7 +287,6 @@ public class [className/] {
     @Test
     public void get[a.getClass().name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
-        PodamFactory factory = new PodamFactoryImpl();
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
         [a.getClass().getEntityLower()/]  = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/] );
 
@@ -305,7 +314,6 @@ public class [className/] {
     @Test
     public void remove[a.getClass().name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
-        PodamFactory factory = new PodamFactoryImpl();
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
         [a.getClass().getEntityLower()/]  = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/] );
 
@@ -325,7 +333,6 @@ public class [className/] {
     @Test
     public void replace[a.getClass().name/]sTest() {
         [c.getEntityName()/] entity = data.get(0);
-        PodamFactory factory = new PodamFactoryImpl();
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/]2 = factory.manufacturePojo([a.getClass().getEntityName()/].class);
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/]3 = factory.manufacturePojo([a.getClass().getEntityName()/].class);
@@ -368,7 +375,6 @@ public class [className/] {
 
         Assert.assertEquals(entity.get[a.getClass().name/]s().size(), 0);
 
-        PodamFactory factory = new PodamFactoryImpl();
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/]2 = factory.manufacturePojo([a.getClass().getEntityName()/].class);
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/]3 = factory.manufacturePojo([a.getClass().getEntityName()/].class);
