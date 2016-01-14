@@ -16,7 +16,7 @@ import [c.getModel().baseGroup()/].ejbs.[c.getBeanName()/];
 import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
-[for (a : Property | c.getCollectionAttributes())]
+[for (a : Property | c.getRelationshipAttributes())]
 [if (not a.isComposite())]
 import [c.getModel().baseGroup()/].api.[a.getClass().getAPIName()/];
 [/if]
@@ -111,10 +111,10 @@ public class [className/] {
      * @generated
      */
     private void clearData() {
-        em.createQuery("delete from [c.getEntityName()/]").executeUpdate();
-        [for (a : Property | c.getNonCompositeCollectionAttributes())]
+        [for (a : Property | c.getRelationshipAttributes())]
         em.createQuery("delete from [a.getClass().getEntityName()/]").executeUpdate();
         [/for]
+        em.createQuery("delete from [c.getEntityName()/]").executeUpdate();
     }
 
     /**
@@ -126,36 +126,45 @@ public class [className/] {
     /**
      * @generated
      */
-    private List<[a.getClass().getEntityName()/]> data[a.getClass().name/]s = new ArrayList<>();
+    private List<[a.getClass().getEntityName()/]> [a.getListVar()/] = new ArrayList<>();
     [/for]
 
     /**
      * @generated
      */
     private void insertData() {
+        PodamFactory factory = new PodamFactoryImpl();
+
+        [for (a : Property | c.getRelationshipAttributes()->reject(isComposite()))]
+        [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+        [a.name/].setId(i + 1L);
+        em.persist([a.name/]);
+        [a.getListVar()/].add([a.name/]);
+
+        [/for]
         for (int i = 0; i < 3; i++) {
-            PodamFactory factory = new PodamFactoryImpl();
             [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);            
             entity.setId(i+1L);
-            [for (a : Property | c.getCompositeCollectionAttributes())]
-            List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]List = new ArrayList<>();
-            for (int j = 0; j < 5; j++)
-            {
-                [a.getClass().getEntityName()/] [a.getClass().getName()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
-                [a.getClass().getName()/]List.add([a.getClass().getName()/]);
+            [for (a : Property | c.getRelationshipAttributes()->select(isComposite()))]
+            [if (a.getUpper() = 1)]
+            entity.[a.getter()/]().[a.getClass().getParentAttribute().setter()/](entity);
+            [else]
+            for ([a.getClass().getEntityName()/] item : entity.[a.getter()/]()) {
+                item.[a.getClass().getParentAttribute().setter()/](entity);
             }
-            
-            entity.set[a.getClass().name/]s([a.getClass().getName()/]List);
-            [/for]            
-            
+            [/if]
+            [/for]
+
+            [for (a : Property | c.getRelationshipAttributes()->reject(isComposite()))]
+            [if (a.getUpper() = 1)]
+            entity.[a.setter()/]([a.getListVar()/].get(0));
+            [else]
+            entity.[a.getter()/]().add([a.getListVar()/].get(0));
+            [/if]
+            [/for]
+
             em.persist(entity);
             data.add(entity);
-
-            [for (a : Property | c.getNonCompositeCollectionAttributes())]
-            [a.getClass().getEntityName()/] [a.getClass().getName()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
-            [a.getClass().getName()/].setId(i + 1L);
-            data[a.getClass().name/]s.add([a.getClass().getName()/]);
-            [/for]
         }
     }
 
@@ -387,4 +396,9 @@ public class [className/] {
 
 [template private getBeanLower(c : Class)]
 [c.name.toLowerFirst().concat('Logic')/]
+[/template]
+
+
+[template private getListVar(a : Property)]
+data[a.name.toUpperFirst()/]
 [/template]
