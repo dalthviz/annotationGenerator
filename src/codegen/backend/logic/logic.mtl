@@ -3,12 +3,6 @@
 [import ::utils /]
 
 [template public mainLogic(c : Class, path : String)]
-[file (c.name + '.txt', false, 'UTF-8')]
-[c.name/] [c.isChild()/]
-[for (a : Property | c.getRelationshipAttributes())]
-	[a.name/] [a.isParentAttribute()/]
-[/for]
-[/file]
 [if (not c.isChild())]
     [c.genLogicInterface(path.concat('api/'))/]
     [c.genLogicBean(path.concat('ejbs/'))/]
