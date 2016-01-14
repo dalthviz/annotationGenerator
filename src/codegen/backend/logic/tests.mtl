@@ -7,7 +7,7 @@
 [/template]
 
 [template protected genTests(c : Class, path : String) {className : String = c.getTestName();}]
-[if (c.isChild()=false)]
+[if (not c.isChild())]
 [let bean : String = c.getName().concat('Logic')]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].test.logic;
@@ -111,17 +111,20 @@ public class [className/] {
      * @generated
      */
     private void clearData() {
-        [for (a : Property | c.getRelationshipAttributes())]
+        [for (a : Property | c.getRelationshipAttributes()->reject(isRelationshipOwner()))]
         em.createQuery("delete from [a.getClass().getEntityName()/]").executeUpdate();
         [/for]
         em.createQuery("delete from [c.getEntityName()/]").executeUpdate();
+        [for (a : Property | c.getRelationshipAttributes()->select(isRelationshipOwner()))]
+        em.createQuery("delete from [a.getClass().getEntityName()/]").executeUpdate();
+        [/for]
     }
 
     /**
      * @generated
      */
     private List<[c.getEntityName()/]> data = new ArrayList<[c.getEntityName()/]>();
-    [for (a : Property | c.getNonCompositeCollectionAttributes())]
+    [for (a : Property | c.getRelationshipAttributes()->select(isComposite()))]
 
     /**
      * @generated
@@ -137,14 +140,12 @@ public class [className/] {
 
         [for (a : Property | c.getRelationshipAttributes()->reject(isComposite()))]
         [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
-        [a.name/].setId(i + 1L);
         em.persist([a.name/]);
         [a.getListVar()/].add([a.name/]);
 
         [/for]
         for (int i = 0; i < 3; i++) {
             [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);            
-            entity.setId(i+1L);
             [for (a : Property | c.getRelationshipAttributes()->select(isComposite()))]
             [if (a.getUpper() = 1)]
             entity.[a.getter()/]().[a.getClass().getParentAttribute().setter()/](entity);

@@ -45,7 +45,7 @@ public class [className/] {
 [if (a.getUpper() = 1)]
     private [a.getClass().getDTOName()/] [a.name/];
 [else]
-    private List<[a.getClass().getDTOName()/]> [a.name/];
+    private List<[a.getClass().getDTOName()/]> [a.name/] = new ArrayList<>();
 [/if]
 [/for]
 
