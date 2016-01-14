@@ -127,6 +127,11 @@
             <name>csw release</name>
             <url>http://157.253.238.75:8081/content/repositories/releases/</url>
         </repository>
+        <repository>
+            <id>csw-snapshots</id>
+            <name>csw snapshots</name>
+            <url>http://157.253.238.75:8081/content/repositories/snapshots/</url>
+        </repository>
     </repositories>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
