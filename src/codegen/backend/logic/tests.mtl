@@ -81,7 +81,7 @@ public class [className/] {
      * @generated
      */
     private List<[c.getEntityName()/]> data = new ArrayList<[c.getEntityName()/]>();
-    [for (a : Property | c.getRelationshipAttributes()->select(isComposite()))]
+    [for (a : Property | c.getRelationshipAttributes()->reject(isComposite()))]
 
     /**
      * @generated
