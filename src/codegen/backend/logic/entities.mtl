@@ -55,6 +55,7 @@ public class [className/] extends BaseEntity implements Serializable {
     [else]
     private List<[a.getClass().getEntityName()/]> [a.name/];
     [/if]
+
 [/for]
 [for (a : Property | c.allAttributes()->reject(isID() or isName()))]
     /**
@@ -120,12 +121,9 @@ public class [className/] extends BaseEntity implements Serializable {
 
 [template protected genParameters(a : Property)]
 [if (not a.isRelationshipOwner() and a.isComposite())]
-(mappedBy = "[a.getOtherEnd().name/]", cascade = CascadeType.ALL, orphanRemoval = true)
-[elseif (not a.isRelationshipOwner())]
-(mappedBy = "[a.getOtherEnd().name/]")
-[elseif (a.isComposite())]
-(cascade = CascadeType.ALL, orphanRemoval = true)
-[/if]
+(mappedBy = "[a.getOtherEnd().name/]", cascade = CascadeType.ALL, orphanRemoval = true)[elseif (not a.isRelationshipOwner())]
+(mappedBy = "[a.getOtherEnd().name/]")[elseif (a.isComposite())]
+(cascade = CascadeType.ALL, orphanRemoval = true)[/if]
 [/template]
 
 [query private getJPAAnnotations(c : Class) : Set(String) =

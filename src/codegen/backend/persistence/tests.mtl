@@ -13,7 +13,7 @@
 package [c.getModel().baseGroup()/].test.persistence;
 
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
-[for (a : Property | c.getReferences(false))]
+[for (a : Property | c.getRelationshipAttributes()->select(isComposite()))]
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 [/for]
 import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
@@ -118,7 +118,7 @@ public class [className/] {
             [if (a.getUpper() = 1)]
             entity.[a.getter()/]().[a.getClass().getParentAttribute().setter()/](entity);
             [else]
-            for ([a.getClass().name/] item : entity.[a.getter()/]()) {
+            for ([a.getClass().getEntityName()/] item : entity.[a.getter()/]()) {
                 item.[a.getClass().getParentAttribute().setter()/](entity);
             }
             [/if]
