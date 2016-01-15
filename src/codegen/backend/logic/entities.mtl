@@ -15,7 +15,6 @@ import javax.persistence.Entity;
 import co.edu.uniandes.csw.crud.spi.entity.BaseEntity;
 [if (c.hasDateAttribute())]
 import java.util.Date;
-import java.util.ArrayList;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import uk.co.jemos.podam.common.PodamStrategyValue;
@@ -28,6 +27,7 @@ import javax.persistence.[s/];
 [/for]
 [if (c.isMaster())]
 import java.util.List;
+import java.util.ArrayList;
 [if (c.hasCompositeAssociations())]
 import javax.persistence.CascadeType;
 [/if]

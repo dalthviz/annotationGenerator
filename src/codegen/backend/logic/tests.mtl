@@ -17,7 +17,7 @@ import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
 [for (a : Property | c.getRelationshipAttributes())]
-[if (not a.isComposite())]
+[if (not a.isComposite() and getUpper() <> 1)]
 import [c.getModel().baseGroup()/].api.[a.getClass().getAPIName()/];
 [/if]
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
@@ -141,16 +141,12 @@ public class [className/] {
      */
     private void insertData() {
         [for (a : Property | c.getRelationshipAttributes()->reject(isComposite()))]
-        [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
-        em.persist([a.name/]);
-        [a.getListVar()/].add([a.name/]);
+        for (int i = 0; i < 3; i++) {
+            [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+            em.persist([a.name/]);
+            [a.getListVar()/].add([a.name/]);
+        }
 
-        [if (a.getUpper() <> 1)]
-        [a.getClass().getEntityName()/] [a.name/]2 = factory.manufacturePojo([a.getClass().getEntityName()/].class);
-        em.persist([a.name/]2);
-        [a.getListVar()/].add([a.name/]2);
-
-        [/if]
         [/for]
         for (int i = 0; i < 3; i++) {
             [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);            
@@ -264,8 +260,31 @@ public class [className/] {
         [/if]
         [/for]
     }
-
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
+
+    /**
+     * @generated
+     */
+    @Test
+    public void get[a.name.toUpperFirst()/]Test() {
+        [c.getEntityName()/] entity = data.get(0);
+        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = [a.getListVar()/].get(0);
+        [a.getClass().getEntityName()/] response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
+
+        [for (prop : Property | a.getClass().attribute)]
+        Assert.assertEquals([a.getClass().getEntityLower()/].[prop.getter()/](), response.[prop.getter()/]());
+        [/for]
+    }
+
+    /**
+     * @generated
+     */
+    @Test
+    public void list[a.name.toUpperFirst()/]Test() {
+        List<[a.getClass().getEntityName()/]> list = [bean/].[a.getter()/](data.get(0).getId());
+        Assert.assertEquals(1, list.size());
+    }
+
     /**
      * @generated
      */
@@ -285,46 +304,10 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void get[a.getClass().name/]Test() {
-        [c.getEntityName()/] entity = data.get(0);
-        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
-        [a.getClass().getEntityLower()/]  = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/] );
-
-        [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
-        [a.getClass().getEntityName()/] get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
-        [for (prop : Property | a.getClass().attribute)]
-        [if (not prop.isDate())]
-        Assert.assertEquals([a.getClass().getEntityLower()/].[prop.getter()/](), get[a.getClass().name/]Response.[prop.getter()/]());
-        [/if]
-        [/for]
-
-        [bean/].update[c.name/](entity);
-
-        [a.getClass().getEntityName()/] listResponse = entity.get[a.getClass().name/]s().get(entity.get[a.getClass().name/]s().size() - 1);
-        [for (prop : Property | a.getClass().attribute)]
-        [if (not prop.isDate())]
-        Assert.assertEquals(listResponse.[prop.getter()/](), [a.getClass().getEntityLower()/].[prop.getter()/]());
-        [/if]
-        [/for]
-    }
-
-    /**
-     * @generated
-     */
-    @Test
     public void remove[a.getClass().name/]Test() {
-        [c.getEntityName()/] entity = data.get(0);
-        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
-        [a.getClass().getEntityLower()/]  = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/] );
-
-        [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
-        [a.getClass().getEntityName()/] get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
-        [bean/].update[c.name/](entity);
-        Assert.assertNotNull(get[a.getClass().name/]Response);
-        [bean/].remove[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
-        [bean/].update[c.name/](entity);
-        get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
-        Assert.assertNull(get[a.getClass().name/]Response);
+        [bean/].remove[a.getClass().name/]([a.getListVar()/].get(0).getId(), data.get(0).getId());
+        [a.getClass().getEntityName()/]response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
+        Assert.assertNull(response);
     }
 
     /**
@@ -362,34 +345,6 @@ public class [className/] {
         Assert.assertNotNull(get[a.getClass().name/]Response2);
         Assert.assertNotNull(get[a.getClass().name/]Response3);
     }
-
-    /**
-     * @generated
-     */
-    @Test
-    public void get[a.getClass().name/]sTest() {
-        [c.getEntityName()/] entity = data.get(0);
-        List<[a.getClass().getEntityName()/]> listado = new ArrayList<[a.getClass().getEntityName()/]>();
-        entity.set[a.getClass().name/]s(listado);
-        [bean/].update[c.name/](entity);
-
-        Assert.assertEquals(entity.get[a.getClass().name/]s().size(), 0);
-
-        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
-        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/]2 = factory.manufacturePojo([a.getClass().getEntityName()/].class);
-        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/]3 = factory.manufacturePojo([a.getClass().getEntityName()/].class);
-
-        [a.getClass().getEntityLower()/] = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]);
-        [a.getClass().getEntityLower()/]2 = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]2);
-        [a.getClass().getEntityLower()/]3 = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]3);
-
-        [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
-        [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/]2.getId(), entity.getId());
-        [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/]3.getId(), entity.getId());
-
-        entity = [bean/].update[c.name/](entity);
-        Assert.assertEquals(entity.get[a.getClass().name/]s().size(), 3);
-    }
     [/for]
 }
 [/file]
@@ -407,5 +362,5 @@ public class [className/] {
 
 
 [template private getListVar(a : Property)]
-data[a.name.toUpperFirst()/]
+[a.name.toLowerFirst()/]Data
 [/template]

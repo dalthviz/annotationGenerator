@@ -133,15 +133,13 @@ public class [className/] implements [c.getAPIName()/] {
         persistence.delete(id);
     }
 
-    [for (a : Property | c.getRelationshipAttributes()->reject(isComposite()))]
-    [if (a.isOne2Many() or a.isMany2Many())]
-	[let isRelationshipOwner : Boolean = a.isRelationshipOwner()]
+    [for (a : Property | c.getCollectionAttributes()->reject(isComposite()))]
     /**
      * @generated
      */
     @Override
     public [a.getClass().getEntityName()/] add[a.getClass().name/](Long [a.getClass().getEntityId()/], Long [c.getEntityId()/]) {
-		[if (isRelationshipOwner)]
+		[if (a.isRelationshipOwner())]
         [a.getClass().getBeanLower()/].add[c.name/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
         return [a.getClass().getName()/]Persistence.find(bookId);        
 		[else]
@@ -161,18 +159,17 @@ public class [className/] implements [c.getAPIName()/] {
      */
     @Override
     public void remove[a.getClass().name/](Long [a.getClass().getEntityId()/], Long [c.getEntityId()/]) {
-		[if (isRelationshipOwner)]
+		[if (a.isRelationshipOwner())]
         [a.getClass().getBeanLower()/].remove[c.name/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
-		[else]
-        [c.getEntityName()/] [c.getEntityLower()/]  = persistence.find([c.getEntityId()/]);
-        [if (a.getOtherEnd().isMany2One())]
-        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = [a.getClass().getName()/]Persistence.find([a.getClass().getEntityId()/]);
-        [a.getClass().getEntityLower()/].set[c.name/](null);    
         [else]
-        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = new [a.getClass().getEntityName()/]();
-        [a.getClass().getEntityLower()/].setId([a.getClass().getEntityId()/]);        
-        [/if]        
-        [c.getEntityLower()/].get[a.getClass().name/]s().remove([a.getClass().getEntityLower()/]);		
+        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = [a.getClass().getName()/]Persistence.find([a.getClass().getEntityId()/]);
+        [if (a.getOtherEnd().getUpper() = 1)]
+        [a.getClass().getEntityLower()/].set[c.name/](null);
+        [else]
+        [c.getEntityName()/] [c.getEntityLower()/] = new [c.getEntityName()/]();
+        [c.getEntityLower()/].setId([c.getEntityId()/]);
+        [a.getClass().getEntityLower()/].[a.getOtherEnd().getter()/]().remove([c.getEntityLower()/]);
+        [/if]
 		[/if]
     }
     
@@ -183,7 +180,7 @@ public class [className/] implements [c.getAPIName()/] {
     public List<[a.getClass().getEntityName()/]> replace[a.getClass().name/]s(List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]s, Long [c.getEntityId()/]) {
         [c.getEntityName()/] [c.getEntityLower()/]  = persistence.find([c.getEntityId()/]);
         List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]List = [a.getClass().getName()/]Persistence.findAll();
-		[if (isRelationshipOwner)]
+		[if (a.isRelationshipOwner())]
         for ([a.getClass().getEntityName()/] [a.getClass().getName()/] : [a.getClass().getName()/]List) {
             if ([a.getClass().getName()/]s.contains([a.getClass().getName()/])) {
                 if (![a.getClass().getName()/].get[c.name/]s().contains([c.getEntityLower()/])) {
@@ -231,8 +228,6 @@ public class [className/] implements [c.getAPIName()/] {
         }
         return null;
     }
-	[/let]
-    [/if]
     [/for]
 }
 [/file]
@@ -244,4 +239,8 @@ public class [className/] implements [c.getAPIName()/] {
 
 [template public getBeanLower(c : Class)]
 [c.name.toLowerFirst().concat('Logic')/]
+[/template]
+
+[template private getEntityId(c : Class)]
+[c.name.toLowerFirst().concat('Id')/]
 [/template]
