@@ -172,7 +172,7 @@ public class [className/] {
     @PUT
     @Path("{[c.getEntityId()/]: \\d+}/[a.getClass().getURI()/]")
     public List<[a.getClass().getDTOName()/]> replace[a.getClass().name/]s(@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], List<[a.getClass().getDTOName()/]> [a.getClass().getURI()/]) {
-        return [a.getClass().getConverterName()/].listEntity2DTO([logic/].replace[a.name.toUpperFirst()/]([a.getClass().getConverterName()/].listDTO2Entity([a.getClass().getURI()/]), [c.getEntityId()/]));
+        return [a.getClass().getConverterName()/].listEntity2DTO([logic/].replace[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getConverterName()/].listDTO2Entity([a.getClass().getURI()/])));
     }
 
     /**

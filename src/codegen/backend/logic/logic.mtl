@@ -170,7 +170,7 @@ public class [className/] implements [c.getAPIName()/] {
         [a.getEntityLower()/].[a.getOtherEnd().setter()/]([c.getEntityLower()/]);
         return [a.getEntityLower()/];
         [else]
-        [a.getClass().getBeanLower()/].add[c.name/]([c.getEntityId()/], [a.getEntityId()/]);
+        [a.getClass().getBeanLower()/].add[a.getOtherEnd().name.toUpperFirst()/]([c.getEntityId()/], [a.getEntityId()/]);
         return [a.getClass().getBeanLower()/].get[a.getClass().name/]([a.getEntityId()/]);
         [/if]
 		[/if]
@@ -198,10 +198,10 @@ public class [className/] implements [c.getAPIName()/] {
         for ([a.getClass().getEntityName()/] [a.getClass().getName()/] : [a.getClass().getName()/]List) {
             if (list.contains([a.getClass().getName()/])) {
                 if (![a.getClass().getName()/].[a.getOtherEnd().getter()/]().contains([c.getEntityLower()/])) {
-                    [a.getClass().getBeanLower()/].add[c.name/]([c.getEntityId()/], [a.getClass().getName()/].getId());
+                    [a.getClass().getBeanLower()/].add[a.getOtherEnd().name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getName()/].getId());
                 }
             } else {
-                [a.getClass().getBeanLower()/].remove[c.name/]([c.getEntityId()/], [a.getClass().getName()/].getId());
+                [a.getClass().getBeanLower()/].remove[a.getOtherEnd().name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getName()/].getId());
             }
         }
         [/if]
@@ -220,7 +220,7 @@ public class [className/] implements [c.getAPIName()/] {
         [a.getClass().getEntityName()/] entity = [a.getClass().getBeanLower()/].get[a.getClass().name/]([a.getEntityId()/]);
         entity.[a.getOtherEnd().setter()/](null);
         [else]
-        [a.getClass().getBeanLower()/].remove[c.name/]([c.getEntityId()/], [a.getEntityId()/]);
+        [a.getClass().getBeanLower()/].remove[a.getOtherEnd().name.toUpperFirst()/]([c.getEntityId()/], [a.getEntityId()/]);
         [/if]
         [else]
         [c.getEntityName()/] entity = persistence.find([c.getEntityId()/]);
