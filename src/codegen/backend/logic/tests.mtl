@@ -57,14 +57,6 @@ public class [className/] {
     @Inject
     private [c.getAPIName()/] [bean/];
 
-    [for (a : Property | c.getNonCompositeCollectionAttributes())]
-    /**
-     * @generated
-     */
-    @Inject
-    private [a.getClass().getAPIName()/] [a.getClass().getBeanLower()/];
-    [/for]
-
     /**
      * @generated
      */
@@ -338,7 +330,6 @@ public class [className/] {
 [template private getBeanLower(c : Class)]
 [c.name.toLowerFirst().concat('Logic')/]
 [/template]
-
 
 [template private getListVar(a : Property)]
 [a.name.toLowerFirst()/]Data

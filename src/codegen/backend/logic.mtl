@@ -2,8 +2,8 @@
 [module logic('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
 [import backend::logic::logic /]
-[import backend::logic::entities /]
 [import backend::logic::tests /]
+[import backend::persistence::entities /]
 [import backend::persistence::persistence /]
 [import backend::persistence::tests /]
 
