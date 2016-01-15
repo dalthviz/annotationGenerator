@@ -17,9 +17,6 @@ import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
 [for (a : Property | c.getRelationshipAttributes())]
-[if (not a.isComposite() and getUpper() <> 1)]
-import [c.getModel().baseGroup()/].api.[a.getClass().getAPIName()/];
-[/if]
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 [/for]
 import java.util.ArrayList;
@@ -143,6 +140,7 @@ public class [className/] {
         for (int i = 0; i < 3; i++) {
             [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);
             [for (a : Property | c.getRelationshipAttributes()->select(isComposite()))]
+
             [if (a.getUpper() = 1)]
             entity.[a.getter()/]().[a.getClass().getParentAttribute().setter()/](entity);
             [else]
@@ -151,8 +149,8 @@ public class [className/] {
             }
             [/if]
             [/for]
-
             [for (a : Property | c.getRelationshipAttributes()->reject(isComposite() or not isRelationshipOwner()))]
+
             [if (a.getUpper() = 1)]
             entity.[a.setter()/]([a.getListVar()/].get(0));
             [else]
@@ -162,10 +160,12 @@ public class [className/] {
 
             em.persist(entity);
             data.add(entity);
-
             [for (a : Property | c.getRelationshipAttributes()->reject(isComposite() or isRelationshipOwner()))]
+
             [if (a.getOtherEnd().getUpper() = 1)]
-            [a.getListVar()/].get(0).[a.getOtherEnd().setter()/](entity);
+            if (i == 0) {
+                [a.getListVar()/].get(i).[a.getOtherEnd().setter()/](entity);
+            }
             [else]
             [a.getListVar()/].get(0).[a.getOtherEnd().getter()/]().add(entity);
             [/if]
@@ -182,9 +182,7 @@ public class [className/] {
         [c.getEntityName()/] result = [bean/].create[c.name/](entity);
         Assert.assertNotNull(result);
         [for (prop : Property | c.attribute)]
-        [if (not prop.isDate())]
         Assert.assertEquals(result.[prop.getter()/](), entity.[prop.getter()/]());
-        [/if]
         [/for]
     }
 
@@ -224,7 +222,7 @@ public class [className/] {
      */
     @Test
     public void delete[c.name/]Test() {
-        [c.getEntityName()/] entity = data.get(0);
+        [c.getEntityName()/] entity = data.get(1);
         [bean/].delete[c.name/](entity.getId());
         [c.getEntityName()/] deleted = em.find([c.getEntityName()/].class, entity.getId());
         Assert.assertNull(deleted);
@@ -245,9 +243,7 @@ public class [className/] {
         [c.getEntityName()/] resp = em.find([c.getEntityName()/].class, entity.getId());
 
         [for (prop : Property | c.attribute)]
-        [if (not prop.isDate())]
         Assert.assertEquals(pojoEntity.[prop.getter()/](), resp.[prop.getter()/]());
-        [/if]
         [/for]
     }
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
@@ -286,7 +282,7 @@ public class [className/] {
 
         Assert.assertNotNull(response);
         [for (prop : Property | a.getClass().allAttributes())]
-        Assert.assertEquals(response.[prop.getter()/](), [a.getClass().getEntityLower()/].[prop.getter()/]());
+        Assert.assertEquals([a.getClass().getEntityLower()/].[prop.getter()/](), response.[prop.getter()/]());
         [/for]
     }
 
