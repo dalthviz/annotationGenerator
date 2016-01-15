@@ -255,7 +255,7 @@ public class [className/] {
     public void get[a.name.toUpperFirst()/]Test() {
         [c.getEntityName()/] entity = data.get(0);
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = [a.getListVar()/].get(0);
-        [a.getClass().getEntityName()/] response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
+        [a.getClass().getEntityName()/] response = [bean/].get[a.name.toUpperFirst()/](entity.getId(), [a.getClass().getEntityLower()/].getId());
 
         [for (prop : Property | a.getClass().attribute)]
         Assert.assertEquals([a.getClass().getEntityLower()/].[prop.getter()/](), response.[prop.getter()/]());
@@ -267,7 +267,7 @@ public class [className/] {
      */
     @Test
     public void list[a.name.toUpperFirst()/]Test() {
-        List<[a.getClass().getEntityName()/]> list = [bean/].[a.getter()/](data.get(0).getId());
+        List<[a.getClass().getEntityName()/]> list = [bean/].list[a.name.toUpperFirst()/](data.get(0).getId());
         Assert.assertEquals(1, list.size());
     }
 
@@ -275,11 +275,11 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void add[a.getClass().name/]Test() {
+    public void add[a.name.toUpperFirst()/]Test() {
         [c.getEntityName()/] entity = data.get(0);
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = [a.getListVar()/].get(1);
-        [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
-        [a.getClass().getEntityName()/] response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
+        [bean/].add[a.name.toUpperFirst()/]([a.getClass().getEntityLower()/].getId(), entity.getId());
+        [a.getClass().getEntityName()/] response = [bean/].get[a.name.toUpperFirst()/](entity.getId(), [a.getClass().getEntityLower()/].getId());
 
         Assert.assertNotNull(response);
         [for (prop : Property | a.getClass().allAttributes())]
@@ -291,10 +291,10 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void replace[a.getClass().name/]sTest() {
+    public void replace[a.name.toUpperFirst()/]Test() {
         [c.getEntityName()/] entity = data.get(0);
         List<[a.getClass().getEntityName()/]> list = [a.getListVar()/].subList(1, 3);
-        [bean/].replace[a.getClass().name/]s(list, entity.getId());
+        [bean/].replace[a.name.toUpperFirst()/](list, entity.getId());
 
         entity = [bean/].get[c.name/](entity.getId());
         Assert.assertFalse(entity.[a.getter()/]().contains([a.getListVar()/].get(0)));
@@ -306,9 +306,9 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void remove[a.getClass().name/]Test() {
-        [bean/].remove[a.getClass().name/]([a.getListVar()/].get(0).getId(), data.get(0).getId());
-        [a.getClass().getEntityName()/] response = [bean/].get[a.getClass().name/](data.get(0).getId(), [a.getListVar()/].get(0).getId());
+    public void remove[a.name.toUpperFirst()/]Test() {
+        [bean/].remove[a.name.toUpperFirst()/]([a.getListVar()/].get(0).getId(), data.get(0).getId());
+        [a.getClass().getEntityName()/] response = [bean/].get[a.name.toUpperFirst()/](data.get(0).getId(), [a.getListVar()/].get(0).getId());
         Assert.assertNull(response);
     }
     [/for]
