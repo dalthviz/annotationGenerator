@@ -48,7 +48,7 @@ import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
 import [c.getModel().baseGroup()/].persistence.[a.getClass().getPersistenceName()/];
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
-[if (a.isRelationshipOwner())]
+[if (not a.isRelationshipOwner())]
 import [c.getModel().baseGroup()/].api.[a.getClass().getAPIName()/];
 [/if]
 [/for]
@@ -164,17 +164,20 @@ public class [className/] implements [c.getAPIName()/] {
     @Override
     public [a.getClass().getEntityName()/] add[a.getClass().name/](Long [a.getClass().getEntityId()/], Long [c.getEntityId()/]) {
 		[if (a.isRelationshipOwner())]
-        [a.getClass().getBeanLower()/].add[c.name/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
-        return [a.getClass().getName()/]Persistence.find([a.getClass().getEntityId()/]);
-		[else]
         [c.getEntityName()/] [c.getEntityLower()/] = persistence.find([c.getEntityId()/]);
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = [a.getClass().getName()/]Persistence.find([a.getClass().getEntityId()/]);
-        [if (a.getOtherEnd().isMany2One())]
-        [a.getClass().getEntityLower()/].[a.getOtherEnd().setter()/]([c.getEntityLower()/]);
-        [else]
         [c.getEntityLower()/].[a.getter()/]().add([a.getClass().getEntityLower()/]);
-        [/if]
         return [a.getClass().getEntityLower()/];
+		[else]
+        [if (a.getOtherEnd().getUpper() = 1)]
+        [c.getEntityName()/] [c.getEntityLower()/] = persistence.find([c.getEntityId()/]);
+        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = [a.getClass().getName()/]Persistence.find([a.getClass().getEntityId()/]);
+        [a.getClass().getEntityLower()/].[a.getOtherEnd().setter()/]([c.getEntityLower()/]);
+        return [a.getClass().getEntityLower()/]
+        [else]
+        [a.getClass().getBeanLower()/].add[c.name/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
+        return [a.getClass().getBeanLower()/].get[a.getClass().name/]([a.getClass().getEntityId()/]);
+        [/if]
 		[/if]
     }
 

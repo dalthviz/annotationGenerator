@@ -215,9 +215,7 @@ public class [className/] {
         [c.getEntityName()/] resultEntity = [bean/].get[c.name/](entity.getId());
         Assert.assertNotNull(resultEntity);
         [for (prop : Property | c.attribute)]
-        [if (not prop.isDate())]
         Assert.assertEquals(entity.[prop.getter()/](), resultEntity.[prop.getter()/]());
-        [/if]
         [/for]
     }
 
