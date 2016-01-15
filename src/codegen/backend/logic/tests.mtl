@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module tests('http://www.eclipse.org/uml2/5.0.0/UML')]
-[import ::utils /] 
+[import ::utils /]
 
 [template public mainTests(c : Class, path : String)]
 [c.genTests(path.concat('test/logic/'))/]
@@ -141,7 +141,7 @@ public class [className/] {
 
         [/for]
         for (int i = 0; i < 3; i++) {
-            [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);            
+            [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);
             [for (a : Property | c.getRelationshipAttributes()->select(isComposite()))]
             [if (a.getUpper() = 1)]
             entity.[a.getter()/]().[a.getClass().getParentAttribute().setter()/](entity);
@@ -296,16 +296,6 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void remove[a.getClass().name/]Test() {
-        [bean/].remove[a.getClass().name/]([a.getListVar()/].get(0).getId(), data.get(0).getId());
-        [a.getClass().getEntityName()/]response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
-        Assert.assertNull(response);
-    }
-
-    /**
-     * @generated
-     */
-    @Test
     public void replace[a.getClass().name/]sTest() {
         [c.getEntityName()/] entity = data.get(0);
         List<[a.getClass().getEntityName()/]> list = [a.getListVar()/].subList(1, 3);
@@ -315,6 +305,16 @@ public class [className/] {
         Assert.assertFalse(entity.[a.getter()/]().contains([a.getListVar()/].get(0)));
         Assert.assertTrue(entity.[a.getter()/]().contains([a.getListVar()/].get(1)));
         Assert.assertTrue(entity.[a.getter()/]().contains([a.getListVar()/].get(2)));
+    }
+
+    /**
+     * @generated
+     */
+    @Test
+    public void remove[a.getClass().name/]Test() {
+        [bean/].remove[a.getClass().name/]([a.getListVar()/].get(0).getId(), data.get(0).getId());
+        [a.getClass().getEntityName()/] response = [bean/].get[a.getClass().name/](data.get(0).getId(), [a.getListVar()/].get(0).getId());
+        Assert.assertNull(response);
     }
     [/for]
 }

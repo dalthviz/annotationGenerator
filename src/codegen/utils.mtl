@@ -5,7 +5,7 @@
 m.packagedElement->filter(Class)->sortedBy(name)
 /]
 
-[query public getAllAttribs(c : Class) : OrderedSet(Property) = 
+[query public getAllAttribs(c : Class) : OrderedSet(Property) =
 c.allAttributes()->reject(isID())
 /]
 
@@ -13,7 +13,7 @@ c.allAttributes()->reject(isID())
 c.allAttributes()->any(isID())
 /]
 
-[query public getRootClasses(m : Model) : OrderedSet(Class) = 
+[query public getRootClasses(m : Model) : OrderedSet(Class) =
 m.getClasses()->reject(isChild())
 /]
 
@@ -33,20 +33,20 @@ and a.getOtherEnd().getUpper() = 1
 and a.getOtherEnd().aggregation = AggregationKind::none
 /]
 
-[query public isOne2Many(a : Property) : Boolean = 
+[query public isOne2Many(a : Property) : Boolean =
     a.isNavigable()
-and a.getUpper() <> 1 
+and a.getUpper() <> 1
 and a.getOtherEnd().getUpper() = 1
 /]
 
-[query public isMany2One(a : Property) : Boolean = 
+[query public isMany2One(a : Property) : Boolean =
     a.isNavigable()
-and a.getUpper() = 1 
+and a.getUpper() = 1
 and a.aggregation = AggregationKind::none
 and a.getOtherEnd().getUpper() <> 1
 /]
 
-[query public getAttributesWithRef(c : Class) : OrderedSet(Property) = 
+[query public getAttributesWithRef(c : Class) : OrderedSet(Property) =
 c.allAttributes()->union(c.getReferences(false))->asOrderedSet()
 /]
 
@@ -75,14 +75,14 @@ c.getAssociations()->collect( asc |
 )->asSet()
 /]
 
-[query public getReferences(c : Class, includeParent : Boolean) : OrderedSet(Property) = 
+[query public getReferences(c : Class, includeParent : Boolean) : OrderedSet(Property) =
 c.getRelationshipAttributes()->select(
     a | a.getUpper() = 1
     and (a.getOtherEnd().isComposite() implies includeParent)
 )->asOrderedSet()
 /]
 
-[query public getCollectionAttributes(c : Class) : Set(Property) = 
+[query public getCollectionAttributes(c : Class) : Set(Property) =
 c.getRelationshipAttributes()->select(getUpper() <> 1)->asSet()
 /]
 
@@ -110,19 +110,19 @@ c.getCompositeCollectionAttributes()->notEmpty()
 c.getNonCompositeCollectionAttributes()->notEmpty()
 /]
 
-[query public isChild(c : Class) : Boolean = 
+[query public isChild(c : Class) : Boolean =
 c.getParentAttribute() <> null
  /]
 
-[query public getParentAttribute(c : Class) : Property = 
+[query public getParentAttribute(c : Class) : Property =
 c.getReferences(true)->any(isParentAttribute())
 /]
 
-[query public isParentAttribute(a : Property) : Boolean = 
+[query public isParentAttribute(a : Property) : Boolean =
 a.getOtherEnd().isComposite()
 /]
 
-[query public isValidType(a : Property) : Boolean = 
+[query public isValidType(a : Property) : Boolean =
 Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <> null and t = a.type.name)
 /]
 
@@ -153,7 +153,7 @@ Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <
  * - La relación es bidireccional, uno a muchos, y el atributo es de cardinalidad 1 o 0..1
  * - La relación es bidireccional, muchos a muchos o uno a uno, entonces se decide cualquiera (se implementa comparando nombres y aquel que sea mayor que el otro)
 */]
-[query public isRelationshipOwner(a : Property) : Boolean = 
+[query public isRelationshipOwner(a : Property) : Boolean =
     a.isNavigable()
 and (
     not a.getOtherEnd().isNavigable()
