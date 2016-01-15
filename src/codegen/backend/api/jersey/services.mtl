@@ -158,7 +158,7 @@ public class [className/] {
     @POST
     @Path("{[c.getEntityId()/]: \\d+}/[a.getClass().getURI()/]/{[a.getClass().getEntityId()/]: \\d+}")
     public [a.getClass().getDTOName()/] add[a.getClass().name/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
-        return [a.getClass().getConverterName()/].fullEntity2DTO([logic/].add[a.name.toUpperFirst()/]([a.getClass().getEntityId()/], [c.getEntityId()/]));
+        return [a.getClass().getConverterName()/].fullEntity2DTO([logic/].add[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getEntityId()/]));
     }
 
     /**
@@ -185,7 +185,7 @@ public class [className/] {
     @DELETE
     @Path("{[c.getEntityId()/]: \\d+}/[a.getClass().getURI()/]/{[a.getClass().getEntityId()/]: \\d+}")
     public void delete[a.getClass().name/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
-        [logic/].remove[a.name.toUpperFirst()/]([a.getClass().getEntityId()/], [c.getEntityId()/]);
+        [logic/].remove[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
     }
 
 [/for]
