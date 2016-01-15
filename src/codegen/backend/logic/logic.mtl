@@ -190,8 +190,7 @@ public class [className/] implements [c.getAPIName()/] {
                 [a.getClass().getBeanLower()/].remove[c.name/]([c.getEntityId()/], [a.getClass().getName()/].getId());
             }
         }
-		[/if]
-        [if (a.getOtherEnd().isMany2One())]  
+        [else]
         for ([a.getClass().getEntityName()/] [a.getClass().getName()/] : [a.getClass().getName()/]List) {
             if ([a.getClass().getName()/]s.contains([a.getClass().getName()/])) {
                 [a.getClass().getName()/].set[c.name/]([c.getEntityLower()/] );                
@@ -200,8 +199,8 @@ public class [className/] implements [c.getAPIName()/] {
                     [a.getClass().getName()/].set[c.name/](null);
                 }
             }
-        } 
-        [/if]  
+        }        
+		[/if]
         [c.getEntityLower()/].set[a.getClass().name/]s([a.getClass().getName()/]s);
         return [c.getEntityLower()/].get[a.getClass().name/]s();
     }
