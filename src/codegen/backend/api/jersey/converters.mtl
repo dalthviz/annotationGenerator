@@ -206,7 +206,7 @@ public abstract class [className/] {
     [let parent : Property = c.getParentAttribute()]
     /**
      * Convierte una instancia de [c.getDTOName()/] a [c.getEntityName()/] asignando un valor
-     * al atributo [parent/] de [c.getEntityName()/]. Se usa cuando se necesita convertir 
+     * al atributo [parent/] de [c.getEntityName()/]. Se usa cuando se necesita convertir
      * un [c.getDTOName()/] asignando el libro asociado
      * @param dto Instancia de [c.getDTOName()/]
      * @param parent Instancia de [parent.getClass().getEntityName()/]
@@ -220,8 +220,8 @@ public abstract class [className/] {
     }
 
     /**
-     * Convierte una colección de instancias de [c.getDTOName()/] a [c.getEntityName()/] 
-     * asignando el mismo padre para todos. Se usa cuando se necesita crear o 
+     * Convierte una colección de instancias de [c.getDTOName()/] a [c.getEntityName()/]
+     * asignando el mismo padre para todos. Se usa cuando se necesita crear o
      * actualizar varios [c.getEntityName()/] con el mismo [parent/]
      * @param dtos Colección de instancias de [c.getDTOName()/]
      * @param parent Instancia de [parent.getClass().getEntityName()/]

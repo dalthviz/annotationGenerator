@@ -32,7 +32,7 @@
                 service: '[a.getClass().getService()/]',
                 options: ['[]'/],
                 required: [a.isRequired()/]
-            }[/for][/if][']'/][if (c.isMaster())], 
+            }[/for][/if][']'/][if (c.isMaster())],
         childs: ['['/][for (a : Property | c.getCollectionAttributes()) separator(', ')]{
                 name: '[a.name/]',
                 displayName: '[a.getDisplayName()/]',
@@ -42,7 +42,7 @@
         [']'/][/if]});
 })(window.angular);
 [/file]
-[/template] 
+[/template]
 
 [template protected genCtrl(c : Class, path : String)]
 [file (path + '.ctrl.js', false, 'UTF-8')]
@@ -82,7 +82,7 @@
 [file (path.concat('.svc.js'), false, 'UTF-8')]
 (function(ng){
     var mod = ng.module('[c.getModule() /]');
-    
+
     mod.service('[c.getService()/]', ['['/]'CrudCreator','[c.getContext()/]', function(CrudCreator, context){
             CrudCreator.extendService(this, context);
     }[']'/]);

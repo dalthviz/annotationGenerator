@@ -82,7 +82,7 @@ describe('[c.name/] E2E Testing', function () {
         element(by.id('save-[c.specName()/]')).click();
         expect(element.all(by.repeater('record in records')).count()).toEqual(1);
     });
-    
+
     it('should read one [c.specName()/]', function () {
         [for (a : Property | c.getAllAttribs())]
 		[if(a.type.name = 'String')]
@@ -98,7 +98,7 @@ describe('[c.name/] E2E Testing', function () {
 		[/if]
         [/for]
     });
-    
+
     it('should edit one [c.specName()/]', function () {
         element(by.id('0-edit-btn')).click();
 
@@ -132,7 +132,7 @@ describe('[c.name/] E2E Testing', function () {
 		[/if]
         [/for]
     });
-    
+
     it('should delete the [c.specName()/]', function () {
         element(by.id('0-delete-btn')).click();
         [for (a : Property | c.getAllAttribs())]

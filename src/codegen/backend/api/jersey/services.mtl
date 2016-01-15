@@ -102,7 +102,7 @@ public class [className/] {
     @PUT
     @Path("{id: \\d+}")
     public [c.getDTOName()/] update[c.name/](@PathParam("id") Long id, [c.getDTOName()/] dto) {
-        [c.getEntityName()/] entity = [c.getConverterName()/].fullDTO2Entity(dto);        
+        [c.getEntityName()/] entity = [c.getConverterName()/].fullDTO2Entity(dto);
         entity.setId(id);
         return [c.getConverterName()/].fullEntity2DTO([logic/].update[c.name/](entity));
     }
@@ -161,7 +161,7 @@ public class [className/] {
         return [a.getClass().getConverterName()/].fullEntity2DTO([logic/].add[a.getClass().name/]([a.getClass().getEntityId()/], [c.getEntityId()/]));
     }
 
-    /** 
+    /**
      * Remplaza las instancias de [a.getClass().name/] asociadas a una instancia de [c.name/]
      *
      * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]

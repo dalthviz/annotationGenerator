@@ -49,7 +49,7 @@
         <!-- bower:css -->
         <!-- endbower -->
         <!-- endbuild -->
-        
+
         <!-- build:css(<%= meta.src %>) styles/main.css -->
         <!-- include: "type": "js", "files": "<%= meta.includeCssFiles %>" -->
         <!-- /include -->

@@ -31,7 +31,7 @@ import java.util.ArrayList;
 /**
  * @generated
  */
-@XmlRootElement 
+@XmlRootElement
 public class [className/] {
 
 [for(a : Property | c.allAttributes())]

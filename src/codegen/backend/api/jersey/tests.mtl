@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module tests('http://www.eclipse.org/uml2/5.0.0/UML')]
-[import ::utils /] 
+[import ::utils /]
 
 [template public mainTests(c : Class, path : String)]
 [c.genTests(path.concat('tests/'))/]
@@ -93,7 +93,7 @@ public class [c.getServiceTestName()/] {
                 // El archivo web.xml es necesario para el despliegue de los servlets
                 .setWebXML(new File("src/main/webapp/WEB-INF/web.xml"));
     }
-    
+
     private WebTarget createWebTarget() {
         ClientConfig config = new ClientConfig();
         config.register(LoggingFilter.class);
@@ -118,22 +118,22 @@ public class [c.getServiceTestName()/] {
                 [a.getClass().getName()/].setId(i + 1L);
                 [a.getClass().getName()/]List.add([a.getClass().getName()/]);
             }
-            
+
             [c.getName()/].set[a.getClass().name/]s([a.getClass().getName()/]List);
             [/for]
-            
+
             oraculo.add([c.getName()/]);
-            
+
             [for (a : Property | c.getNonCompositeCollectionAttributes())]
             [a.getClass().getDTOName()/] [a.getClass().getName()/] = factory.manufacturePojo([a.getClass().getDTOName()/].class);
             [a.getClass().getName()/].setId(i + 1L);
             oraculo[a.getClass().name/]s.add([a.getClass().getName()/]);
             [/for]
 
-            
+
         }
     }
-    
+
     public Cookie login(String username, String password) {
         UserDTO user = new UserDTO();
         user.setUserName(username);
@@ -168,7 +168,7 @@ public class [c.getServiceTestName()/] {
         [/for]
         Assert.assertEquals(Created, response.getStatus());
     }
-    
+
     @Test
     public void t2Get[c.name/]ById() {
         Cookie cookieSessionId = login(username, password);
@@ -179,9 +179,9 @@ public class [c.getServiceTestName()/] {
         [if (prop.isDate()=false)]
         Assert.assertEquals([c.testName()/].[prop.getter()/](), oraculo.get(0).[prop.getter()/]());
         [/if]
-        [/for]                
+        [/for]
     }
-    
+
     @Test
     public void t3[c.getServiceTestName()/]() throws IOException {
         Cookie cookieSessionId = login(username, password);
@@ -192,7 +192,7 @@ public class [c.getServiceTestName()/] {
         Assert.assertEquals(Ok, response.getStatus());
         Assert.assertEquals(1, list[c.name/]Test.size());
     }
-    
+
     @Test
     public void t4Update[c.getServiceTestName()/]() throws IOException {
         Cookie cookieSessionId = login(username, password);
@@ -215,20 +215,20 @@ public class [c.getServiceTestName()/] {
         [/for]
 
     }
-    
+
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
     @Test
     public void t[(i * 4)+1/]Add[a.getClass().name/][c.getServiceTestName()/]() {
         Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
-        
+
         [a.getClass().getDTOName()/] [a.getClass().getName()/] = oraculo[a.getClass().name/]s.get(0);
         [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
-        
-        
+
+
         Response response = target.path([a.getClass().testPath()/])
                 .request().cookie(cookieSessionId)
                 .post(Entity.entity([a.getClass().getName()/], MediaType.APPLICATION_JSON));
-        
+
         [a.getClass().getDTOName()/] [a.getClass().testName()/] = ([a.getClass().getDTOName()/]) response.readEntity([a.getClass().getDTOName()/].class);
         [for (prop : Property | a.getClass().attribute)]
         [if (prop.isDate()=false)]
@@ -236,12 +236,12 @@ public class [c.getServiceTestName()/] {
         [/if]
         [/for]
         Assert.assertEquals(Created, response.getStatus());
-        
+
         response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
                 .path([a.getClass().testPath()/]).path([a.getClass().getName()/].getId().toString())
                 .request().cookie(cookieSessionId)
                 .post(Entity.entity([a.getClass().getName()/], MediaType.APPLICATION_JSON));
-        
+
         [a.getClass().testName()/] = ([a.getClass().getDTOName()/]) response.readEntity([a.getClass().getDTOName()/].class);
         Assert.assertEquals(Ok, response.getStatus());
         [for (prop : Property | a.getClass().attribute)]
@@ -250,55 +250,55 @@ public class [c.getServiceTestName()/] {
         [/if]
         [/for]
     }
-    
+
     @Test
     public void t[(i * 4)+2/]Get[a.getClass().getServiceTestName()/]List() throws IOException {
         Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
         [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
-        
+
         Response response = target.path([c.testPath()/])
                 .path([c.getName()/].getId().toString())
                 .path([a.getClass().testPath()/])
                 .request().cookie(cookieSessionId).get();
-        
+
         String [a.getClass().getName()/]List = response.readEntity(String.class);
         List<[a.getClass().getDTOName()/]> [a.getClass().getName()/]ListTest = new ObjectMapper().readValue([a.getClass().getName()/]List, List.class);
         Assert.assertEquals(Ok, response.getStatus());
         Assert.assertEquals(1, [a.getClass().getName()/]ListTest.size());
     }
-    
+
     @Test
     public void t[(i * 4)+3/]Get[a.getClass().getServiceTestName()/]() throws IOException {
         Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
         [a.getClass().getDTOName()/] [a.getClass().getName()/] = oraculo[a.getClass().name/]s.get(0);
         [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
-        
+
         [a.getClass().getDTOName()/] [a.getClass().testName()/] = target.path([c.testPath()/])
                 .path([c.getName()/].getId().toString()).path([a.getClass().testPath()/])
                 .path([a.getClass().getName()/].getId().toString())
                 .request().cookie(cookieSessionId).get([a.getClass().getDTOName()/].class);
-                
+
         [for (prop : Property | a.getClass().attribute)]
         [if (prop.isDate()=false)]
         Assert.assertEquals([a.getClass().getName()/].[prop.getter()/](), [a.getClass().testName()/].[prop.getter()/]());
         [/if]
         [/for]
     }
-    
+
     @Test
     public void t[(i * 4)+4/]Remove[a.getClass().name/][c.getServiceTestName()/]() {
         Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
-        
+
         [a.getClass().getDTOName()/] [a.getClass().getName()/] = oraculo[a.getClass().name/]s.get(0);
         [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
-        
+
         Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
                 .path([a.getClass().testPath()/]).path([a.getClass().getName()/].getId().toString())
                 .request().cookie(cookieSessionId).delete();
         Assert.assertEquals(OkWithoutContent, response.getStatus());
     }
     [/for]
-    
+
     @Test
     public void t[(c.getNonCompositeCollectionAttributes()->size()*4)+5/]Delete[c.getServiceTestName()/]() {
         Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
@@ -306,8 +306,8 @@ public class [c.getServiceTestName()/] {
         Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
                 .request().cookie(cookieSessionId).delete();
         Assert.assertEquals(OkWithoutContent, response.getStatus());
-    } 
-    
+    }
+
 
 }
 [/file]

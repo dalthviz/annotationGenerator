@@ -31,7 +31,7 @@ stormpathRealm.client = $stormpathClient
 # Applications -> (choose application name) --> Details: REST URL
 
 # ------------ WARNING ------------
-# Set Stormpath's application URL. Without this application won't run. 
+# Set Stormpath's application URL. Without this application won't run.
 # stormpathRealm.applicationRestUrl = https://api.stormpath.com/v1/applications/7Aq0vnw9Ss4r7L1E0nasoo
 
 stormpathRealm.authenticationCachingEnabled = true
