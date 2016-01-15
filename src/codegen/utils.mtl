@@ -158,7 +158,7 @@ Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <
 and (
     not a.getOtherEnd().isNavigable()
     or  (a.isMany2One())
-    or  ((a.isMany2Many() or a.isOne2One()) and a.name > a.getOtherEnd().name)
+    or  ((a.isMany2Many() or a.isOne2One()) and a.name < a.getOtherEnd().name)
 )
 /]
 
