@@ -307,7 +307,7 @@ public class [className/] {
      */
     @Test
     public void remove[a.name.toUpperFirst()/]Test() {
-        [bean/].remove[a.name.toUpperFirst()/]([a.getListVar()/].get(0).getId(), data.get(0).getId());
+        [bean/].remove[a.name.toUpperFirst()/](data.get(0).getId(), [a.getListVar()/].get(0).getId());
         [a.getClass().getEntityName()/] response = [bean/].get[a.name.toUpperFirst()/](data.get(0).getId(), [a.getListVar()/].get(0).getId());
         Assert.assertNull(response);
     }

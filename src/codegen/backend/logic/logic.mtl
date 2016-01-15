@@ -201,7 +201,7 @@ public class [className/] implements [c.getAPIName()/] {
                     [a.getClass().getBeanLower()/].add[a.getOtherEnd().name.toUpperFirst()/]([a.getClass().getName()/].getId(), [c.getEntityId()/]);
                 }
             } else {
-                [a.getClass().getBeanLower()/].remove[a.getOtherEnd().name.toUpperFirst()/]([a.getClass().getName()/].getId(), [c.getEntityId()/], );
+                [a.getClass().getBeanLower()/].remove[a.getOtherEnd().name.toUpperFirst()/]([a.getClass().getName()/].getId(), [c.getEntityId()/]);
             }
         }
         [/if]
