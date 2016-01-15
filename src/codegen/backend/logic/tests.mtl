@@ -294,7 +294,7 @@ public class [className/] {
     public void replace[a.name.toUpperFirst()/]Test() {
         [c.getEntityName()/] entity = data.get(0);
         List<[a.getClass().getEntityName()/]> list = [a.getListVar()/].subList(1, 3);
-        [bean/].replace[a.name.toUpperFirst()/](list, entity.getId());
+        [bean/].replace[a.name.toUpperFirst()/](entity.getId(), list);
 
         entity = [bean/].get[c.name/](entity.getId());
         Assert.assertFalse(entity.[a.getter()/]().contains([a.getListVar()/].get(0)));

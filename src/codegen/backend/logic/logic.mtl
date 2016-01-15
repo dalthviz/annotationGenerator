@@ -162,7 +162,7 @@ public class [className/] implements [c.getAPIName()/] {
         [a.getClass().getEntityName()/] [a.getEntityLower()/] = new [a.getClass().getEntityName()/]();
         [a.getEntityLower()/].setId([a.getEntityId()/]);
         [c.getEntityLower()/].[a.getter()/]().add([a.getEntityLower()/]);
-        return get[a.getClass().name/]([c.getEntityId()/], [a.getEntityId()/]);
+        return get[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getEntityId()/]);
 		[else]
         [if (a.getOtherEnd().getUpper() = 1)]
         [c.getEntityName()/] [c.getEntityLower()/] = persistence.find([c.getEntityId()/]);
