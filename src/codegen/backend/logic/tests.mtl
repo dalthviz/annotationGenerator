@@ -64,7 +64,7 @@ public class [className/] {
      * @generated
      */
     @Inject
-    UserTransaction utx;
+    private UserTransaction utx;
 
     /**
      * @generated
@@ -278,7 +278,8 @@ public class [className/] {
     public void add[a.getClass().name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = [a.getListVar()/].get(1);
-        [a.getClass().getEntityName()/] response = [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
+        [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
+        [a.getClass().getEntityName()/] response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
 
         Assert.assertNotNull(response);
         [for (prop : Property | a.getClass().allAttributes())]
