@@ -316,34 +316,13 @@ public class [className/] {
     @Test
     public void replace[a.getClass().name/]sTest() {
         [c.getEntityName()/] entity = data.get(0);
-        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
-        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/]2 = factory.manufacturePojo([a.getClass().getEntityName()/].class);
-        [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/]3 = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+        List<[a.getClass().getEntityName()/]> list = [a.getListVar()/].subList(1, 3);
+        [bean/].replace[a.getClass().name/]s(list, entity.getId());
 
-        [a.getClass().getEntityLower()/] = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]);
-        [a.getClass().getEntityLower()/]2 = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]2);
-        [a.getClass().getEntityLower()/]3 = [a.getClass().getBeanLower()/].create[a.getClass().name/]([a.getClass().getEntityLower()/]3);
-
-        [bean/].add[a.getClass().name/]([a.getClass().getEntityLower()/].getId(), entity.getId());
-
-        [a.getClass().getEntityName()/] get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
-        [a.getClass().getEntityName()/] get[a.getClass().name/]Response2 = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/]2.getId());
-        [a.getClass().getEntityName()/] get[a.getClass().name/]Response3 = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/]3.getId());
-        Assert.assertNotNull(get[a.getClass().name/]Response);
-        Assert.assertNull(get[a.getClass().name/]Response2);
-        Assert.assertNull(get[a.getClass().name/]Response3);
-
-        List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]List = new ArrayList<[a.getClass().getEntityName()/]>() {};
-        [a.getClass().getName()/]List.add([a.getClass().getEntityLower()/]2);
-        [a.getClass().getName()/]List.add([a.getClass().getEntityLower()/]3);
-        [bean/].replace[a.getClass().name/]s([a.getClass().getName()/]List, entity.getId());
-
-        get[a.getClass().name/]Response = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/].getId());
-        get[a.getClass().name/]Response2 = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/]2.getId());
-        get[a.getClass().name/]Response3 = [bean/].get[a.getClass().name/](entity.getId(), [a.getClass().getEntityLower()/]3.getId());
-        Assert.assertNull(get[a.getClass().name/]Response);
-        Assert.assertNotNull(get[a.getClass().name/]Response2);
-        Assert.assertNotNull(get[a.getClass().name/]Response3);
+        entity = [bean/].get[c.name/](entity.getId());
+        Assert.assertFalse(entity.[a.getter()/]().contains([a.getListVar()/].get(0)));
+        Assert.assertTrue(entity.[a.getter()/]().contains([a.getListVar()/].get(1)));
+        Assert.assertTrue(entity.[a.getter()/]().contains([a.getListVar()/].get(2)));
     }
     [/for]
 }
