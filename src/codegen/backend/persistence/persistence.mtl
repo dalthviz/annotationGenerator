@@ -22,8 +22,8 @@ import co.edu.uniandes.csw.crud.spi.persistence.CrudPersistence;
 @Stateless
 public class [className/] extends CrudPersistence<[c.getEntityName()/]> {
 
-    @PersistenceContext
-    private EntityManager em;
+    @PersistenceContext(unitName="[c.getModel().getPUName()/]")
+    protected EntityManager em;
 
     /**
      * @generated
