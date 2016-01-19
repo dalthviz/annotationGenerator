@@ -102,7 +102,7 @@ public class [className/] {
     @PUT
     @Path("{id: \\d+}")
     public [c.getDTOName()/] update[c.name/](@PathParam("id") Long id, [c.getDTOName()/] dto) {
-        [c.getEntityName()/] entity = [c.getConverterName()/].fullDTO2Entity(dto);        
+        [c.getEntityName()/] entity = [c.getConverterName()/].fullDTO2Entity(dto);
         entity.setId(id);
         return [c.getConverterName()/].fullEntity2DTO([logic/].update[c.name/](entity));
     }
@@ -131,7 +131,7 @@ public class [className/] {
     @GET
     @Path("{[c.getEntityId()/]: \\d+}/[a.getClass().getURI()/]")
     public List<[a.getClass().getDTOName()/]> get[a.getClass().name/]s(@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/]) {
-        return [a.getClass().getConverterName()/].listEntity2DTO([logic/].get[a.getClass().name/]s([c.getEntityId()/]));
+        return [a.getClass().getConverterName()/].listEntity2DTO([logic/].list[a.name.toUpperFirst()/]([c.getEntityId()/]));
     }
 
     /**
@@ -144,7 +144,7 @@ public class [className/] {
     @GET
     @Path("{[c.getEntityId()/]: \\d+}/[a.getClass().getURI()/]/{[a.getClass().getEntityId()/]: \\d+}")
     public [a.getClass().getDTOName()/] get[a.getClass().name/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
-        return [a.getClass().getConverterName()/].fullEntity2DTO([logic/].get[a.getClass().name/]([c.getEntityId()/], [a.getClass().getEntityId()/]));
+        return [a.getClass().getConverterName()/].fullEntity2DTO([logic/].get[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getEntityId()/]));
     }
 
     /**
@@ -158,10 +158,10 @@ public class [className/] {
     @POST
     @Path("{[c.getEntityId()/]: \\d+}/[a.getClass().getURI()/]/{[a.getClass().getEntityId()/]: \\d+}")
     public [a.getClass().getDTOName()/] add[a.getClass().name/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
-        return [a.getClass().getConverterName()/].fullEntity2DTO([logic/].add[a.getClass().name/]([a.getClass().getEntityId()/], [c.getEntityId()/]));
+        return [a.getClass().getConverterName()/].fullEntity2DTO([logic/].add[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getEntityId()/]));
     }
 
-    /** 
+    /**
      * Remplaza las instancias de [a.getClass().name/] asociadas a una instancia de [c.name/]
      *
      * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
@@ -172,7 +172,7 @@ public class [className/] {
     @PUT
     @Path("{[c.getEntityId()/]: \\d+}/[a.getClass().getURI()/]")
     public List<[a.getClass().getDTOName()/]> replace[a.getClass().name/]s(@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], List<[a.getClass().getDTOName()/]> [a.getClass().getURI()/]) {
-        return [a.getClass().getConverterName()/].listEntity2DTO([logic/].replace[a.getClass().name/]s([a.getClass().getConverterName()/].listDTO2Entity([a.getClass().getURI()/]), [c.getEntityId()/]));
+        return [a.getClass().getConverterName()/].listEntity2DTO([logic/].replace[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getConverterName()/].listDTO2Entity([a.getClass().getURI()/])));
     }
 
     /**
@@ -185,7 +185,7 @@ public class [className/] {
     @DELETE
     @Path("{[c.getEntityId()/]: \\d+}/[a.getClass().getURI()/]/{[a.getClass().getEntityId()/]: \\d+}")
     public void delete[a.getClass().name/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
-        [logic/].remove[a.getClass().name/]([a.getClass().getEntityId()/], [c.getEntityId()/]);
+        [logic/].remove[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
     }
 
 [/for]
