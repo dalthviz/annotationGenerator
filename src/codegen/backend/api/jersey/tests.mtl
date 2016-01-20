@@ -216,7 +216,16 @@ public class [c.getServiceTestName()/] {
 
     }
 
+    @Test
+    public void t[(c.getNonCompositeCollectionAttributes()->size()*4)+5/]Delete[c.getServiceTestName()/]() {
+        Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
+        [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
+        Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
+                .request().cookie(cookieSessionId).delete();
+        Assert.assertEquals(OkWithoutContent, response.getStatus());
+    }
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
+
     @Test
     public void t[(i * 4)+1/]Add[a.getClass().name/][c.getServiceTestName()/]() {
         Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
@@ -231,9 +240,7 @@ public class [c.getServiceTestName()/] {
 
         [a.getClass().getDTOName()/] [a.getClass().testName()/] = ([a.getClass().getDTOName()/]) response.readEntity([a.getClass().getDTOName()/].class);
         [for (prop : Property | a.getClass().attribute)]
-        [if (prop.isDate()=false)]
         Assert.assertEquals([a.getClass().getName()/].[prop.getter()/](), [a.getClass().testName()/].[prop.getter()/]());
-        [/if]
         [/for]
         Assert.assertEquals(Created, response.getStatus());
 
@@ -244,11 +251,7 @@ public class [c.getServiceTestName()/] {
 
         [a.getClass().testName()/] = ([a.getClass().getDTOName()/]) response.readEntity([a.getClass().getDTOName()/].class);
         Assert.assertEquals(Ok, response.getStatus());
-        [for (prop : Property | a.getClass().attribute)]
-        [if (prop.isDate()=false)]
-        Assert.assertEquals([a.getClass().getName()/].[prop.getter()/](), [a.getClass().testName()/].[prop.getter()/]());
-        [/if]
-        [/for]
+        Assert.assertEquals([a.getClass().getName()/].getId(), [a.getClass().testName()/].getId());
     }
 
     @Test
@@ -298,17 +301,6 @@ public class [c.getServiceTestName()/] {
         Assert.assertEquals(OkWithoutContent, response.getStatus());
     }
     [/for]
-
-    @Test
-    public void t[(c.getNonCompositeCollectionAttributes()->size()*4)+5/]Delete[c.getServiceTestName()/]() {
-        Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
-        [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
-        Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
-                .request().cookie(cookieSessionId).delete();
-        Assert.assertEquals(OkWithoutContent, response.getStatus());
-    }
-
-
 }
 [/file]
 [/template]
