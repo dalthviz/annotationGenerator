@@ -278,13 +278,10 @@ public class [className/] {
     public void add[a.name.toUpperFirst()/]Test() {
         [c.getEntityName()/] entity = data.get(0);
         [a.getClass().getEntityName()/] [a.getClass().getEntityLower()/] = [a.getListVar()/].get(1);
-        [bean/].add[a.name.toUpperFirst()/](entity.getId(), [a.getClass().getEntityLower()/].getId());
-        [a.getClass().getEntityName()/] response = [bean/].get[a.name.toUpperFirst()/](entity.getId(), [a.getClass().getEntityLower()/].getId());
+        [a.getClass().getEntityName()/] response = [bean/].add[a.name.toUpperFirst()/](entity.getId(), [a.getClass().getEntityLower()/].getId());
 
         Assert.assertNotNull(response);
-        [for (prop : Property | a.getClass().allAttributes())]
-        Assert.assertEquals([a.getClass().getEntityLower()/].[prop.getter()/](), response.[prop.getter()/]());
-        [/for]
+        Assert.assertEquals([a.getClass().getEntityLower()/].getId(), response.getId());
     }
 
     /**

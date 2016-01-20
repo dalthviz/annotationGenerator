@@ -35,7 +35,6 @@ import org.glassfish.jersey.filter.LoggingFilter;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
-import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
@@ -71,10 +70,8 @@ public class [c.getServiceTestName()/] {
     private URL deploymentURL;
 
     @Deployment(testable = false)
-    public static Archive<?> createDeployment() {
-        return ShrinkWrap
-                // Nombre del Proyecto "[c.getModel().getWebProjectName()/]" seguido de ".war". Debe ser el mismo nombre del proyecto web que contiene los javascript y los  servicios Rest
-                .create(WebArchive.class, "[c.getModel().getWebProjectName()/].war")
+    public static WebArchive createDeployment() {
+        return ShrinkWrap.create(WebArchive.class)
                 // Se agrega la dependencia a la logica con el nombre groupid:artefactid:version (GAV)
                 .addAsLibraries(Maven.resolver()
                         .resolve("[c.getModel().baseGroup()/]:[c.getModel().getLogicArtifactId()/]:[c.getModel().getProjectVersion()/]")
@@ -129,8 +126,6 @@ public class [c.getServiceTestName()/] {
             [a.getClass().getName()/].setId(i + 1L);
             oraculo[a.getClass().name/]s.add([a.getClass().getName()/]);
             [/for]
-
-
         }
     }
 
@@ -213,7 +208,6 @@ public class [c.getServiceTestName()/] {
         Assert.assertEquals([c.getName()/].[prop.getter()/](), [c.testName()/].[prop.getter()/]());
         [/if]
         [/for]
-
     }
 
     @Test
