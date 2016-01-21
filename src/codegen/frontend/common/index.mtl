@@ -10,7 +10,7 @@
 [template protected appjs(m : Model, path : String)]
 [file (path.concat('app.js'), false, 'UTF-8')]
 (function (ng) {
-    var mainApp = ng.module('mainApp', ['['/]
+    var mod = ng.module('mainApp', ['['/]
         //'ngCrudMock',
         [for (c : Class | m.getClasses())]
         '[c.getModule()/]',
@@ -20,7 +20,15 @@
         'ngCrud'
     [']'/]);
 
-    mainApp.config(['['/]'$stateProvider', '$urlRouterProvider', 'CrudTemplateURL', 'CrudCtrlAlias', function ($stateProvider, $urlRouterProvider, tplUrl, alias) {
+    mod.config(['['/]'$logProvider', function ($logProvider) {
+            $logProvider.debugEnabled(true);
+        }[']'/]);
+
+    mod.config(['['/]'RestangularProvider', function (rp) {
+            rp.setBaseUrl('api');
+        }[']'/]);
+
+    mod.config(['['/]'$stateProvider', '$urlRouterProvider', 'CrudTemplateURL', 'CrudCtrlAlias', function ($stateProvider, $urlRouterProvider, tplUrl, alias) {
             $stateProvider
                 [for (c : Class | m.getRootClasses()) separator ('\n')]
                 .state('[c.getName()/]', {
@@ -51,7 +59,7 @@
         <!-- endbuild -->
 
         <!-- build:css(<%= meta.src %>) styles/main.css -->
-        <!-- include: "type": "js", "files": "<%= meta.includeCssFiles %>" -->
+        <!-- include: "type": "css", "files": "<%= meta.includeCssFiles %>" -->
         <!-- /include -->
         <!-- endbuild -->
 
