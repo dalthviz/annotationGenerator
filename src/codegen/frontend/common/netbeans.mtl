@@ -35,7 +35,7 @@ file.reference.[m.getWebArtifactId()/]-test=test
 files.encoding=UTF-8
 source.folder=${file.reference.[m.getWebArtifactId()/]-app}
 site.root.folder=${file.reference.[m.getWebArtifactId()/]-dist}
-test.folder=${file.reference.[m.getWebArtifactId()/]-test}
+#test.folder=${file.reference.[m.getWebArtifactId()/]-test}
 test.selenium.folder=${file.reference.[m.getWebArtifactId()/]-e2e}
 [/file]
 [/template]
