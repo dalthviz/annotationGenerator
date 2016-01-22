@@ -88,7 +88,7 @@ module.exports = function (grunt) {
         useminPrepare: 'grunt-usemin',
         ngtemplates: 'grunt-angular-templates',
         protractor_coverage: 'grunt-protractor-coverage',
-		instrument: 'grunt-istanbul',
+        instrument: 'grunt-istanbul',
         sonarRunner: 'grunt-sonar-runner'
     });
 
@@ -99,7 +99,6 @@ module.exports = function (grunt) {
 		test: 'test',
 		e2e: 'e2e',
 		instrumented: 'instrumented',
-        bower: 'bower_components',
         includeJsFiles: ['['/]
             'src/app.js',
             'src/**/*.mod.js',

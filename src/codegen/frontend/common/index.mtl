@@ -7,6 +7,10 @@
 [m.index(path)/]
 [/template]
 
+[template private getAPIURL(m : Model)]
+http://localhost:8080/[m.getApiArtifactId()/]/api/
+[/template]
+
 [template protected appjs(m : Model, path : String)]
 [file (path.concat('app.js'), false, 'UTF-8')]
 (function (ng) {
@@ -25,7 +29,7 @@
         }[']'/]);
 
     mod.config(['['/]'RestangularProvider', function (rp) {
-            rp.setBaseUrl('api');
+            rp.setBaseUrl('[m.getAPIURL()/]');
         }[']'/]);
 
     mod.config(['['/]'$stateProvider', '$urlRouterProvider', 'CrudTemplateURL', 'CrudCtrlAlias', function ($stateProvider, $urlRouterProvider, tplUrl, alias) {
@@ -38,6 +42,13 @@
                     controllerAs: alias
                 })[/for];
                 $urlRouterProvider.otherwise('/');
+        }[']'/]);
+
+    mod.config(['['/]'authServiceProvider', function (auth) {
+            auth.setValues({
+                apiUrl: '[m.getAPIURL()/]users/',
+                successState: '[m.getClasses()->any(1=1).getName()/]'
+            });
         }[']'/]);
 })(window.angular);
 [/file]

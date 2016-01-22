@@ -37,7 +37,8 @@
                 name: '[a.name/]',
                 displayName: '[a.getDisplayName()/]',
                 //template: '', //override generic template
-                ctrl: '[a.name/][a.getOtherEnd().name/]Ctrl'
+                ctrl: '[a.name/][a.getOtherEnd().name/]Ctrl',
+                owned: [a.isComposite()/]
             }[/for]
         [']'/][/if]});
 })(window.angular);
