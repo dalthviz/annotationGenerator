@@ -157,9 +157,7 @@ public class [c.getServiceTestName()/] {
                 .post(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
         [c.getDTOName()/]  [c.testName()/] = ([c.getDTOName()/]) response.readEntity([c.getDTOName()/].class);
         [for (prop : Property | c.attribute)]
-        [if (prop.isDate()=false)]
         Assert.assertEquals([c.getName()/].[prop.getter()/](), [c.testName()/].[prop.getter()/]());
-        [/if]
         [/for]
         Assert.assertEquals(Created, response.getStatus());
     }
@@ -171,9 +169,7 @@ public class [c.getServiceTestName()/] {
                 .path(oraculo.get(0).getId().toString())
                 .request().cookie(cookieSessionId).get([c.getDTOName()/].class);
         [for (prop : Property | c.attribute)]
-        [if (prop.isDate()=false)]
         Assert.assertEquals([c.testName()/].[prop.getter()/](), oraculo.get(0).[prop.getter()/]());
-        [/if]
         [/for]
     }
 
@@ -195,7 +191,7 @@ public class [c.getServiceTestName()/] {
         PodamFactory factory = new PodamFactoryImpl();
         [c.getDTOName()/] [c.getName()/]Changed = factory.manufacturePojo([c.getDTOName()/].class);
         [for (prop : Property | c.attribute)]
-        [if (prop.isDate()=false and prop.isID()=false)]
+        [if (not prop.isID())]
         [c.getName()/].[prop.setter()/]([c.getName()/]Changed.[prop.getter()/]());
         [/if]
         [/for]
@@ -204,7 +200,7 @@ public class [c.getServiceTestName()/] {
         [c.getDTOName()/] [c.testName()/] = ([c.getDTOName()/]) response.readEntity([c.getDTOName()/].class);
         Assert.assertEquals(Ok, response.getStatus());
         [for (prop : Property | c.attribute)]
-        [if (prop.isDate()=false and prop.isID()=false)]
+        [if (not prop.isID())]
         Assert.assertEquals([c.getName()/].[prop.getter()/](), [c.testName()/].[prop.getter()/]());
         [/if]
         [/for]
@@ -276,9 +272,7 @@ public class [c.getServiceTestName()/] {
                 .request().cookie(cookieSessionId).get([a.getClass().getDTOName()/].class);
 
         [for (prop : Property | a.getClass().attribute)]
-        [if (prop.isDate()=false)]
         Assert.assertEquals([a.getClass().getName()/].[prop.getter()/](), [a.getClass().testName()/].[prop.getter()/]());
-        [/if]
         [/for]
     }
 
