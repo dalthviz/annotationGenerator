@@ -184,7 +184,7 @@ public class [className/] {
      */
     @DELETE
     @Path("{[c.getEntityId()/]: \\d+}/[a.getClass().getURI()/]/{[a.getClass().getEntityId()/]: \\d+}")
-    public void delete[a.getClass().name/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
+    public void remove[a.getClass().name/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
         [logic/].remove[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
     }
 

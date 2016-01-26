@@ -17,6 +17,9 @@
   <persistence-unit name="[m.getPUName()/]" transaction-type="JTA">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <jta-data-source>[m.getJNDIName()/]</jta-data-source>
+    [for (c : Class | m.getClasses())]
+    <class>[m.baseGroup()/].entities.[c.getEntityName()/]</class>
+    [/for]
     <properties>
       <property name="eclipselink.logging.level" value="FINE"/>
       <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
