@@ -116,7 +116,7 @@ public class [c.getServiceTestName()/] {
                 [a.getClass().getName()/]List.add([a.getClass().getName()/]);
             }
 
-            [c.getName()/].set[a.getClass().name/]s([a.getClass().getName()/]List);
+            [c.getName()/].[a.setter()/]([a.getClass().getName()/]List);
             [/for]
 
             oraculo.add([c.getName()/]);
