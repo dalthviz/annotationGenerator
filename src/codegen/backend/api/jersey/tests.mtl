@@ -14,7 +14,7 @@ import co.edu.uniandes.csw.auth.model.UserDTO;
 import co.edu.uniandes.csw.auth.security.JWT;
 import [c.getModel().baseGroup()/].dtos.[c.getDTOName()/];
 [for (a : Property | c.getCollectionAttributes())]
-import [c.getModel().baseGroup()/].dtos.[a.getClass().getDTOName()/];
+import [c.getModel().baseGroup()/].dtos.[a.getDTOName()/];
 [/for]
 import [c.getModel().baseGroup()/].services.[c.getServiceName()/];
 import java.io.File;
@@ -34,6 +34,7 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.junit.InSequence;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -59,7 +60,7 @@ public class [c.getServiceTestName()/] {
     private final static List<[c.getDTOName()/]> oraculo = new ArrayList<>();
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
     private final String [a.testPath()/] = "[a.name/]";
-    private final static List<[a.getClass().getDTOName()/]> oraculo[a.name/]s = new ArrayList<>();
+    private final static List<[a.getDTOName()/]> [a.getOraculo()/] = new ArrayList<>();
     [/for]
     private WebTarget target;
     private final String apiPath = "api";
@@ -108,23 +109,23 @@ public class [c.getServiceTestName()/] {
             [c.getDTOName()/] [c.getName()/] = factory.manufacturePojo([c.getDTOName()/].class);
             [c.getName()/].setId(i + 1L);
             [for (a : Property | c.getCompositeCollectionAttributes())]
-            List<[a.getClass().getDTOName()/]> [a.getClass().getName()/]List = new ArrayList<>();
+            List<[a.getDTOName()/]> [a.name/]List = new ArrayList<>();
             for (int j = 0; j < 5; j++)
             {
-                [a.getClass().getDTOName()/] [a.getClass().getName()/] = factory.manufacturePojo([a.getClass().getDTOName()/].class);
-                [a.getClass().getName()/].setId(i + 1L);
-                [a.getClass().getName()/]List.add([a.getClass().getName()/]);
+                [a.getDTOName()/] [a.name/] = factory.manufacturePojo([a.getDTOName()/].class);
+                [a.name/].setId(i + 1L);
+                [a.name/]List.add([a.name/]);
             }
 
-            [c.getName()/].[a.setter()/]([a.getClass().getName()/]List);
+            [c.getName()/].[a.setter()/]([a.name/]List);
             [/for]
 
             oraculo.add([c.getName()/]);
 
             [for (a : Property | c.getNonCompositeCollectionAttributes())]
-            [a.getClass().getDTOName()/] [a.getClass().getName()/] = factory.manufacturePojo([a.getClass().getDTOName()/].class);
-            [a.getClass().getName()/].setId(i + 1L);
-            oraculo[a.name/]s.add([a.getClass().getName()/]);
+            [a.getDTOName()/] [a.name/] = factory.manufacturePojo([a.getDTOName()/].class);
+            [a.name/].setId(i + 1L);
+            [a.getOraculo()/].add([a.name/]);
             [/for]
         }
     }
@@ -149,7 +150,8 @@ public class [c.getServiceTestName()/] {
     }
 
     @Test
-    public void t1Create[c.getServiceTestName()/]() throws IOException {
+    @InSequence(1)
+    public void create[c.getServiceTestName()/]() throws IOException {
         [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
         Cookie cookieSessionId = login(username, password);
         Response response = target.path([c.testPath()/])
@@ -163,7 +165,8 @@ public class [c.getServiceTestName()/] {
     }
 
     @Test
-    public void t2Get[c.name/]ById() {
+    @InSequence(2)
+    public void get[c.name/]ById() {
         Cookie cookieSessionId = login(username, password);
         [c.getDTOName()/] [c.testName()/] = target.path([c.testPath()/])
                 .path(oraculo.get(0).getId().toString())
@@ -174,7 +177,8 @@ public class [c.getServiceTestName()/] {
     }
 
     @Test
-    public void t3[c.getServiceTestName()/]() throws IOException {
+    @InSequence(3)
+    public void list[c.getServiceTestName()/]() throws IOException {
         Cookie cookieSessionId = login(username, password);
         Response response = target.path([c.testPath()/])
                 .request().cookie(cookieSessionId).get();
@@ -185,7 +189,8 @@ public class [c.getServiceTestName()/] {
     }
 
     @Test
-    public void t4Update[c.getServiceTestName()/]() throws IOException {
+    @InSequence(4)
+    public void update[c.getServiceTestName()/]() throws IOException {
         Cookie cookieSessionId = login(username, password);
         [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
         PodamFactory factory = new PodamFactoryImpl();
@@ -207,8 +212,9 @@ public class [c.getServiceTestName()/] {
     }
 
     @Test
-    public void t[(c.getNonCompositeCollectionAttributes()->size()*4)+5/]Delete[c.getServiceTestName()/]() {
-        Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
+    @InSequence([(c.getNonCompositeCollectionAttributes()->size()*4)+5/])
+    public void delete[c.getServiceTestName()/]() {
+        Cookie cookieSessionId = login(username, password);
         [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
         Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
                 .request().cookie(cookieSessionId).delete();
@@ -217,36 +223,38 @@ public class [c.getServiceTestName()/] {
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
 
     @Test
-    public void t[(i * 4)+1/]Add[a.getClass().name/][c.getServiceTestName()/]() {
-        Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
+    @InSequence([(i * 4)+1/])
+    public void add[a.getTestSuffix()/]() {
+        Cookie cookieSessionId = login(username, password);
 
-        [a.getClass().getDTOName()/] [a.getClass().getName()/] = oraculo[a.name/]s.get(0);
+        [a.getDTOName()/] [a.name/] = [a.getOraculo()/].get(0);
         [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
 
 
         Response response = target.path([a.testPath()/])
                 .request().cookie(cookieSessionId)
-                .post(Entity.entity([a.getClass().getName()/], MediaType.APPLICATION_JSON));
+                .post(Entity.entity([a.name/], MediaType.APPLICATION_JSON));
 
-        [a.getClass().getDTOName()/] [a.getClass().testName()/] = ([a.getClass().getDTOName()/]) response.readEntity([a.getClass().getDTOName()/].class);
+        [a.getDTOName()/] [a.getResponseVarName()/] = ([a.getDTOName()/]) response.readEntity([a.getDTOName()/].class);
         [for (prop : Property | a.getClass().attribute)]
-        Assert.assertEquals([a.getClass().getName()/].[prop.getter()/](), [a.getClass().testName()/].[prop.getter()/]());
+        Assert.assertEquals([a.name/].[prop.getter()/](), [a.getResponseVarName()/].[prop.getter()/]());
         [/for]
         Assert.assertEquals(Created, response.getStatus());
 
         response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
-                .path([a.testPath()/]).path([a.getClass().getName()/].getId().toString())
+                .path([a.testPath()/]).path([a.name/].getId().toString())
                 .request().cookie(cookieSessionId)
-                .post(Entity.entity([a.getClass().getName()/], MediaType.APPLICATION_JSON));
+                .post(Entity.entity([a.name/], MediaType.APPLICATION_JSON));
 
-        [a.getClass().testName()/] = ([a.getClass().getDTOName()/]) response.readEntity([a.getClass().getDTOName()/].class);
+        [a.getResponseVarName()/] = ([a.getDTOName()/]) response.readEntity([a.getDTOName()/].class);
         Assert.assertEquals(Ok, response.getStatus());
-        Assert.assertEquals([a.getClass().getName()/].getId(), [a.getClass().testName()/].getId());
+        Assert.assertEquals([a.name/].getId(), [a.getResponseVarName()/].getId());
     }
 
     @Test
-    public void t[(i * 4)+2/]Get[a.getClass().getServiceTestName()/]List() throws IOException {
-        Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
+    @InSequence([(i * 4)+2/])
+    public void list[a.getTestSuffix()/]() throws IOException {
+        Cookie cookieSessionId = login(username, password);
         [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
 
         Response response = target.path([c.testPath()/])
@@ -254,37 +262,39 @@ public class [c.getServiceTestName()/] {
                 .path([a.testPath()/])
                 .request().cookie(cookieSessionId).get();
 
-        String [a.getClass().getName()/]List = response.readEntity(String.class);
-        List<[a.getClass().getDTOName()/]> [a.getClass().getName()/]ListTest = new ObjectMapper().readValue([a.getClass().getName()/]List, List.class);
+        String [a.name/]List = response.readEntity(String.class);
+        List<[a.getDTOName()/]> [a.name/]ListTest = new ObjectMapper().readValue([a.name/]List, List.class);
         Assert.assertEquals(Ok, response.getStatus());
-        Assert.assertEquals(1, [a.getClass().getName()/]ListTest.size());
+        Assert.assertEquals(1, [a.name/]ListTest.size());
     }
 
     @Test
-    public void t[(i * 4)+3/]Get[a.getClass().getServiceTestName()/]() throws IOException {
-        Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
-        [a.getClass().getDTOName()/] [a.getClass().getName()/] = oraculo[a.name/]s.get(0);
+    @InSequence([(i * 4)+3/])
+    public void get[a.getTestSuffix()/]() throws IOException {
+        Cookie cookieSessionId = login(username, password);
+        [a.getDTOName()/] [a.name/] = [a.getOraculo()/].get(0);
         [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
 
-        [a.getClass().getDTOName()/] [a.getClass().testName()/] = target.path([c.testPath()/])
+        [a.getDTOName()/] [a.getResponseVarName()/] = target.path([c.testPath()/])
                 .path([c.getName()/].getId().toString()).path([a.testPath()/])
-                .path([a.getClass().getName()/].getId().toString())
-                .request().cookie(cookieSessionId).get([a.getClass().getDTOName()/].class);
+                .path([a.name/].getId().toString())
+                .request().cookie(cookieSessionId).get([a.getDTOName()/].class);
 
         [for (prop : Property | a.getClass().attribute)]
-        Assert.assertEquals([a.getClass().getName()/].[prop.getter()/](), [a.getClass().testName()/].[prop.getter()/]());
+        Assert.assertEquals([a.name/].[prop.getter()/](), [a.getResponseVarName()/].[prop.getter()/]());
         [/for]
     }
 
     @Test
-    public void t[(i * 4)+4/]Remove[a.getClass().name/][c.getServiceTestName()/]() {
-        Cookie cookieSessionId = login(System.getenv("USERNAME_USER"), System.getenv("PASSWORD_USER"));
+    @InSequence([(i * 4)+4/])
+    public void remove[a.getTestSuffix()/]() {
+        Cookie cookieSessionId = login(username, password);
 
-        [a.getClass().getDTOName()/] [a.getClass().getName()/] = oraculo[a.name/]s.get(0);
+        [a.getDTOName()/] [a.name/] = [a.getOraculo()/].get(0);
         [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
 
         Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
-                .path([a.testPath()/]).path([a.getClass().getName()/].getId().toString())
+                .path([a.testPath()/]).path([a.name/].getId().toString())
                 .request().cookie(cookieSessionId).delete();
         Assert.assertEquals(OkWithoutContent, response.getStatus());
     }
@@ -303,4 +313,20 @@ public class [c.getServiceTestName()/] {
 
 [template private testPath(c : Class)]
 [c.name.toLowerFirst().concat('Path')/]
+[/template]
+
+[template private getTestSuffix(a : Property)]
+[a.name.toUpperFirst()/]Test
+[/template]
+
+[template private getOraculo(a : Property)]
+oraculo[a.name.toUpperFirst()/]
+[/template]
+
+[template private getResponseVarName(a : Property)]
+[a.name.toLower().concat('Test')/]
+[/template]
+
+[template private getDTOName(a : Property)]
+[a.getClass().getDTOName()/]
 [/template]
