@@ -174,14 +174,6 @@ and (
 [c.name.toLower()/]
 [/template]
 
-[template public testURI(c : Class)]
-[c.name.toLower().concat('Path')/]
-[/template]
-
-[template public testPath(c : Class)]
-[c.name.toLower().concat('Path')/]
-[/template]
-
 [template public getServiceName(c : Class)]
 [c.name.toUpperFirst().concat('Service')/]
 [/template]

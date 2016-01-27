@@ -129,7 +129,7 @@ public class [className/] {
      * @generated
      */
     @GET
-    @Path("{[c.getEntityId()/]: \\d+}/[a.getClass().getURI()/]")
+    @Path("{[c.getEntityId()/]: \\d+}/[a.getURI()/]")
     public List<[a.getClass().getDTOName()/]> get[a.getClass().name/]s(@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/]) {
         return [a.getClass().getConverterName()/].listEntity2DTO([logic/].list[a.name.toUpperFirst()/]([c.getEntityId()/]));
     }
@@ -142,7 +142,7 @@ public class [className/] {
      * @generated
      */
     @GET
-    @Path("{[c.getEntityId()/]: \\d+}/[a.getClass().getURI()/]/{[a.getClass().getEntityId()/]: \\d+}")
+    @Path("{[c.getEntityId()/]: \\d+}/[a.getURI()/]/{[a.getClass().getEntityId()/]: \\d+}")
     public [a.getClass().getDTOName()/] get[a.getClass().name/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
         return [a.getClass().getConverterName()/].fullEntity2DTO([logic/].get[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getEntityId()/]));
     }
@@ -156,7 +156,7 @@ public class [className/] {
      * @generated
      */
     @POST
-    @Path("{[c.getEntityId()/]: \\d+}/[a.getClass().getURI()/]/{[a.getClass().getEntityId()/]: \\d+}")
+    @Path("{[c.getEntityId()/]: \\d+}/[a.getURI()/]/{[a.getClass().getEntityId()/]: \\d+}")
     public [a.getClass().getDTOName()/] add[a.getClass().name/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
         return [a.getClass().getConverterName()/].fullEntity2DTO([logic/].add[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getEntityId()/]));
     }
@@ -170,7 +170,7 @@ public class [className/] {
      * @generated
      */
     @PUT
-    @Path("{[c.getEntityId()/]: \\d+}/[a.getClass().getURI()/]")
+    @Path("{[c.getEntityId()/]: \\d+}/[a.getURI()/]")
     public List<[a.getClass().getDTOName()/]> replace[a.getClass().name/]s(@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], List<[a.getClass().getDTOName()/]> [a.getClass().getURI()/]) {
         return [a.getClass().getConverterName()/].listEntity2DTO([logic/].replace[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getConverterName()/].listDTO2Entity([a.getClass().getURI()/])));
     }
@@ -183,7 +183,7 @@ public class [className/] {
      * @generated
      */
     @DELETE
-    @Path("{[c.getEntityId()/]: \\d+}/[a.getClass().getURI()/]/{[a.getClass().getEntityId()/]: \\d+}")
+    @Path("{[c.getEntityId()/]: \\d+}/[a.getURI()/]/{[a.getClass().getEntityId()/]: \\d+}")
     public void remove[a.getClass().name/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
         [logic/].remove[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
     }
@@ -191,4 +191,8 @@ public class [className/] {
 [/for]
 }
 [/file]
+[/template]
+
+[template private getURI(a : Property)]
+[a.name.toLowerFirst()/]
 [/template]
