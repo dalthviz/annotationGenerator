@@ -170,10 +170,6 @@ and (
 [c.name.toLower().concat('Test')/]
 [/template]
 
-[template public specName(c : Class)]
-[c.name.toLower()/]
-[/template]
-
 [template public getServiceName(c : Class)]
 [c.name.toUpperFirst().concat('Service')/]
 [/template]

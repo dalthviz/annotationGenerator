@@ -31,7 +31,7 @@ exports.config = {
 [/template]
 
 [template protected genE2ETests(c : Class, path : String)]
-[file (path.concat(c.specName() + '.specs.js'), false, 'UTF-8')]
+[file (path.concat(c.getName() + '.specs.js'), false, 'UTF-8')]
 describe('[c.name/] E2E Testing', function () {
 
 	browser.driver.manage().window().maximize();
@@ -60,9 +60,9 @@ describe('[c.name/] E2E Testing', function () {
         });
     });
 
-    it('should create one [c.specName()/]', function () {
-        browser.get('#/[c.specName()/]');
-        element(by.id('create-[c.specName()/]')).click();
+    it('should create one [c.getName()/]', function () {
+        browser.get('#/[c.getName()/]');
+        element(by.id('create-[c.getName()/]')).click();
         [for (a : Property | c.getAllAttribs())]
 		[if(a.type.name = 'String')]
         element(by.id('[a.name/]')).sendKeys([a.name.toLower()/]VarTest);
@@ -79,11 +79,11 @@ describe('[c.name/] E2E Testing', function () {
         [for (a : Property | c.getReferences(false))]
         element(by.id('[a.name/]')).all(by.css('option')).last().click();
         [/for]
-        element(by.id('save-[c.specName()/]')).click();
+        element(by.id('save-[c.getName()/]')).click();
         expect(element.all(by.repeater('record in records')).count()).toEqual(1);
     });
 
-    it('should read one [c.specName()/]', function () {
+    it('should read one [c.getName()/]', function () {
         [for (a : Property | c.getAllAttribs())]
 		[if(a.type.name = 'String')]
         expect(element(by.id('0-[a.name/]')).getText()).toBe([a.name.toLower()/]VarTest);
@@ -99,7 +99,7 @@ describe('[c.name/] E2E Testing', function () {
         [/for]
     });
 
-    it('should edit one [c.specName()/]', function () {
+    it('should edit one [c.getName()/]', function () {
         element(by.id('0-edit-btn')).click();
 
         [for (a : Property | c.getAllAttribs())]
@@ -116,7 +116,7 @@ describe('[c.name/] E2E Testing', function () {
 		[/if]
         [/for]
 
-        element(by.id('save-[c.specName()/]')).click();
+        element(by.id('save-[c.getName()/]')).click();
 
         [for (a : Property | c.getAllAttribs())]
         [if(a.type.name = 'String')]
@@ -133,7 +133,7 @@ describe('[c.name/] E2E Testing', function () {
         [/for]
     });
 
-    it('should delete the [c.specName()/]', function () {
+    it('should delete the [c.getName()/]', function () {
         element(by.id('0-delete-btn')).click();
         [for (a : Property | c.getAllAttribs())]
         expect(element.all(by.id('0-[a.name/]')).count()).toEqual(0);
