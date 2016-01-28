@@ -121,3 +121,7 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
 </html>
 [/file]
 [/template]
+
+[template protected getDisplayName(c : Class)]
+[c.name.asDisplayName()/]
+[/template]

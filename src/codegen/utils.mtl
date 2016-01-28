@@ -146,8 +146,6 @@ Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <
 
 [query public getClass(a : Property) : Class = Class.allInstances()->any(c | c.name = a.type.name) /]
 
-[query public getDisplayName(a : Property) : String = a.name.toUpperFirst() /]
-
 [query public isRequired(a : Property) : Boolean = self.getLower() > 0 /]
 
 [**
@@ -192,10 +190,6 @@ String[else]
 [c.getName().concat('Ctrl')/]
 [/template]
 
-[template public getService(c : Class)]
-[c.getName().concat('Service')/]
-[/template]
-
 [template public getEntityModel(c : Class)]
 [c.getName().concat('Model')/]
 [/template]
@@ -204,20 +198,12 @@ String[else]
 [c.getName().concat('Module')/]
 [/template]
 
-[template public getContext(c : Class)]
-[c.getName().concat('Context')/]
-[/template]
-
 [template public getURI(c : Class)]
 [c.getName().concat('s')/]
 [/template]
 
 [template public getName(c : Class)]
 [c.name.toLowerFirst()/]
-[/template]
-
-[template public getDisplayName(c : Class)]
-[c.name/]
 [/template]
 
 [template public getDTOName(c : Class)]
@@ -372,4 +358,8 @@ crud-utils
 
 [template public getCrudLibVersion(m : Model)]
 0.1.1
+[/template]
+
+[template public asDisplayName(s : String)]
+[s.replace('^\\W+','').replaceAll('(?!^)([A-Z])',' $1').replaceAll('\\W+', ' ').toUpperFirst()/]
 [/template]
