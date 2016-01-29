@@ -349,7 +349,7 @@ crud-utils
 [/template]
 
 [template public getCrudLibVersion(m : Model)]
-0.1.1
+0.1.2
 [/template]
 
 [template public asDisplayName(s : String)]

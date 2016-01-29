@@ -39,16 +39,16 @@ import javax.persistence.CascadeType;
  */
 @Entity
 public class [className/] extends BaseEntity implements Serializable {
-
 [for (a : Property | c.allAttributes()->reject(isID() or isName()))]
+
     [if (a.isDate())]
     @Temporal(TemporalType.DATE)
     @PodamStrategyValue(DateStrategy.class)
     [/if]
     private [a.type.name/] [a.name.toLowerFirst()/];
-
 [/for]
 [for (a : Property | c.getRelationshipAttributes())]
+
     [if (not a.isComposite())]@PodamExclude[/if]
     @[a.getJPAAnnotation()/][a.genParameters()/]
     [if (a.getUpper() = 1)]
@@ -56,9 +56,9 @@ public class [className/] extends BaseEntity implements Serializable {
     [else]
     private List<[a.getClass().getEntityName()/]> [a.name/] = new ArrayList<>();
     [/if]
-
 [/for]
 [for (a : Property | c.allAttributes()->reject(isID() or isName()))]
+
     /**
      * @generated
      */
@@ -72,9 +72,9 @@ public class [className/] extends BaseEntity implements Serializable {
     public void [a.setter()/]([a.type.name/] [a.name.toLowerFirst()/]){
         this.[a.name.toLowerFirst()/] = [a.name.toLowerFirst()/];
     }
-
 [/for]
 [for (a : Property | c.getReferences(true))]
+
     /**
      * @generated
      */
@@ -88,9 +88,9 @@ public class [className/] extends BaseEntity implements Serializable {
     public void [a.setter()/]([a.getClass().getEntityName()/] [a.name.toLower()/]) {
         this.[a.name/] = [a.name.toLower()/];
     }
-
 [/for]
 [for (a : Property | c.getCollectionAttributes())]
+
     /**
      * @generated
      */
@@ -104,18 +104,7 @@ public class [className/] extends BaseEntity implements Serializable {
     public void [a.setter()/](List<[a.getClass().getEntityName()/]> [a.name.toLower()/]) {
         this.[a.name/] = [a.name.toLower()/];
     }
-
 [/for]
-
-    @Override
-    public boolean equals(Object obj) {
-        return this.getId().equals((([className/])obj).getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return this.getId().hashCode();
-    }
 }
 [/file]
 [/template]
