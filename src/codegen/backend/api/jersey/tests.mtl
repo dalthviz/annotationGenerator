@@ -229,7 +229,7 @@ public class [c.getServiceTestName()/] {
         [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
 
 
-        Response response = target.path([a.testPath()/])
+        Response response = target.path("[a.getClass().getURI()/]")
                 .request().cookie(cookieSessionId)
                 .post(Entity.entity([a.name/], MediaType.APPLICATION_JSON));
 
