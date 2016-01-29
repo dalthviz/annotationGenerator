@@ -1,6 +1,7 @@
 [comment encoding = UTF-8 /]
 [module tests('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
+[import backend::api::jersey::services /]
 
 [template public mainTests(c : Class, path : String)]
 [c.genTests(path.concat('tests/'))/]
@@ -16,7 +17,7 @@ import [c.getModel().baseGroup()/].dtos.[c.getDTOName()/];
 [for (a : Property | c.getCollectionAttributes())]
 import [c.getModel().baseGroup()/].dtos.[a.getDTOName()/];
 [/for]
-import [c.getModel().baseGroup()/].services.[c.getServiceName()/];
+import [c.getModel().baseGroup()/].services.[c.getJaxRsName()/];
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -78,7 +79,7 @@ public class [c.getServiceTestName()/] {
                         .resolve("[c.getModel().getCSWGroupId()/]:[c.getModel().getAuthLibArtifactId()/]:[c.getModel().getAuthLibVersion()/]")
                         .withTransitivity().asFile())
                 // Se agregan los compilados de los paquetes de servicios
-                .addPackage([c.getServiceName()/].class.getPackage())
+                .addPackage([c.getJaxRsName()/].class.getPackage())
                 // El archivo que contiene la configuracion a la base de datos.
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
                 // El archivo beans.xml es necesario para injeccion de dependencias.

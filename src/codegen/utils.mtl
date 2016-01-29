@@ -168,10 +168,6 @@ and (
 [c.name.toLower().concat('Test')/]
 [/template]
 
-[template public getServiceName(c : Class)]
-[c.name.toUpperFirst().concat('Service')/]
-[/template]
-
 [template public getServiceTestName(c : Class)]
 [c.name.concat('Test')/]
 [/template]
@@ -208,10 +204,6 @@ String[else]
 
 [template public getDTOName(c : Class)]
 [c.name.toUpperFirst().concat('DTO')/]
-[/template]
-
-[template public getJaxRsName(c : Class)]
-[c.name.concat('Service')/]
 [/template]
 
 [template public getAPIName(c : Class)]
