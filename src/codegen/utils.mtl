@@ -1,8 +1,11 @@
 [comment encoding = UTF-8 /]
 [module utils('http://www.eclipse.org/uml2/5.0.0/UML')]
 
-[query public getClasses(m : Model) : OrderedSet(Class) =
-m.packagedElement->filter(Class)->sortedBy(name)
+[**
+ * Obtiene todas las clases pertenecientes al modelo
+*/]
+[query public getClasses(m : Model) : Sequence(Class) =
+m.eContents()->select(e | e.oclIsTypeOf(Class))
 /]
 
 [query public getAllAttribs(c : Class) : OrderedSet(Property) =
@@ -13,7 +16,7 @@ c.allAttributes()->reject(isID())
 c.allAttributes()->any(isID())
 /]
 
-[query public getRootClasses(m : Model) : OrderedSet(Class) =
+[query public getRootClasses(m : Model) : Sequence(Class) =
 m.getClasses()->reject(isChild())
 /]
 
