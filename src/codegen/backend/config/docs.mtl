@@ -48,44 +48,32 @@ La respuesta del servidor al solicitar una colección presenta el siguiente form
 ## API de la aplicación [m.name/]
 [for(c : Class | m.getClasses()) ]
 ### Entidad [c.name/]
-#### Estructura de objeto [ c.name /]
+#### Estructura de objeto [c.name/]
 ```javascript
 {
     [for(a : Property | c.getAttributesWithRef()) separator(',\n')]
     [if (a.isValidType())]
     [ a.name /]: '' /*Tipo [ a.type.name /]*/[else]
-    [ a.name /]: '' /*Objeto que representa instancia de [a.getClass().name/]*/[/if][/for]
-
+    [ a.name /]: '' /*Objeto que representa instancia de [a.getClass().name/]*/[/if][/for][for(a :Property | c.getCompositeCollectionAttributes()) before(',\n')]
+    [a.name/]: ['[]'/] /*Colección de registros de [a.getClass().name/]*/[/for]
 }
 ```
 #### Servicios
 Método|URI|Acción|Parámetros|Cuerpo|Retorno
 :--:|:--:|:--:|:--:|:--:|:--:
-**GET**|/[c.getURI()/]|Obtener todos los objetos JSON de [ c.name /] (READ)|**@QueryParam page**: página a consultar<br>**@QueryParam maxRecords**: cantidad de registros a consultar<br><br>*Si se omite alguno de estos parámetros se obtiene todos los registros en la base de datos*||Colección de objetos JSON [c.name/] y el total de registros en la base de datos en el header X-Total-Count
-**GET**|/[c.getURI()/]/:id|Obtener los atributos de una instancia de [ c.name /] en formato JSON(READ)|**@PathParam id**: Identificador del registro||Objeto JSON con detalle de la instancia de [ c.name /]
-**POST**|/[c.getURI()/]|Crear una nueva instancia de la entidad [ c.name /] (CREATE)||Objeto JSON de [ c.name /] a crear|Objeto JSON de [ c.name /] creado
-**PUT**|/[c.getURI()/]/:id|Actualiza una instancia de la entidad [ c.name /] (UPDATE)|**@PathParam id**: Identificador del registro|Objeto JSON de [ c.name /]|Objeto JSON de [ c.name /] actualizado
-**DELETE**|/[c.getURI()/]/:id|Borra instancia de [ c.name /] en el servidor (DELETE)|<strong>@PathParam id</strong>: Identificador del registro||
-
-[if (c.isMaster())]
-#### Maestros Detalle de [c.name/]
-##### Servicios
-A diferencia del API para CRUD Básico, el API de Maestro/Detalle no provee un servicio para listar los registros de la entidad maestra. Los servicios generados para el componente Maestro/Detalle de [c.name/] son los siguientes:
-
-[if(c.hasSharedAssociations())]
-###### Relaciones
-
-Método|URI|Acción|Parámetros|Cuerpo|Retorno
-:--:|:--:|:--:|:--:|:--:|:--:
+**GET**|/[c.getURI()/]|Lista los registros de [c.name/] (READ)|**@QueryParam page**: página a consultar<br>**@QueryParam maxRecords**: cantidad de registros a consultar<br><br>*Si se omite alguno de estos parámetros se obtiene todos los registros en la base de datos*||Colección de registros de [c.name/] y el total de registros en la base de datos en el header X-Total-Count
+**GET**|/[c.getURI()/]/*:[c.getURI()/]id*|Obtener los atributos de una instancia de [c.name/] (READ)|**@PathParam [c.getURI()/]id**: Identificador del registro||Atributos de la instancia de [c.name/]
+**POST**|/[c.getURI()/]|Crear una nueva instancia de la entidad [c.name/] (CREATE)||Atributos de la instancia de [c.name/] a crear|Instancia de [c.name/] creada, incluyendo su nuevo ID
+**PUT**|/[c.getURI()/]/*:[c.getURI()/]id*|Actualiza una instancia de la entidad [c.name/] (UPDATE)|**@PathParam [c.getURI()/]id**: Identificador del registro|Objeto JSON de [c.name/]|Instancia de [c.name/] actualizada
+**DELETE**|/[c.getURI()/]/*:[c.getURI()/]id*|Borra instancia de [c.name/] en el servidor (DELETE)|**@PathParam [c.getURI()/]id**: Identificador del registro||
 [for (elem : Property | c.getNonCompositeCollectionAttributes())]
-**GET**|[c.getURI()/]/:id/[elem.name/]|Obtener Objetos JSON de [elem.name/]([elem.type.name/]) dependientes de [c.name/]|**@PathParam id**: `id` de instancia de [c.name/]||Colección de objetos JSON de [elem.name/]([elem.type.name/])
-**POST**|[c.getURI()/]/:id/[elem.name/]|Creación de instancias de [elem.name/]([elem.type.name/]) dependientes de [c.name/]|**@PathParam id**: `id` de instancia de [c.name/]|Colección de objetos JSON de [elem.name/]([elem.type.name/]) a crear|Colección de objetos JSON de [elem.name/]([elem.type.name/]) creados con sus respectivos ID
-**PUT**|[c.getURI()/]/:id/[elem.name/]|Actualización de instancias de [elem.name/]([elem.type.name/]) dependientes de [c.name/]|**@PathParam id**: `id` de instancia de [c.name/]|Colección de objetos JSON de [elem.name/]([elem.type.name/]) a actualizar|Colección de objetos JSON de [elem.name/]([elem.type.name/]) actualizados
-**DELETE**|[c.getURI()/]/:id/[elem.name/]|Eliminación de instancias de [elem.name/]([elem.type.name/]) dependientes de [c.name/]|**@PathParam id**: `id` de instancia de [c.name/]|Colección de atributo `id` de [elem.name/]([elem.type.name/]) a eliminar|
+**GET**|[c.getURI()/]/*:[c.getURI()/]id*/[elem.name/]|Listar registros de [elem.name/] ([elem.getClass().name/]) asociados a [c.name/]|**@PathParam [c.getURI()/]id**: Identificador de instancia de [c.name/]||Colección de objetos JSON de [elem.name/]([elem.getClass().name/])
+**GET**|[c.getURI()/]/*:[c.getURI()/]id*/[elem.name/]/*:[elem.name/]id*|Obtener un registro de [elem.name/] ([elem.getClass().name/]) asociado a [c.name/]|**@PathParam [c.getURI()/]id**: Identificador de instancia de [c.name/]<br><br>**@PathParam [elem.name/]id**: Identificador de instancia de [elem.getClass().name/]||Lista de registros de [elem.name/]([elem.getClass().name/])
+**POST**|[c.getURI()/]/*:[c.getURI()/]id*/[elem.name/]/*:[elem.name/]id*|Asocia una instancia de [elem.getClass().name/] a una de [c.name/]|**@PathParam [c.getURI()/]id**: Identificador de instancia de [c.name/]<br><br>**@PathParam [elem.name/]id**: Identificador de instancia de [elem.getClass().name/]|Registro de [elem.name/]([elem.getClass().name/]) para asociar a [c.name/]|Instancia de [elem.name/]([elem.getClass().name/]) asociada a instancia de [c.name/]
+**PUT**|[c.getURI()/]/*:[c.getURI()/]id*/[elem.name/]|Actualización de instancias de [elem.name/] ([elem.getClass().name/]) asociadas a [c.name/]|**@PathParam [c.getURI()/]id**: Identificador de instancia de [c.name/]|Colección de instancias de [elem.name/]([elem.getClass().name/]) a actualizar|Colección de instancias de [elem.name/]([elem.getClass().name/]) actualizados
+**DELETE**|[c.getURI()/]/*:[c.getURI()/]id*/[elem.name/]/*:[elem.name/]id*|Remueve asociación de instancias de [elem.name/] ([elem.getClass().name/]) a [c.name/]|**@PathParam [c.getURI()/]id**: Identificador de instancia de [c.name/]<br><br>**@PathParam [elem.name/]id**: Identificador de instancia de [elem.getClass().name/]|Colección de atributo `id` de [elem.name/]([elem.getClass().name/]) a eliminar|
 [/for]
-[/if]
 
-[/if]
 ['['/]Volver arriba[']'/](#tabla-de-contenidos)
 
 [/for]
