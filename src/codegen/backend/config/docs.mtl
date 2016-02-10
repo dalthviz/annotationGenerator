@@ -56,6 +56,7 @@ La respuesta del servidor al solicitar una colección presenta el siguiente form
     [ a.name /]: '' /*Tipo [ a.type.name /]*/[else]
     [ a.name /]: '' /*Objeto que representa instancia de [a.getClass().name/]*/[/if][/for][for(a :Property | c.getCompositeCollectionAttributes()) before(',\n')]
     [a.name/]: ['[]'/] /*Colección de registros de [a.getClass().name/]*/[/for]
+
 }
 ```
 #### Servicios
