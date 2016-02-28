@@ -1,0 +1,251 @@
+[comment encoding = UTF-8 /]
+[module logic('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[template public mainLogic(c : Class, path : String)]
+[if (not c.isChild())]
+    [c.genLogicInterface(path.concat('api/'))/]
+    [c.genLogicBean(path.concat('ejbs/'))/]
+[/if]
+[/template]
+
+[template protected genLogicInterface(c : Class, path : String) {className : String = c.getAPIName();}]
+[file (path.concat(className + '.java'), false, 'UTF-8')]
+package [c.getModel().baseGroup()/].api;
+
+import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
+[for (a : Property | c.getNonCompositeCollectionAttributes())]
+import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
+[/for]
+import java.util.List;
+
+public interface [className/] {
+    public int count[c.name/]s();
+    public List<[c.getEntityName()/]> get[c.name/]s();
+    public List<[c.getEntityName()/]> get[c.name/]s(Integer page, Integer maxRecords);
+    public [c.getEntityName()/] get[c.name/](Long id);
+    public [c.getEntityName()/] create[c.name/]([c.getEntityName()/] entity);
+    public [c.getEntityName()/] update[c.name/]([c.getEntityName()/] entity);
+    public void delete[c.name/](Long id);
+    [for (a : Property | c.getNonCompositeCollectionAttributes())]
+    public List<[a.getClass().getEntityName()/]> list[a.name.toUpperFirst()/](Long [c.getEntityId()/]);
+    public [a.getClass().getEntityName()/] get[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]);
+    public [a.getClass().getEntityName()/] add[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]);
+    public List<[a.getClass().getEntityName()/]> replace[a.name.toUpperFirst()/](Long [c.getEntityId()/], List<[a.getClass().getEntityName()/]> list);
+    public void remove[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]);
+    [/for]
+}
+[/file]
+[/template]
+
+[template protected genLogicBean(c : Class, path : String) {className : String = c.getBeanName();}]
+[file (path.concat(className.concat('.java')), false, 'UTF-8')]
+package [c.getModel().baseGroup()/].ejbs;
+
+import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
+import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
+import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
+[for (a : Property | c.getNonCompositeCollectionAttributes())]
+import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
+[if (not a.isRelationshipOwner())]
+import [c.getModel().baseGroup()/].api.[a.getClass().getAPIName()/];
+[/if]
+[/for]
+import java.util.List;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+/**
+ * @generated
+ */
+@Stateless
+public class [className/] implements [c.getAPIName()/] {
+
+    @Inject private [c.getPersistenceName()/] persistence;
+
+    [for (a : Property | c.getNonCompositeCollectionAttributes()->reject(isRelationshipOwner()))]
+    @Inject private [a.getClass().getAPIName()/] [a.getClass().getBeanLower()/];
+
+    [/for]
+    /**
+     * @generated
+     */
+    @Override
+    public int count[c.name/]s() {
+        return persistence.count();
+    }
+
+    /**
+     * @generated
+     */
+    @Override
+    public List<[c.getEntityName()/]> get[c.name/]s() {
+        return persistence.findAll();
+    }
+
+    /**
+     * @generated
+     */
+    @Override
+    public List<[c.getEntityName()/]> get[c.name/]s(Integer page, Integer maxRecords) {
+        return persistence.findAll(page, maxRecords);
+    }
+    /**
+     * @generated
+     */
+    @Override
+    public [c.getEntityName()/] get[c.name/](Long id) {
+        return persistence.find(id);
+    }
+
+    /**
+     * @generated
+     */
+    @Override
+    public [c.getEntityName()/] create[c.name/]([c.getEntityName()/] entity) {
+        persistence.create(entity);
+        return entity;
+    }
+
+    /**
+     * @generated
+     */
+    @Override
+    public [c.getEntityName()/] update[c.name/]([c.getEntityName()/] entity) {
+        [c.getEntityName()/] newEntity = entity;
+        [c.getEntityName()/] oldEntity = persistence.find(entity.getId());
+        [for (a : Property | c.getNonCompositeCollectionAttributes())]
+        newEntity.[a.setter()/](oldEntity.[a.getter()/]());
+        [/for]
+        return persistence.update(newEntity);
+    }
+
+    /**
+     * @generated
+     */
+    @Override
+    public void delete[c.name/](Long id) {
+        persistence.delete(id);
+    }
+    [for (a : Property | c.getNonCompositeCollectionAttributes())]
+
+    /**
+     * @generated
+     */
+    @Override
+    public List<[a.getClass().getEntityName()/]> list[a.name.toUpperFirst()/](Long [c.getEntityId()/]) {
+        return persistence.find([c.getEntityId()/]).[a.getter()/]();
+    }
+
+    /**
+     * @generated
+     */
+    @Override
+    public [a.getClass().getEntityName()/] get[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]) {
+        List<[a.getClass().getEntityName()/]> list = persistence.find([c.getEntityId()/]).[a.getter()/]();
+        [a.getClass().getEntityName()/] [a.getEntityLower()/] = new [a.getClass().getEntityName()/]();
+        [a.getEntityLower()/].setId([a.getEntityId()/]);
+        int index = list.indexOf([a.getEntityLower()/]);
+        if (index >= 0) {
+            return list.get(index);
+        }
+        return null;
+    }
+
+    /**
+     * @generated
+     */
+    @Override
+    public [a.getClass().getEntityName()/] add[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]) {
+		[if (a.isRelationshipOwner())]
+        [c.getEntityName()/] [c.getEntityLower()/] = persistence.find([c.getEntityId()/]);
+        [a.getClass().getEntityName()/] [a.getEntityLower()/] = new [a.getClass().getEntityName()/]();
+        [a.getEntityLower()/].setId([a.getEntityId()/]);
+        [c.getEntityLower()/].[a.getter()/]().add([a.getEntityLower()/]);
+        return get[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getEntityId()/]);
+		[else]
+        [if (a.getOtherEnd().getUpper() = 1)]
+        [c.getEntityName()/] [c.getEntityLower()/] = persistence.find([c.getEntityId()/]);
+        [a.getClass().getEntityName()/] [a.getEntityLower()/] = [a.getClass().getBeanLower()/].get[a.getClass().name/]([a.getEntityId()/]);
+        [a.getEntityLower()/].[a.getOtherEnd().setter()/]([c.getEntityLower()/]);
+        return [a.getEntityLower()/];
+        [else]
+        [a.getClass().getBeanLower()/].add[a.getOtherEnd().name.toUpperFirst()/]([a.getEntityId()/], [c.getEntityId()/]);
+        return [a.getClass().getBeanLower()/].get[a.getClass().name/]([a.getEntityId()/]);
+        [/if]
+		[/if]
+    }
+
+    /**
+     * @generated
+     */
+    @Override
+    public List<[a.getClass().getEntityName()/]> replace[a.name.toUpperFirst()/](Long [c.getEntityId()/], List<[a.getClass().getEntityName()/]> list) {
+        [c.getEntityName()/] [c.getEntityLower()/] = persistence.find([c.getEntityId()/]);
+		[if (not a.isRelationshipOwner())]
+        List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]List = [a.getClass().getBeanLower()/].get[a.getClass().name/]s();
+        [if (a.getOtherEnd().getUpper() = 1)]
+        for ([a.getClass().getEntityName()/] [a.getClass().getName()/] : [a.getClass().getName()/]List) {
+            if (list.contains([a.getClass().getName()/])) {
+                [a.getClass().getName()/].[a.getOtherEnd().setter()/]([c.getEntityLower()/]);
+            } else {
+                if ([a.getClass().getName()/].[a.getOtherEnd().getter()/]() != null && [a.getClass().getName()/].[a.getOtherEnd().getter()/]().equals([c.getEntityLower()/])) {
+                    [a.getClass().getName()/].[a.getOtherEnd().setter()/](null);
+                }
+            }
+        }
+        [else]
+        for ([a.getClass().getEntityName()/] [a.getClass().getName()/] : [a.getClass().getName()/]List) {
+            if (list.contains([a.getClass().getName()/])) {
+                if (![a.getClass().getName()/].[a.getOtherEnd().getter()/]().contains([c.getEntityLower()/])) {
+                    [a.getClass().getBeanLower()/].add[a.getOtherEnd().name.toUpperFirst()/]([a.getClass().getName()/].getId(), [c.getEntityId()/]);
+                }
+            } else {
+                [a.getClass().getBeanLower()/].remove[a.getOtherEnd().name.toUpperFirst()/]([a.getClass().getName()/].getId(), [c.getEntityId()/]);
+            }
+        }
+        [/if]
+		[/if]
+        [c.getEntityLower()/].[a.setter()/](list);
+        return [c.getEntityLower()/].[a.getter()/]();
+    }
+
+    /**
+     * @generated
+     */
+    @Override
+    public void remove[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]) {
+        [if (not a.isRelationshipOwner())]
+        [if (a.getOtherEnd().getUpper() = 1)]
+        [a.getClass().getEntityName()/] entity = [a.getClass().getBeanLower()/].get[a.getClass().name/]([a.getEntityId()/]);
+        entity.[a.getOtherEnd().setter()/](null);
+        [else]
+        [a.getClass().getBeanLower()/].remove[a.getOtherEnd().name.toUpperFirst()/]([a.getEntityId()/], [c.getEntityId()/]);
+        [/if]
+        [else]
+        [c.getEntityName()/] entity = persistence.find([c.getEntityId()/]);
+        [a.getClass().getEntityName()/] [a.getEntityLower()/] = new [a.getClass().getEntityName()/]();
+        [a.getEntityLower()/].setId([a.getEntityId()/]);
+        entity.[a.getter()/]().remove([a.getEntityLower()/]);
+        [/if]
+    }
+    [/for]
+}
+[/file]
+[/template]
+
+[template private getEntityLower(c : Class)]
+[c.name.toLowerFirst().concat('Entity')/]
+[/template]
+
+[template private getBeanLower(c : Class)]
+[c.name.toLowerFirst().concat('Logic')/]
+[/template]
+
+[template private getEntityId(a : Property)]
+[a.name.toLowerFirst().concat('Id')/]
+[/template]
+
+[template private getEntityLower(a : Property)]
+[a.name.toLowerFirst().concat('Entity')/]
+[/template]

@@ -1,0 +1,13 @@
+[comment encoding = UTF-8 /]
+[module common('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import frontend::common::index /]
+[import frontend::common::devenv /]
+[import frontend::common::netbeans /]
+[template public genCommon(m : Model, path : String)]
+    [m.indexMain(path)/]
+[/template]
+
+[template public genDevEnv(m : Model, path : String)]
+    [m.mainEnv(path)/]
+    [m.netbeansConfig(path.concat('nbproject/'))/]
+[/template]

@@ -1,0 +1,360 @@
+[comment encoding = UTF-8 /]
+[module utils('http://www.eclipse.org/uml2/5.0.0/UML')]
+
+[**
+ * Obtiene todas las clases pertenecientes al modelo
+*/]
+[query public getClasses(m : Model) : Sequence(Class) =
+m.eContents()->select(e | e.oclIsTypeOf(Class))
+/]
+
+[query public getAllAttribs(c : Class) : OrderedSet(Property) =
+c.allAttributes()->reject(isID())
+/]
+
+[query public getId(c : Class) : Property =
+c.allAttributes()->any(isID())
+/]
+
+[query public getRootClasses(m : Model) : Sequence(Class) =
+m.getClasses()->reject(isChild())
+/]
+
+[query public isMany2Many(a : Property) : Boolean =
+    a.isNavigable()
+and a.getUpper() <> 1
+and a.aggregation = AggregationKind::none
+and a.getOtherEnd().getUpper() <> 1
+and a.getOtherEnd().aggregation = AggregationKind::none
+/]
+
+[query public isOne2One(a : Property) : Boolean =
+    a.isNavigable()
+and a.getUpper() = 1
+and a.aggregation = AggregationKind::none
+and a.getOtherEnd().getUpper() = 1
+and a.getOtherEnd().aggregation = AggregationKind::none
+/]
+
+[query public isOne2Many(a : Property) : Boolean =
+    a.isNavigable()
+and a.getUpper() <> 1
+and a.getOtherEnd().getUpper() = 1
+/]
+
+[query public isMany2One(a : Property) : Boolean =
+    a.isNavigable()
+and a.getUpper() = 1
+and a.aggregation = AggregationKind::none
+and a.getOtherEnd().getUpper() <> 1
+/]
+
+[query public getAttributesWithRef(c : Class) : OrderedSet(Property) =
+c.allAttributes()->union(c.getReferences(false))->asOrderedSet()
+/]
+
+
+[**
+ * Obtiene la colección de atributos de la clase, cuyo tipo es otra clase del modelo y son aceptados por el generador
+ * Actualmente los atributos válidos cumplen con las siguientes características:
+ * - Es navegable
+ * - Su límite máximo de objetos es diferente de cero
+ * - El otro extremo de la relación apunta a la clase que realiza la consulta
+ * - En caso de haber agregación, el otro extremo de la relación no puede tener agregación y su límite máximo debe ser 1
+ * - En caso del atributo ser composite, el extremo opuesto debe ser navegable
+*/]
+[query public getRelationshipAttributes(c : Class) : Set(Property) =
+c.getAssociations()->collect( asc |
+    asc.getAllAttributes()->select(
+        a | a.isNavigable()
+        and a.getUpper() <> 0
+        and a.getOtherEnd().type = c
+        and (a.aggregation <> AggregationKind::none implies (
+                a.getOtherEnd().getUpper() = 1
+            and a.getOtherEnd().aggregation = AggregationKind::none)
+        )
+        and (a.getOtherEnd().aggregation <> AggregationKind::none implies (
+                a.getUpper() = 1
+            and a.aggregation = AggregationKind::none)
+        )
+        and (a.isComposite() implies a.getOtherEnd().isNavigable())
+    )
+)->asSet()
+/]
+
+[query public getReferences(c : Class, includeParent : Boolean) : OrderedSet(Property) =
+c.getRelationshipAttributes()->select(
+    a | a.getUpper() = 1
+    and (a.getOtherEnd().isComposite() implies includeParent)
+)->asOrderedSet()
+/]
+
+[query public getCollectionAttributes(c : Class) : Set(Property) =
+c.getRelationshipAttributes()->select(getUpper() <> 1)->asSet()
+/]
+
+[query public hasReferences(c : Class, includeParent : Boolean) : Boolean =
+c.getReferences(includeParent)->notEmpty()
+/]
+
+[query public isMaster(c : Class) : Boolean =
+c.getCollectionAttributes()->notEmpty()
+/]
+
+[query public getCompositeCollectionAttributes(c : Class) : Set(Property) =
+c.getCollectionAttributes()->select(isComposite())
+/]
+
+[query public getNonCompositeCollectionAttributes(c : Class) : Set(Property) =
+c.getCollectionAttributes()->reject(isComposite())
+/]
+
+[query public hasCompositeAssociations(c : Class) : Boolean =
+c.getCompositeCollectionAttributes()->notEmpty()
+/]
+
+[query public hasSharedAssociations(c : Class) : Boolean =
+c.getNonCompositeCollectionAttributes()->notEmpty()
+/]
+
+[query public isChild(c : Class) : Boolean =
+c.getParentAttribute() <> null
+ /]
+
+[query public getParentAttribute(c : Class) : Property =
+c.getReferences(true)->any(isParentAttribute())
+/]
+
+[query public isParentAttribute(a : Property) : Boolean =
+a.getOtherEnd().isComposite()
+/]
+
+[query public isValidType(a : Property) : Boolean =
+Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <> null and t = a.type.name)
+/]
+
+[query public hasDateAttribute(c : Class) : Boolean = c.allAttributes()->exists(isDate()) /]
+
+[query public isDate(a : Property) : Boolean = a.type.name = 'Date' /]
+
+[query public isComputed(a : Property) : Boolean = a.type.name = 'Computed' /]
+
+[query public isID(a : Property) : Boolean = a.name = 'id' /]
+
+[query public isName(a : Property) : Boolean = a.name = 'name' /]
+
+[query public getter(a : Property) : String = 'get'.concat(a.name.toUpperFirst()) /]
+
+[query public setter(a : Property) : String = 'set'.concat(a.name.toUpperFirst()) /]
+
+[query public getClass(a : Property) : Class = Class.allInstances()->any(c | c.name = a.type.name) /]
+
+[query public isRequired(a : Property) : Boolean = self.getLower() > 0 /]
+
+[**
+ * Permite identificar si el atributo es el dueño de una relación.
+ * Esto se da cuando el atributo es navegable y:
+ * - La relación es unidireccional
+ * - La relación es bidireccional, uno a muchos, y el atributo es de cardinalidad 1 o 0..1
+ * - La relación es bidireccional, muchos a muchos o uno a uno, entonces se decide cualquiera (se implementa comparando nombres y aquel que sea mayor que el otro)
+*/]
+[query public isRelationshipOwner(a : Property) : Boolean =
+    a.isNavigable()
+and (
+    not a.getOtherEnd().isNavigable()
+    or  (a.isMany2One())
+    or  ((a.isMany2Many() or a.isOne2One()) and a.name < a.getOtherEnd().name)
+)
+/]
+
+[template public testName(c : Class)]
+[c.name.toLower().concat('Test')/]
+[/template]
+
+[template public getServiceTestName(c : Class)]
+[c.name.concat('Test')/]
+[/template]
+
+[template public getJavaType(a : Property)]
+[if (a.type.name = 'Image')]
+String[else]
+[a.type.name/][/if]
+[/template]
+
+[template public getModelName(c : Class)]
+[c.getModel().name/]
+[/template]
+
+[template public getCtrl(c : Class)]
+[c.getName().concat('Ctrl')/]
+[/template]
+
+[template public getEntityModel(c : Class)]
+[c.getName().concat('Model')/]
+[/template]
+
+[template public getModule(c : Class)]
+[c.getName().concat('Module')/]
+[/template]
+
+[template public getURI(c : Class)]
+[c.getName().concat('s')/]
+[/template]
+
+[template public getName(c : Class)]
+[c.name.toLowerFirst()/]
+[/template]
+
+[template public getDTOName(c : Class)]
+[c.name.toUpperFirst().concat('DTO')/]
+[/template]
+
+[template public getAPIName(c : Class)]
+['I'.concat(c.name).concat('Logic')/]
+[/template]
+
+[template public getBeanName(c : Class)]
+[c.name.concat('Logic')/]
+[/template]
+
+[template public getEntityName(c : Class)]
+[c.name.concat('Entity')/]
+[/template]
+
+[template public getEntityId(c : Class)]
+[c.name.toLowerFirst().concat('Id')/]
+[/template]
+
+[template public getPersistenceName(c : Class)]
+[c.name.concat('Persistence')/]
+[/template]
+
+[template public getConverterName(c : Class)]
+[c.name.concat('Converter')/]
+[/template]
+
+[template public getTestName(c : Class)]
+[c.name.concat('LogicTest')/]
+[/template]
+
+[template public getPersistenceTestName(c : Class)]
+[c.name.concat('PersistenceTest')/]
+[/template]
+
+[template public baseGroup(m : Model)]
+['co.edu.uniandes.csw.'.concat(m.name.toLowerCase())/]
+[/template]
+
+[template public basePath(m : Model)]
+['/src/main/java/'.concat(m.baseGroup().replaceAll('[.]', '/')).concat('/')/]
+[/template]
+
+[template public baseTestPath(m : Model)]
+['/src/test/java/'.concat(m.baseGroup().replaceAll('[.]', '/')).concat('/')/]
+[/template]
+
+[template public basePck(c : Class, suffix : String)]
+[c.getModel().baseGroup().concat('.'+c.name.toLowerFirst()).concat(suffix)/]
+[/template]
+
+[template public getBackendProjectName(m : Model)]
+[m.name.concat('.logic')/]
+[/template]
+
+[template public getApiProjectName(m : Model)]
+[m.name.concat('.api')/]
+[/template]
+
+[template public getWebProjectName(m : Model)]
+[m.name.concat('.web')/]
+[/template]
+
+[template private asArtifactId(s : String)]
+[s.replace('^\\W+','').replaceAll('(?!^)([A-Z])','-$1').replaceAll('\\W+', '-').toLowerCase()/]
+[/template]
+
+[template public getArtifactId(m : Model)]
+[m.name.asArtifactId()/]
+[/template]
+
+[template public getLogicArtifactId(m : Model)]
+[m.getBackendProjectName().asArtifactId()/]
+[/template]
+
+[template public getApiArtifactId(m : Model)]
+[m.getApiProjectName().asArtifactId()/]
+[/template]
+
+[template public getWebArtifactId(m : Model)]
+[m.getWebProjectName().asArtifactId()/]
+[/template]
+
+[template public getWebRoot(m : Model)]
+[m.getWebArtifactId().concat('/app/')/]
+[/template]
+
+[template public getPoolName(m : Model)]
+[m.name.concat('_pool')/]
+[/template]
+
+[template public getJNDIName(m : Model)]
+['java:app/jdbc/'.concat(m.name)/]
+[/template]
+
+[template public getPUName(m : Model)]
+[m.name.concat('PU')/]
+[/template]
+
+[template public getMetaInfPath(m : Model)]
+[m.getLogicArtifactId().concat('/src/main/resources/META-INF/')/]
+[/template]
+
+[template public getTestMetaInfPath(m : Model)]
+[m.getLogicArtifactId().concat('/src/test/resources/META-INF/')/]
+[/template]
+
+[template public getTestServicesMetaInfPath(m : Model)]
+[m.getApiArtifactId().concat('/src/test/resources/META-INF/')/]
+[/template]
+
+[template public getWebInfPath(m : Model)]
+[m.getApiArtifactId().concat('/src/main/webapp/WEB-INF/')/]
+[/template]
+
+[template public getProjectVersion(m : Model)]
+0.1.0
+[/template]
+
+[template public genBeansXml(m : Model, path : String)]
+[file(path.concat('beans.xml'), false, 'UTF-8')]
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://java.sun.com/xml/ns/javaee"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
+</beans>
+[/file]
+[/template]
+
+[template public getCSWGroupId(m : Model)]
+co.edu.uniandes.csw
+[/template]
+
+[template public getAuthLibArtifactId(m : Model)]
+auth-utils
+[/template]
+
+[template public getAuthLibVersion(m : Model)]
+0.1.0
+[/template]
+
+[template public getCrudLibArtifactId(m : Model)]
+crud-utils
+[/template]
+
+[template public getCrudLibVersion(m : Model)]
+0.1.2
+[/template]
+
+[template public asDisplayName(s : String)]
+[s.replace('^\\W+','').replaceAll('(?!^)([A-Z])',' $1').replaceAll('\\W+', ' ').toUpperFirst()/]
+[/template]

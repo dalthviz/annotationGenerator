@@ -1,0 +1,132 @@
+[comment encoding = UTF-8 /]
+[module entities('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[template public mainEntity(c : Class, path : String)]
+[c.genEntity(path.concat('entities/'))/]
+[/template]
+
+[template protected genEntity(c : Class, path : String) {className : String = c.getEntityName();}]
+[file (path.concat(className+'.java'), false, 'UTF-8')]
+package [c.getModel().baseGroup()/].entities;
+
+import java.io.Serializable;
+import javax.persistence.Entity;
+import co.edu.uniandes.csw.crud.spi.entity.BaseEntity;
+[if (c.hasDateAttribute())]
+import java.util.Date;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import uk.co.jemos.podam.common.PodamStrategyValue;
+import co.edu.uniandes.csw.crud.api.podam.strategy.DateStrategy;
+[/if]
+[if (c.getRelationshipAttributes()->exists(not isComposite()))]
+import uk.co.jemos.podam.common.PodamExclude;
+[for (s : String | c.getJPAAnnotations())]
+import javax.persistence.[s/];
+[/for]
+[if (c.isMaster())]
+import java.util.List;
+import java.util.ArrayList;
+[if (c.hasCompositeAssociations())]
+import javax.persistence.CascadeType;
+[/if]
+[/if]
+[/if]
+
+/**
+ * @generated
+ */
+@Entity
+public class [className/] extends BaseEntity implements Serializable {
+[for (a : Property | c.allAttributes()->reject(isID() or isName()))]
+
+    [if (a.isDate())]
+    @Temporal(TemporalType.DATE)
+    @PodamStrategyValue(DateStrategy.class)
+    [/if]
+    private [a.type.name/] [a.name.toLowerFirst()/];
+[/for]
+[for (a : Property | c.getRelationshipAttributes())]
+
+    [if (not a.isComposite())]@PodamExclude[/if]
+    @[a.getJPAAnnotation()/][a.genParameters()/]
+    [if (a.getUpper() = 1)]
+    private [a.getClass().getEntityName()/] [a.name/];
+    [else]
+    private List<[a.getClass().getEntityName()/]> [a.name/] = new ArrayList<>();
+    [/if]
+[/for]
+[for (a : Property | c.allAttributes()->reject(isID() or isName()))]
+
+    /**
+     * @generated
+     */
+    public [a.type.name/] [a.getter()/](){
+        return [a.name.toLowerFirst()/];
+    }
+
+    /**
+     * @generated
+     */
+    public void [a.setter()/]([a.type.name/] [a.name.toLowerFirst()/]){
+        this.[a.name.toLowerFirst()/] = [a.name.toLowerFirst()/];
+    }
+[/for]
+[for (a : Property | c.getReferences(true))]
+
+    /**
+     * @generated
+     */
+    public [a.getClass().getEntityName()/] [a.getter()/]() {
+        return [a.name/];
+    }
+
+    /**
+     * @generated
+     */
+    public void [a.setter()/]([a.getClass().getEntityName()/] [a.name.toLower()/]) {
+        this.[a.name/] = [a.name.toLower()/];
+    }
+[/for]
+[for (a : Property | c.getCollectionAttributes())]
+
+    /**
+     * @generated
+     */
+    public List<[a.getClass().getEntityName()/]> [a.getter()/]() {
+        return [a.name/];
+    }
+
+    /**
+     * @generated
+     */
+    public void [a.setter()/](List<[a.getClass().getEntityName()/]> [a.name.toLower()/]) {
+        this.[a.name/] = [a.name.toLower()/];
+    }
+[/for]
+}
+[/file]
+[/template]
+
+[template protected genParameters(a : Property)]
+[if (not a.isRelationshipOwner() and a.isComposite())]
+(mappedBy = "[a.getOtherEnd().name/]", cascade = CascadeType.ALL, orphanRemoval = true)[elseif (not a.isRelationshipOwner())]
+(mappedBy = "[a.getOtherEnd().name/]")[elseif (a.isComposite())]
+(cascade = CascadeType.ALL, orphanRemoval = true)[/if]
+[/template]
+
+[query private getJPAAnnotations(c : Class) : Set(String) =
+c.getRelationshipAttributes()->collect(
+    getJPAAnnotation()
+)->asSet()
+/]
+
+[query private getJPAAnnotation(p : Property) : String =
+Set{'OneToMany','ManyToOne','OneToOne','ManyToMany'}->any(
+    a | (a = 'OneToMany' and p.isOne2Many())
+    or  (a = 'ManyToOne' and p.isMany2One())
+    or  (a = 'OneToOne' and p.isOne2One())
+    or  (a = 'ManyToMany' and p.isMany2Many())
+)
+/]

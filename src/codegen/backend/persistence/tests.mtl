@@ -1,0 +1,218 @@
+[comment encoding = UTF-8 /]
+[module tests('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[template public mainDataTests(c : Class, path : String)]
+[c.genTests(path.concat('test/persistence/'))/]
+[/template]
+
+[template protected genTests(c : Class, path : String) {className : String = c.getPersistenceTestName();}]
+[if (not c.isChild())]
+[let bean : String = c.getName().concat('Persistence')]
+[file (path.concat(className+'.java'), false, 'UTF-8')]
+package [c.getModel().baseGroup()/].test.persistence;
+
+import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
+[for (a : Property | c.getRelationshipAttributes()->select(isComposite()))]
+import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
+[/for]
+import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
+import java.util.ArrayList;
+import java.util.List;
+[if (c.hasDateAttribute())]import java.util.Date;[/if]
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.UserTransaction;
+import org.junit.Assert;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import uk.co.jemos.podam.api.PodamFactory;
+import uk.co.jemos.podam.api.PodamFactoryImpl;
+
+/**
+ * @generated
+ */
+@RunWith(Arquillian.class)
+public class [className/] {
+
+    /**
+     * @generated
+     */
+    @Deployment
+    public static JavaArchive createDeployment() {
+        return ShrinkWrap.create(JavaArchive.class)
+                .addPackage([c.getEntityName()/].class.getPackage())
+                .addPackage([c.getPersistenceName()/].class.getPackage())
+                .addAsManifestResource("META-INF/persistence.xml", "persistence.xml")
+                .addAsManifestResource("META-INF/beans.xml", "beans.xml");
+    }
+
+    /**
+     * @generated
+     */
+    @Inject
+    private [c.getPersistenceName()/] [bean/];
+
+    /**
+     * @generated
+     */
+    @PersistenceContext
+    private EntityManager em;
+
+    /**
+     * @generated
+     */
+    @Inject
+    UserTransaction utx;
+
+    /**
+     * @generated
+     */
+    @Before
+    public void configTest() {
+        try {
+            utx.begin();
+            em.joinTransaction();
+            clearData();
+            insertData();
+            utx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                utx.rollback();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * @generated
+     */
+    private void clearData() {
+        [for (a : Property | c.getRelationshipAttributes()->select(isComposite()))]
+        em.createQuery("delete from [a.getClass().getEntityName()/]").executeUpdate();
+        [/for]
+        em.createQuery("delete from [c.getEntityName()/]").executeUpdate();
+    }
+
+    /**
+     * @generated
+     */
+    private List<[c.getEntityName()/]> data = new ArrayList<[c.getEntityName()/]>();
+
+    /**
+     * @generated
+     */
+    private void insertData() {
+        PodamFactory factory = new PodamFactoryImpl();
+        for (int i = 0; i < 3; i++) {
+            [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);
+            [for (a : Property | c.getRelationshipAttributes()->select(isComposite()))]
+            [if (a.getUpper() = 1)]
+            entity.[a.getter()/]().[a.getClass().getParentAttribute().setter()/](entity);
+            [else]
+            for ([a.getClass().getEntityName()/] item : entity.[a.getter()/]()) {
+                item.[a.getClass().getParentAttribute().setter()/](entity);
+            }
+            [/if]
+            [/for]
+            em.persist(entity);
+            data.add(entity);
+        }
+    }
+
+    /**
+     * @generated
+     */
+    @Test
+    public void create[c.name/]Test() {
+		PodamFactory factory = new PodamFactoryImpl();
+        [c.getEntityName()/] newEntity = factory.manufacturePojo([c.getEntityName()/].class);
+        [c.getEntityName()/] result = [bean/].create(newEntity);
+
+        Assert.assertNotNull(result);
+
+        [c.getEntityName()/] entity = em.find([c.getEntityName()/].class, result.getId());
+
+        [for (a : Property | c.getAllAttribs())]
+		[if (not a.isDate())]
+        Assert.assertEquals(newEntity.[a.getter()/](), entity.[a.getter()/]());
+		[/if]
+        [/for]
+    }
+
+    /**
+     * @generated
+     */
+    @Test
+    public void get[c.name/]sTest() {
+        List<[c.getEntityName()/]> list = [bean/].findAll();
+        Assert.assertEquals(data.size(), list.size());
+        for ([c.getEntityName()/] ent : list) {
+            boolean found = false;
+            for ([c.getEntityName()/] entity : data) {
+                if (ent.getId().equals(entity.getId())) {
+                    found = true;
+                }
+            }
+            Assert.assertTrue(found);
+        }
+    }
+
+    /**
+     * @generated
+     */
+    @Test
+    public void get[c.name/]Test() {
+        [c.getEntityName()/] entity = data.get(0);
+        [c.getEntityName()/] newEntity = [bean/].find(entity.getId());
+        Assert.assertNotNull(newEntity);
+        [for (a : Property | c.getAllAttribs())]
+        Assert.assertEquals(entity.[a.getter()/](), newEntity.[a.getter()/]());
+        [/for]
+    }
+
+    /**
+     * @generated
+     */
+    @Test
+    public void delete[c.name/]Test() {
+        [c.getEntityName()/] entity = data.get(0);
+        [bean/].delete(entity.getId());
+        [c.getEntityName()/] deleted = em.find([c.getEntityName()/].class, entity.getId());
+        Assert.assertNull(deleted);
+    }
+
+    /**
+     * @generated
+     */
+    @Test
+    public void update[c.name/]Test() {
+        [c.getEntityName()/] entity = data.get(0);
+        PodamFactory factory = new PodamFactoryImpl();
+        [c.getEntityName()/] newEntity = factory.manufacturePojo([c.getEntityName()/].class);
+
+        newEntity.setId(entity.getId());
+
+        [bean/].update(newEntity);
+
+        [c.getEntityName()/] resp = em.find([c.getEntityName()/].class, entity.getId());
+
+        [for (a : Property | c.getAllAttribs())]
+		[if (not a.isDate())]
+        Assert.assertEquals(newEntity.[a.getter()/](), resp.[a.getter()/]());
+		[/if]
+        [/for]
+    }
+}
+[/file]
+[/let]
+[/if]
+[/template]
