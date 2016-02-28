@@ -1,0 +1,5 @@
+<generator>
+	<name>GMM</name>
+	<m2t name="backend/backend.mtl" />
+	<m2t name="frontend/frontend.mtl" />
+</generator>

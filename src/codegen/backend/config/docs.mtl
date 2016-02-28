@@ -1,0 +1,82 @@
+[comment encoding = UTF-8 /]
+[**
+ * The documentation of the module docs.
+ */]
+[module docs('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[**
+ * The documentation of the template mainDocs.
+ * @param aModel
+ */]
+[template public mainDocs(m : Model)]
+[m.genReadMe()/]
+[/template]
+
+[template protected genReadMe(m : Model)]
+[file ('README.md', false, 'UTF-8')]
+# Tabla de contenidos
+-  ['['/]Introducción[']'/](#introducción)
+-  ['['/]API[']'/](#api-de-la-aplicación-[m.name.toLowerCase()/])
+[for (c : Class | m.getClasses())]
+  - ['['/]Entidad [c.name+']'/](#entidad-[c.name.toLowerCase()/])
+[/for]
+
+# API Rest
+## Introducción
+La comunicación entre cliente y servidor se realiza intercambiando objetos JSON. Para cada entidad se hace un mapeo a JSON, donde cada uno de sus atributos se transforma en una propiedad de un objeto JSON. Todos los servicios se generan en la URL /[m.getApiProjectName()/]/api/. Por defecto, todas las entidades tienen un atributo `id`, con el cual se identifica cada registro:
+
+```javascript
+{
+    id: '',
+    attribute_1: '',
+    attribute_2: '',
+    ...
+    attribute_n: ''
+}
+```
+
+Cuando se transmite información sobre un registro específico, se realiza enviando un objeto con la estructura mencionada en la sección anterior.
+La única excepción se presenta al solicitar al servidor una lista de los registros en la base de datos, que incluye información adicional para manejar paginación de lado del servidor en el header `X-Total-Count` y los registros se envían en el cuerpo del mensaje como un arreglo.
+
+La respuesta del servidor al solicitar una colección presenta el siguiente formato:
+
+```javascript
+['['/]{}, {}, {}, {}, {}, {}[']'/]
+```
+
+## API de la aplicación [m.name/]
+[for(c : Class | m.getClasses()) ]
+### Entidad [c.name/]
+#### Estructura de objeto [c.name/]
+```javascript
+{
+    [for(a : Property | c.getAttributesWithRef()) separator(',\n')]
+    [if (a.isValidType())]
+    [ a.name /]: '' /*Tipo [ a.type.name /]*/[else]
+    [ a.name /]: '' /*Objeto que representa instancia de [a.getClass().name/]*/[/if][/for][for(a :Property | c.getCompositeCollectionAttributes()) before(',\n')]
+    [a.name/]: ['[]'/] /*Colección de registros de [a.getClass().name/]*/[/for]
+
+}
+```
+#### Servicios
+Método|URI|Acción|Parámetros|Cuerpo|Retorno
+:--:|:--:|:--:|:--:|:--:|:--:
+**GET**|/[c.getURI()/]|Lista los registros de [c.name/] (READ)|**@QueryParam page**: página a consultar<br>**@QueryParam maxRecords**: cantidad de registros a consultar<br><br>*Si se omite alguno de estos parámetros se obtiene todos los registros en la base de datos*||Colección de registros de [c.name/] y el total de registros en la base de datos en el header X-Total-Count
+**GET**|/[c.getURI()/]/*:[c.getURI()/]id*|Obtener los atributos de una instancia de [c.name/] (READ)|**@PathParam [c.getURI()/]id**: Identificador del registro||Atributos de la instancia de [c.name/]
+**POST**|/[c.getURI()/]|Crear una nueva instancia de la entidad [c.name/] (CREATE)||Atributos de la instancia de [c.name/] a crear|Instancia de [c.name/] creada, incluyendo su nuevo ID
+**PUT**|/[c.getURI()/]/*:[c.getURI()/]id*|Actualiza una instancia de la entidad [c.name/] (UPDATE)|**@PathParam [c.getURI()/]id**: Identificador del registro|Objeto JSON de [c.name/]|Instancia de [c.name/] actualizada
+**DELETE**|/[c.getURI()/]/*:[c.getURI()/]id*|Borra instancia de [c.name/] en el servidor (DELETE)|**@PathParam [c.getURI()/]id**: Identificador del registro||
+[for (elem : Property | c.getNonCompositeCollectionAttributes())]
+**GET**|[c.getURI()/]/*:[c.getURI()/]id*/[elem.name/]|Listar registros de [elem.name/] ([elem.getClass().name/]) asociados a [c.name/]|**@PathParam [c.getURI()/]id**: Identificador de instancia de [c.name/]||Colección de objetos JSON de [elem.name/]([elem.getClass().name/])
+**GET**|[c.getURI()/]/*:[c.getURI()/]id*/[elem.name/]/*:[elem.name/]id*|Obtener un registro de [elem.name/] ([elem.getClass().name/]) asociado a [c.name/]|**@PathParam [c.getURI()/]id**: Identificador de instancia de [c.name/]<br><br>**@PathParam [elem.name/]id**: Identificador de instancia de [elem.getClass().name/]||Lista de registros de [elem.name/]([elem.getClass().name/])
+**POST**|[c.getURI()/]/*:[c.getURI()/]id*/[elem.name/]/*:[elem.name/]id*|Asocia una instancia de [elem.getClass().name/] a una de [c.name/]|**@PathParam [c.getURI()/]id**: Identificador de instancia de [c.name/]<br><br>**@PathParam [elem.name/]id**: Identificador de instancia de [elem.getClass().name/]|Registro de [elem.name/]([elem.getClass().name/]) para asociar a [c.name/]|Instancia de [elem.name/]([elem.getClass().name/]) asociada a instancia de [c.name/]
+**PUT**|[c.getURI()/]/*:[c.getURI()/]id*/[elem.name/]|Actualización de instancias de [elem.name/] ([elem.getClass().name/]) asociadas a [c.name/]|**@PathParam [c.getURI()/]id**: Identificador de instancia de [c.name/]|Colección de instancias de [elem.name/]([elem.getClass().name/]) a actualizar|Colección de instancias de [elem.name/]([elem.getClass().name/]) actualizados
+**DELETE**|[c.getURI()/]/*:[c.getURI()/]id*/[elem.name/]/*:[elem.name/]id*|Remueve asociación de instancias de [elem.name/] ([elem.getClass().name/]) a [c.name/]|**@PathParam [c.getURI()/]id**: Identificador de instancia de [c.name/]<br><br>**@PathParam [elem.name/]id**: Identificador de instancia de [elem.getClass().name/]|Colección de atributo `id` de [elem.name/]([elem.getClass().name/]) a eliminar|
+[/for]
+
+['['/]Volver arriba[']'/](#tabla-de-contenidos)
+
+[/for]
+[/file]
+[/template]

@@ -1,0 +1,122 @@
+[comment encoding = UTF-8 /]
+[module entities('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[template public moduleMain(c : Class, path : String)]
+[let filePath : String = path.concat(c.getName()+'/'+c.getName())]
+    [c.genModule(filePath)/]
+    [if (not c.isChild())]
+    	[c.genCtrl(filePath)/]
+    [/if]
+[/let]
+[/template]
+
+[template protected genModule(c : Class, path : String)]
+[file (path + '.mod.js', false, 'UTF-8')]
+(function (ng) {
+    var mod = ng.module('[c.getModule() /]', ['['/]'ngCrud'[']'/]);
+
+    mod.constant('[c.getContext()/]', '[c.getURI()/]');
+
+    mod.constant('[c.getEntityModel()/]', {
+        fields: ['['/][for (a : Property | c.getAllAttribs()) separator(', ')]{
+                name: '[a.name/]',
+                displayName: '[a.getDisplayName()/]',
+                type: '[a.type.name/]',
+                required: [a.isRequired()/]
+            }[/for][if(c.hasReferences(false))], [for (a : Property | c.getReferences(false)) separator(', ')]{
+                name: '[a.name/]',
+                displayName: '[a.getDisplayName()/]',
+                type: 'Reference',
+                url: '[a.getClass().getContext()/]',
+                options: ['[]'/],
+                required: [a.isRequired()/]
+            }[/for][/if][']'/][if (c.isMaster())],
+        childs: ['['/][for (a : Property | c.getCollectionAttributes()) separator(', ')]{
+                name: '[a.name/]',
+                displayName: '[a.getDisplayName()/]',
+                //template: '', //override generic template
+                ctrl: '[a.getChildController()/]',
+                owned: [a.isComposite()/]
+            }[/for]
+        [']'/][/if]});
+})(window.angular);
+[/file]
+[/template]
+
+[template protected genCtrl(c : Class, path : String)]
+[file (path + '.ctrl.js', false, 'UTF-8')]
+(function (ng) {
+    var mod = ng.module('[c.getModule() /]');
+
+    mod.controller('[c.getCtrl()/]', ['['/]'CrudCreator', '$scope',
+        '[c.getContext()/]', '[c.getEntityModel()/]',
+        function (ngCrud, $scope, url, model) {
+            ngCrud.extendController({
+                name: '[c.getName()/]',
+                displayName: '[c.getDisplayName()/]',
+                ctrl: this,
+                scope: $scope,
+                model: model,
+                url: url
+            });
+            [if (c.hasReferences(false))]
+            this.loadRefOptions();
+            [/if]
+            this.fetchRecords();
+        }[']'/]);
+    [for (a : Property | c.getCollectionAttributes())]
+
+    [if (a.isComposite())]	
+    mod.controller('[a.getChildController()/]', ['['/]'CrudCreator', '$scope', '[a.getClass().getEntityModel()/]',
+        function (ngCrud, $scope, model) {
+            ngCrud.extendCompChildCtrl({
+                name: '[a.name/]',
+                displayName: '[a.getDisplayName()/]',
+                parent: '[a.getOtherEnd().name/]',
+                ctrl: this,
+                scope: $scope,
+                model: model
+            });
+            [if (a.getClass().hasReferences(false))]
+            this.loadRefOptions();
+            [/if]
+        }[']'/]);
+    [else]	
+    mod.controller('[a.getChildController()/]', ['['/]'CrudCreator', '$scope',
+        '[a.getClass().getEntityModel()/]', '[a.getClass().getContext()/]', '[a.getOtherEnd().getClass().getContext()/]',
+        function (ngCrud, $scope, model, url, parentUrl) {
+            ngCrud.extendAggChildCtrl({
+                name: '[a.name/]',
+                displayName: '[a.getDisplayName()/]',
+                parentUrl: parentUrl,
+                listUrl: url,
+                ctrl: this,
+                scope: $scope,
+                model: model
+            });
+            [if (a.getClass().hasReferences(false))]
+            this.loadRefOptions();
+            [/if]
+        }[']'/]);
+    [/if]
+    [/for]
+})(window.angular);
+[/file]
+[/template]
+
+[template protected getChildController(a : Property)]
+[a.getOtherEnd().name.toUpperFirst()/][a.name/]Ctrl
+[/template]
+
+[template protected getDisplayName(a : Property)]
+[a.name.asDisplayName()/]
+[/template]
+
+[template protected getContext(c : Class)]
+[c.getName().concat('Context')/]
+[/template]
+
+[template protected getDisplayName(c : Class)]
+[c.name.asDisplayName()/]
+[/template]

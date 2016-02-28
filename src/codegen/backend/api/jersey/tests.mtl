@@ -1,0 +1,330 @@
+[comment encoding = UTF-8 /]
+[module tests('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+[import backend::api::jersey::services /]
+
+[template public mainTests(c : Class, path : String)]
+[c.genTests(path.concat('tests/'))/]
+[/template]
+
+[template protected genTests(c : Class, path : String) {className : String = c.getServiceTestName();}]
+[file (path.concat(className+'.java'), false, 'UTF-8')]
+package [c.getModel().baseGroup()/].tests;
+
+import co.edu.uniandes.csw.auth.model.UserDTO;
+import co.edu.uniandes.csw.auth.security.JWT;
+import [c.getModel().baseGroup()/].dtos.[c.getDTOName()/];
+[for (a : Property | c.getCollectionAttributes())]
+import [c.getModel().baseGroup()/].dtos.[a.getDTOName()/];
+[/for]
+import [c.getModel().baseGroup()/].services.[c.getJaxRsName()/];
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.filter.LoggingFilter;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.junit.InSequence;
+import org.jboss.arquillian.test.api.ArquillianResource;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import uk.co.jemos.podam.api.PodamFactory;
+import uk.co.jemos.podam.api.PodamFactoryImpl;
+
+@RunWith(Arquillian.class)
+public class [c.getServiceTestName()/] {
+
+    private final int Ok = Status.OK.getStatusCode();
+    private final int Created = Status.CREATED.getStatusCode();
+    private final int OkWithoutContent = Status.NO_CONTENT.getStatusCode();
+    private final String [c.testPath()/] = "[c.getURI()/]";
+    private final static List<[c.getDTOName()/]> oraculo = new ArrayList<>();
+    [for (a : Property | c.getNonCompositeCollectionAttributes())]
+    private final String [a.testPath()/] = "[a.name/]";
+    private final static List<[a.getDTOName()/]> [a.getOraculo()/] = new ArrayList<>();
+    [/for]
+    private WebTarget target;
+    private final String apiPath = "api";
+    private final String username = System.getenv("USERNAME_USER");
+    private final String password = System.getenv("PASSWORD_USER");
+
+    @ArquillianResource
+    private URL deploymentURL;
+
+    @Deployment(testable = false)
+    public static WebArchive createDeployment() {
+        return ShrinkWrap.create(WebArchive.class)
+                // Se agrega la dependencia a la logica con el nombre groupid:artefactid:version (GAV)
+                .addAsLibraries(Maven.resolver()
+                        .resolve("[c.getModel().baseGroup()/]:[c.getModel().getLogicArtifactId()/]:[c.getModel().getProjectVersion()/]")
+                        .withTransitivity().asFile())
+                .addAsLibraries(Maven.resolver()
+                        .resolve("[c.getModel().getCSWGroupId()/]:[c.getModel().getAuthLibArtifactId()/]:[c.getModel().getAuthLibVersion()/]")
+                        .withTransitivity().asFile())
+                // Se agregan los compilados de los paquetes de servicios
+                .addPackage([c.getJaxRsName()/].class.getPackage())
+                // El archivo que contiene la configuracion a la base de datos.
+                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
+                // El archivo beans.xml es necesario para injeccion de dependencias.
+                .addAsWebInfResource(new File("src/main/webapp/WEB-INF/beans.xml"))
+                // El archivo shiro.ini es necesario para injeccion de dependencias
+                .addAsWebInfResource(new File("src/main/webapp/WEB-INF/shiro.ini"))
+                // El archivo web.xml es necesario para el despliegue de los servlets
+                .setWebXML(new File("src/main/webapp/WEB-INF/web.xml"));
+    }
+
+    private WebTarget createWebTarget() {
+        ClientConfig config = new ClientConfig();
+        config.register(LoggingFilter.class);
+        return ClientBuilder.newClient(config).target(deploymentURL.toString()).path(apiPath);
+    }
+
+    @BeforeClass
+    public static void setUp() {
+        insertData();
+    }
+
+    public static void insertData() {
+        for (int i = 0; i < 5; i++) {
+            PodamFactory factory = new PodamFactoryImpl();
+            [c.getDTOName()/] [c.getName()/] = factory.manufacturePojo([c.getDTOName()/].class);
+            [c.getName()/].setId(i + 1L);
+            [for (a : Property | c.getCompositeCollectionAttributes())]
+            List<[a.getDTOName()/]> [a.name/]List = new ArrayList<>();
+            for (int j = 0; j < 5; j++)
+            {
+                [a.getDTOName()/] [a.name/] = factory.manufacturePojo([a.getDTOName()/].class);
+                [a.name/].setId(i + 1L);
+                [a.name/]List.add([a.name/]);
+            }
+
+            [c.getName()/].[a.setter()/]([a.name/]List);
+            [/for]
+
+            oraculo.add([c.getName()/]);
+
+            [for (a : Property | c.getNonCompositeCollectionAttributes())]
+            [a.getDTOName()/] [a.name/] = factory.manufacturePojo([a.getDTOName()/].class);
+            [a.name/].setId(i + 1L);
+            [a.getOraculo()/].add([a.name/]);
+            [/for]
+        }
+    }
+
+    public Cookie login(String username, String password) {
+        UserDTO user = new UserDTO();
+        user.setUserName(username);
+        user.setPassword(password);
+        user.setRememberMe(true);
+        Response response = target.path("users").path("login").request()
+                .post(Entity.entity(user, MediaType.APPLICATION_JSON));
+        if (response.getStatus() == Ok) {
+            return response.getCookies().get(JWT.cookieName);
+        } else {
+            return null;
+        }
+    }
+
+    @Before
+    public void setUpTest() {
+        target = createWebTarget();
+    }
+
+    @Test
+    @InSequence(1)
+    public void create[c.getServiceTestName()/]() throws IOException {
+        [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
+        Cookie cookieSessionId = login(username, password);
+        Response response = target.path([c.testPath()/])
+                .request().cookie(cookieSessionId)
+                .post(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
+        [c.getDTOName()/]  [c.testName()/] = ([c.getDTOName()/]) response.readEntity([c.getDTOName()/].class);
+        [for (prop : Property | c.attribute)]
+        Assert.assertEquals([c.getName()/].[prop.getter()/](), [c.testName()/].[prop.getter()/]());
+        [/for]
+        Assert.assertEquals(Created, response.getStatus());
+    }
+
+    @Test
+    @InSequence(2)
+    public void get[c.name/]ById() {
+        Cookie cookieSessionId = login(username, password);
+        [c.getDTOName()/] [c.testName()/] = target.path([c.testPath()/])
+                .path(oraculo.get(0).getId().toString())
+                .request().cookie(cookieSessionId).get([c.getDTOName()/].class);
+        [for (prop : Property | c.attribute)]
+        Assert.assertEquals([c.testName()/].[prop.getter()/](), oraculo.get(0).[prop.getter()/]());
+        [/for]
+    }
+
+    @Test
+    @InSequence(3)
+    public void list[c.getServiceTestName()/]() throws IOException {
+        Cookie cookieSessionId = login(username, password);
+        Response response = target.path([c.testPath()/])
+                .request().cookie(cookieSessionId).get();
+        String list[c.name/] = response.readEntity(String.class);
+        List<[c.getDTOName()/]> list[c.name/]Test = new ObjectMapper().readValue(list[c.name/], List.class);
+        Assert.assertEquals(Ok, response.getStatus());
+        Assert.assertEquals(1, list[c.name/]Test.size());
+    }
+
+    @Test
+    @InSequence(4)
+    public void update[c.getServiceTestName()/]() throws IOException {
+        Cookie cookieSessionId = login(username, password);
+        [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
+        PodamFactory factory = new PodamFactoryImpl();
+        [c.getDTOName()/] [c.getName()/]Changed = factory.manufacturePojo([c.getDTOName()/].class);
+        [for (prop : Property | c.attribute)]
+        [if (not prop.isID())]
+        [c.getName()/].[prop.setter()/]([c.getName()/]Changed.[prop.getter()/]());
+        [/if]
+        [/for]
+        Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
+                .request().cookie(cookieSessionId).put(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
+        [c.getDTOName()/] [c.testName()/] = ([c.getDTOName()/]) response.readEntity([c.getDTOName()/].class);
+        Assert.assertEquals(Ok, response.getStatus());
+        [for (prop : Property | c.attribute)]
+        [if (not prop.isID())]
+        Assert.assertEquals([c.getName()/].[prop.getter()/](), [c.testName()/].[prop.getter()/]());
+        [/if]
+        [/for]
+    }
+
+    @Test
+    @InSequence([(c.getNonCompositeCollectionAttributes()->size()*4)+5/])
+    public void delete[c.getServiceTestName()/]() {
+        Cookie cookieSessionId = login(username, password);
+        [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
+        Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
+                .request().cookie(cookieSessionId).delete();
+        Assert.assertEquals(OkWithoutContent, response.getStatus());
+    }
+    [for (a : Property | c.getNonCompositeCollectionAttributes())]
+
+    @Test
+    @InSequence([(i * 4)+1/])
+    public void add[a.getTestSuffix()/]() {
+        Cookie cookieSessionId = login(username, password);
+
+        [a.getDTOName()/] [a.name/] = [a.getOraculo()/].get(0);
+        [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
+
+
+        Response response = target.path("[a.getClass().getURI()/]")
+                .request().cookie(cookieSessionId)
+                .post(Entity.entity([a.name/], MediaType.APPLICATION_JSON));
+
+        [a.getDTOName()/] [a.getResponseVarName()/] = ([a.getDTOName()/]) response.readEntity([a.getDTOName()/].class);
+        [for (prop : Property | a.getClass().attribute)]
+        Assert.assertEquals([a.name/].[prop.getter()/](), [a.getResponseVarName()/].[prop.getter()/]());
+        [/for]
+        Assert.assertEquals(Created, response.getStatus());
+
+        response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
+                .path([a.testPath()/]).path([a.name/].getId().toString())
+                .request().cookie(cookieSessionId)
+                .post(Entity.entity([a.name/], MediaType.APPLICATION_JSON));
+
+        [a.getResponseVarName()/] = ([a.getDTOName()/]) response.readEntity([a.getDTOName()/].class);
+        Assert.assertEquals(Ok, response.getStatus());
+        Assert.assertEquals([a.name/].getId(), [a.getResponseVarName()/].getId());
+    }
+
+    @Test
+    @InSequence([(i * 4)+2/])
+    public void list[a.getTestSuffix()/]() throws IOException {
+        Cookie cookieSessionId = login(username, password);
+        [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
+
+        Response response = target.path([c.testPath()/])
+                .path([c.getName()/].getId().toString())
+                .path([a.testPath()/])
+                .request().cookie(cookieSessionId).get();
+
+        String [a.name/]List = response.readEntity(String.class);
+        List<[a.getDTOName()/]> [a.name/]ListTest = new ObjectMapper().readValue([a.name/]List, List.class);
+        Assert.assertEquals(Ok, response.getStatus());
+        Assert.assertEquals(1, [a.name/]ListTest.size());
+    }
+
+    @Test
+    @InSequence([(i * 4)+3/])
+    public void get[a.getTestSuffix()/]() throws IOException {
+        Cookie cookieSessionId = login(username, password);
+        [a.getDTOName()/] [a.name/] = [a.getOraculo()/].get(0);
+        [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
+
+        [a.getDTOName()/] [a.getResponseVarName()/] = target.path([c.testPath()/])
+                .path([c.getName()/].getId().toString()).path([a.testPath()/])
+                .path([a.name/].getId().toString())
+                .request().cookie(cookieSessionId).get([a.getDTOName()/].class);
+
+        [for (prop : Property | a.getClass().attribute)]
+        Assert.assertEquals([a.name/].[prop.getter()/](), [a.getResponseVarName()/].[prop.getter()/]());
+        [/for]
+    }
+
+    @Test
+    @InSequence([(i * 4)+4/])
+    public void remove[a.getTestSuffix()/]() {
+        Cookie cookieSessionId = login(username, password);
+
+        [a.getDTOName()/] [a.name/] = [a.getOraculo()/].get(0);
+        [c.getDTOName()/] [c.getName()/] = oraculo.get(0);
+
+        Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
+                .path([a.testPath()/]).path([a.name/].getId().toString())
+                .request().cookie(cookieSessionId).delete();
+        Assert.assertEquals(OkWithoutContent, response.getStatus());
+    }
+    [/for]
+}
+[/file]
+[/template]
+
+[template private getURI(a : Property)]
+[a.name.toLowerFirst()/]
+[/template]
+
+[template private testPath(a : Property)]
+[a.name.toLowerFirst().concat('Path')/]
+[/template]
+
+[template private testPath(c : Class)]
+[c.name.toLowerFirst().concat('Path')/]
+[/template]
+
+[template private getTestSuffix(a : Property)]
+[a.name.toUpperFirst()/]Test
+[/template]
+
+[template private getOraculo(a : Property)]
+oraculo[a.name.toUpperFirst()/]
+[/template]
+
+[template private getResponseVarName(a : Property)]
+[a.name.toLower().concat('Test')/]
+[/template]
+
+[template private getDTOName(a : Property)]
+[a.getClass().getDTOName()/]
+[/template]
