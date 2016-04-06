@@ -163,7 +163,6 @@ public class [className/] extends [c.getMinimumDTOName()/]{
 [/file]
 [/template]
 
-
 [template protected genFullDTO(c : Class, path: String) {className : String = c.getFullDTOName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].dtos.full;
