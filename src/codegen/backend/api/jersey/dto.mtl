@@ -9,6 +9,9 @@
 [let filePath : String = path.concat('dtos/basic/')]
     [c.genBasicDTO(filePath)/]
 [/let]
+[let filePath : String = path.concat('dtos/full/')]
+    [c.genFullDTO(filePath)/]
+[/let]
 [/template]
 
 [template protected genMinimumDTO(c : Class, path: String) {className : String = c.getMinimumDTOName();}]
@@ -84,6 +87,7 @@ public class [className/] {
 }
 [/file]
 [/template]
+[/template]
 [template protected genBasicDTO(c : Class, path: String) {className : String = c.getBasicDTOName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 package [c.getModel().baseGroup()/].dtos.basic;
@@ -157,6 +161,7 @@ public class [className/] extends [c.getMinimumDTOName()/]{
 [/for]
 }
 [/file]
+[/template]
 
 
 [template protected genFullDTO(c : Class, path: String) {className : String = c.getFullDTOName();}]
@@ -241,3 +246,4 @@ public class [className/] extends [c.getBasicDTOName()/]{
 [/for]
 }
 [/file]
+[/template]
