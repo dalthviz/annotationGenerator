@@ -209,6 +209,18 @@ String[else]
 [c.name.toUpperFirst().concat('DTO')/]
 [/template]
 
+[template public getMinimumDTOName(c : Class)]
+[c.name.toUpperFirst().concat('MinimumDTO')/]
+[/template]
+
+[template public getBasicDTOName(c : Class)]
+[c.name.toUpperFirst().concat('BasicDTO')/]
+[/template]
+
+[template public getFullDTOName(c : Class)]
+[c.name.toUpperFirst().concat('FullDTO')/]
+[/template]
+
 [template public getAPIName(c : Class)]
 ['I'.concat(c.name).concat('Logic')/]
 [/template]
