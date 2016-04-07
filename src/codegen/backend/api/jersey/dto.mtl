@@ -20,9 +20,6 @@ package [c.getModel().baseGroup()/].dtos.minimum;
 
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import javax.xml.bind.annotation.XmlRootElement;
-[if (c.getRelationshipAttributes()->select(not isComposite())->notEmpty())]
-import uk.co.jemos.podam.common.PodamExclude;
-[/if]
 [if (c.hasDateAttribute())]
 import java.util.Date;
 import uk.co.jemos.podam.common.PodamStrategyValue;
@@ -109,7 +106,7 @@ public class [className/] extends [c.getMinimumDTOName()/]{
 
 [for (a : Property | c.getRelationshipAttributes())]   
 [if (a.getUpper() = 1)]
-	[if (not a.isComposite())]@PodamExclude[/if]
+    [if (not a.isComposite())]@PodamExclude[/if]
     private [a.getClass().getMinimumDTOName()/] [a.name/];
 [/if]
 [/for]
@@ -189,8 +186,10 @@ public class [className/] extends [c.getBasicDTOName()/]{
 
 [for (a : Property | c.getRelationshipAttributes())]    
 [if (a.getUpper() <> 1)]
-    [if (not a.isComposite())]@PodamExclude[/if]
+    [if (a.isComposite())]
+    @PodamExclude
     private List<[a.getClass().getMinimumDTOName()/]> [a.name/] = new ArrayList<>();
+    [/if]
 [/if]
 [/for]
 
@@ -208,9 +207,11 @@ public class [className/] extends [c.getBasicDTOName()/]{
     public [className/]([c.getEntityName()/] entity) {
         super(entity);      
 [for (a : Property | c.getCollectionAttributes())] 
+    [if (a.isComposite())]
         for ([a.getClass().getEntityName()/] obj : entity.[a.getter()/]()) {
             [a.name/].add(new [a.getClass().getMinimumDTOName()/](obj));
         }
+    [/if]
 [/for]
     }
 
@@ -221,11 +222,13 @@ public class [className/] extends [c.getBasicDTOName()/]{
     public [c.getEntityName()/] toEntity() {
         [c.getEntityName()/] entity = super.toEntity();
 [for (a : Property | c.getCollectionAttributes())] 
-        List<[a.getClass().getEntityName()/]> list = new ArrayList<>();
+    [if (a.isComposite())]
+        List<[a.getClass().getEntityName()/]> [a.name/]List = new ArrayList<>();
         for ([a.getClass().getMinimumDTOName()/] obj : this.[a.getter()/]()) {
-            list.add(obj.toEntity());
+            [a.name/]List.add(obj.toEntity());
         }
         entity.[a.setter()/](list);
+    [/if]
 [/for]
         return entity;
     }
