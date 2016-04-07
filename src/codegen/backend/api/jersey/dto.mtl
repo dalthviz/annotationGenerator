@@ -227,13 +227,14 @@ public class [className/] extends [c.getBasicDTOName()/]{
         for ([a.getClass().getMinimumDTOName()/] obj : this.[a.getter()/]()) {
             [a.name/]List.add(obj.toEntity());
         }
-        entity.[a.setter()/](list);
+        entity.[a.setter()/]([a.name/]List);
     [/if]
 [/for]
         return entity;
     }
 
 [for (a : Property | c.getCollectionAttributes())]
+    [if (a.isComposite())]
     /**
      * @generated
      */
@@ -247,7 +248,7 @@ public class [className/] extends [c.getBasicDTOName()/]{
     public void [a.setter()/](List<[a.getClass().getMinimumDTOName()/]> [a.name.toLower()/]) {
         this.[a.name/] = [a.name.toLower()/];
     }
-
+    [/if]
 [/for]
 }
 [/file]
