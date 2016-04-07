@@ -3,7 +3,9 @@
 [import ::utils /]
 
 [template public mainConverter(c : Class, path : String)]
-[c.genConverter(path.concat('converters/'))/]
+[**
+ * [c.genConverter(path.concat('converters/'))/
+*/]
 [/template]
 
 [template protected genConverter(c : Class, path : String) {className : String = c.getConverterName();}]

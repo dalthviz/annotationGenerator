@@ -9,6 +9,7 @@
 [import backend::api::config::xml /]
 [import backend::api::config::pom /]
 [import backend::api::config::jerseyapp /]
+[import backend::api::config::package-info /]
 
 [template public genServices(m : Model, path : String)]
 [m.mainPOM()/]
@@ -16,6 +17,9 @@
 [let webinf : String = m.getWebInfPath()]
     [m.genShiroIni(webinf)/]
     [m.mainXML(webinf)/]
+[/let]
+[let project : String = path.concat(m.basePath())]
+        [c.genPackageinfo(project)/]
 [/let]
 
 [for (c : Class | m.getClasses())]
