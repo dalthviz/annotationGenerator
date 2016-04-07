@@ -42,42 +42,43 @@ public class [className/] {
     private [a.type.name/] [a.name/];
 [/for]
 
-	/**
+    /**
      * @generated
      */
-	public [className/]() {
-	}
+    public [className/]() {
+    }
 
-	/**
+    /**
+     * @param entity
      * @generated
      */
-	public [className/]([c.getEntityName()/] entity) {
+    public [className/]([c.getEntityName()/] entity) {
 	[for(a : Property | c.allAttributes())]
-	    this.[a.name/]=entity.[a.getter()/]();
+        this.[a.name/]=entity.[a.getter()/]();
 	[/for]
-	}
+    }
 
-	/**
+    /**
      * @generated
      */
-	public [c.getEntityName()/] toEntity() {
-		[c.getEntityName()/] entity = new [c.getEntityName()/]();
+    public [c.getEntityName()/] toEntity() {
+        [c.getEntityName()/] entity = new [c.getEntityName()/]();
 	[for(a : Property | c.allAttributes())]
-	    entity.[a.setter()/](this.[a.getter()/]());
+        entity.[a.setter()/](this.[a.getter()/]());
 	[/for]
-		return entity;
-	}
+    return entity;
+    }
 
 [for (a : Property | c.allAttributes())]
     /**
-     * @generated
+     * @return the [a.name/]
      */
     public [a.type.name/] [a.getter()/]() {
         return [a.name/];
     }
 
     /**
-     * @generated
+     * @param [a.name/] the [a.name/] to set
      */
     public void [a.setter()/]([a.type.name/] [a.name.toLower()/]) {
         this.[a.name/] = [a.name.toLower()/];
@@ -106,24 +107,25 @@ import uk.co.jemos.podam.common.PodamExclude;
 public class [className/] extends [c.getMinimumDTOName()/]{
 
 
-[for (a : Property | c.getRelationshipAttributes())]
-    [if (not a.isComposite())]@PodamExclude[/if]
+[for (a : Property | c.getRelationshipAttributes())]   
 [if (a.getUpper() = 1)]
+	[if (not a.isComposite())]@PodamExclude[/if]
     private [a.getClass().getMinimumDTOName()/] [a.name/];
 [/if]
 [/for]
 
-	/**
+    /**
      * @generated
      */
-	public [className/]() {
+    public [className/]() {
         super();
     }
 
-	/**
+    /**
+     * @param entity
      * @generated
      */
-	public [className/]([c.getEntityName()/] entity) {
+    public [className/]([c.getEntityName()/] entity) {
         super(entity);
         [for (a : Property | c.getReferences(true))]
         this.[a.name/] = new [a.getClass().getMinimumDTOName()/](entity.[a.getter()/]());
@@ -131,10 +133,10 @@ public class [className/] extends [c.getMinimumDTOName()/]{
         
     }
 
-	/**
+    /**
      * @generated
      */
-	@Override
+    @Override
     public [c.getEntityName()/] toEntity() {
         [c.getEntityName()/] entity = super.toEntity();
 [for (a : Property | c.getReferences(true))]
@@ -185,24 +187,25 @@ import java.util.ArrayList;
 @XmlRootElement
 public class [className/] extends [c.getBasicDTOName()/]{
 
-[for (a : Property | c.getRelationshipAttributes())]
-    [if (not a.isComposite())]@PodamExclude[/if]
+[for (a : Property | c.getRelationshipAttributes())]    
 [if (a.getUpper() <> 1)]
+    [if (not a.isComposite())]@PodamExclude[/if]
     private List<[a.getClass().getMinimumDTOName()/]> [a.name/] = new ArrayList<>();
 [/if]
 [/for]
 
-	/**
+    /**
      * @generated
      */
-	public [className/]() {
+    public [className/]() {
         super();
     }
 
-	/**
+    /**
+     * @param entity
      * @generated
      */
-	public [className/]([c.getEntityName()/] entity) {
+    public [className/]([c.getEntityName()/] entity) {
         super(entity);      
 [for (a : Property | c.getCollectionAttributes())] 
         for ([a.getClass().getEntityName()/] obj : entity.[a.getter()/]()) {
@@ -211,10 +214,10 @@ public class [className/] extends [c.getBasicDTOName()/]{
 [/for]
     }
 
-	/**
+    /**
      * @generated
      */
-	@Override
+    @Override
     public [c.getEntityName()/] toEntity() {
         [c.getEntityName()/] entity = super.toEntity();
 [for (a : Property | c.getCollectionAttributes())] 
