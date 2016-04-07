@@ -86,7 +86,7 @@ public class [className/] {
 [/for]
 }
 [/file]
-[/template][/template]
+[/template]
 
 [template protected genBasicDTO(c : Class, path: String) {className : String = c.getBasicDTOName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
