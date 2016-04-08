@@ -19,7 +19,7 @@
     [m.mainXML(webinf)/]
 [/let]
 [let project : String = path.concat(m.basePath())]
-        [m.genPackageinfo(project)/]
+        [m.mainPackageinfo(project)/]
 [/let]
 
 [for (c : Class | m.getClasses())]
