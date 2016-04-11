@@ -31,13 +31,12 @@ import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
 import [c.getModel().baseGroup()/].dtos.basic.[c.getBasicDTOName()/];
 import [c.getModel().baseGroup()/].dtos.full.[c.getFullDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
-import [c.getModel().baseGroup()/].converters.[c.getConverterName()/];
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
-import [c.getModel().baseGroup()/].dtos.[a.getClass().getBasicDTOName()/];
-import [c.getModel().baseGroup()/].dtos.[a.getClass().getFullDTOName()/];
+import [c.getModel().baseGroup()/].dtos.basic.[a.getClass().getBasicDTOName()/];
+import [c.getModel().baseGroup()/].dtos.full.[a.getClass().getFullDTOName()/];
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 [/for]
-
+import java.util.ArrayList;
 /**
  * @generated
  */
@@ -62,7 +61,7 @@ public class [className/] {
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
     private List<[a.getClass().getBasicDTOName()/]> [a.name/]ListEntity2DTO(List<[a.getClass().getEntityName()/]> entityList){
         List<[a.getClass().getBasicDTOName()/]> list = new ArrayList<>();
-        for (<[a.getClass().getEntityName()/] entity : entityList) {
+        for ([a.getClass().getEntityName()/] entity : entityList) {
             list.add(new [a.getClass().getBasicDTOName()/](entity));
         }
         return list;
@@ -70,7 +69,7 @@ public class [className/] {
     
     private List<[a.getClass().getEntityName()/]> [a.name/]ListDTO2Entity(List<[a.getClass().getBasicDTOName()/]> dtos){
         List<[a.getClass().getEntityName()/]> list = new ArrayList<>();
-        for (<[a.getClass().getBasicDTOName()/] dto : dtos) {
+        for ([a.getClass().getBasicDTOName()/] dto : dtos) {
             list.add(dto.toEntity());
         }
         return list;
@@ -198,7 +197,7 @@ public class [className/] {
      */
     @PUT
     @Path("{[c.getEntityId()/]: \\d+}/[a.name/]")
-    public List<[a.getClass().getBasicDTOName()/]> replace[a.name.toUpperFirst()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], List<[a.getClass().getDTOName()/]> [a.getClass().getURI()/]) {
+    public List<[a.getClass().getBasicDTOName()/]> replace[a.name.toUpperFirst()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], List<[a.getClass().getBasicDTOName()/]> [a.getClass().getURI()/]) {
         return [a.name/]ListEntity2DTO([logic/].replace[a.name.toUpperFirst()/]([c.getEntityId()/], [a.name/]ListDTO2Entity([a.getClass().getURI()/])));
     }
 
