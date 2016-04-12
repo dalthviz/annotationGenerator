@@ -13,9 +13,7 @@ package [c.getModel().baseGroup()/].tests;
 
 import co.edu.uniandes.csw.auth.model.UserDTO;
 import co.edu.uniandes.csw.auth.security.JWT;
-[if (c.hasCompositeAssociations())]
 import [c.getModel().baseGroup()/].dtos.full.[c.getFullDTOName()/];
-[/if]
 import [c.getModel().baseGroup()/].dtos.minimum.[c.getMinimumDTOName()/];
 [for (a : Property | c.getCollectionAttributes())]
 import [c.getModel().baseGroup()/].dtos.minimum.[a.getDTOName()/];
