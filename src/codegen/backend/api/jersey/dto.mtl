@@ -224,8 +224,10 @@ public class [className/] extends [c.getBasicDTOName()/]{
 [for (a : Property | c.getCollectionAttributes())] 
     [if (a.isComposite())]
         List<[a.getClass().getEntityName()/]> [a.name/]List = new ArrayList<>();
-        for ([a.getClass().getMinimumDTOName()/] obj : this.[a.getter()/]()) {
-            [a.name/]List.add(obj.toEntity());
+        for ([a.getClass().getMinimumDTOName()/] [a.name/] : this.[a.getter()/]()) {
+            [a.getClass().getMinimumDTOName()/] obj=[a.name/].toEntity();
+            obj.set[c.name/](entity);
+            [a.name/]List.add(obj);
         }
         entity.[a.setter()/]([a.name/]List);
     [/if]

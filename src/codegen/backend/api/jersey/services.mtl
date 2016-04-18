@@ -130,6 +130,10 @@ public class [className/] {
     public [c.getFullDTOName()/] update[c.name/](@PathParam("id") Long id, [c.getFullDTOName()/] dto) {
         [c.getEntityName()/] entity = dto.toEntity();
         entity.setId(id);
+        [c.getEntityName()/] oldEntity = [logic/].get[c.name/](id);
+        [for (a : Property | c.getNonCompositeCollectionAttributes())]
+        entity.[a.setter()/](oldEntity.[a.getter()/]());
+        [/for]
         return new [c.getFullDTOName()/]([logic/].update[c.name/](entity));
     }
 
