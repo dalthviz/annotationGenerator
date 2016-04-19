@@ -3,14 +3,14 @@
 [import ::utils /]
 
 [template public mainJersey(c : Class, path : String)]
-[let filePath : String = path.concat('services/')]
+[let filePath : String = path.concat('resources/')]
     [c.restClass(filePath)/]
 [/let]
 [/template]
 
 [template protected restClass(c : Class, path : String) {className : String = c.getJaxRsName(); logic : String = c.getName().concat('Logic');}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
-package [c.getModel().baseGroup()/].services;
+package [c.getModel().baseGroup()/].resources;
 
 import co.edu.uniandes.csw.auth.provider.StatusCreated;
 import java.util.List;

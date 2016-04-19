@@ -11,24 +11,17 @@
  */]
 
 [template public mainJerseyApp(m : Model, path : String)]
-[m.genJerseyApp(path.concat('services/'))/]
+[m.genJerseyApp(path.concat('resources/'))/]
 [/template]
 
 [template protected genJerseyApp(m : Model, path : String)]
 [file (path.concat('RestConfig.java'), false, 'UTF-8')]
-package [m.baseGroup()/].services;
+package [m.baseGroup()/].resources;
 
-import org.glassfish.jersey.server.ResourceConfig;
 import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
 
 @ApplicationPath("api")
-public class RestConfig extends ResourceConfig {
-
-    public RestConfig() {
-        packages("[m.baseGroup()/].services");
-        packages("co.edu.uniandes.csw.auth.service");
-        packages("co.edu.uniandes.csw.auth.provider");
-    }
-}
+public class RestConfig extends Application {}
 [/file]
 [/template]
