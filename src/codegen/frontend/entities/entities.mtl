@@ -19,6 +19,9 @@
     mod.constant('[c.getContext()/]', '[c.getURI()/]');
 
     mod.constant('[c.getEntityModel()/]', {
+        name: '[c.getName()/]',
+        displayName: '[c.getDisplayName()/]',
+		url: '[c.getURI()/]',
         fields: ['['/][for (a : Property | c.getAllAttribs()) separator(', ')]{
                 name: '[a.name/]',
                 displayName: '[a.getDisplayName()/]',
@@ -41,13 +44,16 @@
             }[/for]
         [']'/][/if]});
 
-	mod.config(['['/]'$stateProvider', 'CrudTemplateURL', 'CrudCtrlAlias', function($stateProvider, tplUrl, alias){
-        $stateProvider.state('[c.getName()/]', {
-            url: '/[c.getName()/]',
-            templateUrl: tplUrl,
-            controller: '[c.getCtrl()/]',
-            controllerAs: alias
-        });
+	mod.config(['['/]'$stateProvider', 'CrudTemplateURL', 'CrudCtrlAlias',
+		function($stateProvider, tplUrl, alias){
+	        $stateProvider.state('[c.getName()/]', {
+	            url: '/[c.getName()/]',
+				views: {
+					templateUrl: tplUrl,
+		            controller: '[c.getCtrl()/]',
+		            controllerAs: alias
+				}
+	        });
 	}[']'/]);
 })(window.angular);
 [/file]
@@ -58,16 +64,15 @@
 (function (ng) {
     var mod = ng.module('[c.getModule() /]');
 
-    mod.controller('[c.getCtrl()/]', ['['/]'CrudCreator', '$scope',
-        '[c.getContext()/]', '[c.getEntityModel()/]',
-        function (ngCrud, $scope, url, model) {
+    mod.controller('[c.getCtrl()/]', ['['/]'CrudCreator', '$scope', '[c.getEntityModel()/]',
+        function (ngCrud, $scope, model) {
             ngCrud.extendController({
-                name: '[c.getName()/]',
-                displayName: '[c.getDisplayName()/]',
                 ctrl: this,
                 scope: $scope,
                 model: model,
-                url: url
+                name: model.name,
+                displayName: model.displayName,
+                url: model.url
             });
             [if (c.hasReferences(false))]
             this.loadRefOptions();
