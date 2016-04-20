@@ -66,7 +66,7 @@ public class [className/] {
         }
         return list;
     }
-    
+
     private List<[a.getClass().getEntityName()/]> [a.name/]ListDTO2Entity(List<[a.getClass().getBasicDTOName()/]> dtos){
         List<[a.getClass().getEntityName()/]> list = new ArrayList<>();
         for ([a.getClass().getBasicDTOName()/] dto : dtos) {

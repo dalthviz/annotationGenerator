@@ -14,7 +14,7 @@
 [template protected genModule(c : Class, path : String)]
 [file (path + '.mod.js', false, 'UTF-8')]
 (function (ng) {
-    var mod = ng.module('[c.getModule() /]', ['['/]'ngCrud'[']'/]);
+    var mod = ng.module('[c.getModule() /]', ['['/]'ngCrud', 'ui.router'[']'/]);
 
     mod.constant('[c.getContext()/]', '[c.getURI()/]');
 
@@ -40,6 +40,15 @@
                 owned: [a.isComposite()/]
             }[/for]
         [']'/][/if]});
+
+	mod.config(['['/]'$stateProvider', 'CrudTemplateURL', 'CrudCtrlAlias', function($stateProvider, tplUrl, alias){
+        $stateProvider.state('[c.getName()/]', {
+            url: '/[c.getName()/]',
+            templateUrl: tplUrl,
+            controller: '[c.getCtrl()/]',
+            controllerAs: alias
+        });
+	}[']'/]);
 })(window.angular);
 [/file]
 [/template]
