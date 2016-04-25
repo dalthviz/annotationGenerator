@@ -10,10 +10,12 @@
 [import backend::api::config::pom /]
 [import backend::api::config::jerseyapp /]
 [import backend::api::config::packageInfo /]
+[import backend::api::config::tests /]
 
 [template public genServices(m : Model, path : String)]
 [m.mainPOM()/]
 [m.mainJerseyApp(path.concat(m.basePath()))/]
+[m.mainTests()/]
 [let webinf : String = m.getWebInfPath()]
     [m.genShiroIni(webinf)/]
     [m.mainXML(webinf)/]
