@@ -178,11 +178,12 @@ public class [className/] {
      */
     @Test
     public void create[c.name/]Test() {
-        [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);
+        [c.getEntityName()/] newEntity = factory.manufacturePojo([c.getEntityName()/].class);
         [c.getEntityName()/] result = [bean/].create[c.name/](entity);
         Assert.assertNotNull(result);
+        [c.getEntityName()/] entity = em.find([c.getEntityName()/].class, result.getId());
         [for (prop : Property | c.attribute)]
-        Assert.assertEquals(result.[prop.getter()/](), entity.[prop.getter()/]());
+        Assert.assertEquals(newEntity.[prop.getter()/](), entity.[prop.getter()/]());
         [/for]
     }
 
