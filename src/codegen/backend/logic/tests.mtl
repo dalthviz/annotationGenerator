@@ -179,7 +179,7 @@ public class [className/] {
     @Test
     public void create[c.name/]Test() {
         [c.getEntityName()/] newEntity = factory.manufacturePojo([c.getEntityName()/].class);
-        [c.getEntityName()/] result = [bean/].create[c.name/](entity);
+        [c.getEntityName()/] result = [bean/].create[c.name/](newEntity);
         Assert.assertNotNull(result);
         [c.getEntityName()/] entity = em.find([c.getEntityName()/].class, result.getId());
         [for (prop : Property | c.attribute)]
