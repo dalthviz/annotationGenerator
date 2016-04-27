@@ -95,13 +95,12 @@ El objeto [c.name/] tiene 2 representaciones JSON:
 ```
 [/if]
 
-[if (c.hasCompositeAssociations(False))]
+[if (c.hasCompositeAssociations())]
 #### Representación Full
 ```javascript
 {
     // todo lo de la representación Basic más la collección de los objetos de relaciones composite.
-    [for(a : Property | c.getRelationshipAttributes()) separator(',\n')]
-    [if (a.getUpper() = 1)]
+    [for(a : Property | c.getCompositeCollectionAttributes()) separator(',\n')]
     [ a.name /]: [{
     [for(a2 : Property | a.getClass().allAttributes()) separator(',\n')]
     [ a2.name /]: '' /*Tipo [ a2.type.name /]*/
