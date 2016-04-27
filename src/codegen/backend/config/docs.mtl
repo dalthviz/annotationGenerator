@@ -20,9 +20,9 @@
 -  ['['/]API[']'/](#api-de-la-aplicación-[m.name.toLowerCase()/])
 [for (c : Class | m.getClasses())]
   - ['['/]Recurso [c.name+']'/](#recurso-[c.name.toLowerCase()/])
-    - ['['/]GET /[c.getURI()/][']'/](#GET-/[c.getURI())
+    - ['['/]GET /[c.getURI()/][']'/](#GET-/[c.getURI()/])
     - ['['/]GET /[c.getURI()/]/{id}[']'/](#GET-/[c.getURI()/]/{id})
-    - ['['/]POST /[c.getURI()/][']'/](#POST-/[c.getURI())
+    - ['['/]POST /[c.getURI()/][']'/](#POST-/[c.getURI()/])
     - ['['/]PUT /[c.getURI()/]/{id}[']'/](#PUT-/[c.getURI()/]/{id})
     - ['['/]DELETE /[c.getURI()/]/{id}[']'/](#DELETE-/[c.getURI()/]/{id})
 [for (elem : Property | c.getNonCompositeCollectionAttributes())]
@@ -60,9 +60,9 @@ La respuesta del servidor al solicitar una colección presenta el siguiente form
 ## API de la aplicación [m.name/]
 [for(c : Class | m.getClasses()) ]
 ### Recurso [c.name/]
-[if (c.hasReferences(False) and c.hasCompositeAssociations())]
+[if (c.hasReferences(false) and c.hasCompositeAssociations())]
 El objeto [c.name/] tiene 3 representaciones JSON:
-[elseif (c.hasReferences(False) or c.hasCompositeAssociations())]
+[elseif (c.hasReferences(false) or c.hasCompositeAssociations())]
 El objeto [c.name/] tiene 2 representaciones JSON:	
 [/if]
 
@@ -76,7 +76,7 @@ El objeto [c.name/] tiene 2 representaciones JSON:
 }
 ```
 
-[if (c.hasReferences(False))]
+[if (c.hasReferences(false))]
 #### Representaci�n Basic
 ```javascript
 {
@@ -88,6 +88,7 @@ El objeto [c.name/] tiene 2 representaciones JSON:
     [ a2.name /]: '' /*Tipo [ a2.type.name /]*/
     [/for]
     }
+    [/if]
     [/for]
 
 }
