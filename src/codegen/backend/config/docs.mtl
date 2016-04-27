@@ -112,6 +112,7 @@ El objeto [c.name/] tiene 2 representaciones JSON:
 ```
 [/if]
 
+
 #### Servicios
 Método|URI|Acción|Parámetros|Cuerpo|Retorno
 :--:|:--:|:--:|:--:|:--:|:--:
