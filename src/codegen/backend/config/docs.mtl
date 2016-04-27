@@ -19,7 +19,19 @@
 -  ['['/]Introducci贸n[']'/](#introducci贸n)
 -  ['['/]API[']'/](#api-de-la-aplicaci贸n-[m.name.toLowerCase()/])
 [for (c : Class | m.getClasses())]
-  - ['['/]Entidad [c.name+']'/](#entidad-[c.name.toLowerCase()/])
+  - ['['/]Recurso [c.name+']'/](#recurso-[c.name.toLowerCase()/])
+    - ['['/]GET /[c.getURI()/][']'/](#GET-/[c.getURI())
+    - ['['/]GET /[c.getURI()/]/{id}[']'/](#GET-/[c.getURI()/]/{id})
+    - ['['/]POST /[c.getURI()/][']'/](#POST-/[c.getURI())
+    - ['['/]PUT /[c.getURI()/]/{id}[']'/](#PUT-/[c.getURI()/]/{id})
+    - ['['/]DELETE /[c.getURI()/]/{id}[']'/](#DELETE-/[c.getURI()/]/{id})
+[for (elem : Property | c.getNonCompositeCollectionAttributes())]
+    - ['['/]GET [c.getURI()/]/{[c.getURI()/]id}/[elem.name/][']'/](#GET-[c.getURI()/]/{[c.getURI()/]id}/[elem.name/])
+    - ['['/]GET [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}[']'/](#GET-[c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id})
+    - ['['/]POST [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}[']'/](#POST-[c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id})
+    - ['['/]PUT [c.getURI()/]/{[c.getURI()/]id}/[elem.name/][']'/](#PUT-[c.getURI()/]/{[c.getURI()/]id}/[elem.name/])
+    - ['['/]DELETE [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}[']'/](#DELETE-[c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}[']'/])
+[/for]
 [/for]
 
 # API Rest
@@ -47,18 +59,59 @@ La respuesta del servidor al solicitar una colecci贸n presenta el siguiente form
 
 ## API de la aplicaci贸n [m.name/]
 [for(c : Class | m.getClasses()) ]
-### Entidad [c.name/]
-#### Estructura de objeto [c.name/]
+### Recurso [c.name/]
+[if (c.hasReferences(False) and c.hasCompositeAssociations())]
+El objeto [c.name/] tiene 3 representaciones JSON:
+[elseif (c.hasReferences(False) or c.hasCompositeAssociations())]
+El objeto [c.name/] tiene 2 representaciones JSON:	
+[/if]
+
+#### Representaci髇 Minimum
 ```javascript
 {
-    [for(a : Property | c.getAttributesWithRef()) separator(',\n')]
-    [if (a.isValidType())]
-    [ a.name /]: '' /*Tipo [ a.type.name /]*/[else]
-    [ a.name /]: '' /*Objeto que representa instancia de [a.getClass().name/]*/[/if][/for][for(a :Property | c.getCompositeCollectionAttributes()) before(',\n')]
-    [a.name/]: ['[]'/] /*Colecci贸n de registros de [a.getClass().name/]*/[/for]
+    [for(a : Property | c.allAttributes()) separator(',\n')]
+    [ a.name /]: '' /*Tipo [ a.type.name /]*/
+    [/for]
 
 }
 ```
+
+[if (c.hasReferences(False))]
+#### Representaci髇 Basic
+```javascript
+{
+    // todo lo de la representaci髇 Minimum m醩 los objetos Minimum con relaci髇 simple.
+    [for(a : Property | c.getRelationshipAttributes()) separator(',\n')]
+    [if (a.getUpper() = 1)]
+    [ a.name /]: {
+    [for(a2 : Property | a.getClass().allAttributes()) separator(',\n')]
+    [ a2.name /]: '' /*Tipo [ a2.type.name /]*/
+    [/for]
+    }
+    [/for]
+
+}
+```
+[/if]
+
+[if (c.hasCompositeAssociations(False))]
+#### Representaci髇 Full
+```javascript
+{
+    // todo lo de la representaci髇 Basic m醩 la collecci髇 de los objetos de relaciones composite.
+    [for(a : Property | c.getRelationshipAttributes()) separator(',\n')]
+    [if (a.getUpper() = 1)]
+    [ a.name /]: [{
+    [for(a2 : Property | a.getClass().allAttributes()) separator(',\n')]
+    [ a2.name /]: '' /*Tipo [ a2.type.name /]*/
+    [/for]
+    }]
+    [/for]
+
+}
+```
+[/if]
+
 #### Servicios
 M茅todo|URI|Acci贸n|Par谩metros|Cuerpo|Retorno
 :--:|:--:|:--:|:--:|:--:|:--:
