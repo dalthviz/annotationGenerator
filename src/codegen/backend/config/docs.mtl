@@ -97,7 +97,7 @@ El objeto [c.name/] tiene 2 representaciones JSON:
 #### Representación Full
 ```javascript
 {
-    // todo lo de la representación Basic más la collecci�n de los objetos de relaciones composite.
+    // todo lo de la representación Basic más la collección de los objetos de relaciones composite.
     [for(a : Property | c.getCompositeCollectionAttributes()) separator(',\n')]
     [ a.name /]: ['['/]{
     [for(a2 : Property | a.getClass().allAttributes()) separator(',\n')]
@@ -108,6 +108,36 @@ El objeto [c.name/] tiene 2 representaciones JSON:
 ```
 [/if]
 
+
+#### GET /[c.getURI()/]
+
+Retorna una colección de objetos [c.name/] en representación Basic.
+[if (c.hasReferences(false))] 
+Cada [c.name/] en la colección tiene embebidos su objetos [for(a : Property | c.getReferences(false)) separator(', ') after('.')][ a.name /][/for].
+[/if]
+
+#### Parámetros
+
+#### N/A
+
+#### Respuesta
+
+Código|Descripción|Cuerpo|
+200|OK|Colección de ['['/]representaciones Basic[']'/](#recurso-[c.name.toLowerCase()/])
+409|Un objeto relacionado no existe.|Mensaje de error
+500|Error interno|Mensaje de error
+
+#### GET /[c.getURI()/]/{id}
+#### POST /[c.getURI()/]
+#### PUT /[c.getURI()/]/{id}
+#### DELETE /[c.getURI()/]/{id}
+[for (elem : Property | c.getNonCompositeCollectionAttributes())]
+#### GET [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]
+#### GET [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
+#### POST [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
+#### PUT [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]
+#### DELETE [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
+[/for]
 
 #### Servicios
 Método|URI|Acción|Parámetros|Cuerpo|Retorno
