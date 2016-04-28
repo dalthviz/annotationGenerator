@@ -113,7 +113,7 @@ El objeto [c.name/] tiene 2 representaciones JSON:
 
 Retorna una colección de objetos [c.name/] en representación Basic.
 [if (c.hasReferences(false))] 
-Cada [c.name/] en la colección tiene embebidos su objetos [for(a : Property | c.getReferences(false)) separator(', ')][ a.name /][/for].
+Cada [c.name/] en la colección tiene embebidos los siguientes objetos: [for(a : Property | c.getReferences(false)) separator(', ')][ a.getClass().name /][/for].
 [/if]
 
 #### Parámetros
@@ -132,17 +132,17 @@ Código|Descripción|Cuerpo
 
 Retorna una colección de objetos [c.name/] en representación Full.
 [if (c.hasReferences(false))] 
-Cada [c.name/] en la colección tiene embebidos su objetos [for(a : Property | c.getReferences(false)) separator(', ')][ a.name /][/for] [for(a : Property | c.getCompositeCollectionAttributes()) before(' y sus colecciones ') separator(', ')][ a.name /][/for].
+Cada [c.name/] en la colección tiene los siguientes objetos: [for(a : Property | c.getReferences(false)) separator(', ')][ a.getClass().name /][/for].
 [/if]
 [if (c.hasCompositeAssociations())] 
-Cada [c.name/] en la colección tiene embebidos su objetos con relaciones composite [for(a : Property | c.getCompositeCollectionAttributes()) separator(', ')][ a.name /][/for].
+Cada [c.name/] en la colección tiene embebidos los siguientes objetos con relaciones composite: [for(a : Property | c.getCompositeCollectionAttributes()) separator(', ')][ a.getClass().name /][/for].
 [/if]
 
 #### Parámetros
 
 Nombre|Ubicación|Descripción|Requerido|Esquema
 :--|:--|:--|:--|:--
-id|Path|ID del objeto [c.name/] a consultar|S�|Integer
+id|Path|ID del objeto [c.name/] a consultar|Sí|Integer
 
 #### Respuesta
 
@@ -157,7 +157,7 @@ Código|Descripción|Cuerpo
 Es el encargado de crear objetos [c.name/].
 [if (c.hasCompositeAssociations())] 
 [for(a : Property | c.getCompositeCollectionAttributes())]
-Dado que [ a.name /] es una clase hija de [c.name/] a través de una relación composite, este servicio también permite la creación de [ a.name /]s asociados con un [c.name/].
+Dado que [ a.getClass().name /] es una clase hija de [c.name/] a través de una relación composite, este servicio también permite la creación de [ a.name /] asociados con un [c.name/].
 [/for].
 [/if]
 
@@ -165,7 +165,7 @@ Dado que [ a.name /] es una clase hija de [c.name/] a través de una relación c
 
 Nombre|Ubicación|Descripción|Requerido|Esquema
 :--|:--|:--|:--|:--
-body|body|Objeto [c.name/] que ser� creado|S�|['['/]Representación Full[']'/](#recurso-[c.name.toLowerCase()/])
+body|body|Objeto [c.name/] que será creado|Sí|['['/]Representación Full[']'/](#recurso-[c.name.toLowerCase()/])
 
 #### Respuesta
 
@@ -180,7 +180,7 @@ Código|Descripción|Cuerpo
 Es el encargado de actualizar objetos [c.name/].
 [if (c.hasCompositeAssociations())] 
 [for(a : Property | c.getCompositeCollectionAttributes())]
-Dado que [ a.name /] es una clase hija de [c.name/] a través de una relación composite, este servicio también permite la actualización de [ a.name /]s asociados con un [c.name/].
+Dado que [ a.getClass().name /] es una clase hija de [c.name/] a través de una relación composite, este servicio también permite la actualización de [ a.name /] asociados con un [c.name/].
 [/for].
 [/if]
 
@@ -188,8 +188,8 @@ Dado que [ a.name /] es una clase hija de [c.name/] a través de una relación c
 
 Nombre|Ubicación|Descripción|Requerido|Esquema
 :--|:--|:--|:--|:--
-id|Path|ID del objeto [c.name/] a actualizar|S�|Integer
-body|body|Objeto [c.name/] nuevo|S�|['['/]Representación Full[']'/](#recurso-[c.name.toLowerCase()/])
+id|Path|ID del objeto [c.name/] a actualizar|Sí|Integer
+body|body|Objeto [c.name/] nuevo|Sí|['['/]Representación Full[']'/](#recurso-[c.name.toLowerCase()/])
 
 #### Respuesta
 
@@ -207,7 +207,7 @@ Elimina un objeto [c.name/].
 
 Nombre|Ubicación|Descripción|Requerido|Esquema
 :--|:--|:--|:--|:--
-id|Path|ID del objeto [c.name/] a eliminar|S�|Integer
+id|Path|ID del objeto [c.name/] a eliminar|Sí|Integer
 
 #### Respuesta
 
@@ -218,26 +218,95 @@ Código|Descripción|Cuerpo
 
 [for (elem : Property | c.getNonCompositeCollectionAttributes())]
 #### GET [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]
-#### GET [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
-#### POST [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
-#### PUT [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]
-#### DELETE [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
-[/for]
 
-#### Servicios
-Método|URI|Acción|Parámetros|Cuerpo|Retorno
-:--:|:--:|:--:|:--:|:--:|:--:
-**GET**|/[c.getURI()/]|Lista los registros de [c.name/] (READ)|**@QueryParam page**: página a consultar<br>**@QueryParam maxRecords**: cantidad de registros a consultar<br><br>*Si se omite alguno de estos parámetros se obtiene todos los registros en la base de datos*||Colección de registros de [c.name/] y el total de registros en la base de datos en el header X-Total-Count
-**GET**|/[c.getURI()/]/*:[c.getURI()/]id*|Obtener los atributos de una instancia de [c.name/] (READ)|**@PathParam [c.getURI()/]id**: Identificador del registro||Atributos de la instancia de [c.name/]
-**POST**|/[c.getURI()/]|Crear una nueva instancia de la entidad [c.name/] (CREATE)||Atributos de la instancia de [c.name/] a crear|Instancia de [c.name/] creada, incluyendo su nuevo ID
-**PUT**|/[c.getURI()/]/*:[c.getURI()/]id*|Actualiza una instancia de la entidad [c.name/] (UPDATE)|**@PathParam [c.getURI()/]id**: Identificador del registro|Objeto JSON de [c.name/]|Instancia de [c.name/] actualizada
-**DELETE**|/[c.getURI()/]/*:[c.getURI()/]id*|Borra instancia de [c.name/] en el servidor (DELETE)|**@PathParam [c.getURI()/]id**: Identificador del registro||
-[for (elem : Property | c.getNonCompositeCollectionAttributes())]
-**GET**|[c.getURI()/]/*:[c.getURI()/]id*/[elem.name/]|Listar registros de [elem.name/] ([elem.getClass().name/]) asociados a [c.name/]|**@PathParam [c.getURI()/]id**: Identificador de instancia de [c.name/]||Colección de objetos JSON de [elem.name/]([elem.getClass().name/])
-**GET**|[c.getURI()/]/*:[c.getURI()/]id*/[elem.name/]/*:[elem.name/]id*|Obtener un registro de [elem.name/] ([elem.getClass().name/]) asociado a [c.name/]|**@PathParam [c.getURI()/]id**: Identificador de instancia de [c.name/]<br><br>**@PathParam [elem.name/]id**: Identificador de instancia de [elem.getClass().name/]||Lista de registros de [elem.name/]([elem.getClass().name/])
-**POST**|[c.getURI()/]/*:[c.getURI()/]id*/[elem.name/]/*:[elem.name/]id*|Asocia una instancia de [elem.getClass().name/] a una de [c.name/]|**@PathParam [c.getURI()/]id**: Identificador de instancia de [c.name/]<br><br>**@PathParam [elem.name/]id**: Identificador de instancia de [elem.getClass().name/]|Registro de [elem.name/]([elem.getClass().name/]) para asociar a [c.name/]|Instancia de [elem.name/]([elem.getClass().name/]) asociada a instancia de [c.name/]
-**PUT**|[c.getURI()/]/*:[c.getURI()/]id*/[elem.name/]|Actualización de instancias de [elem.name/] ([elem.getClass().name/]) asociadas a [c.name/]|**@PathParam [c.getURI()/]id**: Identificador de instancia de [c.name/]|Colección de instancias de [elem.name/]([elem.getClass().name/]) a actualizar|Colección de instancias de [elem.name/]([elem.getClass().name/]) actualizados
-**DELETE**|[c.getURI()/]/*:[c.getURI()/]id*/[elem.name/]/*:[elem.name/]id*|Remueve asociación de instancias de [elem.name/] ([elem.getClass().name/]) a [c.name/]|**@PathParam [c.getURI()/]id**: Identificador de instancia de [c.name/]<br><br>**@PathParam [elem.name/]id**: Identificador de instancia de [elem.getClass().name/]|Colección de atributo `id` de [elem.name/]([elem.getClass().name/]) a eliminar|
+Retorna una colección de objetos [ elem.getClass().name /] asociados a un objeto [c.name/] en representación Basic.
+
+#### Parámetros
+
+Nombre|Ubicación|Descripción|Requerido|Esquema
+:--|:--|:--|:--|:--
+id|Path|ID del objeto [c.name/] a consultar|Sí|Integer
+
+#### Respuesta
+
+Código|Descripción|Cuerpo
+:--|:--|:--
+200|OK|Colección de objetos [ elem.getClass().name /] en ['['/]representación Basic[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
+500|Error consultando [ elem.name /] |Mensaje de error
+
+#### GET [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
+
+Retorna un objeto [ elem.getClass().name /] asociados a un objeto [c.name/] en representación Basic.
+
+#### Parámetros
+
+Nombre|Ubicación|Descripción|Requerido|Esquema
+:--|:--|:--|:--|:--
+[c.getURI()/]id|Path|ID del objeto [c.name/] a consultar|Sí|Integer
+[elem.name/]id|Path|ID del objeto [ elem.getClass().name /] a consultar|Sí|Integer
+
+#### Respuesta
+
+Código|Descripción|Cuerpo
+:--|:--|:--
+200|OK|Objeto [ elem.getClass().name /] en ['['/]representación Basic[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
+404|No existe un objeto [ elem.getClass().name /] con el ID solicitado asociado al objeto [c.name/] indicado |Mensaje de error
+500|Error interno|Mensaje de error
+
+#### POST [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
+
+Asocia un objeto [ elem.getClass().name /] a un objeto [c.name/].
+
+#### Parámetros
+
+Nombre|Ubicación|Descripción|Requerido|Esquema
+:--|:--|:--|:--|:--
+[c.getURI()/]id|PathParam|ID del objeto [c.name/] al cual se asociar� el objeto [ elem.getClass().name /]|Sí|Integer
+[elem.name/]id|PathParam|ID del objeto [ elem.getClass().name /] a asociar|Sí|Integer
+
+#### Respuesta
+
+Código|Descripción|Cuerpo
+:--|:--|:--
+200|Objeto [ elem.getClass().name /] asociado|['['/]Representación Basic de [ elem.getClass().name /][']'/](#recurso-[elem.getClass().name.toLowerCase()/])
+500|No se pudo asociar el objeto [ elem.getClass().name /]|Mensaje de error
+
+#### PUT [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]
+
+Es el encargado de remplazar la colecci�n de objetos [ elem.getClass().name /] asociada a un objeto [c.name/].
+
+#### Parámetros
+
+Nombre|Ubicación|Descripción|Requerido|Esquema
+:--|:--|:--|:--|:--
+[c.getURI()/]id|Path|ID del objeto [c.name/] cuya colecci�n ser� remplazada|Sí|Integer
+body|body|Colecci�n de objetos [ elem.getClass().name /]|Sí|['['/]Representación Basic[']'/](#recurso-[elem.getClass().name.toLowerCase()/]
+
+#### Respuesta
+
+Código|Descripción|Cuerpo
+:--|:--|:--
+200|Se remplaz� la colecci�n|Colecci�n de objetos [ elem.getClass().name /] en ['['/]Representación Basic[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
+500|No se pudo remplazar la colecci�n|Mensaje de error
+
+#### DELETE [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
+
+Remueve un objeto [ elem.getClass().name /] de la colecci�n en un objeto [c.name/].
+
+#### Parámetros
+
+Nombre|Ubicación|Descripción|Requerido|Esquema
+:--|:--|:--|:--|:--
+[c.getURI()/]id|Path|ID del objeto [c.name/] asociado al objeto [ elem.getClass().name /]|Sí|Integer
+[elem.name/]id|Path|ID del objeto [ elem.getClass().name /] a remover|Sí|Integer
+
+#### Respuesta
+
+Código|Descripción|Cuerpo
+:--|:--|:--
+204|Objeto removido|N/A
+500|Error interno|Mensaje de error
+
 [/for]
 
 ['['/]Volver arriba[']'/](#tabla-de-contenidos)
