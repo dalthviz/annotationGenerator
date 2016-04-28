@@ -261,7 +261,7 @@ Asocia un objeto [ elem.getClass().name /] a un objeto [c.name/].
 
 Nombre|Ubicación|Descripción|Requerido|Esquema
 :--|:--|:--|:--|:--
-[c.getURI()/]id|PathParam|ID del objeto [c.name/] al cual se asociar� el objeto [ elem.getClass().name /]|Sí|Integer
+[c.getURI()/]id|PathParam|ID del objeto [c.name/] al cual se asociará el objeto [ elem.getClass().name /]|Sí|Integer
 [elem.name/]id|PathParam|ID del objeto [ elem.getClass().name /] a asociar|Sí|Integer
 
 #### Respuesta
@@ -273,25 +273,25 @@ Código|Descripción|Cuerpo
 
 #### PUT [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]
 
-Es el encargado de remplazar la colecci�n de objetos [ elem.getClass().name /] asociada a un objeto [c.name/].
+Es el encargado de remplazar la colección de objetos [ elem.getClass().name /] asociada a un objeto [c.name/].
 
 #### Parámetros
 
 Nombre|Ubicación|Descripción|Requerido|Esquema
 :--|:--|:--|:--|:--
-[c.getURI()/]id|Path|ID del objeto [c.name/] cuya colecci�n ser� remplazada|Sí|Integer
-body|body|Colecci�n de objetos [ elem.getClass().name /]|Sí|['['/]Representación Basic[']'/](#recurso-[elem.getClass().name.toLowerCase()/]
+[c.getURI()/]id|Path|ID del objeto [c.name/] cuya colección será remplazada|Sí|Integer
+body|body|Colección de objetos [ elem.getClass().name /]|Sí|['['/]Representación Basic[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
 
 #### Respuesta
 
 Código|Descripción|Cuerpo
 :--|:--|:--
-200|Se remplaz� la colecci�n|Colecci�n de objetos [ elem.getClass().name /] en ['['/]Representación Basic[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
-500|No se pudo remplazar la colecci�n|Mensaje de error
+200|Se remplazó la colección|Colección de objetos [ elem.getClass().name /] en ['['/]Representación Basic[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
+500|No se pudo remplazar la colección|Mensaje de error
 
 #### DELETE [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
 
-Remueve un objeto [ elem.getClass().name /] de la colecci�n en un objeto [c.name/].
+Remueve un objeto [ elem.getClass().name /] de la colección en un objeto [c.name/].
 
 #### Parámetros
 
