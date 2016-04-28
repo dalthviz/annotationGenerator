@@ -19,6 +19,7 @@
 -  ['['/]Introducci贸n[']'/](#introducci贸n)
 -  ['['/]API[']'/](#api-de-la-aplicaci贸n-[m.name.toLowerCase()/])
 [for (c : Class | m.getClasses())]
+[if (not c.isChild())]
   - ['['/]Recurso [c.name+']'/](#recurso-[c.name.toLowerCase()/])
     - ['['/]GET /[c.getURI()/][']'/](#GET-/[c.getURI()/])
     - ['['/]GET /[c.getURI()/]/{id}[']'/](#GET-/[c.getURI()/]/{id})
@@ -32,6 +33,7 @@
     - ['['/]PUT [c.getURI()/]/{[c.getURI()/]id}/[elem.name/][']'/](#PUT-[c.getURI()/]/{[c.getURI()/]id}/[elem.name/])
     - ['['/]DELETE [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}[']'/](#DELETE-[c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}[']'/])
 [/for]
+[/if]
 [/for]
 
 # API Rest
@@ -59,6 +61,7 @@ La respuesta del servidor al solicitar una colecci贸n presenta el siguiente form
 
 ## API de la aplicaci贸n [m.name/]
 [for(c : Class | m.getClasses()) ]
+[if (not c.isChild())]
 ### Recurso [c.name/]
 [if (c.hasReferences(false) and c.hasCompositeAssociations())]
 El objeto [c.name/] tiene 3 representaciones JSON:
@@ -66,47 +69,40 @@ El objeto [c.name/] tiene 3 representaciones JSON:
 El objeto [c.name/] tiene 2 representaciones JSON:	
 [/if]
 
-#### Representaci髇 Minimum
+#### Representaci贸n Minimum
 ```javascript
 {
     [for(a : Property | c.allAttributes()) separator(',\n')]
-    [ a.name /]: '' /*Tipo [ a.type.name /]*/
-    [/for]
+    [ a.name /]: '' /*Tipo [ a.type.name /]*/[/for]
 
 }
 ```
 
 [if (c.hasReferences(false))]
-#### Representaci髇 Basic
+#### Representaci贸n Basic
 ```javascript
 {
-    // todo lo de la representaci髇 Minimum m醩 los objetos Minimum con relaci髇 simple.
-    [for(a : Property | c.getRelationshipAttributes()) separator(',\n')]
-    [if (a.getUpper() = 1)]
+    // todo lo de la representaci贸n Minimum m谩s los objetos Minimum con relaci贸n simple.
+    [for(a : Property | c.getReferences(false)) separator(',\n')]
     [ a.name /]: {
     [for(a2 : Property | a.getClass().allAttributes()) separator(',\n')]
-    [ a2.name /]: '' /*Tipo [ a2.type.name /]*/
-    [/for]
-    }
-    [/if]
-    [/for]
+    [ a2.name /]: '' /*Tipo [ a2.type.name /]*/[/for]
+    }[/for]
 
 }
 ```
 [/if]
 
 [if (c.hasCompositeAssociations())]
-#### Representaci髇 Full
+#### Representaci贸n Full
 ```javascript
 {
-    // todo lo de la representaci髇 Basic m醩 la collecci髇 de los objetos de relaciones composite.
+    // todo lo de la representaci贸n Basic m谩s la collecci髇 de los objetos de relaciones composite.
     [for(a : Property | c.getCompositeCollectionAttributes()) separator(',\n')]
     [ a.name /]: ['['/]{
     [for(a2 : Property | a.getClass().allAttributes()) separator(',\n')]
-    [ a2.name /]: '' /*Tipo [ a2.type.name /]*/
-    [/for]
-    }[']'/]
-    [/for]
+    [ a2.name /]: '' /*Tipo [ a2.type.name /]*/[/for]
+    }[']'/][/for]
 
 }
 ```
@@ -130,7 +126,7 @@ M茅todo|URI|Acci贸n|Par谩metros|Cuerpo|Retorno
 [/for]
 
 ['['/]Volver arriba[']'/](#tabla-de-contenidos)
-
+[/if]
 [/for]
 [/file]
 [/template]
