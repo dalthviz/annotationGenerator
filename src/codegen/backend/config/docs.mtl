@@ -101,11 +101,11 @@ El objeto [c.name/] tiene 2 representaciones JSON:
 {
     // todo lo de la representación Basic más la collección de los objetos de relaciones composite.
     [for(a : Property | c.getCompositeCollectionAttributes()) separator(',\n')]
-    [ a.name /]: [{
+    [ a.name /]: ['['/]{
     [for(a2 : Property | a.getClass().allAttributes()) separator(',\n')]
     [ a2.name /]: '' /*Tipo [ a2.type.name /]*/
     [/for]
-    }]
+    }[']'/]
     [/for]
 
 }
