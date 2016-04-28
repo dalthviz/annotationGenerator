@@ -13,6 +13,9 @@
 [m.genWebPOM(m.getApiArtifactId().concat('/'))/]
 [/template]
 
+[**
+ * POM del proyecto API
+*/]
 [template protected genWebPOM(m : Model, path : String)]
 [file (path.concat('pom.xml'), false, 'UTF-8')]
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -45,70 +48,6 @@
             <version>[m.getProjectVersion()/]</version>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                        <configuration>
-                            <propertyName>surefireArgLine</propertyName>
-                            <excludes>
-                                <exclude>**/*IT.java</exclude>
-                            </excludes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <configuration>
-                            <!-- Sets the path to the file which contains the execution data. -->
-                            <dataFile>${sonar.jacoco.reportPath}</dataFile>
-                            <!-- Sets the output directory for the code coverage report. -->
-                            <outputDirectory>${sonar.jacoco.outReportPath}</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <configuration>
-                            <destFile>${sonar.jacoco.itReportPath}</destFile>
-                            <propertyName>jacoco.agent.argLine</propertyName>
-                            <excludes>
-                                <exclude>**/*Test.java</exclude>
-                            </excludes>
-                        </configuration>
-                        <id>pre-itest</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>prepare-agent-integration</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>post-integration-test</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <configuration>
-                            <dataFile>${sonar.jacoco.itReportPath}</dataFile>
-                            <outputDirectory>${sonar.jacoco.outItReportPath}</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 </project>
 [/file]
 [/template]
