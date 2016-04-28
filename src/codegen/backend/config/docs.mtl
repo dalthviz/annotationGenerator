@@ -113,7 +113,7 @@ El objeto [c.name/] tiene 2 representaciones JSON:
 
 Retorna una colección de objetos [c.name/] en representación Basic.
 [if (c.hasReferences(false))] 
-Cada [c.name/] en la colección tiene embebidos su objetos [for(a : Property | c.getReferences(false)) separator(', ') after('.')][ a.name /][/for].
+Cada [c.name/] en la colección tiene embebidos su objetos [for(a : Property | c.getReferences(false)) separator(', ')][ a.name /][/for].
 [/if]
 
 #### Parámetros
@@ -122,15 +122,100 @@ Cada [c.name/] en la colección tiene embebidos su objetos [for(a : Property | c
 
 #### Respuesta
 
-Código|Descripción|Cuerpo|
+Código|Descripción|Cuerpo
+:--|:--|:--
 200|OK|Colección de ['['/]representaciones Basic[']'/](#recurso-[c.name.toLowerCase()/])
-409|Un objeto relacionado no existe.|Mensaje de error
+409|Un objeto relacionado no existe|Mensaje de error
 500|Error interno|Mensaje de error
 
 #### GET /[c.getURI()/]/{id}
+
+Retorna una colección de objetos [c.name/] en representación Full.
+[if (c.hasReferences(false))] 
+Cada [c.name/] en la colección tiene embebidos su objetos [for(a : Property | c.getReferences(false)) separator(', ')][ a.name /][/for] [for(a : Property | c.getCompositeCollectionAttributes()) before(' y sus colecciones ') separator(', ')][ a.name /][/for].
+[/if]
+[if (c.hasCompositeAssociations())] 
+Cada [c.name/] en la colección tiene embebidos su objetos con relaciones composite [for(a : Property | c.getCompositeCollectionAttributes()) separator(', ')][ a.name /][/for].
+[/if]
+
+#### Parámetros
+
+Nombre|Ubicación|Descripción|Requerido|Esquema
+:--|:--|:--|:--|:--
+id|Path|ID del objeto [c.name/] a consultar|S�|Integer
+
+#### Respuesta
+
+Código|Descripción|Cuerpo
+:--|:--|:--
+200|OK|Objeto [c.name/] en ['['/]representaciones Full[']'/](#recurso-[c.name.toLowerCase()/])
+404|No existe un objeto [c.name/] con el ID solicitado|Mensaje de error
+500|Error interno|Mensaje de error
+
 #### POST /[c.getURI()/]
+
+Es el encargado de crear objetos [c.name/].
+[if (c.hasCompositeAssociations())] 
+[for(a : Property | c.getCompositeCollectionAttributes())]
+Dado que [ a.name /] es una clase hija de [c.name/] a través de una relación composite, este servicio también permite la creación de [ a.name /]s asociados con un [c.name/].
+[/for].
+[/if]
+
+#### Parámetros
+
+Nombre|Ubicación|Descripción|Requerido|Esquema
+:--|:--|:--|:--|:--
+body|body|Objeto [c.name/] que ser� creado|S�|['['/]Representación Full[']'/](#recurso-[c.name.toLowerCase()/])
+
+#### Respuesta
+
+Código|Descripción|Cuerpo
+:--|:--|:--
+201|El objeto [c.name/] ha sido creado|['['/]Representación Full[']'/](#recurso-[c.name.toLowerCase()/])
+409|Un objeto relacionado no existe|Mensaje de error
+500|No se pudo crear el objeto [c.name/]|Mensaje de error
+
 #### PUT /[c.getURI()/]/{id}
+
+Es el encargado de actualizar objetos [c.name/].
+[if (c.hasCompositeAssociations())] 
+[for(a : Property | c.getCompositeCollectionAttributes())]
+Dado que [ a.name /] es una clase hija de [c.name/] a través de una relación composite, este servicio también permite la actualización de [ a.name /]s asociados con un [c.name/].
+[/for].
+[/if]
+
+#### Parámetros
+
+Nombre|Ubicación|Descripción|Requerido|Esquema
+:--|:--|:--|:--|:--
+id|Path|ID del objeto [c.name/] a actualizar|S�|Integer
+body|body|Objeto [c.name/] nuevo|S�|['['/]Representación Full[']'/](#recurso-[c.name.toLowerCase()/])
+
+#### Respuesta
+
+Código|Descripción|Cuerpo
+:--|:--|:--
+201|El objeto [c.name/] actualizado|['['/]Representación Full[']'/](#recurso-[c.name.toLowerCase()/])
+409|Un objeto relacionado no existe|Mensaje de error
+500|No se pudo actualizar el objeto [c.name/]|Mensaje de error
+
 #### DELETE /[c.getURI()/]/{id}
+
+Elimina un objeto [c.name/].
+
+#### Parámetros
+
+Nombre|Ubicación|Descripción|Requerido|Esquema
+:--|:--|:--|:--|:--
+id|Path|ID del objeto [c.name/] a eliminar|S�|Integer
+
+#### Respuesta
+
+Código|Descripción|Cuerpo
+:--|:--|:--
+204|Objeto eliminado|N/A
+500|Error interno|Mensaje de error
+
 [for (elem : Property | c.getNonCompositeCollectionAttributes())]
 #### GET [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]
 #### GET [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
