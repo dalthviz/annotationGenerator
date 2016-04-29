@@ -32,8 +32,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.filter.LoggingFilter;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
@@ -92,9 +90,7 @@ public class [c.getServiceTestName()/] {
     }
 
     private WebTarget createWebTarget() {
-        ClientConfig config = new ClientConfig();
-        config.register(LoggingFilter.class);
-        return ClientBuilder.newClient(config).target(deploymentURL.toString()).path(apiPath);
+        return ClientBuilder.newClient().target(deploymentURL.toString()).path(apiPath);
     }
 
     @BeforeClass
