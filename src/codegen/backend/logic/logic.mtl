@@ -11,6 +11,9 @@
 
 [template protected genLogicInterface(c : Class, path : String) {className : String = c.getAPIName();}]
 [file (path.concat(className + '.java'), false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
 package [c.getModel().baseGroup()/].api;
 
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
@@ -40,6 +43,9 @@ public interface [className/] {
 
 [template protected genLogicBean(c : Class, path : String) {className : String = c.getBeanName();}]
 [file (path.concat(className.concat('.java')), false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
 package [c.getModel().baseGroup()/].ejbs;
 
 import [c.getModel().baseGroup()/].api.[c.getAPIName()/];

@@ -13,6 +13,9 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
 
 [template protected appjs(m : Model, path : String)]
 [file (path.concat('app.js'), false, 'UTF-8')]
+/*
+[m.license()/]
+*/
 (function (ng) {
     var mod = ng.module('mainApp', ['['/]
         //'ngCrudMock',
@@ -32,15 +35,7 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
             rp.setBaseUrl('[m.getAPIURL()/]');
         }[']'/]);
 
-    mod.config(['['/]'$stateProvider', '$urlRouterProvider', 'CrudTemplateURL', 'CrudCtrlAlias', function ($stateProvider, $urlRouterProvider, tplUrl, alias) {
-            $stateProvider
-                [for (c : Class | m.getRootClasses()) separator ('\n')]
-                .state('[c.getName()/]', {
-                    url: '/[c.getName()/]',
-                    templateUrl: tplUrl,
-                    controller: '[c.getCtrl()/]',
-                    controllerAs: alias
-                })[/for];
+    mod.config(['['/]'$urlRouterProvider', function ($urlRouterProvider) {
                 $urlRouterProvider.otherwise('/');
         }[']'/]);
 
@@ -57,6 +52,9 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
 [template protected index(m : Model, path : String)]
 [file (path.concat('index.html'), false, 'UTF-8')]
 <!DOCTYPE html>
+<!--
+[m.license()/]
+-->
 <html ng-app="mainApp">
     <head>
         <title>[m.name/]</title>

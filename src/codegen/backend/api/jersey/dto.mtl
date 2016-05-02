@@ -3,29 +3,26 @@
 [import ::utils /]
 
 [template public mainDTOs(c : Class, path : String)]
-[let filePath : String = path.concat('dtos/')]
-    [c.genDTO(filePath)/]
+[let dtoPath : String = path.concat('dtos/')]
+    [c.genMinimumDTO(dtoPath.concat('minimum/'))/]
+    [c.genBasicDTO(dtoPath.concat('basic/'))/]
+    [c.genFullDTO(dtoPath.concat('full/'))/]
 [/let]
 [/template]
 
-[template protected genDTO(c : Class, path: String) {className : String = c.getDTOName();}]
+[template protected genMinimumDTO(c : Class, path: String) {className : String = c.getMinimumDTOName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
-package [c.getModel().baseGroup()/].dtos;
+/*
+[c.getModel().license()/]
+*/
+package [c.getModel().baseGroup()/].dtos.minimum;
 
+import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import javax.xml.bind.annotation.XmlRootElement;
-[if (c.getRelationshipAttributes()->select(not isComposite())->notEmpty())]
-import uk.co.jemos.podam.common.PodamExclude;
-[/if]
 [if (c.hasDateAttribute())]
 import java.util.Date;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import co.edu.uniandes.csw.auth.model.DateAdapter;
 import uk.co.jemos.podam.common.PodamStrategyValue;
 import co.edu.uniandes.csw.crud.api.podam.strategy.DateStrategy;
-[/if]
-[if (c.isMaster())]
-import java.util.List;
-import java.util.ArrayList;
 [/if]
 
 /**
@@ -36,67 +33,235 @@ public class [className/] {
 
 [for(a : Property | c.allAttributes())]
     [if(a.isDate())]
-    @XmlJavaTypeAdapter(DateAdapter.class)
     @PodamStrategyValue(DateStrategy.class)
     [/if]
     private [a.type.name/] [a.name/];
 [/for]
-[for (a : Property | c.getRelationshipAttributes())]
-    [if (not a.isComposite())]@PodamExclude[/if]
-[if (a.getUpper() = 1)]
-    private [a.getClass().getDTOName()/] [a.name/];
-[else]
-    private List<[a.getClass().getDTOName()/]> [a.name/] = new ArrayList<>();
-[/if]
-[/for]
+
+    /**
+     * @generated
+     */
+    public [className/]() {
+    }
+
+    /**
+     * @param entity
+     * @generated
+     */
+    public [className/]([c.getEntityName()/] entity) {
+	   if (entity!=null){
+    [for(a : Property | c.allAttributes())]
+        this.[a.name/]=entity.[a.getter()/]();
+	[/for]
+       }
+    }
+
+    /**
+     * @generated
+     */
+    public [c.getEntityName()/] toEntity() {
+        [c.getEntityName()/] entity = new [c.getEntityName()/]();
+	[for(a : Property | c.allAttributes())]
+        entity.[a.setter()/](this.[a.getter()/]());
+	[/for]
+    return entity;
+    }
 
 [for (a : Property | c.allAttributes())]
     /**
-     * @generated
+     * @return the [a.name/]
      */
     public [a.type.name/] [a.getter()/]() {
         return [a.name/];
     }
 
     /**
-     * @generated
+     * @param [a.name/] the [a.name/] to set
      */
     public void [a.setter()/]([a.type.name/] [a.name.toLower()/]) {
         this.[a.name/] = [a.name.toLower()/];
     }
 
 [/for]
+}
+[/file]
+[/template]
+
+[template protected genBasicDTO(c : Class, path: String) {className : String = c.getBasicDTOName();}]
+[file (path.concat(className+'.java'), false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
+package [c.getModel().baseGroup()/].dtos.basic;
+
+import [c.getModel().baseGroup()/].dtos.minimum.*;
+import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
+import javax.xml.bind.annotation.XmlRootElement;
+[if (c.getRelationshipAttributes()->select(not isComposite())->notEmpty())]
+import uk.co.jemos.podam.common.PodamExclude;
+[/if]
+
+/**
+ * @generated
+ */
+@XmlRootElement
+public class [className/] extends [c.getMinimumDTOName()/]{
+
+
+[for (a : Property | c.getRelationshipAttributes())]   
+[if (a.getUpper() = 1)]
+    [if (not a.isComposite())]@PodamExclude[/if]
+    private [a.getClass().getMinimumDTOName()/] [a.name/];
+[/if]
+[/for]
+
+    /**
+     * @generated
+     */
+    public [className/]() {
+        super();
+    }
+
+    /**
+     * @param entity
+     * @generated
+     */
+    public [className/]([c.getEntityName()/] entity) {
+        super(entity);
+        [for (a : Property | c.getReferences(true))]
+        if (entity.[a.getter()/]()!=null){
+        this.[a.name/] = new [a.getClass().getMinimumDTOName()/](entity.[a.getter()/]());
+        }
+        [/for]
+        
+    }
+
+    /**
+     * @generated
+     */
+    @Override
+    public [c.getEntityName()/] toEntity() {
+        [c.getEntityName()/] entity = super.toEntity();
+[for (a : Property | c.getReferences(true))]
+        if (this.[a.getter()/]()!=null){
+        entity.[a.setter()/](this.[a.getter()/]().toEntity());
+        }
+[/for]
+        return entity;
+    }
+
 [for (a : Property | c.getReferences(true))]
     /**
      * @generated
      */
-    public [a.getClass().getDTOName()/] [a.getter()/]() {
+    public [a.getClass().getMinimumDTOName()/] [a.getter()/]() {
         return [a.name/];
     }
 
     /**
      * @generated
      */
-    public void [a.setter()/]([a.getClass().getDTOName()/] [a.name.toLower()/]) {
+    public void [a.setter()/]([a.getClass().getMinimumDTOName()/] [a.name.toLower()/]) {
         this.[a.name/] = [a.name.toLower()/];
     }
 
 [/for]
-[for (a : Property | c.getCollectionAttributes())]
+}
+[/file]
+[/template]
+
+[template protected genFullDTO(c : Class, path: String) {className : String = c.getFullDTOName();}]
+[file (path.concat(className+'.java'), false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
+package [c.getModel().baseGroup()/].dtos.full;
+
+import [c.getModel().baseGroup()/].dtos.minimum.*;
+import [c.getModel().baseGroup()/].dtos.basic.[c.getBasicDTOName()/];
+import [c.getModel().baseGroup()/].entities.*;
+import javax.xml.bind.annotation.XmlRootElement;
+[if (c.getRelationshipAttributes()->select(not isComposite())->notEmpty())]
+import uk.co.jemos.podam.common.PodamExclude;
+[/if]
+[if (c.isMaster())]
+import java.util.List;
+import java.util.ArrayList;
+[/if]
+
+/**
+ * @generated
+ */
+@XmlRootElement
+public class [className/] extends [c.getBasicDTOName()/]{
+
+[for (a : Property | c.getRelationshipAttributes())]    
+[if (a.getUpper() <> 1)]
+    [if (a.isComposite())]
+    @PodamExclude
+    private List<[a.getClass().getMinimumDTOName()/]> [a.name/] = new ArrayList<>();
+    [/if]
+[/if]
+[/for]
+
     /**
      * @generated
      */
-    public List<[a.getClass().getDTOName()/]> [a.getter()/]() {
+    public [className/]() {
+        super();
+    }
+
+    /**
+     * @param entity
+     * @generated
+     */
+    public [className/]([c.getEntityName()/] entity) {
+        super(entity);      
+[for (a : Property | c.getCollectionAttributes())] 
+    [if (a.isComposite())]
+        for ([a.getClass().getEntityName()/] obj : entity.[a.getter()/]()) {
+            [a.name/].add(new [a.getClass().getMinimumDTOName()/](obj));
+        }
+    [/if]
+[/for]
+    }
+
+    /**
+     * @generated
+     */
+    @Override
+    public [c.getEntityName()/] toEntity() {
+        [c.getEntityName()/] entity = super.toEntity();
+[for (a : Property | c.getCollectionAttributes())] 
+    [if (a.isComposite())]
+        List<[a.getClass().getEntityName()/]> [a.name/]List = new ArrayList<>();
+        for ([a.getClass().getMinimumDTOName()/] [a.name/] : this.[a.getter()/]()) {
+            [a.getClass().getEntityName()/] obj=[a.name/].toEntity();
+            obj.set[c.name/](entity);
+            [a.name/]List.add(obj);
+        }
+        entity.[a.setter()/]([a.name/]List);
+    [/if]
+[/for]
+        return entity;
+    }
+
+[for (a : Property | c.getCollectionAttributes())]
+    [if (a.isComposite())]
+    /**
+     * @generated
+     */
+    public List<[a.getClass().getMinimumDTOName()/]> [a.getter()/]() {
         return [a.name/];
     }
 
     /**
      * @generated
      */
-    public void [a.setter()/](List<[a.getClass().getDTOName()/]> [a.name.toLower()/]) {
+    public void [a.setter()/](List<[a.getClass().getMinimumDTOName()/]> [a.name.toLower()/]) {
         this.[a.name/] = [a.name.toLower()/];
     }
-
+    [/if]
 [/for]
 }
 [/file]
