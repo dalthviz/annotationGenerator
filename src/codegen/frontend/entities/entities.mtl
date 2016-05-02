@@ -13,6 +13,9 @@
 
 [template protected genModule(c : Class, path : String)]
 [file (path + '.mod.js', false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
 (function (ng) {
     var mod = ng.module('[c.getModule() /]', ['['/]'ngCrud', 'ui.router'[']'/]);
 
@@ -61,6 +64,9 @@
 
 [template protected genCtrl(c : Class, path : String)]
 [file (path + '.ctrl.js', false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
 (function (ng) {
     var mod = ng.module('[c.getModule() /]');
 

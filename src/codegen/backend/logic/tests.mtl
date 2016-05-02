@@ -10,6 +10,9 @@
 [if (not c.isChild())]
 [let bean : String = c.getName().concat('Logic')]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
 package [c.getModel().baseGroup()/].test.logic;
 
 import [c.getModel().baseGroup()/].ejbs.[c.getBeanName()/];

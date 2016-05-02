@@ -16,6 +16,9 @@
 
 [template protected genJerseyApp(m : Model, path : String)]
 [file (path.concat('RestConfig.java'), false, 'UTF-8')]
+/*
+[m.license()/]
+*/
 package [m.baseGroup()/].resources;
 
 import javax.ws.rs.ApplicationPath;

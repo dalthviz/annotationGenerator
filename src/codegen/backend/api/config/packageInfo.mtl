@@ -11,6 +11,9 @@
 
 [template protected genPackageinfo(m : Model, path : String)]
 [file (path.concat('package-info.java'), false, 'UTF-8')]
+/*
+[m.license()/]
+*/
 @XmlJavaTypeAdapter(value = DateAdapter.class, type = Date.class)
 @XmlAccessorType(XmlAccessType.FIELD)
 package [m.baseGroup()/].dtos;

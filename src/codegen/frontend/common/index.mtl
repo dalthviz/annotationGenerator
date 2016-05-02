@@ -13,6 +13,9 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
 
 [template protected appjs(m : Model, path : String)]
 [file (path.concat('app.js'), false, 'UTF-8')]
+/*
+[m.license()/]
+*/
 (function (ng) {
     var mod = ng.module('mainApp', ['['/]
         //'ngCrudMock',
@@ -49,6 +52,9 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
 [template protected index(m : Model, path : String)]
 [file (path.concat('index.html'), false, 'UTF-8')]
 <!DOCTYPE html>
+<!--
+[m.license()/]
+-->
 <html ng-app="mainApp">
     <head>
         <title>[m.name/]</title>

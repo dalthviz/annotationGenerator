@@ -17,6 +17,7 @@
   "name": "[m.getArtifactId()/]",
   "description": "[m.name/]",
   "version": "0.1.0",
+  "license": "MIT",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-angular-templates": "^0.5.7",
@@ -58,6 +59,7 @@
 [file (path.concat('bower.json'), false, 'UTF-8')]
 {
     "name": "[m.name/]",
+    "license": "MIT",
     "dependencies": {
         "ng-crud": "^0.2.0",
         "csw-ng-auth": "^0.1.0",
@@ -508,6 +510,9 @@ after_success:
 [template protected genDummyDist(m : Model, path : String)]
 [file (path.concat('dist/index.html'), false, 'UTF-8')]
 <!DOCTYPE html>
+<!--
+[m.license()/]
+-->
 <html ng-app="mainApp">
     <head>
         <title>Dummy</title>

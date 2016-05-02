@@ -8,6 +8,9 @@
 
 [template protected genPersistence(c : Class, path : String) {className : String = c.getPersistenceName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
 package [c.getModel().baseGroup()/].persistence;
 
 import javax.ejb.Stateless;
