@@ -11,6 +11,13 @@
  */]
 [template public mainDocs(m : Model)]
 [m.genReadMe()/]
+[m.genLicense()/]
+[/template]
+
+[template protected genLicense(m : Model)]
+[file ('LICENSE', false, 'UTF-8')]
+[m.license()/]
+[/file]
 [/template]
 
 [template protected genReadMe(m : Model)]

@@ -9,6 +9,9 @@
 
 [template protected genTests(c : Class, path : String) {className : String = c.getServiceTestName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
 package [c.getModel().baseGroup()/].tests;
 
 import co.edu.uniandes.csw.auth.model.UserDTO;

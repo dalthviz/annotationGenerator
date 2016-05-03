@@ -3,19 +3,18 @@
 [import ::utils /]
 
 [template public mainDTOs(c : Class, path : String)]
-[let filePath : String = path.concat('dtos/minimum/')]
-    [c.genMinimumDTO(filePath)/]
-[/let]
-[let filePath : String = path.concat('dtos/basic/')]
-    [c.genBasicDTO(filePath)/]
-[/let]
-[let filePath : String = path.concat('dtos/full/')]
-    [c.genFullDTO(filePath)/]
+[let dtoPath : String = path.concat('dtos/')]
+    [c.genMinimumDTO(dtoPath.concat('minimum/'))/]
+    [c.genBasicDTO(dtoPath.concat('basic/'))/]
+    [c.genFullDTO(dtoPath.concat('full/'))/]
 [/let]
 [/template]
 
 [template protected genMinimumDTO(c : Class, path: String) {className : String = c.getMinimumDTOName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
 package [c.getModel().baseGroup()/].dtos.minimum;
 
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
@@ -101,6 +100,9 @@ public class [className/] {
 
 [template protected genBasicDTO(c : Class, path: String) {className : String = c.getBasicDTOName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
 package [c.getModel().baseGroup()/].dtos.basic;
 
 import [c.getModel().baseGroup()/].dtos.minimum.*;
@@ -192,6 +194,9 @@ public class [className/] extends [c.getMinimumDTOName()/]{
 
 [template protected genFullDTO(c : Class, path: String) {className : String = c.getFullDTOName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
 package [c.getModel().baseGroup()/].dtos.full;
 
 import [c.getModel().baseGroup()/].dtos.minimum.*;

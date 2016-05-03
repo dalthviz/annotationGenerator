@@ -8,6 +8,9 @@
 
 [template public genExceptions(m : Model, path : String)]
 [file (path.concat('BusinessLogicException.java'), false, 'UTF-8')]
+/*
+[m.license()/]
+*/
 package [m.baseGroup()/].exceptions;
 
 import javax.ejb.ApplicationException;

@@ -10,7 +10,10 @@
  * @param aModel
  */]
 [template public mainPOM(m : Model)]
-[m.genWebPOM(m.getApiArtifactId().concat('/'))/]
+[let path : String = m.getApiArtifactId().concat('/')]
+    [m.genWebPOM(path)/]
+    [m.genLicense(path)/]
+[/let]
 [/template]
 
 [**
@@ -30,6 +33,12 @@
         <version>[m.getProjectVersion()/]</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <comments>See file LICENSE</comments>
+        </license>
+    </licenses>
     <dependencies>
         <dependency>
             <groupId>javax.ws.rs</groupId>
@@ -49,5 +58,13 @@
         </dependency>
     </dependencies>
 </project>
+[/file]
+[/template]
+[**
+ * Generación de licencia para proyecto API
+*/]
+[template protected genLicense(m : Model, path : String)]
+[file (path.concat('LICENSE'), false, 'UTF-8')]
+[m.license()/]
 [/file]
 [/template]

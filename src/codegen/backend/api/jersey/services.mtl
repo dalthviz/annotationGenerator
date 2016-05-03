@@ -10,6 +10,9 @@
 
 [template protected restClass(c : Class, path : String) {className : String = c.getJaxRsName(); logic : String = c.getName().concat('Logic');}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
 package [c.getModel().baseGroup()/].resources;
 
 import co.edu.uniandes.csw.auth.provider.StatusCreated;

@@ -8,6 +8,9 @@
 
 [template protected genEntity(c : Class, path : String) {className : String = c.getEntityName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
 package [c.getModel().baseGroup()/].entities;
 
 import java.io.Serializable;
