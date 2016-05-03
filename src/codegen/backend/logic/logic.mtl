@@ -86,7 +86,7 @@ public class [className/] implements [c.getAPIName()/] {
     /**
      * Obtiene la lista de los registros de Book.
      *
-     * @return Colecci髇 de objetos de [c.getEntityName()/].
+     * @return Colecci贸n de objetos de [c.getEntityName()/].
      * @generated
      */
     @Override
@@ -97,9 +97,9 @@ public class [className/] implements [c.getAPIName()/] {
     /**
      * Obtiene la lista de los registros de Book indicando los datos para la paginaci贸n.
      *
-     * @param page N煤mero de pagina.
+     * @param page N煤mero de p谩gina.
      * @param maxRecords N煤mero de registros que se mostraran en cada pa
-     * @return Colecci髇 de objetos de [c.getEntityName()/].
+     * @return Colecci贸n de objetos de [c.getEntityName()/].
      * @generated
      */
     @Override
@@ -131,9 +131,8 @@ public class [className/] implements [c.getAPIName()/] {
     }
 
     /**
-     * Actualiza la informaci髇 de una instancia de [c.name/].
+     * Actualiza la informaci贸n de una instancia de [c.name/].
      *
-     * @param id Identificador de la instancia de [c.name/] a modificar
      * @param entity Instancia de [c.getEntityName()/] con los nuevos datos.
      * @return Instancia de [c.getEntityName()/] con los datos actualizados.
      * @generated
@@ -161,11 +160,11 @@ public class [className/] implements [c.getAPIName()/] {
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
 
     /**
-     * Obtiene una colecci髇 de instancias de [a.getClass().getEntityName()/] asociadas a una
+     * Obtiene una colecci贸n de instancias de [a.getClass().getEntityName()/] asociadas a una
      * instancia de [c.name/]
      *
      * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
-     * @return Colecci髇 de instancias de [a.getClass().getEntityName()/] asociadas a la instancia de [c.name/]
+     * @return Colecci贸n de instancias de [a.getClass().getEntityName()/] asociadas a la instancia de [c.name/]
      * @generated
      */
     @Override
@@ -225,8 +224,8 @@ public class [className/] implements [c.getAPIName()/] {
      * Remplaza las instancias de [a.getClass().name/] asociadas a una instancia de [c.name/]
      *
      * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
-     * @param list Colecci髇 de instancias de [a.getClass().getEntityName()/] a asociar a instancia de [c.name/]
-     * @return Nueva colecci髇 de [a.getClass().getEntityName()/] asociada a la instancia de [c.name/]
+     * @param list Colecci贸n de instancias de [a.getClass().getEntityName()/] a asociar a instancia de [c.name/]
+     * @return Nueva colecci贸n de [a.getClass().getEntityName()/] asociada a la instancia de [c.name/]
      * @generated
      */
     @Override

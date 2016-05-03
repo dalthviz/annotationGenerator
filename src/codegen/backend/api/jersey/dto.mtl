@@ -86,7 +86,7 @@ public class [className/] {
     /**
      * Establece el valor del atributo [a.name/].
      *
-     * @param [a.name/] nuevo valor del atributo
+     * @param [a.name.toLower()/] nuevo valor del atributo
      * @generated
      */
     public void [a.setter()/]([a.type.name/] [a.name.toLower()/]) {

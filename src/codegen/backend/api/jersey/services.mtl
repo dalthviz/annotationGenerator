@@ -86,7 +86,7 @@ public class [className/] {
     }
 
     /**
-     * Convierte una lista de [a.getClass().getBasicDTOName()/] a una lista de [c.getBasicDTOName()/].
+     * Convierte una lista de [a.getClass().getBasicDTOName()/] a una lista de [a.getClass().getEntityName()/].
      *
      * @param dtos Lista de [a.getClass().getBasicDTOName()/] a convertir.
      * @return Lista de [a.getClass().getEntityName()/] convertida.
