@@ -63,6 +63,9 @@ public class [className/] extends BaseEntity implements Serializable {
 [for (a : Property | c.allAttributes()->reject(isID() or isName()))]
 
     /**
+     * Obtiene el atributo [a.name.toLowerFirst()/].
+     *
+     * @return atributo [a.name.toLowerFirst()/].
      * @generated
      */
     public [a.type.name/] [a.getter()/](){
@@ -70,6 +73,9 @@ public class [className/] extends BaseEntity implements Serializable {
     }
 
     /**
+     * Establece el valor del atributo [a.name.toLowerFirst()/].
+     *
+     * @param [a.name.toLowerFirst()/] nuevo valor del atributo
      * @generated
      */
     public void [a.setter()/]([a.type.name/] [a.name.toLowerFirst()/]){
@@ -79,6 +85,9 @@ public class [className/] extends BaseEntity implements Serializable {
 [for (a : Property | c.getReferences(true))]
 
     /**
+     * Obtiene el atributo [a.name/].
+     *
+     * @return atributo [a.name/].
      * @generated
      */
     public [a.getClass().getEntityName()/] [a.getter()/]() {
@@ -86,6 +95,9 @@ public class [className/] extends BaseEntity implements Serializable {
     }
 
     /**
+     * Establece el valor del atributo [a.name/].
+     *
+     * @param [a.name/] nuevo valor del atributo
      * @generated
      */
     public void [a.setter()/]([a.getClass().getEntityName()/] [a.name.toLower()/]) {
@@ -95,6 +107,9 @@ public class [className/] extends BaseEntity implements Serializable {
 [for (a : Property | c.getCollectionAttributes())]
 
     /**
+     * Obtiene la colección de [a.name/].
+     *
+     * @return colección [a.name/].
      * @generated
      */
     public List<[a.getClass().getEntityName()/]> [a.getter()/]() {
@@ -102,6 +117,9 @@ public class [className/] extends BaseEntity implements Serializable {
     }
 
     /**
+     * Establece el valor de la colección de [a.name/].
+     *
+     * @param [a.name/] nuevo valor de la colección.
      * @generated
      */
     public void [a.setter()/](List<[a.getClass().getEntityName()/]> [a.name.toLower()/]) {

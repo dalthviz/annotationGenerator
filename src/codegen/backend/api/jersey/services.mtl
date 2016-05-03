@@ -53,6 +53,14 @@ public class [className/] {
     @QueryParam("page") private Integer page;
     @QueryParam("maxRecords") private Integer maxRecords;
 
+   
+    /**
+     * Convierte una lista de [c.getEntityName()/] a una lista de [c.getBasicDTOName()/].
+     *
+     * @param entityList Lista de [c.getEntityName()/] a convertir.
+     * @return Lista de [c.getBasicDTOName()/] convertida.
+     * @generated
+     */
     private List<[c.getBasicDTOName()/]> listEntity2DTO(List<[c.getEntityName()/]> entityList){
         List<[c.getBasicDTOName()/]> list = new ArrayList<>();
         for ([c.getEntityName()/] entity : entityList) {
@@ -62,6 +70,13 @@ public class [className/] {
     }
 
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
+    /**
+     * Convierte una lista de [a.getClass().getEntityName()/] a una lista de [a.getClass().getBasicDTOName()/].
+     *
+     * @param entityList Lista de [a.getClass().getEntityName()/] a convertir.
+     * @return Lista de [a.getClass().getBasicDTOName()/] convertida.
+     * @generated
+     */
     private List<[a.getClass().getBasicDTOName()/]> [a.name/]ListEntity2DTO(List<[a.getClass().getEntityName()/]> entityList){
         List<[a.getClass().getBasicDTOName()/]> list = new ArrayList<>();
         for ([a.getClass().getEntityName()/] entity : entityList) {
@@ -70,6 +85,13 @@ public class [className/] {
         return list;
     }
 
+    /**
+     * Convierte una lista de [a.getClass().getBasicDTOName()/] a una lista de [a.getClass().getEntityName()/].
+     *
+     * @param dtos Lista de [a.getClass().getBasicDTOName()/] a convertir.
+     * @return Lista de [a.getClass().getEntityName()/] convertida.
+     * @generated
+     */
     private List<[a.getClass().getEntityName()/]> [a.name/]ListDTO2Entity(List<[a.getClass().getBasicDTOName()/]> dtos){
         List<[a.getClass().getEntityName()/]> list = new ArrayList<>();
         for ([a.getClass().getBasicDTOName()/] dto : dtos) {
