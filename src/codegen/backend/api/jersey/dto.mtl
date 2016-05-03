@@ -46,7 +46,9 @@ public class [className/] {
     }
 
     /**
-     * @param entity
+     * Crea un objeto [className/] a partir de un objeto [c.getEntityName()/].
+     *
+     * @param entity Entidad [c.getEntityName()/] desde la cual se va a crear el nuevo objeto.
      * @generated
      */
     public [className/]([c.getEntityName()/] entity) {
@@ -58,6 +60,9 @@ public class [className/] {
     }
 
     /**
+     * Convierte un objeto [className/] a [c.getEntityName()/].
+     *
+     * @return Nueva objeto [c.getEntityName()/].
      * @generated
      */
     public [c.getEntityName()/] toEntity() {
@@ -70,14 +75,20 @@ public class [className/] {
 
 [for (a : Property | c.allAttributes())]
     /**
-     * @return the [a.name/]
+     * Obtiene el atributo [a.name/].
+     *
+     * @return atributo [a.name/].
+     * @generated
      */
     public [a.type.name/] [a.getter()/]() {
         return [a.name/];
     }
 
     /**
-     * @param [a.name/] the [a.name/] to set
+     * Establece el valor del atributo [a.name/].
+     *
+     * @param [a.name/] nuevo valor del atributo
+     * @generated
      */
     public void [a.setter()/]([a.type.name/] [a.name.toLower()/]) {
         this.[a.name/] = [a.name.toLower()/];
@@ -121,7 +132,9 @@ public class [className/] extends [c.getMinimumDTOName()/]{
     }
 
     /**
-     * @param entity
+     * Crea un objeto [className/] a partir de un objeto [c.getEntityName()/] incluyendo los atributos de [c.getMinimumDTOName()/].
+     *
+     * @param entity Entidad [c.getEntityName()/] desde la cual se va a crear el nuevo objeto.
      * @generated
      */
     public [className/]([c.getEntityName()/] entity) {
@@ -135,6 +148,9 @@ public class [className/] extends [c.getMinimumDTOName()/]{
     }
 
     /**
+     * Convierte un objeto [className/] a [c.getEntityName()/] incluyendo los atributos de [c.getMinimumDTOName()/].
+     *
+     * @return Nueva objeto [c.getEntityName()/].
      * @generated
      */
     @Override
@@ -150,6 +166,9 @@ public class [className/] extends [c.getMinimumDTOName()/]{
 
 [for (a : Property | c.getReferences(true))]
     /**
+     * Obtiene el atributo [a.name/].
+     *
+     * @return atributo [a.name/].
      * @generated
      */
     public [a.getClass().getMinimumDTOName()/] [a.getter()/]() {
@@ -157,6 +176,9 @@ public class [className/] extends [c.getMinimumDTOName()/]{
     }
 
     /**
+     * Establece el valor del atributo [a.name/].
+     *
+     * @param [a.name/] nuevo valor del atributo
      * @generated
      */
     public void [a.setter()/]([a.getClass().getMinimumDTOName()/] [a.name.toLower()/]) {
@@ -207,7 +229,9 @@ public class [className/] extends [c.getBasicDTOName()/]{
     }
 
     /**
-     * @param entity
+     * Crea un objeto [className/] a partir de un objeto [c.getEntityName()/] incluyendo los atributos de [c.getBasicDTOName()/].
+     *
+     * @param entity Entidad [c.getEntityName()/] desde la cual se va a crear el nuevo objeto.
      * @generated
      */
     public [className/]([c.getEntityName()/] entity) {
@@ -222,6 +246,9 @@ public class [className/] extends [c.getBasicDTOName()/]{
     }
 
     /**
+     * Convierte un objeto [className/] a [c.getEntityName()/] incluyendo los atributos de [c.getBasicDTOName()/].
+     *
+     * @return Nueva objeto [c.getEntityName()/].
      * @generated
      */
     @Override
@@ -244,6 +271,9 @@ public class [className/] extends [c.getBasicDTOName()/]{
 [for (a : Property | c.getCollectionAttributes())]
     [if (a.isComposite())]
     /**
+     * Obtiene la colección de [a.name/].
+     *
+     * @return colección [a.name/].
      * @generated
      */
     public List<[a.getClass().getMinimumDTOName()/]> [a.getter()/]() {
@@ -251,6 +281,9 @@ public class [className/] extends [c.getBasicDTOName()/]{
     }
 
     /**
+     * Establece el valor de la colección de [a.name/].
+     *
+     * @param [a.name/] nuevo valor de la colección.
      * @generated
      */
     public void [a.setter()/](List<[a.getClass().getMinimumDTOName()/]> [a.name.toLower()/]) {
