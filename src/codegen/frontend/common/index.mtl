@@ -113,7 +113,7 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
                     </div> <!-- /.container-fluid -->
                 </nav>
             </div>
-            <div ui-view></div>
+            <div ui-view="mainView"></div>
         </div>
     </body>
 </html>
