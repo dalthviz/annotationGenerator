@@ -75,6 +75,8 @@ public class [className/] {
     UserTransaction utx;
 
     /**
+     * Configuración inicial de la prueba.
+     *
      * @generated
      */
     @Before
@@ -96,6 +98,8 @@ public class [className/] {
     }
 
     /**
+     * Limpia las tablas que están implicadas en la prueba.
+     *
      * @generated
      */
     private void clearData() {
@@ -111,6 +115,8 @@ public class [className/] {
     private List<[c.getEntityName()/]> data = new ArrayList<[c.getEntityName()/]>();
 
     /**
+     * Inserta los datos iniciales para el correcto funcionamiento de las pruebas.
+     *
      * @generated
      */
     private void insertData() {
@@ -132,6 +138,8 @@ public class [className/] {
     }
 
     /**
+     * Prueba para crear un [c.name/].
+     *
      * @generated
      */
     @Test
@@ -152,6 +160,8 @@ public class [className/] {
     }
 
     /**
+     * Prueba para crear un [c.name/].
+     *
      * @generated
      */
     @Test
@@ -170,6 +180,8 @@ public class [className/] {
     }
 
     /**
+     * Prueba para consultar la lista de [c.name/]s.
+     *
      * @generated
      */
     @Test
@@ -183,6 +195,8 @@ public class [className/] {
     }
 
     /**
+     * Prueba para eliminar un [c.name/].
+     *
      * @generated
      */
     @Test
@@ -194,6 +208,8 @@ public class [className/] {
     }
 
     /**
+     * Prueba para actualizar un [c.name/].
+     *
      * @generated
      */
     @Test
