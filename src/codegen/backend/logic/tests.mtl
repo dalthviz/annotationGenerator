@@ -96,6 +96,8 @@ public class [className/] {
     }
 
     /**
+     * Configuración inicial de la prueba.
+     *
      * @generated
      */
     @Before
@@ -116,6 +118,8 @@ public class [className/] {
     }
 
     /**
+     * Limpia las tablas que están implicadas en la prueba.
+     *
      * @generated
      */
     private void clearData() {
@@ -129,6 +133,8 @@ public class [className/] {
     }
 
     /**
+     * Inserta los datos iniciales para el correcto funcionamiento de las pruebas.
+     *
      * @generated
      */
     private void insertData() {
@@ -176,7 +182,9 @@ public class [className/] {
         }
     }
 
-    /**
+   /**
+     * Prueba para crear un [c.name/]
+     *
      * @generated
      */
     @Test
@@ -191,6 +199,8 @@ public class [className/] {
     }
 
     /**
+     * Prueba para consultar la lista de [c.name/]s
+     *
      * @generated
      */
     @Test
@@ -208,7 +218,10 @@ public class [className/] {
         }
     }
 
+    
     /**
+     * Prueba para consultar un [c.name/]
+     *
      * @generated
      */
     @Test
@@ -222,6 +235,8 @@ public class [className/] {
     }
 
     /**
+     * Prueba para eliminar un [c.name/]
+     *
      * @generated
      */
     @Test
@@ -233,6 +248,8 @@ public class [className/] {
     }
 
     /**
+     * Prueba para actualizar un [c.name/]
+     *
      * @generated
      */
     @Test
@@ -253,6 +270,8 @@ public class [className/] {
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
 
     /**
+     * Prueba para obtener una instancia de [a.name.toUpperFirst()/] asociada a una instancia [c.name/]
+     *
      * @generated
      */
     @Test
@@ -267,6 +286,8 @@ public class [className/] {
     }
 
     /**
+     * Prueba para obtener una colección de instancias de [a.name.toUpperFirst()/] asociadas a una instancia [c.name/]
+     *
      * @generated
      */
     @Test
@@ -276,6 +297,8 @@ public class [className/] {
     }
 
     /**
+     *Prueba para asociar un [a.name.toUpperFirst()/] existente a un [c.name/]
+     *
      * @generated
      */
     @Test
@@ -289,6 +312,8 @@ public class [className/] {
     }
 
     /**
+     * Prueba para remplazar las instancias de [a.name.toUpperFirst()/] asociadas a una instancia de [c.name/]
+     *
      * @generated
      */
     @Test
@@ -304,6 +329,8 @@ public class [className/] {
     }
 
     /**
+     * Prueba para desasociar un [a.name.toUpperFirst()/] existente de un [c.name/] existente
+     *
      * @generated
      */
     @Test

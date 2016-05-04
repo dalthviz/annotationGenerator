@@ -160,7 +160,7 @@ public class [className/] {
     }
 
     /**
-     * Prueba para crear un [c.name/].
+     * Prueba para consultar la lista de [c.name/]s.
      *
      * @generated
      */
@@ -180,7 +180,7 @@ public class [className/] {
     }
 
     /**
-     * Prueba para consultar la lista de [c.name/]s.
+     * Prueba para consultar un [c.name/].
      *
      * @generated
      */
