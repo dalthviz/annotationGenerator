@@ -96,11 +96,21 @@ public class [c.getServiceTestName()/] {
         return ClientBuilder.newClient().target(deploymentURL.toString()).path(apiPath);
     }
 
+    /**
+     * Configuración inicial de la prueba.
+     *
+     * @generated
+     */
     @BeforeClass
     public static void setUp() {
         insertData();
     }
 
+   /**
+     * Datos iniciales para el correcto funcionamiento de las pruebas.
+     *
+     * @generated
+     */
     public static void insertData() {
         for (int i = 0; i < 5; i++) {
             PodamFactory factory = new PodamFactoryImpl();
@@ -128,6 +138,14 @@ public class [c.getServiceTestName()/] {
         }
     }
 
+    /**
+     * Login para poder consultar los diferentes servicios
+     *
+     * @param username Nombre de usuario
+     * @param password Clave del usuario
+     * @return Cookie con información de la sesión del usuario
+     * @generated
+     */
     public Cookie login(String username, String password) {
         UserDTO user = new UserDTO();
         user.setUserName(username);
@@ -147,6 +165,11 @@ public class [c.getServiceTestName()/] {
         target = createWebTarget();
     }
 
+    /**
+     * Prueba para crear un [c.name/]
+     *
+     * @generated
+     */
     @Test
     @InSequence(1)
     public void create[c.getServiceTestName()/]() throws IOException {
@@ -162,6 +185,11 @@ public class [c.getServiceTestName()/] {
         Assert.assertEquals(Created, response.getStatus());
     }
 
+    /**
+     * Prueba para consultar un [c.name/]
+     *
+     * @generated
+     */
     @Test
     @InSequence(2)
     public void get[c.name/]ById() {
@@ -174,6 +202,11 @@ public class [c.getServiceTestName()/] {
         [/for]
     }
 
+    /**
+     * Prueba para consultar la lista de [c.name/]s
+     *
+     * @generated
+     */
     @Test
     @InSequence(3)
     public void list[c.getServiceTestName()/]() throws IOException {
@@ -186,6 +219,11 @@ public class [c.getServiceTestName()/] {
         Assert.assertEquals(1, list[c.name/]Test.size());
     }
 
+    /**
+     * Prueba para actualizar un [c.name/]
+     *
+     * @generated
+     */
     @Test
     @InSequence(4)
     public void update[c.getServiceTestName()/]() throws IOException {
@@ -208,7 +246,12 @@ public class [c.getServiceTestName()/] {
         [/if]
         [/for]
     }
-
+    
+    /**
+     * Prueba para eliminar un [c.name/]
+     *
+     * @generated
+     */
     @Test
     @InSequence([(c.getNonCompositeCollectionAttributes()->size()*4)+5/])
     public void delete[c.getServiceTestName()/]() {
@@ -220,6 +263,11 @@ public class [c.getServiceTestName()/] {
     }
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
 
+    /**
+     *Prueba para asociar un [a.name.toUpperFirst()/] existente a un [c.name/]
+     *
+     * @generated
+     */
     @Test
     @InSequence([(i * 4)+1/])
     public void add[a.getTestSuffix()/]() {
@@ -249,6 +297,11 @@ public class [c.getServiceTestName()/] {
         Assert.assertEquals([a.name/].getId(), [a.getResponseVarName()/].getId());
     }
 
+    /**
+     * Prueba para obtener una colección de instancias de [a.name.toUpperFirst()/] asociadas a una instancia [c.name/]
+     *
+     * @generated
+     */
     @Test
     @InSequence([(i * 4)+2/])
     public void list[a.getTestSuffix()/]() throws IOException {
@@ -266,6 +319,11 @@ public class [c.getServiceTestName()/] {
         Assert.assertEquals(1, [a.name/]ListTest.size());
     }
 
+    /**
+     * Prueba para obtener una instancia de [a.name.toUpperFirst()/] asociada a una instancia [c.name/]
+     *
+     * @generated
+     */
     @Test
     @InSequence([(i * 4)+3/])
     public void get[a.getTestSuffix()/]() throws IOException {
@@ -283,6 +341,11 @@ public class [c.getServiceTestName()/] {
         [/for]
     }
 
+    /**
+     * Prueba para desasociar un [a.name.toUpperFirst()/] existente de un [c.name/] existente
+     *
+     * @generated
+     */
     @Test
     @InSequence([(i * 4)+4/])
     public void remove[a.getTestSuffix()/]() {
