@@ -3,10 +3,8 @@
 [import ::utils /]
 
 [template public mainLogic(c : Class, path : String)]
-[if (not c.isChild())]
     [c.genLogicInterface(path.concat('api/'))/]
     [c.genLogicBean(path.concat('ejbs/'))/]
-[/if]
 [/template]
 
 [template protected genLogicInterface(c : Class, path : String) {className : String = c.getAPIName();}]
