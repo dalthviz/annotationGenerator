@@ -51,6 +51,10 @@ package [c.getModel().baseGroup()/].ejbs;
 import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
+[if (c.isChild())]
+import [c.getModel().baseGroup()/].api.[c.getParentAttribute().getClass().getAPIName()/];
+import [c.getModel().baseGroup()/].entities.[c.getParentAttribute().getClass().getEntityName()/];
+[/if]
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 [if (not a.isRelationshipOwner())]
@@ -83,8 +87,22 @@ public class [className/] implements [c.getAPIName()/] {
         return persistence.count();
     }
 
+[if (c.isChild())]
     /**
-     * Obtiene la lista de los registros de Book.
+     * Obtiene la lista de los registros de [c.name/].
+     *
+     * @param [c.getParentAttribute().getClass().getName()/]id id del [c.getParentAttribute().getClass().name/] al cual le pertenece [c.name/].
+     * @return Colección de objetos de [c.getEntityName()/].
+     * @generated
+     */
+    @Override
+    public List<[c.getEntityName()/]> get[c.name/]s(Long [c.getParentAttribute().getClass().getName()/]id) {
+        [c.getParentAttribute().getClass().getEntityName/] [c.getParentAttribute().getClass().getName()/] = [c.getParentAttribute().getClass().getBeanLower/].get[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]id);
+        return [c.getParentAttribute().getClass().getName()/].get[c.name/]s();
+    }
+[else]
+    /**
+     * Obtiene la lista de los registros de [c.name/].
      *
      * @return Colección de objetos de [c.getEntityName()/].
      * @generated
@@ -93,6 +111,8 @@ public class [className/] implements [c.getAPIName()/] {
     public List<[c.getEntityName()/]> get[c.name/]s() {
         return persistence.findAll();
     }
+[/if]
+    
 
     /**
      * Obtiene la lista de los registros de Book indicando los datos para la paginación.
