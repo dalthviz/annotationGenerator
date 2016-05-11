@@ -25,7 +25,7 @@ public interface [className/] {
 [if (c.isChild())]
     public List<[c.getEntityName()/]> get[c.name/]s(Long [c.getParentAttribute().getClass().getName()/]id);
     public List<[c.getEntityName()/]> get[c.name/]s(Integer page, Integer maxRecords, Long [c.getParentAttribute().getClass().getName()/]id);
-    public [c.getEntityName()/] get[c.name/]([c.getParentAttribute().getClass().getName()/]id, Long [c.getName()/]id);
+    public [c.getEntityName()/] get[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, Long [c.getName()/]id);
     public [c.getEntityName()/] create[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity);
     public [c.getEntityName()/] update[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity);
     public void delete[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, Long id);
@@ -71,6 +71,7 @@ import [c.getModel().baseGroup()/].api.[a.getClass().getAPIName()/];
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 
 /**
  * @generated
@@ -137,7 +138,7 @@ public class [className/] implements [c.getAPIName()/] {
      */
     public [c.getEntityName()/] get[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, Long [c.getName()/]id) {
         try {
-            return persistence.find([c.getParentAttribute().getClass().getName()/]id, [c.getName()/]id));
+            return persistence.find([c.getParentAttribute().getClass().getName()/]id, [c.getName()/]id);
         }catch(NoResultException e){
             throw new IllegalArgumentException("El [c.name/] no existe");
         }
@@ -171,7 +172,7 @@ public class [className/] implements [c.getAPIName()/] {
     public [c.getEntityName()/] update[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity) {
         [c.getParentAttribute().getClass().getEntityName()/] [c.getParentAttribute().getClass().getName()/] = [c.getParentAttribute().getClass().getBeanLower()/].get[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]id);
         entity.set[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]);
-        return persistence.update(newEntity);
+        return persistence.update(entity);
     }
 
     /**
@@ -183,7 +184,7 @@ public class [className/] implements [c.getAPIName()/] {
      */
     @Override
     public void delete[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, Long id) {
-        PrizeEntity old = get[c.name/]([c.getParentAttribute().getClass().getName()/]id, id);
+        [c.getEntityName()/] old = get[c.name/]([c.getParentAttribute().getClass().getName()/]id, id);
         persistence.delete(old.getId());
     }
 [else]
@@ -244,12 +245,7 @@ public class [className/] implements [c.getAPIName()/] {
      */
     @Override
     public [c.getEntityName()/] update[c.name/]([c.getEntityName()/] entity) {
-        [c.getEntityName()/] newEntity = entity;
-        [c.getEntityName()/] oldEntity = persistence.find(entity.getId());
-        [for (a : Property | c.getNonCompositeCollectionAttributes())]
-        newEntity.[a.setter()/](oldEntity.[a.getter()/]());
-        [/for]
-        return persistence.update(newEntity);
+        return persistence.update(entity);
     }
 
     /**
