@@ -102,7 +102,7 @@ public class [className/] {
 [/for]
 
     /**
-     * Obtiene la lista de los registros de Book.
+     * Obtiene la lista de los registros de [c.name/].
      *
      * @return Colección de objetos de [c.getBasicDTOName()/] cada uno con sus respectivos Review
      * @generated
@@ -117,10 +117,10 @@ public class [className/] {
     }
 
     /**
-     * Obtiene los datos de una instancia de Book a partir de su ID.
+     * Obtiene los datos de una instancia de [c.name/] a partir de su ID.
      *
      * @param id Identificador de la instancia a consultar
-     * @return Instancia de [c.getFullDTOName()/] con los datos del Book consultado y sus Review
+     * @return Instancia de [c.getFullDTOName()/] con los datos del [c.name/] consultado y sus Review
      * @generated
      */
     @GET
@@ -130,7 +130,7 @@ public class [className/] {
     }
 
     /**
-     * Se encarga de crear un book en la base de datos.
+     * Se encarga de crear un [c.name/] en la base de datos.
      *
      * @param dto Objeto de [c.getFullDTOName()/] con los datos nuevos
      * @return Objeto de [c.getFullDTOName()/]con los datos nuevos y su ID.
@@ -143,9 +143,9 @@ public class [className/] {
     }
 
     /**
-     * Actualiza la información de una instancia de Book.
+     * Actualiza la información de una instancia de [c.name/].
      *
-     * @param id Identificador de la instancia de Book a modificar
+     * @param id Identificador de la instancia de [c.name/] a modificar
      * @param dto Instancia de [c.getFullDTOName()/] con los nuevos datos.
      * @return Instancia de [c.getFullDTOName()/] con los datos actualizados.
      * @generated
@@ -163,7 +163,7 @@ public class [className/] {
     }
 
     /**
-     * Elimina una instancia de Book de la base de datos.
+     * Elimina una instancia de [c.name/] de la base de datos.
      *
      * @param id Identificador de la instancia a eliminar.
      * @generated

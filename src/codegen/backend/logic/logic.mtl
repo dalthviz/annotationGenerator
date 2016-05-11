@@ -22,12 +22,21 @@ import java.util.List;
 
 public interface [className/] {
     public int count[c.name/]s();
+[if (c.isChild())]
+    public List<[c.getEntityName()/]> get[c.name/]s(Long [c.getParentAttribute().getClass().getName()/]id);
+    public List<[c.getEntityName()/]> get[c.name/]s(Integer page, Integer maxRecords, Long [c.getParentAttribute().getClass().getName()/]id);
+    public [c.getEntityName()/] get[c.name/]([c.getParentAttribute().getClass().getName()/]id, Long [c.getName()/]id);
+    public [c.getEntityName()/] create[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity);
+    public [c.getEntityName()/] update[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity);
+    public void delete[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, Long id);
+[else]
     public List<[c.getEntityName()/]> get[c.name/]s();
     public List<[c.getEntityName()/]> get[c.name/]s(Integer page, Integer maxRecords);
     public [c.getEntityName()/] get[c.name/](Long id);
-    public [c.getEntityName()/] create[c.name/]([c.getEntityName()/] entity);
+    public [c.getEntityName()/] create[c.name/]([c.getEntityName()/] entity); 
     public [c.getEntityName()/] update[c.name/]([c.getEntityName()/] entity);
     public void delete[c.name/](Long id);
+[/if]
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
     public List<[a.getClass().getEntityName()/]> list[a.name.toUpperFirst()/](Long [c.getEntityId()/]);
     public [a.getClass().getEntityName()/] get[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]);
@@ -71,6 +80,11 @@ public class [className/] implements [c.getAPIName()/] {
 
     @Inject private [c.getPersistenceName()/] persistence;
 
+    [if (c.isChild())]
+    @Inject
+    private [c.getParentAttribute().getClass().getAPIName()/] [c.getParentAttribute().getClass().getBeanLower()/];
+    [/if]
+
     [for (a : Property | c.getNonCompositeCollectionAttributes()->reject(isRelationshipOwner()))]
     @Inject private [a.getClass().getAPIName()/] [a.getClass().getBeanLower()/];
 
@@ -87,9 +101,9 @@ public class [className/] implements [c.getAPIName()/] {
 
 [if (c.isChild())]
     /**
-     * Obtiene la lista de los registros de [c.name/].
+     * Obtiene la lista de los registros de [c.name/] que pertenecen a un [c.getParentAttribute().getClass().name/].
      *
-     * @param [c.getParentAttribute().getClass().getName()/]id id del [c.getParentAttribute().getClass().name/] al cual le pertenece [c.name/].
+     * @param [c.getParentAttribute().getClass().getName()/]id id del [c.getParentAttribute().getClass().name/] el cual es padre de los [c.name/]s.
      * @return Colección de objetos de [c.getEntityName()/].
      * @generated
      */
@@ -97,6 +111,80 @@ public class [className/] implements [c.getAPIName()/] {
     public List<[c.getEntityName()/]> get[c.name/]s(Long [c.getParentAttribute().getClass().getName()/]id) {
         [c.getParentAttribute().getClass().getEntityName()/] [c.getParentAttribute().getClass().getName()/] = [c.getParentAttribute().getClass().getBeanLower()/].get[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]id);
         return [c.getParentAttribute().getClass().getName()/].get[c.name/]s();
+    }
+
+    /**
+     * Obtiene la lista de los registros de [c.name/] que pertenecen a un [c.getParentAttribute().getClass().name/] indicando los datos para la paginación.
+     *
+     * @param page Número de página.
+     * @param maxRecords Número de registros que se mostraran en cada página.
+     * @param [c.getParentAttribute().getClass().getName()/]id id del [c.getParentAttribute().getClass().name/] el cual es padre de los [c.name/]s.
+     * @return Colección de objetos de [c.getEntityName()/].
+     * @generated
+     */
+    @Override
+    public List<[c.getEntityName()/]> get[c.name/]s(Integer page, Integer maxRecords, Long [c.getParentAttribute().getClass().getName()/]id) {
+        return persistence.findAll(page, maxRecords, [c.getParentAttribute().getClass().getName()/]id);
+    }
+
+    /**
+     * Obtiene los datos de una instancia de [c.name/] a partir de su ID.
+     *
+     * @param [c.getName()/]id) Identificador del [c.name/] a consultar
+     * @param [c.getParentAttribute().getClass().getName()/]id id del [c.getParentAttribute().getClass().name/] el cual es padre del [c.name/].
+     * @return Instancia de [c.getEntityName()/] con los datos del [c.name/] consultado.
+     * @generated
+     */
+    public [c.getEntityName()/] get[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, Long [c.getName()/]id) {
+        try {
+            return persistence.find([c.getParentAttribute().getClass().getName()/]id, [c.getName()/]id));
+        }catch(NoResultException e){
+            throw new IllegalArgumentException("El [c.name/] no existe");
+        }
+    }
+
+    /**
+     * Se encarga de crear un [c.name/] en la base de datos.
+     *
+     * @param entity Objeto de [c.getEntityName()/] con los datos nuevos
+     * @param [c.getParentAttribute().getClass().getName()/]id id del [c.getParentAttribute().getClass().name/] el cual sera padre del nuevo [c.name/].
+     * @return Objeto de [c.getEntityName()/] con los datos nuevos y su ID.
+     * @generated
+     */
+    @Override
+    public [c.getEntityName()/] create[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity) {
+        [c.getParentAttribute().getClass().getEntityName()/] [c.getParentAttribute().getClass().getName()/] = [c.getParentAttribute().getClass().getBeanLower()/].get[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]id);
+        entity.set[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]);
+        entity = persistence.create(entity);
+        return entity;
+    }
+
+    /**
+     * Actualiza la información de una instancia de [c.name/].
+     *
+     * @param entity Instancia de [c.getEntityName()/] con los nuevos datos.
+     * @param [c.getParentAttribute().getClass().getName()/]id id del [c.getParentAttribute().getClass().name/] el cual sera padre del [c.name/] actualizado.
+     * @return Instancia de [c.getEntityName()/] con los datos actualizados.
+     * @generated
+     */
+    @Override
+    public [c.getEntityName()/] update[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity) {
+        [c.getParentAttribute().getClass().getEntityName()/] [c.getParentAttribute().getClass().getName()/] = [c.getParentAttribute().getClass().getBeanLower()/].get[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]id);
+        entity.set[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]);
+        return persistence.update(newEntity);
+    }
+
+    /**
+     * Elimina una instancia de [c.name/] de la base de datos.
+     *
+     * @param id Identificador de la instancia a eliminar.
+     * @param [c.getParentAttribute().getClass().getName()/]id id del [c.getParentAttribute().getClass().name/] el cual es padre del [c.name/].
+     * @generated
+     */
+    @Override
+    public void delete[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, Long id) {
+        PrizeEntity old = get[c.name/]([c.getParentAttribute().getClass().getName()/]id, id);
+        persistence.delete(old.getId());
     }
 [else]
     /**
@@ -109,14 +197,12 @@ public class [className/] implements [c.getAPIName()/] {
     public List<[c.getEntityName()/]> get[c.name/]s() {
         return persistence.findAll();
     }
-[/if]
-    
 
     /**
-     * Obtiene la lista de los registros de Book indicando los datos para la paginación.
+     * Obtiene la lista de los registros de [c.name/] indicando los datos para la paginación.
      *
      * @param page Número de página.
-     * @param maxRecords Número de registros que se mostraran en cada pa
+     * @param maxRecords Número de registros que se mostraran en cada página.
      * @return Colección de objetos de [c.getEntityName()/].
      * @generated
      */
@@ -124,6 +210,7 @@ public class [className/] implements [c.getAPIName()/] {
     public List<[c.getEntityName()/]> get[c.name/]s(Integer page, Integer maxRecords) {
         return persistence.findAll(page, maxRecords);
     }
+
     /**
      * Obtiene los datos de una instancia de [c.name/] a partir de su ID.
      *
@@ -175,6 +262,8 @@ public class [className/] implements [c.getAPIName()/] {
     public void delete[c.name/](Long id) {
         persistence.delete(id);
     }
+[/if]
+  
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
 
     /**
