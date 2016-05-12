@@ -125,13 +125,13 @@ public class [className/] {
      * Obtiene los datos de una instancia de [c.name/] a partir de su ID asociado a un [c.getParentAttribute().getClass().name/]
      *
      * @param [c.getParentAttribute().getClass().getName()/]Id Identificador del objeto de [c.getParentAttribute().getClass().name/]
-     * @param [c.getName/]Id Identificador de la instancia a consultar
+     * @param [c.getName()/]Id Identificador de la instancia a consultar
      * @return Instancia de [c.getBasicDTOName()/] con los datos del [c.name/] consultado
      * @generated
      */
     @GET
-    @Path("{[c.getName/]Id: \\d+}")
-    public [c.getBasicDTOName()/] get[c.name/](@PathParam("[c.getParentAttribute().getClass().getName()/]Id") Long [c.getParentAttribute().getClass().getName()/]Id, @PathParam("[c.getName/]Id") Long [c.getName/]Id) {
+    @Path("{[c.getName()/]Id: \\d+}")
+    public [c.getBasicDTOName()/] get[c.name/](@PathParam("[c.getParentAttribute().getClass().getName()/]Id") Long [c.getParentAttribute().getClass().getName()/]Id, @PathParam("[c.getName()/]Id") Long [c.getName()/]Id) {
         return new [c.getBasicDTOName()/]([logic/].get[c.name/]([c.getParentAttribute().getClass().getName()/]Id, [c.getName/]Id));
     }
 
@@ -152,14 +152,14 @@ public class [className/] {
      * Actualiza la información de una instancia de [c.name/].
      *
      * @param [c.getParentAttribute().getClass().getName()/]Id Identificador del objeto de [c.getParentAttribute().getClass().name/]
-     * @param [c.getName/]Id Identificador de la instancia de [c.name/] a modificar
+     * @param [c.getName()/]Id Identificador de la instancia de [c.name/] a modificar
      * @param dto Instancia de [c.getBasicDTOName()/] con los nuevos datos.
      * @return Instancia de [c.getBasicDTOName()/] con los datos actualizados.
      * @generated
      */
     @PUT
-    @Path("{[c.getName/]Id: \\d+}")
-    public [c.getBasicDTOName()/] update[c.name/](@PathParam("[c.getParentAttribute().getClass().getName()/]Id") Long [c.getParentAttribute().getClass().getName()/]Id, @PathParam("[c.getName/]Id") Long [c.getName/]Id, [c.getBasicDTOName()/] dto) {
+    @Path("{[c.getName()/]Id: \\d+}")
+    public [c.getBasicDTOName()/] update[c.name/](@PathParam("[c.getParentAttribute().getClass().getName()/]Id") Long [c.getParentAttribute().getClass().getName()/]Id, @PathParam("[c.getName()/]Id") Long [c.getName()/]Id, [c.getBasicDTOName()/] dto) {
         [c.getEntityName()/] entity = dto.toEntity();
         entity.setId([c.getName/]Id);
         [c.getEntityName()/] oldEntity = [logic/].get[c.name/]([c.getName/]Id);
@@ -173,12 +173,12 @@ public class [className/] {
      * Elimina una instancia de [c.name/] de la base de datos.
      *
      * @param [c.getParentAttribute().getClass().getName()/]Id Identificador del objeto de [c.getParentAttribute().getClass().name/]
-     * @param [c.getName/]Id Identificador de la instancia a eliminar.
+     * @param [c.getName()/]Id Identificador de la instancia a eliminar.
      * @generated
      */
     @DELETE
-    @Path("{[c.getName/]Id: \\d+}")
-    public void delete[c.name/](@PathParam("[c.getParentAttribute().getClass().getName()/]Id") Long [c.getParentAttribute().getClass().getName()/]Id, @PathParam("[c.getName/]Id") Long [c.getName/]Id) {
+    @Path("{[c.getName()/]Id: \\d+}")
+    public void delete[c.name/](@PathParam("[c.getParentAttribute().getClass().getName()/]Id") Long [c.getParentAttribute().getClass().getName()/]Id, @PathParam("[c.getName()/]Id") Long [c.getName()/]Id) {
         [logic/].delete[c.name/]([c.getName/]Id);
     }
 [else]
