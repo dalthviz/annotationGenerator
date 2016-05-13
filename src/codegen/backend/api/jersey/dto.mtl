@@ -6,7 +6,6 @@
 [let dtoPath : String = path.concat('dtos/')]
     [c.genMinimumDTO(dtoPath.concat('minimum/'))/]
     [c.genBasicDTO(dtoPath.concat('basic/'))/]
-    [c.genFullDTO(dtoPath.concat('full/'))/]
 [/let]
 [/template]
 

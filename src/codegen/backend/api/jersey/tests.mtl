@@ -16,7 +16,6 @@ package [c.getModel().baseGroup()/].tests;
 
 import co.edu.uniandes.csw.auth.model.UserDTO;
 import co.edu.uniandes.csw.auth.security.JWT;
-import [c.getModel().baseGroup()/].dtos.full.[c.getFullDTOName()/];
 import [c.getModel().baseGroup()/].dtos.minimum.[c.getMinimumDTOName()/];
 [for (a : Property | c.getCollectionAttributes())]
 import [c.getModel().baseGroup()/].dtos.minimum.[a.getDTOName()/];
@@ -114,19 +113,8 @@ public class [c.getServiceTestName()/] {
     public static void insertData() {
         for (int i = 0; i < 5; i++) {
             PodamFactory factory = new PodamFactoryImpl();
-            [c.getFullDTOName()/] [c.getName()/] = factory.manufacturePojo([c.getFullDTOName()/].class);
+            [c.getMinimumDTOName()/] [c.getName()/] = factory.manufacturePojo([c.getMinimumDTOName()/].class);
             [c.getName()/].setId(i + 1L);
-            [for (a : Property | c.getCompositeCollectionAttributes())]
-            List<[a.getDTOName()/]> [a.name/]List = new ArrayList<>();
-            for (int j = 0; j < 5; j++)
-            {
-                [a.getDTOName()/] [a.name/] = factory.manufacturePojo([a.getDTOName()/].class);
-                [a.name/].setId(i + 1L);
-                [a.name/]List.add([a.name/]);
-            }
-
-            [c.getName()/].[a.setter()/]([a.name/]List);
-            [/for]
 
             oraculo.add([c.getName()/]);
 

@@ -30,15 +30,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-[if (c.isChild())]
-import [c.getModel().baseGroup()/].api. [c.getParentAttribute().getClass().getAPIName()/];
-import [c.getModel().baseGroup()/].dtos.basic. [c.getParentAttribute().getClass().getBasicDTOName()/];
-import [c.getModel().baseGroup()/].entities. [c.getParentAttribute().getClass().getEntityName()/];
-[else]
 import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
 import [c.getModel().baseGroup()/].dtos.basic.[c.getBasicDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
-[/if]
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
 import [c.getModel().baseGroup()/].dtos.basic.[a.getClass().getBasicDTOName()/];
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
@@ -162,7 +156,7 @@ public class [className/] {
     public [c.getBasicDTOName()/] update[c.name/](@PathParam("[c.getParentAttribute().getClass().getName()/]Id") Long [c.getParentAttribute().getClass().getName()/]Id, @PathParam("[c.getName()/]Id") Long [c.getName()/]Id, [c.getBasicDTOName()/] dto) {
         [c.getEntityName()/] entity = dto.toEntity();
         entity.setId([c.getName()/]Id);
-        [c.getEntityName()/] oldEntity = [logic/].get[c.name/]([c.getName()/]Id);
+        [c.getEntityName()/] oldEntity = [logic/].get[c.name/]([c.getParentAttribute().getClass().getName()/]Id, [c.getName()/]Id);
         [for (a : Property | c.getNonCompositeCollectionAttributes())]
         entity.[a.setter()/](oldEntity.[a.getter()/]());
         [/for]
@@ -179,7 +173,7 @@ public class [className/] {
     @DELETE
     @Path("{[c.getName()/]Id: \\d+}")
     public void delete[c.name/](@PathParam("[c.getParentAttribute().getClass().getName()/]Id") Long [c.getParentAttribute().getClass().getName()/]Id, @PathParam("[c.getName()/]Id") Long [c.getName()/]Id) {
-        [logic/].delete[c.name/]([c.getName()/]Id);
+        [logic/].delete[c.name/]([c.getParentAttribute().getClass().getName()/]Id, [c.getName()/]Id);
     }
 [else]
 @Path("/[c.getURI()/]")
