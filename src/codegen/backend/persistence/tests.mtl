@@ -13,7 +13,9 @@
 [c.getModel().license()/]
 */
 package [c.getModel().baseGroup()/].test.persistence;
-
+[if (c.isChild())]
+import [c.getModel().baseGroup()/].entities.[c.getParentAttribute().getClass().getEntityName()/];
+[/if]
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 [for (a : Property | c.getRelationshipAttributes()->select(isComposite()))]
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
@@ -139,7 +141,7 @@ public class [className/] {
             [/for]
             [if (c.isChild())]
             fatherEntity = factory.manufacturePojo([c.getParentAttribute().getClass().getEntityName()/].class);
-            fatherEntity.setId(1);
+            fatherEntity.setId(1L);
             em.persist(fatherEntity);
             entity.set[c.getParentAttribute().getClass().name/](fatherEntity);
             [/if]
@@ -178,7 +180,7 @@ public class [className/] {
      */
     @Test
     public void get[c.name/]sTest() {
-        List<[c.getEntityName()/]> list = [bean/].findAll(fatherEntity.getId());
+        List<[c.getEntityName()/]> list = [bean/].findAll(null, null, fatherEntity.getId());
         Assert.assertEquals(data.size(), list.size());
         for ([c.getEntityName()/] ent : list) {
             boolean found = false;
@@ -336,8 +338,8 @@ public class [className/] {
         [/if]
         [/for]
     }
-}
 [/if]
+}
 [/file]
 [/let]
 
