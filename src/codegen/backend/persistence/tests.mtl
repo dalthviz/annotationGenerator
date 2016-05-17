@@ -7,7 +7,6 @@
 [/template]
 
 [template protected genTests(c : Class, path : String) {className : String = c.getPersistenceTestName();}]
-[if (not c.isChild())]
 [let bean : String = c.getName().concat('Persistence')]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 /*
@@ -55,6 +54,8 @@ public class [className/] {
                 .addAsManifestResource("META-INF/persistence.xml", "persistence.xml")
                 .addAsManifestResource("META-INF/beans.xml", "beans.xml");
     }
+
+    [c.getParentAttribute().getClass().getEntityName()/] fatherEntity;
 
     /**
      * @generated
@@ -107,6 +108,9 @@ public class [className/] {
         em.createQuery("delete from [a.getClass().getEntityName()/]").executeUpdate();
         [/for]
         em.createQuery("delete from [c.getEntityName()/]").executeUpdate();
+        [if (c.isChild())]
+        em.createQuery("delete from [c.getParentAttribute().getClass().getEntityName()/]").executeUpdate();
+        [/if]
     }
 
     /**
@@ -132,11 +136,17 @@ public class [className/] {
             }
             [/if]
             [/for]
+            [if (c.isChild())]
+            fatherEntity = factory.manufacturePojo([c.getParentAttribute().getClass().getEntityName()/].class);
+            fatherEntity.setId(1);
+            em.persist(fatherEntity);
+            entity.set[c.getParentAttribute().getClass().name/](fatherEntity);
+            [/if]
             em.persist(entity);
             data.add(entity);
         }
     }
-
+[if (c.isChild())]
     /**
      * Prueba para crear un [c.name/].
      *
@@ -146,6 +156,7 @@ public class [className/] {
     public void create[c.name/]Test() {
 		PodamFactory factory = new PodamFactoryImpl();
         [c.getEntityName()/] newEntity = factory.manufacturePojo([c.getEntityName()/].class);
+        newEntity.set[c.getParentAttribute().getClass().name/](fatherEntity);
         [c.getEntityName()/] result = [bean/].create(newEntity);
 
         Assert.assertNotNull(result);
@@ -156,6 +167,100 @@ public class [className/] {
 		[if (not a.isDate())]
         Assert.assertEquals(newEntity.[a.getter()/](), entity.[a.getter()/]());
 		[/if]
+        [/for]
+    }
+
+    /**
+     * Prueba para consultar la lista de [c.name/]s.
+     *
+     * @generated
+     */
+    @Test
+    public void get[c.name/]sTest() {
+        List<[c.getEntityName()/]> list = [bean/].findAll(fatherEntity.getId());
+        Assert.assertEquals(data.size(), list.size());
+        for ([c.getEntityName()/] ent : list) {
+            boolean found = false;
+            for ([c.getEntityName()/] entity : data) {
+                if (ent.getId().equals(entity.getId())) {
+                    found = true;
+                }
+            }
+            Assert.assertTrue(found);
+        }
+    }
+
+    /**
+     * Prueba para consultar un [c.name/].
+     *
+     * @generated
+     */
+    @Test
+    public void get[c.name/]Test() {
+        [c.getEntityName()/] entity = data.get(0);
+        [c.getEntityName()/] newEntity = [bean/].find(entity.get[c.getParentAttribute().getClass().name/]().getId(), entity.getId());
+        Assert.assertNotNull(newEntity);
+        [for (a : Property | c.getAllAttribs())]
+        Assert.assertEquals(entity.[a.getter()/](), newEntity.[a.getter()/]());
+        [/for]
+    }
+
+    /**
+     * Prueba para eliminar un [c.name/].
+     *
+     * @generated
+     */
+    @Test
+    public void delete[c.name/]Test() {
+        [c.getEntityName()/] entity = data.get(0);
+        [bean/].delete(entity.getId());
+        [c.getEntityName()/] deleted = em.find([c.getEntityName()/].class, entity.getId());
+        Assert.assertNull(deleted);
+    }
+
+    /**
+     * Prueba para actualizar un [c.name/].
+     *
+     * @generated
+     */
+    @Test
+    public void update[c.name/]Test() {
+        [c.getEntityName()/] entity = data.get(0);
+        PodamFactory factory = new PodamFactoryImpl();
+        [c.getEntityName()/] newEntity = factory.manufacturePojo([c.getEntityName()/].class);
+
+        newEntity.setId(entity.getId());
+
+        [bean/].update(newEntity);
+
+        [c.getEntityName()/] resp = em.find([c.getEntityName()/].class, entity.getId());
+
+        [for (a : Property | c.getAllAttribs())]
+		[if (not a.isDate())]
+        Assert.assertEquals(newEntity.[a.getter()/](), resp.[a.getter()/]());
+		[/if]
+        [/for]
+    }
+[else]
+    /**
+     * Prueba para crear un [c.name/].
+     *
+     * @generated
+     */
+    @Test
+    public void create[c.name/]Test() {
+        PodamFactory factory = new PodamFactoryImpl();
+        [c.getEntityName()/] newEntity = factory.manufacturePojo([c.getEntityName()/].class);
+        [c.getEntityName()/] result = [bean/].create(newEntity);
+
+        Assert.assertNotNull(result);
+
+        [c.getEntityName()/] entity = em.find([c.getEntityName()/].class, result.getId());
+
+        [for (a : Property | c.getAllAttribs())]
+        [if (not a.isDate())]
+        Assert.assertEquals(newEntity.[a.getter()/](), entity.[a.getter()/]());
+        [/if]
         [/for]
     }
 
@@ -225,13 +330,14 @@ public class [className/] {
         [c.getEntityName()/] resp = em.find([c.getEntityName()/].class, entity.getId());
 
         [for (a : Property | c.getAllAttribs())]
-		[if (not a.isDate())]
+        [if (not a.isDate())]
         Assert.assertEquals(newEntity.[a.getter()/](), resp.[a.getter()/]());
-		[/if]
+        [/if]
         [/for]
     }
 }
+[/if]
 [/file]
 [/let]
-[/if]
+
 [/template]
