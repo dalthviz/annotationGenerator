@@ -128,6 +128,11 @@ public class [className/] {
      */
     private void insertData() {
         PodamFactory factory = new PodamFactoryImpl();
+        [if (c.isChild())]
+            fatherEntity = factory.manufacturePojo([c.getParentAttribute().getClass().getEntityName()/].class);
+            fatherEntity.setId(1L);
+            em.persist(fatherEntity);
+        [/if]
         for (int i = 0; i < 3; i++) {
             [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);
             [for (a : Property | c.getRelationshipAttributes()->select(isComposite()))]
@@ -140,9 +145,6 @@ public class [className/] {
             [/if]
             [/for]
             [if (c.isChild())]
-            fatherEntity = factory.manufacturePojo([c.getParentAttribute().getClass().getEntityName()/].class);
-            fatherEntity.setId(1L);
-            em.persist(fatherEntity);
             entity.set[c.getParentAttribute().getClass().name/](fatherEntity);
             [/if]
             em.persist(entity);
