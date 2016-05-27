@@ -25,10 +25,10 @@ public interface [className/] {
 [if (c.isChild())]
     public List<[c.getEntityName()/]> get[c.name/]s(Long [c.getParentAttribute().getClass().getName()/]id);
     public List<[c.getEntityName()/]> get[c.name/]s(Integer page, Integer maxRecords, Long [c.getParentAttribute().getClass().getName()/]id);
-    public [c.getEntityName()/] get[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, Long [c.getName()/]id);
+    public [c.getEntityName()/] get[c.name/](Long [c.getName()/]id);
     public [c.getEntityName()/] create[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity);
     public [c.getEntityName()/] update[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity);
-    public void delete[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, Long id);
+    public void delete[c.name/](Long id);
 [else]
     public List<[c.getEntityName()/]> get[c.name/]s();
     public List<[c.getEntityName()/]> get[c.name/]s(Integer page, Integer maxRecords);
@@ -132,13 +132,13 @@ public class [className/] implements [c.getAPIName()/] {
      * Obtiene los datos de una instancia de [c.name/] a partir de su ID.
      *
      * @param [c.getName()/]id) Identificador del [c.name/] a consultar
-     * @param [c.getParentAttribute().getClass().getName()/]id id del [c.getParentAttribute().getClass().name/] el cual es padre del [c.name/].
      * @return Instancia de [c.getEntityName()/] con los datos del [c.name/] consultado.
      * @generated
      */
-    public [c.getEntityName()/] get[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, Long [c.getName()/]id) {
+    @Override
+    public [c.getEntityName()/] get[c.name/](Long [c.getName()/]id) {
         try {
-            return persistence.find([c.getParentAttribute().getClass().getName()/]id, [c.getName()/]id);
+            return persistence.find([c.getName()/]id);
         }catch(NoResultException e){
             throw new IllegalArgumentException("El [c.name/] no existe");
         }
@@ -183,8 +183,8 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
-    public void delete[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, Long id) {
-        [c.getEntityName()/] old = get[c.name/]([c.getParentAttribute().getClass().getName()/]id, id);
+    public void delete[c.name/](Long id) {
+        [c.getEntityName()/] old = get[c.name/](id);
         persistence.delete(old.getId());
     }
 [else]

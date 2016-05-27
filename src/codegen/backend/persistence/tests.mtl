@@ -56,6 +56,10 @@ public class [className/] {
                 .addAsManifestResource("META-INF/persistence.xml", "persistence.xml")
                 .addAsManifestResource("META-INF/beans.xml", "beans.xml");
     }
+
+    /**
+     * @generated
+     */
     [if (c.isChild())]
     [c.getParentAttribute().getClass().getEntityName()/] fatherEntity;
     [/if]

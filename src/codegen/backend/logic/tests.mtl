@@ -7,7 +7,6 @@
 [/template]
 
 [template protected genTests(c : Class, path : String) {className : String = c.getTestName();}]
-[if (not c.isChild())]
 [let bean : String = c.getName().concat('Logic')]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 /*
@@ -18,6 +17,9 @@ package [c.getModel().baseGroup()/].test.logic;
 import [c.getModel().baseGroup()/].ejbs.[c.getBeanName()/];
 import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
+[if (c.isChild())]
+import [c.getModel().baseGroup()/].entities.[c.getParentAttribute().getClass().getEntityName()/];
+[/if]
 import [c.getModel().baseGroup()/].persistence.[c.getPersistenceName()/];
 [for (a : Property | c.getRelationshipAttributes())]
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
@@ -45,6 +47,13 @@ import uk.co.jemos.podam.api.PodamFactoryImpl;
  */
 @RunWith(Arquillian.class)
 public class [className/] {
+
+    /**
+     * @generated
+     */
+    [if (c.isChild())]
+    [c.getParentAttribute().getClass().getEntityName()/] fatherEntity;
+    [/if]
 
     /**
      * @generated
@@ -130,6 +139,9 @@ public class [className/] {
         [for (a : Property | c.getRelationshipAttributes()->select(isRelationshipOwner()))]
         em.createQuery("delete from [a.getClass().getEntityName()/]").executeUpdate();
         [/for]
+        [if (c.isChild())]
+        em.createQuery("delete from [c.getParentAttribute().getClass().getEntityName()/]").executeUpdate();
+        [/if]
     }
 
     /**
@@ -146,8 +158,16 @@ public class [className/] {
         }
 
         [/for]
+        [if (c.isChild())]
+            fatherEntity = factory.manufacturePojo([c.getParentAttribute().getClass().getEntityName()/].class);
+            fatherEntity.setId(1L);
+            em.persist(fatherEntity);
+        [/if]
         for (int i = 0; i < 3; i++) {
             [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);
+            [if (c.isChild())]
+            entity.set[c.getParentAttribute().getClass().name/](fatherEntity);
+            [/if]
             [for (a : Property | c.getRelationshipAttributes()->select(isComposite()))]
 
             [if (a.getUpper() = 1)]
@@ -181,7 +201,7 @@ public class [className/] {
             [/for]
         }
     }
-
+[if (c.isChild())]
    /**
      * Prueba para crear un [c.name/]
      *
@@ -267,6 +287,93 @@ public class [className/] {
         Assert.assertEquals(pojoEntity.[prop.getter()/](), resp.[prop.getter()/]());
         [/for]
     }
+[else]
+    /**
+     * Prueba para crear un [c.name/]
+     *
+     * @generated
+     */
+    @Test
+    public void create[c.name/]Test() {
+        [c.getEntityName()/] newEntity = factory.manufacturePojo([c.getEntityName()/].class);
+        [c.getEntityName()/] result = [bean/].create[c.name/](newEntity);
+        Assert.assertNotNull(result);
+        [c.getEntityName()/] entity = em.find([c.getEntityName()/].class, result.getId());
+        [for (prop : Property | c.attribute)]
+        Assert.assertEquals(newEntity.[prop.getter()/](), entity.[prop.getter()/]());
+        [/for]
+    }
+
+    /**
+     * Prueba para consultar la lista de [c.name/]s
+     *
+     * @generated
+     */
+    @Test
+    public void get[c.name/]sTest() {
+        List<[c.getEntityName()/]> list = [bean/].get[c.name/]s();
+        Assert.assertEquals(data.size(), list.size());
+        for ([c.getEntityName()/] entity : list) {
+            boolean found = false;
+            for ([c.getEntityName()/] storedEntity : data) {
+                if (entity.getId().equals(storedEntity.getId())) {
+                    found = true;
+                }
+            }
+            Assert.assertTrue(found);
+        }
+    }
+
+    
+    /**
+     * Prueba para consultar un [c.name/]
+     *
+     * @generated
+     */
+    @Test
+    public void get[c.name/]Test() {
+        [c.getEntityName()/] entity = data.get(0);
+        [c.getEntityName()/] resultEntity = [bean/].get[c.name/](entity.getId());
+        Assert.assertNotNull(resultEntity);
+        [for (prop : Property | c.attribute)]
+        Assert.assertEquals(entity.[prop.getter()/](), resultEntity.[prop.getter()/]());
+        [/for]
+    }
+
+    /**
+     * Prueba para eliminar un [c.name/]
+     *
+     * @generated
+     */
+    @Test
+    public void delete[c.name/]Test() {
+        [c.getEntityName()/] entity = data.get(1);
+        [bean/].delete[c.name/](entity.getId());
+        [c.getEntityName()/] deleted = em.find([c.getEntityName()/].class, entity.getId());
+        Assert.assertNull(deleted);
+    }
+
+    /**
+     * Prueba para actualizar un [c.name/]
+     *
+     * @generated
+     */
+    @Test
+    public void update[c.name/]Test() {
+        [c.getEntityName()/] entity = data.get(0);
+        [c.getEntityName()/] pojoEntity = factory.manufacturePojo([c.getEntityName()/].class);
+
+        pojoEntity.setId(entity.getId());
+
+        [bean/].update[c.name/](pojoEntity);
+
+        [c.getEntityName()/] resp = em.find([c.getEntityName()/].class, entity.getId());
+
+        [for (prop : Property | c.attribute)]
+        Assert.assertEquals(pojoEntity.[prop.getter()/](), resp.[prop.getter()/]());
+        [/for]
+    }
+[/if]
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
 
     /**
@@ -341,9 +448,10 @@ public class [className/] {
     }
     [/for]
 }
+
 [/file]
 [/let]
-[/if]
+
 [/template]
 
 [template private getEntityLower(c : Class)]
