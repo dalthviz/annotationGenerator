@@ -33,10 +33,6 @@ import javax.ws.rs.core.MediaType;
 import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
 import [c.getModel().baseGroup()/].dtos.basic.[c.getBasicDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
-[for (a : Property | c.getNonCompositeCollectionAttributes())]
-import [c.getModel().baseGroup()/].dtos.basic.[a.getClass().getBasicDTOName()/];
-import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
-[/for]
 import java.util.ArrayList;
 import javax.ws.rs.WebApplicationException;
 /**
@@ -69,37 +65,6 @@ public class [className/] {
         return list;
     }
 
-[for (a : Property | c.getNonCompositeCollectionAttributes())]
-    /**
-     * Convierte una lista de [a.getClass().getEntityName()/] a una lista de [a.getClass().getBasicDTOName()/]
-     *
-     * @param entityList Lista de [a.getClass().getEntityName()/] a convertir
-     * @return Lista de [a.getClass().getBasicDTOName()/] convertida
-     * @generated
-     */
-    private List<[a.getClass().getBasicDTOName()/]> [a.name/]ListEntity2DTO(List<[a.getClass().getEntityName()/]> entityList){
-        List<[a.getClass().getBasicDTOName()/]> list = new ArrayList<>();
-        for ([a.getClass().getEntityName()/] entity : entityList) {
-            list.add(new [a.getClass().getBasicDTOName()/](entity));
-        }
-        return list;
-    }
-
-    /**
-     * Convierte una lista de [a.getClass().getBasicDTOName()/] a una lista de [a.getClass().getEntityName()/].
-     *
-     * @param dtos Lista de [a.getClass().getBasicDTOName()/] a convertir
-     * @return Lista de [a.getClass().getEntityName()/] convertida
-     * @generated
-     */
-    private List<[a.getClass().getEntityName()/]> [a.name/]ListDTO2Entity(List<[a.getClass().getBasicDTOName()/]> dtos){
-        List<[a.getClass().getEntityName()/]> list = new ArrayList<>();
-        for ([a.getClass().getBasicDTOName()/] dto : dtos) {
-            list.add(dto.toEntity());
-        }
-        return list;
-    }
-[/for]
 
     /**
      * Obtiene la lista de los registros de [c.name/] asociados a un [c.getParentAttribute().getClass().name/]
