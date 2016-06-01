@@ -38,6 +38,7 @@ import [c.getModel().baseGroup()/].dtos.basic.[a.getClass().getBasicDTOName()/];
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 [/for]
 import java.util.ArrayList;
+import javax.ws.rs.WebApplicationException;
 /**
  * @generated
  */
@@ -124,7 +125,7 @@ public class [className/] {
      */
     @GET
     @Path("{[c.getName()/]Id: \\d+}")
-    public [c.getBasicDTOName()/] get[c.name/](@PathParam(@PathParam("[c.getName()/]Id") Long [c.getName()/]Id) {
+    public [c.getBasicDTOName()/] get[c.name/](@PathParam("[c.getName()/]Id") Long [c.getName()/]Id) {
         [c.getEntityName()/] entity = [logic/].get[c.name/]([c.getName()/]Id);
         if (entity.get[c.getParentAttribute().getClass().name/]() != null && ![c.getParentAttribute().getClass().getName()/]Id.equals(entity.get[c.getParentAttribute().getClass().name/]().getId())) {
             throw new WebApplicationException(404);
@@ -172,7 +173,7 @@ public class [className/] {
      */
     @DELETE
     @Path("{[c.getName()/]Id: \\d+}")
-    public void delete[c.name/](@PathParam(@PathParam("[c.getName()/]Id") Long [c.getName()/]Id) {
+    public void delete[c.name/](@PathParam("[c.getName()/]Id") Long [c.getName()/]Id) {
         [logic/].delete[c.name/]([c.getName()/]Id);
     }
 [else]
