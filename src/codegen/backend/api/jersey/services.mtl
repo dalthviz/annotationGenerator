@@ -309,7 +309,7 @@ public class [className/] {
     }
 [/if]
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
-    [c.restClass(filePath,a.getClass())/]
+    [c.restClass(path,a.getClass())/]
     /**
      * Obtiene una colección de instancias de [a.getClass().getBasicDTOName()/] asociadas a una
      * instancia de [c.name/]
