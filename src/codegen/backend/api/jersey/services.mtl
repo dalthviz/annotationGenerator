@@ -310,73 +310,6 @@ public class [className/] {
 [/if]
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
     [c.restClassNonCompositeCollection(a,path)/]
-    /**
-     * Obtiene una colección de instancias de [a.getClass().getBasicDTOName()/] asociadas a una
-     * instancia de [c.name/]
-     *
-     * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
-     * @return Colección de instancias de [a.getClass().getBasicDTOName()/] asociadas a la instancia de [c.name/]
-     * @generated
-     */
-    @GET
-    @Path("{[c.getEntityId()/]: \\d+}/[a.name/]")
-    public List<[a.getClass().getBasicDTOName()/]> list[a.name.toUpperFirst()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/]) {
-        return [a.name/]ListEntity2DTO([logic/].list[a.name.toUpperFirst()/]([c.getEntityId()/]));
-    }
-
-    /**
-     * Obtiene una instancia de [a.getClass().name/] asociada a una instancia de [c.name/]
-     *
-     * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
-     * @param [a.getClass().getEntityId()/] Identificador de la instancia de [a.getClass().name/]
-     * @generated
-     */
-    @GET
-    @Path("{[c.getEntityId()/]: \\d+}/[a.name/]/{[a.getClass().getEntityId()/]: \\d+}")
-    public [a.getClass().getBasicDTOName()/] get[a.name.toUpperFirst()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
-        return new [a.getClass().getBasicDTOName()/]([logic/].get[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getEntityId()/]));
-    }
-
-    /**
-     * Asocia un [a.getClass().name/] existente a un [c.name/]
-     *
-     * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
-     * @param [a.getClass().getEntityId()/] Identificador de la instancia de [a.getClass().name/]
-     * @return Instancia de [a.getClass().getBasicDTOName()/] que fue asociada a [c.name/]
-     * @generated
-     */
-    @POST
-    @Path("{[c.getEntityId()/]: \\d+}/[a.name/]/{[a.getClass().getEntityId()/]: \\d+}")
-    public [a.getClass().getBasicDTOName()/] add[a.name.toUpperFirst()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
-        return new [a.getClass().getBasicDTOName()/]([logic/].add[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getEntityId()/]));
-    }
-
-    /**
-     * Remplaza las instancias de [a.getClass().name/] asociadas a una instancia de [c.name/]
-     *
-     * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
-     * @param [a.getClass().getURI()/] Colección de instancias de [a.getClass().getDTOName()/] a asociar a instancia de [c.name/]
-     * @return Nueva colección de [a.getClass().getDTOName()/] asociada a la instancia de [c.name/]
-     * @generated
-     */
-    @PUT
-    @Path("{[c.getEntityId()/]: \\d+}/[a.name/]")
-    public List<[a.getClass().getBasicDTOName()/]> replace[a.name.toUpperFirst()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], List<[a.getClass().getBasicDTOName()/]> [a.getClass().getURI()/]) {
-        return [a.name/]ListEntity2DTO([logic/].replace[a.name.toUpperFirst()/]([c.getEntityId()/], [a.name/]ListDTO2Entity([a.getClass().getURI()/])));
-    }
-
-    /**
-     * Desasocia un [a.getClass().name/] existente de un [c.name/] existente
-     *
-     * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
-     * @param [a.getClass().getEntityId()/] Identificador de la instancia de [a.getClass().name/]
-     * @generated
-     */
-    @DELETE
-    @Path("{[c.getEntityId()/]: \\d+}/[a.name/]/{[a.getClass().getEntityId()/]: \\d+}")
-    public void remove[a.name.toUpperFirst()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
-        [logic/].remove[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
-    }
 [/for]
 
 [for (a : Property | c.getCompositeCollectionAttributes())]
@@ -390,8 +323,8 @@ public class [className/] {
 [/file]
 [/template]
 
-[template protected restClassNonCompositeCollection(c : Class, a : Property, path : String) {className : String = c.getJaxRsName(); logic : String = c.getName().concat('Logic');}]
-[file (path.concat(className+a.getClass().name+'.java'), false, 'UTF-8')]
+[template protected restClassNonCompositeCollection(c : Class, a : Property, path : String) {className : String = a.getClass().getJaxRsName(); logic : String = c.getName().concat('Logic');}]
+[file (path.concat(c.name+className+'.java'), false, 'UTF-8')]
 /*
 [c.getModel().license()/]
 */
@@ -409,46 +342,25 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
-import [c.getModel().baseGroup()/].dtos.basic.[c.getBasicDTOName()/];
-import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
 import [c.getModel().baseGroup()/].dtos.basic.[a.getClass().getBasicDTOName()/];
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 [/for]
 import java.util.ArrayList;
-import javax.ws.rs.WebApplicationException;
 /**
  * @generated
  */
 @Path("/[c.getURI()/]")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class [className+a.getClass().name/] {
+public class [c.name+className/] {
 
     @Inject private [c.getAPIName()/] [logic/];
     @Context private HttpServletResponse response;
-    @QueryParam("page") private Integer page;
-    @QueryParam("maxRecords") private Integer maxRecords;
-
-   
-    /**
-     * Convierte una lista de [c.getEntityName()/] a una lista de [c.getBasicDTOName()/].
-     *
-     * @param entityList Lista de [c.getEntityName()/] a convertir.
-     * @return Lista de [c.getBasicDTOName()/] convertida.
-     * @generated
-     */
-    private List<[c.getBasicDTOName()/]> listEntity2DTO(List<[c.getEntityName()/]> entityList){
-        List<[c.getBasicDTOName()/]> list = new ArrayList<>();
-        for ([c.getEntityName()/] entity : entityList) {
-            list.add(new [c.getBasicDTOName()/](entity));
-        }
-        return list;
-    }
+    
 
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
     /**
