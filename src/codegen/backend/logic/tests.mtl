@@ -139,9 +139,6 @@ public class [className/] {
         [for (a : Property | c.getRelationshipAttributes()->select(isRelationshipOwner()))]
         em.createQuery("delete from [a.getClass().getEntityName()/]").executeUpdate();
         [/for]
-        [if (c.isChild())]
-        em.createQuery("delete from [c.getParentAttribute().getClass().getEntityName()/]").executeUpdate();
-        [/if]
     }
 
     /**
@@ -151,12 +148,13 @@ public class [className/] {
      */
     private void insertData() {
         [for (a : Property | c.getRelationshipAttributes()->reject(isComposite()))]
+        [if(c.getParentAttribute().getClass().name!=a.getClass().name)]
         for (int i = 0; i < 3; i++) {
             [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
             em.persist([a.name/]);
             [a.getListVar()/].add([a.name/]);
         }
-
+        [/if]
         [/for]
         [if (c.isChild())]
             fatherEntity = factory.manufacturePojo([c.getParentAttribute().getClass().getEntityName()/].class);
@@ -168,22 +166,13 @@ public class [className/] {
             [if (c.isChild())]
             entity.set[c.getParentAttribute().getClass().name/](fatherEntity);
             [/if]
-            [for (a : Property | c.getRelationshipAttributes()->select(isComposite()))]
-
-            [if (a.getUpper() = 1)]
-            entity.[a.getter()/]().[a.getClass().getParentAttribute().setter()/](entity);
-            [else]
-            for ([a.getClass().getEntityName()/] item : entity.[a.getter()/]()) {
-                item.[a.getClass().getParentAttribute().setter()/](entity);
-            }
-            [/if]
-            [/for]
             [for (a : Property | c.getRelationshipAttributes()->reject(isComposite() or not isRelationshipOwner()))]
-
+            [if(c.getParentAttribute().getClass().name!=a.getClass().name)]
             [if (a.getUpper() = 1)]
             entity.[a.setter()/]([a.getListVar()/].get(0));
             [else]
             entity.[a.getter()/]().add([a.getListVar()/].get(0));
+            [/if]
             [/if]
             [/for]
 
@@ -210,7 +199,7 @@ public class [className/] {
     @Test
     public void create[c.name/]Test() {
         [c.getEntityName()/] newEntity = factory.manufacturePojo([c.getEntityName()/].class);
-        [c.getEntityName()/] result = [bean/].create[c.name/](newEntity);
+        [c.getEntityName()/] result = [bean/].create[c.name/](fatherEntity.getId(), newEntity);
         Assert.assertNotNull(result);
         [c.getEntityName()/] entity = em.find([c.getEntityName()/].class, result.getId());
         [for (prop : Property | c.attribute)]
@@ -225,7 +214,7 @@ public class [className/] {
      */
     @Test
     public void get[c.name/]sTest() {
-        List<[c.getEntityName()/]> list = [bean/].get[c.name/]s();
+        List<[c.getEntityName()/]> list = [bean/].get[c.name/]s(fatherEntity.getId());
         Assert.assertEquals(data.size(), list.size());
         for ([c.getEntityName()/] entity : list) {
             boolean found = false;
@@ -279,7 +268,7 @@ public class [className/] {
 
         pojoEntity.setId(entity.getId());
 
-        [bean/].update[c.name/](pojoEntity);
+        [bean/].update[c.name/](fatherEntity.getId(), pojoEntity);
 
         [c.getEntityName()/] resp = em.find([c.getEntityName()/].class, entity.getId());
 

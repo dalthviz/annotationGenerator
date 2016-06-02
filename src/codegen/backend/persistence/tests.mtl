@@ -139,15 +139,7 @@ public class [className/] {
         [/if]
         for (int i = 0; i < 3; i++) {
             [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);
-            [for (a : Property | c.getRelationshipAttributes()->select(isComposite()))]
-            [if (a.getUpper() = 1)]
-            entity.[a.getter()/]().[a.getClass().getParentAttribute().setter()/](entity);
-            [else]
-            for ([a.getClass().getEntityName()/] item : entity.[a.getter()/]()) {
-                item.[a.getClass().getParentAttribute().setter()/](entity);
-            }
-            [/if]
-            [/for]
+            
             [if (c.isChild())]
             entity.set[c.getParentAttribute().getClass().name/](fatherEntity);
             [/if]
