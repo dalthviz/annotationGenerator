@@ -148,7 +148,9 @@ public class [className/] {
      */
     private void insertData() {
         [for (a : Property | c.getRelationshipAttributes()->reject(isComposite()))]
-        [if(c.getParentAttribute().getClass().getEntityName() <> a.getClass().getEntityName())]
+        
+        [if (c.isChild())]
+        [if(c.getParentAttribute().getClass().name <> a.getClass().name)]
         for (int i = 0; i < 3; i++) {
             [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
             em.persist([a.name/]);
@@ -156,18 +158,24 @@ public class [className/] {
         }
         [/if]
         [/for]
-        [if (c.isChild())]
+
             fatherEntity = factory.manufacturePojo([c.getParentAttribute().getClass().getEntityName()/].class);
             fatherEntity.setId(1L);
             em.persist(fatherEntity);
+        [else]
+        for (int i = 0; i < 3; i++) {
+            [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+            em.persist([a.name/]);
+            [a.getListVar()/].add([a.name/]);
+        }
         [/if]
         for (int i = 0; i < 3; i++) {
             [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);
             [if (c.isChild())]
             entity.set[c.getParentAttribute().getClass().name/](fatherEntity);
-            [/if]
+
             [for (a : Property | c.getRelationshipAttributes()->reject(isComposite() or not isRelationshipOwner()))]
-            [if(c.getParentAttribute().getClass().getEntityName() <> a.getClass().getEntityName())]
+            [if(c.getParentAttribute().getClass().name <> a.getClass().name)]
             [if (a.getUpper() = 1)]
             entity.[a.setter()/]([a.getListVar()/].get(0));
             [else]
@@ -175,6 +183,16 @@ public class [className/] {
             [/if]
             [/if]
             [/for]
+            [else]
+            [for (a : Property | c.getRelationshipAttributes()->reject(isComposite() or not isRelationshipOwner()))]
+            [if (a.getUpper() = 1)]
+            entity.[a.setter()/]([a.getListVar()/].get(0));
+            [else]
+            entity.[a.getter()/]().add([a.getListVar()/].get(0));
+            [/if]
+            [/for]
+            [/if]
+            
 
             em.persist(entity);
             data.add(entity);
