@@ -27,6 +27,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
+import javax.transaction.UserTransaction;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -49,10 +53,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
-import javax.inject.Inject;
-import javax.transaction.UserTransaction;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+
 
 @RunWith(Arquillian.class)
 public class [c.getServiceTestName()/] {
@@ -337,6 +338,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
+import javax.transaction.UserTransaction;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -359,10 +364,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
-import javax.inject.Inject;
-import javax.transaction.UserTransaction;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+
 
 @RunWith(Arquillian.class)
 public class [c.name+className/] {
