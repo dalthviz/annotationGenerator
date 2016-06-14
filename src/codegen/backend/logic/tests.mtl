@@ -160,9 +160,9 @@ public class [className/] {
         [/if]
         [/for]
 
-            fatherEntity = factory.manufacturePojo([c.getParentAttribute().getClass().getEntityName()/].class);
-            fatherEntity.setId(1L);
-            em.persist(fatherEntity);
+        fatherEntity = factory.manufacturePojo([c.getParentAttribute().getClass().getEntityName()/].class);
+        fatherEntity.setId(1L);
+        em.persist(fatherEntity);
         [else]
         [for (a : Property | c.getRelationshipAttributes()->reject(isComposite()))]
         for (int i = 0; i < 3; i++) {
