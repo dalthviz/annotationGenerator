@@ -16,6 +16,9 @@ package [c.getModel().baseGroup()/].tests;
 
 import co.edu.uniandes.csw.auth.model.UserDTO;
 import co.edu.uniandes.csw.auth.security.JWT;
+[if (c.isChild())]
+import [c.getModel().baseGroup()/].entities.[c.getParentAttribute().getClass().getEntityName()/];
+[/if]
 import [c.getModel().baseGroup()/].dtos.minimum.[c.getMinimumDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import [c.getModel().baseGroup()/].resources.[c.getJaxRsName()/];
@@ -46,6 +49,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
+import javax.inject.Inject;
+import javax.transaction.UserTransaction;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @RunWith(Arquillian.class)
 public class [c.getServiceTestName()/] {
@@ -99,7 +106,7 @@ public class [c.getServiceTestName()/] {
     private void clearData() {
         em.createQuery("delete from [c.getEntityName()/]").executeUpdate();
     [if (c.isChild())]
-        em.createQuery("delete from [.getParentAttribute().getClass().getEntityName()/]").executeUpdate();
+        em.createQuery("delete from [c.getParentAttribute().getClass().getEntityName()/]").executeUpdate();
     [/if]
         oraculo.clear();
     }
@@ -111,7 +118,7 @@ public class [c.getServiceTestName()/] {
      *
      * @generated
      */
-    public static void insertData() {
+    public void insertData() {
         [if (c.isChild())]
         fatherEntity = factory.manufacturePojo([c.getParentAttribute().getClass().getEntityName()/].class);
         fatherEntity.setId(1L);
@@ -182,6 +189,7 @@ public class [c.getServiceTestName()/] {
      */
     @Test
     public void create[c.getServiceTestName()/]() throws IOException {
+        PodamFactory factory = new PodamFactoryImpl();
         [c.getMinimumDTOName()/] [c.getName()/] = factory.manufacturePojo([c.getMinimumDTOName()/].class);
         [c.getName()/].setId(7L);
         Cookie cookieSessionId = login(username, password);
@@ -317,6 +325,9 @@ package [c.getModel().baseGroup()/].tests;
 
 import co.edu.uniandes.csw.auth.model.UserDTO;
 import co.edu.uniandes.csw.auth.security.JWT;
+[if (c.isChild())]
+import [c.getModel().baseGroup()/].entities.[c.getParentAttribute().getClass().getEntityName()/];
+[/if]
 import [c.getModel().baseGroup()/].dtos.minimum.[c.getMinimumDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import [c.getModel().baseGroup()/].dtos.minimum.[a.getDTOName()/];
@@ -348,6 +359,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
+import javax.inject.Inject;
+import javax.transaction.UserTransaction;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @RunWith(Arquillian.class)
 public class [c.name+className/] {
@@ -403,7 +418,7 @@ public class [c.name+className/] {
     private void clearData() {
         em.createQuery("delete from [a.getClass().getEntityName()/]").executeUpdate();
     [if (c.isChild())]
-        em.createQuery("delete from [.getParentAttribute().getClass().getEntityName()/]").executeUpdate();
+        em.createQuery("delete from [c.getParentAttribute().getClass().getEntityName()/]").executeUpdate();
     [/if]
         em.createQuery("delete from [c.getEntityName()/]").executeUpdate();
         oraculo.clear();
@@ -416,14 +431,14 @@ public class [c.name+className/] {
      *
      * @generated
      */
-    public static void insertData() {
+    public void insertData() {
+        PodamFactory factory = new PodamFactoryImpl();
         [if (c.isChild())]
         fatherEntity = factory.manufacturePojo([c.getParentAttribute().getClass().getEntityName()/].class);
         fatherEntity.setId(1L);
         em.persist(fatherEntity);
         [/if]
-        for (int i = 0; i < 3; i++) {
-            PodamFactory factory = new PodamFactoryImpl();
+        for (int i = 0; i < 3; i++) {            
             [c.getEntityName()/] [c.getName()/] = factory.manufacturePojo([c.getEntityName()/].class);
             [c.getName()/].setId(i + 1L);
             [if (c.isChild())]
@@ -433,7 +448,7 @@ public class [c.name+className/] {
             oraculo.add([c.getName()/]);
 
             
-            [a.getEntityName()/] [a.name/] = factory.manufacturePojo([a.getEntityName()/].class);
+            [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
             [a.name/].setId(i + 1L);
             em.persist([a.name/]);
             [a.getOraculo()/].add([a.name/]);
@@ -557,7 +572,6 @@ public class [c.name+className/] {
      * @generated
      */
     @Test
-    @InSequence([(i * 4)+4/])
     public void remove[a.getTestSuffix()/]() {
         Cookie cookieSessionId = login(username, password);
 
