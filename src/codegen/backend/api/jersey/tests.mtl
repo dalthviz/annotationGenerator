@@ -99,7 +99,7 @@ public class [c.getServiceTestName()/] {
     private void clearData() {
         em.createQuery("delete from [c.getEntityName()/]").executeUpdate();
     [if (c.isChild())]
-        em.createQuery("delete from [.getParentAttribute().getClass().getEntityName()/]").executeUpdate();
+        em.createQuery("delete from [c.getParentAttribute().getClass().getEntityName()/]").executeUpdate();
     [/if]
         oraculo.clear();
     }
@@ -403,7 +403,7 @@ public class [c.name+className/] {
     private void clearData() {
         em.createQuery("delete from [a.getClass().getEntityName()/]").executeUpdate();
     [if (c.isChild())]
-        em.createQuery("delete from [.getParentAttribute().getClass().getEntityName()/]").executeUpdate();
+        em.createQuery("delete from [c.getParentAttribute().getClass().getEntityName()/]").executeUpdate();
     [/if]
         em.createQuery("delete from [c.getEntityName()/]").executeUpdate();
         oraculo.clear();
@@ -433,7 +433,7 @@ public class [c.name+className/] {
             oraculo.add([c.getName()/]);
 
             
-            [a.getEntityName()/] [a.name/] = factory.manufacturePojo([a.getEntityName()/].class);
+            [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
             [a.name/].setId(i + 1L);
             em.persist([a.name/]);
             [a.getOraculo()/].add([a.name/]);
@@ -557,7 +557,6 @@ public class [c.name+className/] {
      * @generated
      */
     @Test
-    @InSequence([(i * 4)+4/])
     public void remove[a.getTestSuffix()/]() {
         Cookie cookieSessionId = login(username, password);
 
