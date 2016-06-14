@@ -332,6 +332,7 @@ import [c.getModel().baseGroup()/].entities.[c.getParentAttribute().getClass().g
 import [c.getModel().baseGroup()/].dtos.minimum.[c.getMinimumDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import [c.getModel().baseGroup()/].dtos.minimum.[a.getDTOName()/];
+import [c.getModel().baseGroup()/].dtos.minimum.[a.getEntityName()/];
 import [c.getModel().baseGroup()/].resources.[c.getJaxRsName()/];
 import java.io.File;
 import java.io.IOException;
@@ -375,7 +376,7 @@ public class [c.name+className/] {
     private final String [c.testPath()/] = "[c.getURI()/]";
     private final static List<[c.getEntityName()/]> oraculo = new ArrayList<>();
     private final String [a.testPath()/] = "[a.name/]";
-    private final static List<[a.getDTOName()/]> [a.getOraculo()/] = new ArrayList<>();
+    private final static List<[a.getEntityName()/]> [a.getOraculo()/] = new ArrayList<>();
     private WebTarget target;
     private final String apiPath = "api";
     private final String username = System.getenv("USERNAME_USER");
@@ -516,12 +517,12 @@ public class [c.name+className/] {
         [a.getDTOName()/] [a.name/] = new [a.getDTOName()/]([a.getOraculo()/].get(0));
         [c.getMinimumDTOName()/] [c.getName()/] = new [c.getMinimumDTOName()/](oraculo.get(0));
 
-        response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
+        Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
                 .path([a.testPath()/]).path([a.name/].getId().toString())
                 .request().cookie(cookieSessionId)
                 .post(Entity.entity([a.name/], MediaType.APPLICATION_JSON));
 
-        [a.getResponseVarName()/] = ([a.getDTOName()/]) response.readEntity([a.getDTOName()/].class);
+        [a.getDTOName()/] [a.getResponseVarName()/] = ([a.getDTOName()/]) response.readEntity([a.getDTOName()/].class);
         Assert.assertEquals(Ok, response.getStatus());
         Assert.assertEquals([a.name/].getId(), [a.getResponseVarName()/].getId());
     }
