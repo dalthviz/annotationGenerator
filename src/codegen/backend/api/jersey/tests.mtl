@@ -120,13 +120,13 @@ public class [c.getServiceTestName()/] {
      * @generated
      */
     public void insertData() {
+        PodamFactory factory = new PodamFactoryImpl();
         [if (c.isChild())]
         fatherEntity = factory.manufacturePojo([c.getParentAttribute().getClass().getEntityName()/].class);
         fatherEntity.setId(1L);
         em.persist(fatherEntity);
         [/if]
-        for (int i = 0; i < 3; i++) {
-            PodamFactory factory = new PodamFactoryImpl();
+        for (int i = 0; i < 3; i++) {            
             [c.getEntityName()/] [c.getName()/] = factory.manufacturePojo([c.getEntityName()/].class);
             [c.getName()/].setId(i + 1L);
             [if (c.isChild())]
