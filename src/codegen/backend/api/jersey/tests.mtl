@@ -192,7 +192,6 @@ public class [c.getServiceTestName()/] {
     public void create[c.getServiceTestName()/]() throws IOException {
         PodamFactory factory = new PodamFactoryImpl();
         [c.getMinimumDTOName()/] [c.getName()/] = factory.manufacturePojo([c.getMinimumDTOName()/].class);
-        [c.getName()/].setId(7L);
         Cookie cookieSessionId = login(username, password);
         [if (c.isChild())]
         Response response = target.path([c.getParentAttribute().getClass().testPath()/]).path(fatherEntity.getId().toString()).path([c.testPath()/])
@@ -206,9 +205,15 @@ public class [c.getServiceTestName()/] {
         
         [c.getMinimumDTOName()/]  [c.testName()/] = ([c.getMinimumDTOName()/]) response.readEntity([c.getMinimumDTOName()/].class);
         [for (prop : Property | c.attribute)]
+        [if(not prop.isID())]
         Assert.assertEquals([c.getName()/].[prop.getter()/](), [c.testName()/].[prop.getter()/]());
+        [/if]
         [/for]
+        [if (c.isChild())]
+        Assert.assertEquals(Ok, response.getStatus());
+        [else]
         Assert.assertEquals(Created, response.getStatus());
+        [/if]        
         [c.getEntityName()/] entity = em.find([c.getEntityName()/].class, [c.testName()/].getId());
         Assert.assertNotNull(entity);
     }
@@ -255,7 +260,7 @@ public class [c.getServiceTestName()/] {
         String list[c.name/] = response.readEntity(String.class);
         List<[c.getMinimumDTOName()/]> list[c.name/]Test = new ObjectMapper().readValue(list[c.name/], List.class);
         Assert.assertEquals(Ok, response.getStatus());
-        Assert.assertEquals(1, list[c.name/]Test.size());
+        Assert.assertEquals(3, list[c.name/]Test.size());
     }
 
     /**
@@ -424,6 +429,7 @@ public class [c.name+className/] {
         em.createQuery("delete from [c.getParentAttribute().getClass().getEntityName()/]").executeUpdate();
     [/if]
         em.createQuery("delete from [c.getEntityName()/]").executeUpdate();
+        [a.getOraculo()/].clear();
         oraculo.clear();
     }
 
@@ -435,27 +441,41 @@ public class [c.name+className/] {
      * @generated
      */
     public void insertData() {
-        PodamFactory factory = new PodamFactoryImpl();
-        [if (c.isChild())]
-        fatherEntity = factory.manufacturePojo([c.getParentAttribute().getClass().getEntityName()/].class);
-        fatherEntity.setId(1L);
-        em.persist(fatherEntity);
-        [/if]
-        for (int i = 0; i < 3; i++) {            
-            [c.getEntityName()/] [c.getName()/] = factory.manufacturePojo([c.getEntityName()/].class);
-            [c.getName()/].setId(i + 1L);
+        try{
+            PodamFactory factory = new PodamFactoryImpl();
             [if (c.isChild())]
-            [c.getName()/].set[c.getParentAttribute().getClass().name/](fatherEntity);
+            fatherEntity = factory.manufacturePojo([c.getParentAttribute().getClass().getEntityName()/].class);
+            fatherEntity.setId(1L);
+            em.persist(fatherEntity);
             [/if]
-            em.persist([c.getName()/]);
-            oraculo.add([c.getName()/]);
-
-            
-            [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
-            [a.name/].setId(i + 1L);
-            em.persist([a.name/]);
-            [a.getOraculo()/].add([a.name/]);
-        }
+            for (int i = 0; i < 3; i++) {   
+                [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+                [a.name/].setId(i + 1L);
+                utx.begin();
+                em.persist([a.name/]);
+                utx.commit();
+                [a.getOraculo()/].add([a.name/]);
+                     
+                [c.getEntityName()/] [c.getName()/] = factory.manufacturePojo([c.getEntityName()/].class);
+                [c.getName()/].setId(i + 1L);
+                [c.getName()/].[a.getter()/]().add([a.name/]);
+                [if (c.isChild())]
+                [c.getName()/].set[c.getParentAttribute().getClass().name/](fatherEntity);
+                [/if]
+                utx.begin();
+                em.persist([c.getName()/]);
+                utx.commit();
+                oraculo.add([c.getName()/]);               
+                
+            }
+            } catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    utx.rollback();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
     }
 
     /**
@@ -514,7 +534,7 @@ public class [c.name+className/] {
     public void add[a.getTestSuffix()/]() {
         Cookie cookieSessionId = login(username, password);
 
-        [a.getDTOName()/] [a.name/] = new [a.getDTOName()/]([a.getOraculo()/].get(0));
+        [a.getDTOName()/] [a.name/] = new [a.getDTOName()/]([a.getOraculo()/].get(1));
         [c.getMinimumDTOName()/] [c.getName()/] = new [c.getMinimumDTOName()/](oraculo.get(0));
 
         Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
