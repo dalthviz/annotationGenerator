@@ -451,6 +451,7 @@ public class [c.name+className/] {
             utx.commit();
             [/if]
             for (int i = 0; i < 3; i++) {   
+                [if (a.isRelationshipOwner())]
                 [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
                 [a.name/].setId(i + 1L);
                 utx.begin();
@@ -467,7 +468,49 @@ public class [c.name+className/] {
                 utx.begin();
                 em.persist([c.getName()/]);
                 utx.commit();
-                oraculo.add([c.getName()/]);               
+                oraculo.add([c.getName()/]);     
+                [else]
+                [if (a.getOtherEnd().getUpper() = 1)]
+                [c.getEntityName()/] [c.getName()/] = factory.manufacturePojo([c.getEntityName()/].class);
+                [c.getName()/].setId(i + 1L);
+                [c.getName()/].[a.getter()/]().add([a.name/]);
+                [if (c.isChild())]
+                [c.getName()/].set[c.getParentAttribute().getClass().name/](fatherEntity);
+                [/if]
+                utx.begin();
+                em.persist([c.getName()/]);
+                utx.commit();
+                oraculo.add([c.getName()/]);
+
+                [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+                [a.name/].setId(i + 1L);
+                [a.name/].set[c.getName()/]([c.getName()/]);    
+                utx.begin();
+                em.persist([a.name/]);
+                utx.commit();
+                [a.getOraculo()/].add([a.name/]);                     
+                
+                [else]
+                [c.getEntityName()/] [c.getName()/] = factory.manufacturePojo([c.getEntityName()/].class);
+                [c.getName()/].setId(i + 1L);
+                [if (c.isChild())]
+                [c.getName()/].set[c.getParentAttribute().getClass().name/](fatherEntity);
+                [/if]
+                utx.begin();
+                em.persist([c.getName()/]);
+                utx.commit();
+                oraculo.add([c.getName()/]);
+
+                [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
+                [a.name/].setId(i + 1L);
+                [a.name/].get[c.getName()/]s().add([c.getName()/] );
+                utx.begin();
+                em.persist([a.name/]);
+                utx.commit();
+                [a.getOraculo()/].add([a.name/]);                     
+
+                [/if]
+                [/if]          
                 
             }
             } catch (Exception e) {
