@@ -473,7 +473,6 @@ public class [c.name+className/] {
                 [if (a.getOtherEnd().getUpper() = 1)]
                 [c.getEntityName()/] [c.getName()/] = factory.manufacturePojo([c.getEntityName()/].class);
                 [c.getName()/].setId(i + 1L);
-                [c.getName()/].[a.getter()/]().add([a.name/]);
                 [if (c.isChild())]
                 [c.getName()/].set[c.getParentAttribute().getClass().name/](fatherEntity);
                 [/if]
@@ -484,7 +483,7 @@ public class [c.name+className/] {
 
                 [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
                 [a.name/].setId(i + 1L);
-                [a.name/].set[c.getName()/]([c.getName()/]);    
+                [a.name/].set[c.name/]([c.getName()/]);    
                 utx.begin();
                 em.persist([a.name/]);
                 utx.commit();
@@ -503,7 +502,7 @@ public class [c.name+className/] {
 
                 [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
                 [a.name/].setId(i + 1L);
-                [a.name/].get[c.getName()/]s().add([c.getName()/] );
+                [a.name/].get[c.name/]s().add([c.getName()/] );
                 utx.begin();
                 em.persist([a.name/]);
                 utx.commit();
