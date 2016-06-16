@@ -446,7 +446,9 @@ public class [c.name+className/] {
             [if (c.isChild())]
             fatherEntity = factory.manufacturePojo([c.getParentAttribute().getClass().getEntityName()/].class);
             fatherEntity.setId(1L);
+            utx.begin();
             em.persist(fatherEntity);
+            utx.commit();
             [/if]
             for (int i = 0; i < 3; i++) {   
                 [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
@@ -512,8 +514,8 @@ public class [c.name+className/] {
         try {
             utx.begin();
             clearData();
-            insertData();
             utx.commit();
+            insertData();            
         } catch (Exception e) {
             e.printStackTrace();
             try {
