@@ -15,6 +15,7 @@
     [c.moduleMain(filePath)/]
     [c.mainListState(filePath)/]
     [c.mainNewState(filePath)/]
+    [c.mainDetailState(filePath)/]
     [c.mainEditState(filePath)/]
     [c.mainDeleteState(filePath)/]
 [/let]
