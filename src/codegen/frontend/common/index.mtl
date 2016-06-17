@@ -1,6 +1,7 @@
 [comment encoding = UTF-8 /]
 [module index('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
+[import frontend::entities::main /]
 
 [template public indexMain(m : Model, path : String)]
 [m.appjs(path.concat('src/'))/]
@@ -19,12 +20,12 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
 (function (ng) {
     var mod = ng.module('mainApp', ['['/]
         //'ngCrudMock',
+        'ngCrud'
+        'ui.router',
         [for (c : Class | m.getClasses())]
         '[c.getModule()/]',
         [/for]
         'authModule',
-        'ui.router',
-        'ngCrud'
     [']'/]);
 
     mod.config(['['/]'$logProvider', function ($logProvider) {
@@ -42,7 +43,7 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
     mod.config(['['/]'authServiceProvider', function (auth) {
             auth.setValues({
                 apiUrl: '[m.getAPIURL()/]users/',
-                successState: '[m.getClasses()->any(1=1).getName()/]'
+                successState: '[m.getClasses()->any(1=1).getListStateName()/]'
             });
         }[']'/]);
 })(window.angular);
@@ -84,7 +85,7 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
 
     </head>
     <body style="padding-top: 60px;">
-        <div class="container-fluid">
+        <div class="container">
             <div class="col-md-12">
                 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
                     <div class="container-fluid">
@@ -103,7 +104,7 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
                         <div class="collapse navbar-collapse" id="main-bar">
                             <ul class="nav navbar-nav">
                                 [for (c : Class | m.getRootClasses())]
-                                <li><a ui-sref="[c.getName()/]">[c.getDisplayName()/]</a></li>
+                                <li><a ui-sref="[c.getListStateName()/]">[c.getDisplayName()/]</a></li>
                                 [/for]
                             </ul>
                             <ul class="nav navbar-nav navbar-right">

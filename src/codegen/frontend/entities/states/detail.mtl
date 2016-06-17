@@ -57,6 +57,7 @@
 [c.getModel().license()/]
 -->
 <!-- TODO -->
+{{currentRecord | json}}
 [/file]
 [/template]
 
