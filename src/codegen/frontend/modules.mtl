@@ -11,7 +11,7 @@
 [import frontend::entities::tests /]
 
 [template public genModules(c : Class, path : String)]
-[let filePath : String = path.concat(path.concat('src/modules/') + c.getName()+'/'+c.getName())]
+[let filePath : String = path.concat('src/modules/' + c.getName()+'/')]
     [c.moduleMain(filePath)/]
     [c.mainListState(filePath)/]
     [c.mainNewState(filePath)/]

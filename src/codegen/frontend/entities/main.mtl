@@ -9,7 +9,7 @@
 [/template]
 
 [template private genModule(c : Class, path : String)]
-[file (path + '.mod.js', false, 'UTF-8')]
+[file (path.concat(c.getName()) + '.mod.js', false, 'UTF-8')]
 /*
 [c.getModel().license()/]
 */
@@ -132,7 +132,7 @@
 [/template]
 
 [template private genCtrl(c : Class, path : String)]
-[file (path + '.ctrl.js', false, 'UTF-8')]
+[file (path.concat(c.getName()) + '.ctrl.js', false, 'UTF-8')]
 /*
 [c.getModel().license()/]
 */

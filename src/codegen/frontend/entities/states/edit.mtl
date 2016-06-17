@@ -18,7 +18,7 @@
 
     var mod = ng.module("[c.getModule()/]");
 
-    mod.controller("[c.getEditCtrlName()/]", ['['/]"$scope", "$state", "[c.getRecordName()/]"
+    mod.controller("[c.getEditCtrlName()/]", ['['/]"$scope", "$state", "[c.getRecordName()/]",
         function ($scope, $state, [c.getRecordName()/]) {
             $scope.currentRecord = [c.getRecordName()/];
             $scope.actions = {
