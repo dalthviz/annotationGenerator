@@ -25,8 +25,8 @@
 
     var mod = ng.module("[c.getModule()/]");
 
-    mod.controller("[c.getListCtrlName()/]", ['['/]"$scope", '[c.getRecordsName()/]', '$state'
-        function ($scope, [c.getRecordsName()/], $state) {
+    mod.controller("[c.getListCtrlName()/]", ['['/]"$scope", '$state', '[c.getRecordsName()/]',
+        function ($scope, $state, [c.getRecordsName()/]) {
             $scope.records = [c.getRecordsName()/];
             $scope.actions = {
                 create: {

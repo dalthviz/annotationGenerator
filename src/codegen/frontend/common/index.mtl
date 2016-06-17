@@ -20,12 +20,12 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
 (function (ng) {
     var mod = ng.module('mainApp', ['['/]
         //'ngCrudMock',
-        'ngCrud'
+        'ngCrud',
         'ui.router',
         [for (c : Class | m.getClasses())]
         '[c.getModule()/]',
         [/for]
-        'authModule',
+        'authModule'
     [']'/]);
 
     mod.config(['['/]'$logProvider', function ($logProvider) {

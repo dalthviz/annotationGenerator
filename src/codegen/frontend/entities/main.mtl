@@ -34,9 +34,9 @@
                 required: [a.isRequired()/]
             }[/for][/if][']'/]});
 
-	mod.config(['['/]'$stateProvider',
-		function($stateProvider){
-	        var basePath = 'src/modules/[c.getName()/]/';
+    mod.config(['['/]'$stateProvider',
+        function($stateProvider){
+            var basePath = 'src/modules/[c.getName()/]/';
             var baseInstancePath = basePath + '[c.getInstanceStatesFolder()/]';
             $stateProvider.state('[c.getMainStateName()/]', {
                 url: '/[c.getURI()/]',
@@ -97,7 +97,7 @@
                 }
             }).state('[c.getDetailStateName()/]', {
                 url: '/details',
-                parent: '[c.getMainStateName()/]',
+                parent: '[c.getInstanceStateName()/]',
                 views: {
                     [c.getInstanceView()/]: {
                         templateUrl: baseInstancePath + 'details/[c.getName()/].detail.tpl.html',
@@ -107,7 +107,7 @@
             }).state('[c.getEditStateName()/]', {
                 url: '/edit',
                 sticky: true,
-                parent: '[c.getMainStateName()/]',
+                parent: '[c.getInstanceStateName()/]',
                 views: {
                     [c.getInstanceView()/]: {
                         templateUrl: baseInstancePath + 'edit/[c.getName()/].edit.tpl.html',
@@ -117,7 +117,7 @@
                 }
             }).state('[c.getDeleteStateName()/]', {
                 url: '/delete',
-                parent: '[c.getMainStateName()/]',
+                parent: '[c.getInstanceStateName()/]',
                 views: {
                     [c.getInstanceView()/]: {
                         templateUrl: baseInstancePath + 'delete/[c.getName()/].delete.tpl.html',
