@@ -35,10 +35,11 @@
             }[/for][/if][']'/]});
 
     mod.config(['['/]'$stateProvider',
-        function($stateProvider){
+        function($sp){
             var basePath = 'src/modules/[c.getName()/]/';
             var baseInstancePath = basePath + '[c.getInstanceStatesFolder()/]';
-            $stateProvider.state('[c.getMainStateName()/]', {
+
+            $sp.state('[c.getMainStateName()/]', {
                 url: '/[c.getURI()/]',
                 abstract: true,
                 [if (c.isChild())]parent: '[c.getParentAttribute().getClass().getInstanceStateName()/]',[/if]
@@ -61,7 +62,8 @@
                             return r.all(model.url).getList();
                         }[']'/]
                 }
-            }).state('[c.getListStateName()/]', {
+            });
+            $sp.state('[c.getListStateName()/]', {
                 url: '/list',
                 parent: '[c.getMainStateName()/]',
                 views: {
@@ -71,7 +73,8 @@
                         controllerAs: 'ctrl'
                     }
                 }
-            }).state('[c.getNewStateName()/]', {
+            });
+            $sp.state('[c.getNewStateName()/]', {
                 url: '/new',
                 parent: '[c.getMainStateName()/]',
                 views: {
@@ -81,7 +84,8 @@
                         controllerAs: 'ctrl'
                     }
                 }
-            }).state('[c.getInstanceStateName()/]', {
+            });
+            $sp.state('[c.getInstanceStateName()/]', {
                 url: '/{[c.getIdParamName()/]:int}',
                 abstract: true,
                 parent: '[c.getMainStateName()/]',
@@ -95,16 +99,18 @@
                             return [c.getRecordsName()/].get($params.[c.getIdParamName()/]);
                         }[']'/]
                 }
-            }).state('[c.getDetailStateName()/]', {
+            });
+            $sp.state('[c.getDetailStateName()/]', {
                 url: '/details',
                 parent: '[c.getInstanceStateName()/]',
                 views: {
                     [c.getInstanceView()/]: {
-                        templateUrl: baseInstancePath + 'details/[c.getName()/].detail.tpl.html',
+                        templateUrl: baseInstancePath + 'detail/[c.getName()/].detail.tpl.html',
                         controller: '[c.getName()/]DetailCtrl'
                     }
                 }
-            }).state('[c.getEditStateName()/]', {
+            });
+            $sp.state('[c.getEditStateName()/]', {
                 url: '/edit',
                 sticky: true,
                 parent: '[c.getInstanceStateName()/]',
@@ -115,7 +121,8 @@
                         controllerAs: 'ctrl'
                     }
                 }
-            }).state('[c.getDeleteStateName()/]', {
+            });
+            $sp.state('[c.getDeleteStateName()/]', {
                 url: '/delete',
                 parent: '[c.getInstanceStateName()/]',
                 views: {

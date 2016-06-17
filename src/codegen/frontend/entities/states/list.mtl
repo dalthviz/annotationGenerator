@@ -45,6 +45,16 @@
                 }
             };
             $scope.recordActions = {
+                detail: {
+                    displayName: 'Detail',
+                    icon: 'eye-open',
+                    fn: function (rc) {
+                        $state.go('[c.getDetailStateName()/]', {[c.getIdParamName()/]: rc.id});
+                    },
+                    show: function () {
+                        return true;
+                    }
+                },
                 edit: {
                     displayName: 'Edit',
                     icon: 'edit',

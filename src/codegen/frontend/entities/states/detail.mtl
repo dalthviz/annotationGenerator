@@ -40,10 +40,14 @@
                     fn: function () {
                         $state.reload();
                     }
-                }[if (c.isMaster())],[for (a : Property | c.getCollectionAttributes())]
-                    
-                [/for]
-            
+                }[if (c.isMaster())],[for (a : Property | c.getCollectionAttributes()) separator(',')]
+                [a.name/]: {
+                    displayName: '[a.getDisplayName()/]',
+                    icon: 'link',
+                    fn: function () {
+                        $state.reload();
+                    }
+                }[/for]
                 [/if]
             };
         }[']'/]);
@@ -56,6 +60,9 @@
 <!--
 [c.getModel().license()/]
 -->
+<header>
+    <toolbar name="model.name" display-name="model.displayName" actions='actions'></toolbar>
+</header>
 <!-- TODO -->
 {{currentRecord | json}}
 [/file]
