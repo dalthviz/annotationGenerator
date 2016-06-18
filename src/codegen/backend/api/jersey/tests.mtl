@@ -73,7 +73,7 @@ public class [c.getServiceTestName()/] {
     [if (c.isChild())]
     [for (cl : Class | c.getHierarchy())]
     [if (cl.name<>c.name)]
-    private final String [cl.testPath()/] = "[c.getParentAttribute().getClass().getURI()/]";
+    private final String [cl.testPath()/] = "[cl.getURI()/]";
     [cl.getEntityName()/] father[cl.name/]Entity;
     [/if]
     [/for]    
@@ -133,7 +133,7 @@ public class [c.getServiceTestName()/] {
     public void insertData() {
         PodamFactory factory = new PodamFactoryImpl();
         [if (c.isChild())]
-        [for (cl : Class | c.getHierarchy())]
+        [for (cl : Class | c.getHierarchy()->reverse())]
         [if (cl.name<>c.name)]        
         father[cl.name/]Entity = factory.manufacturePojo([cl.getEntityName()/].class);
         father[cl.name/]Entity.setId(1L);
@@ -149,7 +149,7 @@ public class [c.getServiceTestName()/] {
             [c.getEntityName()/] [c.getName()/] = factory.manufacturePojo([c.getEntityName()/].class);
             [c.getName()/].setId(i + 1L);
             [if (c.isChild())]
-            [c.getName()/].set[c.getParentAttribute().getClass().name/](fatherEntity);
+            [c.getName()/].set[c.getParentAttribute().getClass().name/](father[c.getParentAttribute().getClass().name/]Entity);
             [/if]
             em.persist([c.getName()/]);
             oraculo.add([c.getName()/]);
@@ -214,11 +214,11 @@ public class [c.getServiceTestName()/] {
         Cookie cookieSessionId = login(username, password);
         [if (c.isChild())]
         Response response = target
-        [for (cl : Class | c.getHierarchy())]
+        [for (cl : Class | c.getHierarchy()->reverse())]
             [if (cl.name<>c.name)]
             .path([cl.testPath()/]).path(father[cl.name/]Entity.getId().toString())
             [/if]            
-        [/for].path([c.testPath()/])
+        [/for]          .path([c.testPath()/])
             .request().cookie(cookieSessionId)
             .post(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
         [else]
@@ -252,11 +252,11 @@ public class [c.getServiceTestName()/] {
         Cookie cookieSessionId = login(username, password);
         [if (c.isChild())]        
         [c.getMinimumDTOName()/] [c.testName()/] = target
-        [for (cl : Class | c.getHierarchy())]
+        [for (cl : Class | c.getHierarchy()->reverse())]
             [if (cl.name<>c.name)]
             .path([cl.testPath()/]).path(father[cl.name/]Entity.getId().toString())
             [/if]        
-        [/for].path([c.testPath()/])
+        [/for]          .path([c.testPath()/])
             .path(oraculo.get(0).getId().toString())
             .request().cookie(cookieSessionId).get([c.getMinimumDTOName()/].class);
         [else]
@@ -280,11 +280,11 @@ public class [c.getServiceTestName()/] {
         Cookie cookieSessionId = login(username, password);
         [if (c.isChild())]
         Response response = target
-        [for (cl : Class | c.getHierarchy())]
+        [for (cl : Class | c.getHierarchy()->reverse())]
             [if (cl.name<>c.name)]
             .path([cl.testPath()/]).path(father[cl.name/]Entity.getId().toString())
             [/if]            
-        [/for].path([c.testPath()/])
+        [/for]          .path([c.testPath()/])
             .request().cookie(cookieSessionId).get();
         [else]
         Response response = target.path([c.testPath()/])
@@ -315,11 +315,11 @@ public class [c.getServiceTestName()/] {
         [/for]
         [if (c.isChild())]
         Response response = target
-        [for (cl : Class | c.getHierarchy())]
+        [for (cl : Class | c.getHierarchy()->reverse())]
             [if (cl.name<>c.name)]
             .path([cl.testPath()/]).path(father[cl.name/]Entity.getId().toString())
             [/if]            
-        [/for].path([c.testPath()/])
+        [/for]          .path([c.testPath()/])
             .path([c.getName()/].getId().toString())
             .request().cookie(cookieSessionId).put(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
         [else]
@@ -347,11 +347,11 @@ public class [c.getServiceTestName()/] {
         [c.getMinimumDTOName()/] [c.getName()/] = new [c.getMinimumDTOName()/](oraculo.get(0));
         [if (c.isChild())]
         Response response = target
-        [for (cl : Class | c.getHierarchy())]
+        [for (cl : Class | c.getHierarchy()->reverse())]
             [if (cl.name<>c.name)]
             .path([cl.testPath()/]).path(father[cl.name/]Entity.getId().toString())
             [/if]            
-        [/for].path([c.testPath()/])
+        [/for]          .path([c.testPath()/])
             .path([c.getName()/].getId().toString())
             .request().cookie(cookieSessionId).delete();
         [else]
