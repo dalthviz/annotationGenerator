@@ -216,7 +216,7 @@ public class [c.getServiceTestName()/] {
         Response response = target
         [for (cl : Class | c.getHierarchy())]
             [if (cl.name<>c.name)]
-            .path([cl.getClass().testPath()/]).path(father[cl.name/]Entity.getId().toString())
+            .path([cl.testPath()/]).path(father[cl.name/]Entity.getId().toString())
             [/if]            
         [/for].path([c.testPath()/])
             .request().cookie(cookieSessionId)
@@ -254,7 +254,7 @@ public class [c.getServiceTestName()/] {
         [c.getMinimumDTOName()/] [c.testName()/] = target
         [for (cl : Class | c.getHierarchy())]
             [if (cl.name<>c.name)]
-            .path([cl.getClass().testPath()/]).path(father[cl.name/]Entity.getId().toString())
+            .path([cl.testPath()/]).path(father[cl.name/]Entity.getId().toString())
             [/if]        
         [/for].path([c.testPath()/])
             .path(oraculo.get(0).getId().toString())
@@ -282,7 +282,7 @@ public class [c.getServiceTestName()/] {
         Response response = target
         [for (cl : Class | c.getHierarchy())]
             [if (cl.name<>c.name)]
-            .path([cl.getClass().testPath()/]).path(father[cl.name/]Entity.getId().toString())
+            .path([cl.testPath()/]).path(father[cl.name/]Entity.getId().toString())
             [/if]            
         [/for].path([c.testPath()/])
             .request().cookie(cookieSessionId).get();
@@ -317,7 +317,7 @@ public class [c.getServiceTestName()/] {
         Response response = target
         [for (cl : Class | c.getHierarchy())]
             [if (cl.name<>c.name)]
-            .path([cl.getClass().testPath()/]).path(father[cl.name/]Entity.getId().toString())
+            .path([cl.testPath()/]).path(father[cl.name/]Entity.getId().toString())
             [/if]            
         [/for].path([c.testPath()/])
             .path([c.getName()/].getId().toString())
@@ -349,7 +349,7 @@ public class [c.getServiceTestName()/] {
         Response response = target
         [for (cl : Class | c.getHierarchy())]
             [if (cl.name<>c.name)]
-            .path([cl.getClass().testPath()/]).path(father[cl.name/]Entity.getId().toString())
+            .path([cl.testPath()/]).path(father[cl.name/]Entity.getId().toString())
             [/if]            
         [/for].path([c.testPath()/])
             .path([c.getName()/].getId().toString())
