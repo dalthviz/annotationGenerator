@@ -17,10 +17,13 @@ package [c.getModel().baseGroup()/].tests;
 import co.edu.uniandes.csw.auth.model.UserDTO;
 import co.edu.uniandes.csw.auth.security.JWT;
 [if (c.isChild())]
-import [c.getModel().baseGroup()/].entities.[c.getParentAttribute().getClass().getEntityName()/];
+[for (cl : Class | c.getHierarchy())]
+import [cl.getModel().baseGroup()/].entities.[cl.getEntityName()/];
+[/for]
+[else]
+import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 [/if]
 import [c.getModel().baseGroup()/].dtos.minimum.[c.getMinimumDTOName()/];
-import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import [c.getModel().baseGroup()/].resources.[c.getJaxRsName()/];
 import java.io.File;
 import java.io.IOException;
@@ -68,8 +71,12 @@ public class [c.getServiceTestName()/] {
     private final String username = System.getenv("USERNAME_USER");
     private final String password = System.getenv("PASSWORD_USER");    
     [if (c.isChild())]
-    private final String [c.getParentAttribute().getClass().testPath()/] = "[c.getParentAttribute().getClass().getURI()/]";
-    [c.getParentAttribute().getClass().getEntityName()/] fatherEntity;
+    [for (cl : Class | c.getHierarchy())]
+    [if (cl.name!=c.name)]
+    private final String [cl.testPath()/] = "[c.getParentAttribute().getClass().getURI()/]";
+    [cl.getEntityName()/] father[cl.name/]Entity;
+    [/if]
+    [/for]    
     [/if]
 
     @ArquillianResource
@@ -105,9 +112,13 @@ public class [c.getServiceTestName()/] {
     private UserTransaction utx;
 
     private void clearData() {
-        em.createQuery("delete from [c.getEntityName()/]").executeUpdate();
+        
     [if (c.isChild())]
-        em.createQuery("delete from [c.getParentAttribute().getClass().getEntityName()/]").executeUpdate();
+        [for (cl : Class | c.getHierarchy())]
+        em.createQuery("delete from [cl.getEntityName()/]").executeUpdate();
+        [/for]
+    [else]
+        em.createQuery("delete from [c.getEntityName()/]").executeUpdate();    
     [/if]
         oraculo.clear();
     }
@@ -122,9 +133,17 @@ public class [c.getServiceTestName()/] {
     public void insertData() {
         PodamFactory factory = new PodamFactoryImpl();
         [if (c.isChild())]
-        fatherEntity = factory.manufacturePojo([c.getParentAttribute().getClass().getEntityName()/].class);
-        fatherEntity.setId(1L);
-        em.persist(fatherEntity);
+        [for (cl : Class | c.getHierarchy())]
+        [if (cl.name!=c.name)]        
+        father[cl.name/]Entity = factory.manufacturePojo([cl.getEntityName()/].class);
+        father[cl.name/]Entity.setId(1L);
+        [if (cl.isChild())]
+        father[cl.name/]Entity.set[cl.getParentAttribute().getClass().name/](father[cl.getParentAttribute().getClass().name/]Entity);
+        [/if]        
+        em.persist(father[cl.name/]Entity);
+        [/if]
+        [/for]
+        
         [/if]
         for (int i = 0; i < 3; i++) {            
             [c.getEntityName()/] [c.getName()/] = factory.manufacturePojo([c.getEntityName()/].class);
@@ -194,7 +213,12 @@ public class [c.getServiceTestName()/] {
         [c.getMinimumDTOName()/] [c.getName()/] = factory.manufacturePojo([c.getMinimumDTOName()/].class);
         Cookie cookieSessionId = login(username, password);
         [if (c.isChild())]
-        Response response = target.path([c.getParentAttribute().getClass().testPath()/]).path(fatherEntity.getId().toString()).path([c.testPath()/])
+        Response response = target
+        [for (cl : Class | c.getHierarchy())]
+            [if (cl.name!=c.name)]
+            .path([cl.getClass().testPath()/]).path(father[cl.name/]Entity.getId().toString())
+            [/if]            
+        [/for].path([c.testPath()/])
             .request().cookie(cookieSessionId)
             .post(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
         [else]
@@ -226,10 +250,15 @@ public class [c.getServiceTestName()/] {
     @Test
     public void get[c.name/]ById() {
         Cookie cookieSessionId = login(username, password);
-        [if (c.isChild())]
-        [c.getMinimumDTOName()/] [c.testName()/] = target.path([c.getParentAttribute().getClass().testPath()/]).path(fatherEntity.getId().toString()).path([c.testPath()/])
-                .path(oraculo.get(0).getId().toString())
-                .request().cookie(cookieSessionId).get([c.getMinimumDTOName()/].class);
+        [if (c.isChild())]        
+        [c.getMinimumDTOName()/] [c.testName()/] = target
+        [for (cl : Class | c.getHierarchy())]
+            [if (cl.name!=c.name)]
+            .path([cl.getClass().testPath()/]).path(father[cl.name/]Entity.getId().toString())
+            [/if]        
+        [/for].path([c.testPath()/])
+            .path(oraculo.get(0).getId().toString())
+            .request().cookie(cookieSessionId).get([c.getMinimumDTOName()/].class);
         [else]
         [c.getMinimumDTOName()/] [c.testName()/] = target.path([c.testPath()/])
                 .path(oraculo.get(0).getId().toString())
@@ -250,8 +279,13 @@ public class [c.getServiceTestName()/] {
     public void list[c.getServiceTestName()/]() throws IOException {
         Cookie cookieSessionId = login(username, password);
         [if (c.isChild())]
-        Response response = target.path([c.getParentAttribute().getClass().testPath()/]).path(fatherEntity.getId().toString()).path([c.testPath()/])
-                .request().cookie(cookieSessionId).get();
+        Response response = target
+        [for (cl : Class | c.getHierarchy())]
+            [if (cl.name!=c.name)]
+            .path([cl.getClass().testPath()/]).path(father[cl.name/]Entity.getId().toString())
+            [/if]            
+        [/for].path([c.testPath()/])
+            .request().cookie(cookieSessionId).get();
         [else]
         Response response = target.path([c.testPath()/])
                 .request().cookie(cookieSessionId).get();
@@ -280,8 +314,14 @@ public class [c.getServiceTestName()/] {
         [/if]
         [/for]
         [if (c.isChild())]
-        Response response = target.path([c.getParentAttribute().getClass().testPath()/]).path(fatherEntity.getId().toString()).path([c.testPath()/]).path([c.getName()/].getId().toString())
-                .request().cookie(cookieSessionId).put(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
+        Response response = target
+        [for (cl : Class | c.getHierarchy())]
+            [if (cl.name!=c.name)]
+            .path([cl.getClass().testPath()/]).path(father[cl.name/]Entity.getId().toString())
+            [/if]            
+        [/for].path([c.testPath()/])
+            .path([c.getName()/].getId().toString())
+            .request().cookie(cookieSessionId).put(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
         [else]
         Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
                 .request().cookie(cookieSessionId).put(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
@@ -306,8 +346,14 @@ public class [c.getServiceTestName()/] {
         Cookie cookieSessionId = login(username, password);
         [c.getMinimumDTOName()/] [c.getName()/] = new [c.getMinimumDTOName()/](oraculo.get(0));
         [if (c.isChild())]
-        Response response = target.path([c.getParentAttribute().getClass().testPath()/]).path(fatherEntity.getId().toString()).path([c.testPath()/]).path([c.getName()/].getId().toString())
-                .request().cookie(cookieSessionId).delete();
+        Response response = target
+        [for (cl : Class | c.getHierarchy())]
+            [if (cl.name!=c.name)]
+            .path([cl.getClass().testPath()/]).path(father[cl.name/]Entity.getId().toString())
+            [/if]            
+        [/for].path([c.testPath()/])
+            .path([c.getName()/].getId().toString())
+            .request().cookie(cookieSessionId).delete();
         [else]
         Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
                 .request().cookie(cookieSessionId).delete();
