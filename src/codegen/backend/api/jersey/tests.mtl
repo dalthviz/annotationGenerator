@@ -72,7 +72,7 @@ public class [c.getServiceTestName()/] {
     private final String password = System.getenv("PASSWORD_USER");    
     [if (c.isChild())]
     [for (cl : Class | c.getHierarchy())]
-    [if (cl.name!=c.name)]
+    [if (cl.name<>c.name)]
     private final String [cl.testPath()/] = "[c.getParentAttribute().getClass().getURI()/]";
     [cl.getEntityName()/] father[cl.name/]Entity;
     [/if]
@@ -134,7 +134,7 @@ public class [c.getServiceTestName()/] {
         PodamFactory factory = new PodamFactoryImpl();
         [if (c.isChild())]
         [for (cl : Class | c.getHierarchy())]
-        [if (cl.name!=c.name)]        
+        [if (cl.name<>c.name)]        
         father[cl.name/]Entity = factory.manufacturePojo([cl.getEntityName()/].class);
         father[cl.name/]Entity.setId(1L);
         [if (cl.isChild())]
@@ -215,7 +215,7 @@ public class [c.getServiceTestName()/] {
         [if (c.isChild())]
         Response response = target
         [for (cl : Class | c.getHierarchy())]
-            [if (cl.name!=c.name)]
+            [if (cl.name<>c.name)]
             .path([cl.getClass().testPath()/]).path(father[cl.name/]Entity.getId().toString())
             [/if]            
         [/for].path([c.testPath()/])
@@ -253,7 +253,7 @@ public class [c.getServiceTestName()/] {
         [if (c.isChild())]        
         [c.getMinimumDTOName()/] [c.testName()/] = target
         [for (cl : Class | c.getHierarchy())]
-            [if (cl.name!=c.name)]
+            [if (cl.name<>c.name)]
             .path([cl.getClass().testPath()/]).path(father[cl.name/]Entity.getId().toString())
             [/if]        
         [/for].path([c.testPath()/])
@@ -281,7 +281,7 @@ public class [c.getServiceTestName()/] {
         [if (c.isChild())]
         Response response = target
         [for (cl : Class | c.getHierarchy())]
-            [if (cl.name!=c.name)]
+            [if (cl.name<>c.name)]
             .path([cl.getClass().testPath()/]).path(father[cl.name/]Entity.getId().toString())
             [/if]            
         [/for].path([c.testPath()/])
@@ -316,7 +316,7 @@ public class [c.getServiceTestName()/] {
         [if (c.isChild())]
         Response response = target
         [for (cl : Class | c.getHierarchy())]
-            [if (cl.name!=c.name)]
+            [if (cl.name<>c.name)]
             .path([cl.getClass().testPath()/]).path(father[cl.name/]Entity.getId().toString())
             [/if]            
         [/for].path([c.testPath()/])
@@ -348,7 +348,7 @@ public class [c.getServiceTestName()/] {
         [if (c.isChild())]
         Response response = target
         [for (cl : Class | c.getHierarchy())]
-            [if (cl.name!=c.name)]
+            [if (cl.name<>c.name)]
             .path([cl.getClass().testPath()/]).path(father[cl.name/]Entity.getId().toString())
             [/if]            
         [/for].path([c.testPath()/])
