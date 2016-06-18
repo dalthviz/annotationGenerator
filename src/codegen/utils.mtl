@@ -55,7 +55,8 @@ c.allAttributes()->union(c.getReferences(false))->asOrderedSet()
 
 
 [**
- * Obtiene la colección de atributos de la clase, cuyo tipo es otra clase del modelo y son aceptados por el generador
+ * Obtiene la colección de atributos de la clase, cuyo tipo es otra clase del modelo y son aceptados por el generador.<br>
+ * 
  * Actualmente los atributos válidos cumplen con las siguientes características:
  * - Es navegable
  * - Su límite máximo de objetos es diferente de cero
@@ -89,14 +90,23 @@ c.getRelationshipAttributes()->select(
 )->asOrderedSet()
 /]
 
+[**
+ * Gets a list of attributes member of a relationship with upper cardinality higher than 1
+*/]
 [query public getCollectionAttributes(c : Class) : Set(Property) =
 c.getRelationshipAttributes()->select(getUpper() <> 1)->asSet()
 /]
 
+[**
+ * 
+*/]
 [query public hasReferences(c : Class, includeParent : Boolean) : Boolean =
 c.getReferences(includeParent)->notEmpty()
 /]
 
+[**
+ * The result of Class.getCollectionAttributes is not empty
+*/]
 [query public isMaster(c : Class) : Boolean =
 c.getCollectionAttributes()->notEmpty()
 /]
