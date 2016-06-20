@@ -177,6 +177,15 @@ and (
 )
 /]
 
+[query public getHierarchy(c : Class) : Sequence(Class) = 
+Sequence(class){c}->union(
+    if c.getParentAttribute() <> null then 
+        c.getParentAttribute().getClass().getHierarchy() 
+    else 
+        Sequence(Class){} 
+    endif) 
+/]
+
 [template public testName(c : Class)]
 [c.name.toLower().concat('Test')/]
 [/template]
