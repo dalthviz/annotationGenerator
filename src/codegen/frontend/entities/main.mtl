@@ -20,19 +20,21 @@
         name: '[c.getName()/]',
         displayName: '[c.getDisplayName()/]',
 		url: '[c.getURI()/]',
-        fields: ['['/][for (a : Property | c.getAllAttribs()) separator(', ')]{
-                name: '[a.name/]',
+        fields: {[for (a : Property | c.getAllAttribs()) separator(',\n')]
+            [a.name/]: {
                 displayName: '[a.getDisplayName()/]',
                 type: '[a.type.name/]',
                 required: [a.isRequired()/]
-            }[/for][if(c.hasReferences(false))], [for (a : Property | c.getReferences(false)) separator(', ')]{
-                name: '[a.name/]',
+            }[/for][for (a : Property | c.getReferences(false))],
+            [a.name/]: {
                 displayName: '[a.getDisplayName()/]',
                 type: 'Reference',
-                url: '[a.getClass().getURI()/]',
+                model: '[a.getClass().getEntityModel()/]',
                 options: ['[]'/],
                 required: [a.isRequired()/]
-            }[/for][/if][']'/]});
+            }[/for]
+        }
+    });
 
     mod.config(['['/]'$stateProvider',
         function($sp){
@@ -50,6 +52,7 @@
                     }
                 },
                 resolve: {
+                    [if (c.hasReferences(false))]
                     references: ['['/]'$q', 'Restangular', function ($q, r) {
                             return $q.all({
                              [for (a : Property | c.getReferences(false)) separator(', ')]
@@ -57,6 +60,7 @@
                             [/for]
                             });
                         }[']'/],
+                    [/if]
                     model: '[c.getEntityModel()/]',
                     [c.getRecordsName()/]: ['['/]'Restangular', 'model', function (r, model) {
                             return r.all(model.url).getList();
@@ -146,9 +150,11 @@
 (function (ng) {
     var mod = ng.module('[c.getModule() /]');
 
-    mod.controller('[c.getCtrl()/]', ['['/]'$scope', 'references', 'model',
-        function ($scope, references, model) {
+    mod.controller('[c.getCtrl()/]', ['['/]'$scope', 'model',[if(c.hasReferences(false))] 'references',[/if]
+        function ($scope, model[if(c.hasReferences(false))] references,[/if]) {
+            [if(c.hasReferences(false))]
             $scope.references = references;
+            [/if]
             $scope.model = model;
             //Alertas
             $scope.alerts = ['[]'/];
