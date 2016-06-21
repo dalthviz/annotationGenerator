@@ -63,8 +63,24 @@
 <header>
     <toolbar name="model.name" display-name="model.displayName" actions='actions'></toolbar>
 </header>
+<div  class="container well">
+    <div class="col-md-12">
+    [for (a : Property | c.allAttributes()->reject(isID()))]
+
+        [if (a.isDate())]
+        <label><b>Name: </b></label><span> {{currentRecord. [a.name.toLowerFirst()/] | date}}</span><br>
+        [else]
+        <label><b>Name: </b></label><span> {{currentRecord. [a.name.toLowerFirst()/]}}</span><br>
+        [/if]
+    [/for]   
+    [for (a : Property | c.getRelationshipAttributes())]
+        [if (a.getUpper() = 1)]
+        <label><b>Name: </b></label><span> {{currentRecord. [a.name.toLowerFirst()/].name}}</span><br>    
+        [/if]
+    [/for]     
+    </div>
+</div>
 <!-- TODO -->
-{{currentRecord | json}}
 [/file]
 [/template]
 
