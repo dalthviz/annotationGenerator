@@ -56,7 +56,7 @@
 </header>
 <form novalidate name="[c.getFormName()/]" role="form">
     <fieldset>
-        <crud-form fields='model.fields' record='currentRecord'></crud-form>
+        <crud-form fields='model.fields' record='currentRecord' lists-of-values="references"></crud-form>
     </fieldset>
 </form>
 [/file]

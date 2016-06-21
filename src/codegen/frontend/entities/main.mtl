@@ -151,7 +151,7 @@
     var mod = ng.module('[c.getModule() /]');
 
     mod.controller('[c.getCtrl()/]', ['['/]'$scope', 'model',[if(c.hasReferences(false))] 'references',[/if]
-        function ($scope, model[if(c.hasReferences(false))] references,[/if]) {
+        function ($scope, model[if(c.hasReferences(false))], references[/if]) {
             [if(c.hasReferences(false))]
             $scope.references = references;
             [/if]

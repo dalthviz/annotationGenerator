@@ -46,7 +46,7 @@
                     displayName: '[a.getDisplayName()/]',
                     icon: 'link',
                     fn: function () {
-                        $state.reload();
+                        $state.go('[a.getClass().getListStateName()/]');
                     }
                 }[/for][/if]
             };
