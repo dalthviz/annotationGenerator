@@ -287,3 +287,25 @@
 [template protected getInstanceStatesFolder(c : Class)]
 instance/
 [/template]
+
+[comment Shared Utils /]
+
+[template protected getSharedEditState(a : Property)]
+[a.getOwner().getName()/][a.name.toUpperFirst()/]Edit
+[/template]
+
+[template protected getSharedListState(a : Property)]
+[a.getOwner().getName()/][a.name.toUpperFirst()/]List
+[/template]
+
+[template protected getSharedListCtrlName(a : Property)]
+[a.getOwner().getName()/][a.name.toUpperFirst()/]ListCtrl
+[/template]
+
+[template protected getSharedEditCtrlName(a : Property)]
+[a.getOwner().getName()/][a.name.toUpperFirst()/]EditCtrl
+[/template]
+
+[query protected getOwner(a : Property) : Class = 
+a.getOtherEnd().getClass()
+/]
