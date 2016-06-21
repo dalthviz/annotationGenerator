@@ -62,9 +62,15 @@
                         }[']'/],
                     [/if]
                     model: '[c.getEntityModel()/]',
+                    [if (c.isChild())]
+                    [c.getRecordsName()/]: ['['/]'[c.getParentAttribute().getClass().getName()/]', function ([c.getParentAttribute().getClass().getName()/]) {
+                            return [c.getParentAttribute().getClass().getName()/].getList('[c.getRecordsName()/]');
+                        }[']'/]
+                    [else]
                     [c.getRecordsName()/]: ['['/]'Restangular', 'model', function (r, model) {
                             return r.all(model.url).getList();
                         }[']'/]
+                    [/if]
                 }
             });
             $sp.state('[c.getListStateName()/]', {
