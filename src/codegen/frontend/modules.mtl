@@ -7,6 +7,7 @@
 [import frontend::entities::states::new /]
 [import frontend::entities::states::detail /]
 [import frontend::entities::states::edit /]
+[import frontend::entities::states::shared /]
 [import frontend::entities::states::delete /]
 [import frontend::entities::tests /]
 
@@ -18,5 +19,8 @@
     [c.mainDetailState(filePath)/]
     [c.mainEditState(filePath)/]
     [c.mainDeleteState(filePath)/]
+    [for (a : Property | c.getNonCompositeCollectionAttributes())]
+    [a.mainShared(filePath.concat('instance/'+a.name+'/'))/]
+    [/for]
 [/let]
 [/template]

@@ -52,7 +52,16 @@
                     fn: function () {
                         $state.reload();
                     }
+                }[if (c.isChild())],
+                cancel: {
+                    displayName: 'Go back',
+                    icon: 'arrow-left',
+                    fn: function () {
+                        $state.go('[c.getParentAttribute().getClass().getName()/]Detail');
+                    }
                 }
+
+                 [/if]
             };
             $scope.recordActions = {
                 detail: {

@@ -3,7 +3,14 @@
 [import ::utils /]
 
 [template public mainShared(a : Property, path : String)]
-
+[let filePath : String = path.concat('list/')]
+    [a.genListTemplate(filePath)/]
+    [a.genListCtrl(filePath)/]
+[/let]
+[let filePath : String = path.concat('edit/')]
+    [a.genEditTemplate(filePath)/]
+    [a.genEditCtrl(filePath)/]
+[/let]
 [/template]
 
 [template private genListTemplate(a : Property, path : String)]
