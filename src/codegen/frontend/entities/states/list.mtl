@@ -35,7 +35,7 @@
             this.totalItems = [c.getRecordsName()/].totalRecords;
 
             this.pageChanged = function () {
-                $state.go('[c.getListStateName()/]', {[c.getIdParamName()/]: rc.id});
+                $state.go('[c.getListStateName()/]', $params);
             };
 
             $scope.actions = {
