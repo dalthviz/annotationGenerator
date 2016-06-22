@@ -34,11 +34,32 @@
                         $state.go('[c.getNewStateName()/]');
                     }
                 },
+                edit: {
+                    displayName: 'Edit',
+                    icon: 'edit',
+                    fn: function (rc) {
+                        $state.go('[c.getEditStateName()/]');
+                    }
+                },
+                delete: {
+                    displayName: 'Delete',
+                    icon: 'minus',
+                    fn: function (rc) {
+                        $state.go('[c.getDeleteStateName()/]');
+                    }
+                },
                 refresh: {
                     displayName: 'Refresh',
                     icon: 'refresh',
                     fn: function () {
                         $state.reload();
+                    }
+                },
+                list: {
+                    displayName: 'List',
+                    icon: 'th-list',
+                    fn: function () {
+                        $state.go('[c.getListStateName()/]');
                     }
                 }[if (c.isMaster())],
                 [for (a : Property | c.getCollectionAttributes()) separator(',\n')]

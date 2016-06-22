@@ -34,6 +34,18 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
 
     mod.config(['['/]'RestangularProvider', function (rp) {
             rp.setBaseUrl('[m.getAPIURL()/]');
+            rp.setRequestInterceptor(function (elem, operation) {
+                if (operation === "remove") {
+                    return null;
+                }
+                return elem;
+            });
+            rp.addResponseInterceptor(function (data, operation, what, url, response) {
+                if (operation === "getList" && response.headers("X-Total-Count")) {
+                    data.totalRecords = parseInt(response.headers("X-Total-Count"));
+                }
+                return data;
+            });
         }[']'/]);
 
     mod.config(['['/]'$urlRouterProvider', function ($urlRouterProvider) {
