@@ -25,9 +25,19 @@
 
     var mod = ng.module("[c.getModule()/]");
 
-    mod.controller("[c.getListCtrlName()/]", ['['/]"$scope", '$state', '[c.getRecordsName()/]',
-        function ($scope, $state, [c.getRecordsName()/]) {
+    mod.controller("[c.getListCtrlName()/]", ['['/]"$scope", '$state', '[c.getRecordsName()/]', '$stateParams',
+        function ($scope, $state, [c.getRecordsName()/], $params) {
             $scope.records = [c.getRecordsName()/];
+
+            //Paginación
+            this.itemsPerPage = $params.limit;
+            this.currentPage = $params.page;
+            this.totalItems = books.totalRecords;
+
+            this.pageChanged = function () {
+                $state.go('[c.getDetailStateName()/]', {[c.getIdParamName()/]: rc.id});
+            };
+
             $scope.actions = {
                 create: {
                     displayName: 'Create',
@@ -90,5 +100,14 @@
     <toolbar name="model.name" display-name="model.displayName" actions='actions'></toolbar>
 </header>
 <list-records fields="model.fields" records="records" actions="recordActions"></list-records>
+<pagination total-items="ctrl.totalItems"
+            max-size="5" 
+            ng-model="ctrl.currentPage"
+            ng-change="ctrl.pageChanged()"
+            items-per-page="ctrl.itemsPerPage"
+            class="pagination-md" 
+            boundary-links="true" 
+            rotate="false">
+</pagination>
 [/file]
 [/template]

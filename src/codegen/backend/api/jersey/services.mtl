@@ -46,7 +46,7 @@ public class [className/] {
     @Inject private [c.getAPIName()/] [logic/];
     @Context private HttpServletResponse response;
     @QueryParam("page") private Integer page;
-    @QueryParam("maxRecords") private Integer maxRecords;
+    @QueryParam("limit") private Integer maxRecords;
     @PathParam("[c.getParentAttribute().getClass().getName()/]Id")
     private Long [c.getParentAttribute().getClass().getName()/]Id;
    
@@ -150,7 +150,7 @@ public class [className/] {
     @Inject private [c.getAPIName()/] [logic/];
     @Context private HttpServletResponse response;
     @QueryParam("page") private Integer page;
-    @QueryParam("maxRecords") private Integer maxRecords;
+    @QueryParam("limit") private Integer maxRecords;
 
    
     /**

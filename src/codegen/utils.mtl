@@ -370,22 +370,6 @@ String[else]
 co.edu.uniandes.csw
 [/template]
 
-[template public getAuthLibArtifactId(m : Model)]
-auth-utils
-[/template]
-
-[template public getAuthLibVersion(m : Model)]
-0.1.0
-[/template]
-
-[template public getCrudLibArtifactId(m : Model)]
-crud-utils
-[/template]
-
-[template public getCrudLibVersion(m : Model)]
-0.1.2
-[/template]
-
 [template public asDisplayName(s : String)]
 [s.replace('^\\W+','').replaceAll('(?!^)([A-Z])',' $1').replaceAll('\\W+', ' ').toUpperFirst()/]
 [/template]

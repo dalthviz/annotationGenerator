@@ -42,7 +42,7 @@
             var baseInstancePath = basePath + '[c.getInstanceStatesFolder()/]';
 
             $sp.state('[c.getMainStateName()/]', {
-                url: '/[c.getURI()/]',
+                url: '/[c.getURI()/]?page&limit',
                 abstract: true,
                 [if (c.isChild())]parent: '[c.getParentAttribute().getClass().getInstanceStateName()/]',[/if]
                 views: {
@@ -63,12 +63,12 @@
                     [/if]
                     model: '[c.getEntityModel()/]',
                     [if (c.isChild())]
-                    [c.getRecordsName()/]: ['['/]'[c.getParentAttribute().getClass().getName()/]', function ([c.getParentAttribute().getClass().getName()/]) {
-                            return [c.getParentAttribute().getClass().getName()/].getList('[c.getRecordsName()/]');
+                    [c.getRecordsName()/]: ['['/]'[c.getParentAttribute().getClass().getName()/]', '$stateParams', function ([c.getParentAttribute().getClass().getName()/], $params) {
+                            return [c.getParentAttribute().getClass().getName()/].getList('[c.getRecordsName()/]', $params);
                         }[']'/]
                     [else]
-                    [c.getRecordsName()/]: ['['/]'Restangular', 'model', function (r, model) {
-                            return r.all(model.url).getList();
+                    [c.getRecordsName()/]: ['['/]'Restangular', 'model', '$stateParams', function (r, model, $params) {
+                            return r.all(model.url).getList($params);
                         }[']'/]
                     [/if]
                 }

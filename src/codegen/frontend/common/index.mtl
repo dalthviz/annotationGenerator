@@ -41,8 +41,8 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
                 return elem;
             });
             rp.addResponseInterceptor(function (data, operation, what, url, response) {
-                if (operation === "getList" && response.headers("X-Total-Count")) {
-                    data.totalRecords = parseInt(response.headers("X-Total-Count"));
+                if (operation === "getList") {
+                    data.totalRecords = parseInt(response.headers("X-Total-Count")) || 1;
                 }
                 return data;
             });
