@@ -46,7 +46,7 @@
                 abstract: true,
                 [if (c.isChild())]parent: '[c.getParentAttribute().getClass().getInstanceStateName()/]',[/if]
                 views: {
-                    mainView: {
+                     [if(c.isChild())][c.getParentAttribute().getClass().getInstanceView()/][else]mainView[/if]: {
                         templateUrl: basePath + '[c.getName()/].tpl.html',
                         controller: '[c.getName()/]Ctrl'
                     }
