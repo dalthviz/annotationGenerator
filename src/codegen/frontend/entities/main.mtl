@@ -290,7 +290,7 @@
 [c.getName()/]DeleteCtrl
 [/template]
 
-[template protected getInstanceStatesFolder(c : Class)]
+[template public getInstanceStatesFolder(c : Class)]
 instance/
 [/template]
 

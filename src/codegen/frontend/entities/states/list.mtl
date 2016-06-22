@@ -32,7 +32,7 @@
             //Paginación
             this.itemsPerPage = $params.limit;
             this.currentPage = $params.page;
-            this.totalItems = books.totalRecords;
+            this.totalItems = [c.getRecordsName()/].totalRecords;
 
             this.pageChanged = function () {
                 $state.go('[c.getDetailStateName()/]', {[c.getIdParamName()/]: rc.id});

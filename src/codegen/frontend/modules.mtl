@@ -20,7 +20,7 @@
     [c.mainEditState(filePath)/]
     [c.mainDeleteState(filePath)/]
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
-    [a.mainShared(filePath.concat('instance/'+a.name+'/'))/]
+    [a.mainShared(filePath.concat(a.getClass().getInstanceStatesFolder()+a.name+'/'))/]
     [/for]
 [/let]
 [/template]
