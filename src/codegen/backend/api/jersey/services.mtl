@@ -5,12 +5,12 @@
 [template public mainJersey(c : Class, path : String)]
 [let filePath : String = path.concat('resources/')]
     [if (c.isChild())]
-        [c.genCompositeResourceClass(path)/]
+        [c.genCompositeResourceClass(filePath)/]
     [else]
         [c.genResourceClass(filePath)/]
     [/if]
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
-        [a.genSharedResourceClass(path)/]
+        [a.genSharedResourceClass(filePath)/]
     [/for]
 [/let]
 [/template]
@@ -248,6 +248,7 @@ public class [className/] {
      * @generated
      */
     @POST
+    @StatusCreated
     public [c.getBasicDTOName()/] create[c.name/]([c.getBasicDTOName()/] dto) {
         return new [c.getBasicDTOName()/]([logic/].create[c.name/]([c.getParentAttribute().getClass().getName()/]Id, dto.toEntity()));
     }
@@ -295,7 +296,6 @@ public class [className/] {
 */
 package [a.getClass().getModel().baseGroup()/].resources;
 
-import co.edu.uniandes.csw.auth.provider.StatusCreated;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
@@ -362,7 +362,6 @@ public class [a.getSharedResourceClassName()/] {
      * @generated
      */
     @GET
-    @Path("{[a.getOwner().getEntityId()/]: \\d+}/[a.name/]")
     public List<[a.getClass().getBasicDTOName()/]> list[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getEntityId()/]") Long [a.getOwner().getEntityId()/]) {
         return [a.name/]ListEntity2DTO([logic/].list[a.name.toUpperFirst()/]([a.getOwner().getEntityId()/]));
     }
@@ -375,7 +374,7 @@ public class [a.getSharedResourceClassName()/] {
      * @generated
      */
     @GET
-    @Path("{[a.getOwner().getEntityId()/]: \\d+}/[a.name/]/{[a.getClass().getEntityId()/]: \\d+}")
+    @Path("{[a.getClass().getEntityId()/]: \\d+}")
     public [a.getClass().getBasicDTOName()/] get[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getEntityId()/]") Long [a.getOwner().getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
         return new [a.getClass().getBasicDTOName()/]([logic/].get[a.name.toUpperFirst()/]([a.getOwner().getEntityId()/], [a.getClass().getEntityId()/]));
     }
@@ -389,7 +388,7 @@ public class [a.getSharedResourceClassName()/] {
      * @generated
      */
     @POST
-    @Path("{[a.getOwner().getEntityId()/]: \\d+}/[a.name/]/{[a.getClass().getEntityId()/]: \\d+}")
+    @Path("{[a.getClass().getEntityId()/]: \\d+}")
     public [a.getClass().getBasicDTOName()/] add[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getEntityId()/]") Long [a.getOwner().getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
         return new [a.getClass().getBasicDTOName()/]([logic/].add[a.name.toUpperFirst()/]([a.getOwner().getEntityId()/], [a.getClass().getEntityId()/]));
     }
@@ -403,7 +402,6 @@ public class [a.getSharedResourceClassName()/] {
      * @generated
      */
     @PUT
-    @Path("{[a.getOwner().getEntityId()/]: \\d+}/[a.name/]")
     public List<[a.getClass().getBasicDTOName()/]> replace[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getEntityId()/]") Long [a.getOwner().getEntityId()/], List<[a.getClass().getBasicDTOName()/]> [a.getClass().getURI()/]) {
         return [a.name/]ListEntity2DTO([logic/].replace[a.name.toUpperFirst()/]([a.getOwner().getEntityId()/], [a.name/]ListDTO2Entity([a.getClass().getURI()/])));
     }
@@ -416,7 +414,7 @@ public class [a.getSharedResourceClassName()/] {
      * @generated
      */
     @DELETE
-    @Path("{[a.getOwner().getEntityId()/]: \\d+}/[a.name/]/{[a.getClass().getEntityId()/]: \\d+}")
+    @Path("{[a.getClass().getEntityId()/]: \\d+}")
     public void remove[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getEntityId()/]") Long [a.getOwner().getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
         [logic/].remove[a.name.toUpperFirst()/]([a.getOwner().getEntityId()/], [a.getClass().getEntityId()/]);
     }
@@ -427,11 +425,11 @@ public class [a.getSharedResourceClassName()/] {
 [template protected genSubResourceLocators(c : Class)]
 [for (a : Property | c.getCompositeCollectionAttributes())]
 
-    @Path("{[c.getEntityId()/]: \\d+}/[a.name/]")
-    public Class<[a.getClass().getJaxRsName()/]> get[a.getClass().getJaxRsName()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/]){
-        get[c.name/]([c.getEntityId()/]);
-        return [a.getClass().getJaxRsName()/].class;
-    }
+@Path("{[c.getEntityId()/]: \\d+}/[a.name/]")
+public Class<[a.getClass().getJaxRsName()/]> get[a.getClass().getJaxRsName()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/]){
+    get[c.name/]([c.getEntityId()/]);
+    return [a.getClass().getJaxRsName()/].class;
+}
 [/for]
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
 

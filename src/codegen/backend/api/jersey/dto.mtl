@@ -18,6 +18,7 @@ package [c.getModel().baseGroup()/].dtos.minimum;
 
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 [if (c.hasDateAttribute())]
 import java.util.Date;
 import uk.co.jemos.podam.common.PodamStrategyValue;
@@ -28,7 +29,7 @@ import co.edu.uniandes.csw.crud.api.podam.strategy.DateStrategy;
  * @generated
  */
 @XmlRootElement
-public class [className/] {
+public class [className/] implements Serializable{
 
 [for(a : Property | c.allAttributes())]
     [if(a.isDate())]
@@ -186,114 +187,6 @@ public class [className/] extends [c.getMinimumDTOName()/]{
         this.[a.name/] = [a.name.toLower()/];
     }
 
-[/for]
-}
-[/file]
-[/template]
-
-[template protected genFullDTO(c : Class, path: String) {className : String = c.getFullDTOName();}]
-[file (path.concat(className+'.java'), false, 'UTF-8')]
-/*
-[c.getModel().license()/]
-*/
-package [c.getModel().baseGroup()/].dtos.full;
-
-import [c.getModel().baseGroup()/].dtos.minimum.*;
-import [c.getModel().baseGroup()/].dtos.basic.[c.getBasicDTOName()/];
-import [c.getModel().baseGroup()/].entities.*;
-import javax.xml.bind.annotation.XmlRootElement;
-[if (c.getRelationshipAttributes()->select(not isComposite())->notEmpty())]
-import uk.co.jemos.podam.common.PodamExclude;
-[/if]
-[if (c.isMaster())]
-import java.util.List;
-import java.util.ArrayList;
-[/if]
-
-/**
- * @generated
- */
-@XmlRootElement
-public class [className/] extends [c.getBasicDTOName()/]{
-
-[for (a : Property | c.getRelationshipAttributes())]    
-[if (a.getUpper() <> 1)]
-    [if (a.isComposite())]
-    @PodamExclude
-    private List<[a.getClass().getMinimumDTOName()/]> [a.name/] = new ArrayList<>();
-    [/if]
-[/if]
-[/for]
-
-    /**
-     * @generated
-     */
-    public [className/]() {
-        super();
-    }
-
-    /**
-     * Crea un objeto [className/] a partir de un objeto [c.getEntityName()/] incluyendo los atributos de [c.getBasicDTOName()/].
-     *
-     * @param entity Entidad [c.getEntityName()/] desde la cual se va a crear el nuevo objeto.
-     * @generated
-     */
-    public [className/]([c.getEntityName()/] entity) {
-        super(entity);      
-[for (a : Property | c.getCollectionAttributes())] 
-    [if (a.isComposite())]
-        for ([a.getClass().getEntityName()/] obj : entity.[a.getter()/]()) {
-            [a.name/].add(new [a.getClass().getMinimumDTOName()/](obj));
-        }
-    [/if]
-[/for]
-    }
-
-    /**
-     * Convierte un objeto [className/] a [c.getEntityName()/] incluyendo los atributos de [c.getBasicDTOName()/].
-     *
-     * @return Nueva objeto [c.getEntityName()/].
-     * @generated
-     */
-    @Override
-    public [c.getEntityName()/] toEntity() {
-        [c.getEntityName()/] entity = super.toEntity();
-[for (a : Property | c.getCollectionAttributes())] 
-    [if (a.isComposite())]
-        List<[a.getClass().getEntityName()/]> [a.name/]List = new ArrayList<>();
-        for ([a.getClass().getMinimumDTOName()/] [a.name/] : this.[a.getter()/]()) {
-            [a.getClass().getEntityName()/] obj=[a.name/].toEntity();
-            obj.set[c.name/](entity);
-            [a.name/]List.add(obj);
-        }
-        entity.[a.setter()/]([a.name/]List);
-    [/if]
-[/for]
-        return entity;
-    }
-
-[for (a : Property | c.getCollectionAttributes())]
-    [if (a.isComposite())]
-    /**
-     * Obtiene la colección de [a.name/].
-     *
-     * @return colección [a.name/].
-     * @generated
-     */
-    public List<[a.getClass().getMinimumDTOName()/]> [a.getter()/]() {
-        return [a.name/];
-    }
-
-    /**
-     * Establece el valor de la colección de [a.name/].
-     *
-     * @param [a.name/] nuevo valor de la colección.
-     * @generated
-     */
-    public void [a.setter()/](List<[a.getClass().getMinimumDTOName()/]> [a.name.toLower()/]) {
-        this.[a.name/] = [a.name.toLower()/];
-    }
-    [/if]
 [/for]
 }
 [/file]

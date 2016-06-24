@@ -37,14 +37,14 @@
                 edit: {
                     displayName: 'Edit',
                     icon: 'edit',
-                    fn: function (rc) {
+                    fn: function () {
                         $state.go('[c.getEditStateName()/]');
                     }
                 },
                 delete: {
                     displayName: 'Delete',
                     icon: 'minus',
-                    fn: function (rc) {
+                    fn: function () {
                         $state.go('[c.getDeleteStateName()/]');
                     }
                 },
@@ -73,8 +73,8 @@
                         $state.go('[a.getSharedListState()/]');
                         [/if]
                     }
-                }
-                [/for][/if]
+                }[/for][/if]
+
             };
         }[']'/]);
 })(window.angular);
@@ -92,17 +92,16 @@
 <div  class="container well">
     <div class="col-md-12">
     [for (a : Property | c.allAttributes()->reject(isID()))]
-
+        <p>
         [if (a.isDate())]
-        <label><b>[a.name.toUpperFirst()/]: </b></label><span> {{currentRecord.[a.name.toLowerFirst()/] | date}}</span><br>
+        <label><b>[a.name.toUpperFirst()/]: </b></label><span> {{currentRecord.[a.name.toLowerFirst()/] | date}}</span>
         [else]
-        <label><b>[a.name.toUpperFirst()/]: </b></label><span> {{currentRecord.[a.name.toLowerFirst()/]}}</span><br>
+        <label><b>[a.name.toUpperFirst()/]: </b></label><span> {{currentRecord.[a.name.toLowerFirst()/]}}</span>
         [/if]
-    [/for]   
-    [for (a : Property | c.getRelationshipAttributes())]
-        [if (a.getUpper() = 1)]
-        <label><b>[a.name.toUpperFirst()/]: </b></label><span> {{currentRecord.[a.name.toLowerFirst()/].name}}</span><br>    
-        [/if]
+        </p>
+    [/for]
+    [for (a : Property | c.getReferences(false))]
+        <p><label><b>[a.name.toUpperFirst()/]: </b></label><span> {{currentRecord.[a.name.toLowerFirst()/].name}}</span></p>
     [/for]     
     </div>
 </div>
