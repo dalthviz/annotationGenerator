@@ -61,7 +61,7 @@
                     }
                 }
 
-                 [/if]
+                [/if]
             };
             $scope.recordActions = {
                 detail: {

@@ -48,7 +48,7 @@
                 views: {
                      [if(c.isChild())][c.getParentAttribute().getClass().getInstanceView()/][else]mainView[/if]: {
                         templateUrl: basePath + '[c.getName()/].tpl.html',
-                        controller: '[c.getName()/]Ctrl'
+                        controller: '[c.getCtrl()/]'
                     }
                 },
                 resolve: {
@@ -90,7 +90,7 @@
                 views: {
                     [c.getMainView()/]: {
                         templateUrl: basePath + 'new/[c.getName()/].new.tpl.html',
-                        controller: '[c.getName()/]NewCtrl',
+                        controller: '[c.getNewCtrlName()/]',
                         controllerAs: 'ctrl'
                     }
                 }
@@ -116,7 +116,7 @@
                 views: {
                     [c.getInstanceView()/]: {
                         templateUrl: baseInstancePath + 'detail/[c.getName()/].detail.tpl.html',
-                        controller: '[c.getName()/]DetailCtrl'
+                        controller: '[c.getDetailCtrlName()/]'
                     }
                 }
             });
@@ -127,7 +127,7 @@
                 views: {
                     [c.getInstanceView()/]: {
                         templateUrl: baseInstancePath + 'edit/[c.getName()/].edit.tpl.html',
-                        controller: '[c.getName()/]EditCtrl',
+                        controller: '[c.getEditCtrlName()/]',
                         controllerAs: 'ctrl'
                     }
                 }
@@ -138,11 +138,55 @@
                 views: {
                     [c.getInstanceView()/]: {
                         templateUrl: baseInstancePath + 'delete/[c.getName()/].delete.tpl.html',
-                        controller: '[c.getName()/]DeleteCtrl',
+                        controller: '[c.getDeleteCtrlName()/]',
                         controllerAs: 'ctrl'
                     }
                 }
             });
+            [for (a : Property | c.getNonCompositeCollectionAttributes())]
+            $sp.state('[a.getSharedAbstractState()/]', {
+                url: '/[a.name/]',
+                parent: '[c.getInstanceStateName()/]',
+                abstract: true,
+                views: {
+                    [c.getInstanceView()/]: {
+                        template: '<div ui-view="[a.getSharedAbstractView()/]"></div>'
+                    }
+                },
+                resolve: {
+                    [a.name/]: ['['/]'[c.getRecordName()/]', function ([c.getRecordName()/]) {
+                            return [c.getRecordName()/].getList('[a.name/]');
+                        }[']'/],
+                    model: '[a.getClass().getEntityModel()/]'
+                }
+            });
+            $sp.state('[a.getSharedListState()/]', {
+                url: '/list',
+                parent: '[a.getSharedAbstractState()/]',
+                views: {
+                    [a.getSharedAbstractView()/]: {
+                        templateUrl: baseInstancePath + '[a.name/]/list/[c.getName()/].[a.name/].list.tpl.html',
+                        controller: '[a.getSharedListCtrlName()/]'
+                    }
+                }
+            });
+            $sp.state('[a.getSharedEditState()/]', {
+                url: '/edit',
+                parent: '[a.getSharedAbstractState()/]',
+                views: {
+                    [a.getSharedAbstractView()/]: {
+                        templateUrl: baseInstancePath + '[a.name/]/edit/[c.getName()/].[a.name/].edit.tpl.html',
+                        controller: '[a.getSharedEditCtrlName()/]',
+                        controllerAs: 'ctrl'
+                    }
+                },
+                resolve: {
+                    pool: ['['/]'Restangular', 'model', function (r, model) {
+                            return r.all(model.url).getList();
+                        }[']'/]
+                }
+            });
+            [/for]
 	}[']'/]);
 })(window.angular);
 [/file]
@@ -229,27 +273,27 @@
 [/template]
 
 [template public getListStateName(c : Class)]
-[c.getName()/]List
+[c.getMainStateName()/]List
 [/template]
 
 [template protected getNewStateName(c : Class)]
-[c.getName()/]New
+[c.getMainStateName()/]New
 [/template]
 
 [template protected getInstanceStateName(c : Class)]
-[c.getName()/]Instance
+[c.getMainStateName()/]Instance
 [/template]
 
 [template protected getDetailStateName(c : Class)]
-[c.getName()/]Detail
+[c.getMainStateName()/]Detail
 [/template]
 
 [template protected getEditStateName(c : Class)]
-[c.getName()/]Edit
+[c.getMainStateName()/]Edit
 [/template]
 
 [template protected getDeleteStateName(c : Class)]
-[c.getName()/]Delete
+[c.getMainStateName()/]Delete
 [/template]
 
 [**
@@ -271,23 +315,23 @@
 */]
 
 [template protected getListCtrlName(c : Class)]
-[c.getName()/]ListCtrl
+[c.getListStateName()/]Ctrl
 [/template]
 
 [template protected getNewCtrlName(c : Class)]
-[c.getName()/]NewCtrl
+[c.getNewStateName()/]Ctrl
 [/template]
 
 [template protected getDetailCtrlName(c : Class)]
-[c.getName()/]DetailCtrl
+[c.getDetailStateName()/]Ctrl
 [/template]
 
 [template protected getEditCtrlName(c : Class)]
-[c.getName()/]EditCtrl
+[c.getEditStateName()/]Ctrl
 [/template]
 
 [template protected getDeleteCtrlName(c : Class)]
-[c.getName()/]DeleteCtrl
+[c.getDeleteStateName()/]Ctrl
 [/template]
 
 [template public getInstanceStatesFolder(c : Class)]
@@ -295,21 +339,28 @@ instance/
 [/template]
 
 [comment Shared Utils /]
+[template protected getSharedAbstractState(a : Property)]
+[a.getOwner().getName()/][a.name.toUpperFirst()/]
+[/template]
+
+[template protected getSharedAbstractView(a : Property)]
+[a.getSharedAbstractState()/]View
+[/template]
 
 [template protected getSharedEditState(a : Property)]
-[a.getOwner().getName()/][a.name.toUpperFirst()/]Edit
+[a.getSharedAbstractState()/]Edit
 [/template]
 
 [template protected getSharedListState(a : Property)]
-[a.getOwner().getName()/][a.name.toUpperFirst()/]List
+[a.getSharedAbstractState()/]List
 [/template]
 
 [template protected getSharedListCtrlName(a : Property)]
-[a.getOwner().getName()/][a.name.toUpperFirst()/]ListCtrl
+[a.getSharedListState()/]Ctrl
 [/template]
 
 [template protected getSharedEditCtrlName(a : Property)]
-[a.getOwner().getName()/][a.name.toUpperFirst()/]EditCtrl
+[a.getSharedEditState()/]Ctrl
 [/template]
 
 [query protected getOwner(a : Property) : Class = 

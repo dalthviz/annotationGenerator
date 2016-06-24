@@ -67,9 +67,14 @@
                     displayName: '[a.getDisplayName()/]',
                     icon: 'link',
                     fn: function () {
+                        [if (a.isComposite())]
                         $state.go('[a.getClass().getListStateName()/]');
+                        [else]
+                        $state.go('[a.getSharedListState()/]');
+                        [/if]
                     }
-                }[/for][/if]
+                }
+                [/for][/if]
             };
         }[']'/]);
 })(window.angular);

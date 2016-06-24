@@ -14,7 +14,7 @@
 [/template]
 
 [template private genListTemplate(a : Property, path : String)]
-[file (path.concat(a.name + '.list.tpl.html'), false, 'UTF-8')]
+[file (path.concat(a.getOwner().getName() + '.' + a.name + '.list.tpl.html'), false, 'UTF-8')]
 <!--
 [a.getClass().getModel().license()/]
 -->
@@ -26,7 +26,7 @@
 [/template]
 
 [template private genListCtrl(a : Property, path : String)]
-[file (path.concat(a.name + '.list.ctrl.js'), false, 'UTF-8')]
+[file (path.concat(a.getOwner().getName() + '.' + a.name + '.list.ctrl.js'), false, 'UTF-8')]
 /*
 [a.getClass().getModel().license()/]
 */
@@ -59,7 +59,7 @@
 [/template]
 
 [template private genEditTemplate(a : Property, path : String)]
-[file (path.concat(a.name + '.edit.tpl.html'), false, 'UTF-8')]
+[file (path.concat(a.getOwner().getName() + '.' + a.name + '.edit.tpl.html'), false, 'UTF-8')]
 <!--
 [a.getClass().getModel().license()/]
 -->
@@ -71,7 +71,7 @@
 [/template]
 
 [template private genEditCtrl(a : Property, path : String)]
-[file (path.concat(a.name + '.edit.ctrl.js'), false, 'UTF-8')]
+[file (path.concat(a.getOwner().getName() + '.' + a.name + '.edit.ctrl.js'), false, 'UTF-8')]
 /*
 [a.getClass().getModel().license()/]
 */
