@@ -49,7 +49,7 @@
                     displayName: 'Go back',
                     icon: 'arrow-left',
                     fn: function () {
-                        $state.go('[a.getOwner().getListStateName()/]');
+                        $state.go('[a.getOwner().getDetailStateName()/]');
                     }
                 }
             };

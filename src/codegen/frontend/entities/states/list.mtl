@@ -57,7 +57,7 @@
                     displayName: 'Go back',
                     icon: 'arrow-left',
                     fn: function () {
-                        $state.go('[c.getParentAttribute().getClass().getName()/]Detail');
+                        $state.go('[c.getParentAttribute().getClass().getDetailStateName()/]');
                     }
                 }
 
