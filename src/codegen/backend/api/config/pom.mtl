@@ -48,8 +48,8 @@
         </dependency>
         <dependency>
             <groupId>[m.getCSWGroupId()/]</groupId>
-            <artifactId>[m.getAuthLibArtifactId()/]</artifactId>
-            <version>[m.getAuthLibVersion()/]</version>
+            <artifactId>auth-utils</artifactId>
+            <version>0.1.4</version>
         </dependency>
         <dependency>
             <groupId>[m.baseGroup()/]</groupId>

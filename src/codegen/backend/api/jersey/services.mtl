@@ -32,18 +32,13 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
 import [c.getModel().baseGroup()/].dtos.basic.[c.getBasicDTOName()/];
-import [c.getModel().baseGroup()/].dtos.full.[c.getFullDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
-[for (a : Property | c.getNonCompositeCollectionAttributes())]
-import [c.getModel().baseGroup()/].dtos.basic.[a.getClass().getBasicDTOName()/];
-import [c.getModel().baseGroup()/].dtos.full.[a.getClass().getFullDTOName()/];
-import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
-[/for]
 import java.util.ArrayList;
+import javax.ws.rs.WebApplicationException;
 /**
  * @generated
  */
-@Path("/[c.getURI()/]")
+[if (c.isChild())]
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class [className/] {
@@ -51,8 +46,17 @@ public class [className/] {
     @Inject private [c.getAPIName()/] [logic/];
     @Context private HttpServletResponse response;
     @QueryParam("page") private Integer page;
-    @QueryParam("maxRecords") private Integer maxRecords;
-
+    @QueryParam("limit") private Integer maxRecords;
+    @PathParam("[c.getParentAttribute().getClass().getName()/]Id")
+    private Long [c.getParentAttribute().getClass().getName()/]Id;
+   
+    /**
+     * Convierte una lista de [c.getEntityName()/] a una lista de [c.getBasicDTOName()/]
+     *
+     * @param entityList Lista de [c.getEntityName()/] a convertir
+     * @return Lista de [c.getBasicDTOName()/] convertida
+     * @generated
+     */
     private List<[c.getBasicDTOName()/]> listEntity2DTO(List<[c.getEntityName()/]> entityList){
         List<[c.getBasicDTOName()/]> list = new ArrayList<>();
         for ([c.getEntityName()/] entity : entityList) {
@@ -61,28 +65,114 @@ public class [className/] {
         return list;
     }
 
-[for (a : Property | c.getNonCompositeCollectionAttributes())]
-    private List<[a.getClass().getBasicDTOName()/]> [a.name/]ListEntity2DTO(List<[a.getClass().getEntityName()/]> entityList){
-        List<[a.getClass().getBasicDTOName()/]> list = new ArrayList<>();
-        for ([a.getClass().getEntityName()/] entity : entityList) {
-            list.add(new [a.getClass().getBasicDTOName()/](entity));
-        }
-        return list;
-    }
-
-    private List<[a.getClass().getEntityName()/]> [a.name/]ListDTO2Entity(List<[a.getClass().getBasicDTOName()/]> dtos){
-        List<[a.getClass().getEntityName()/]> list = new ArrayList<>();
-        for ([a.getClass().getBasicDTOName()/] dto : dtos) {
-            list.add(dto.toEntity());
-        }
-        return list;
-    }
-[/for]
 
     /**
-     * Obtiene la lista de los registros de Book.
+     * Obtiene la lista de los registros de [c.name/] asociados a un [c.getParentAttribute().getClass().name/]
      *
-     * @return Colección de objetos de [c.getBasicDTOName()/] cada uno con sus respectivos Review
+     * @return Colección de objetos de [c.getBasicDTOName()/]
+     * @generated
+     */
+    @GET
+    public List<[c.getBasicDTOName()/]> get[c.name/]s() {
+        if (page != null && maxRecords != null) {
+            this.response.setIntHeader("X-Total-Count", [logic/].count[c.name/]s());
+            return listEntity2DTO([logic/].get[c.name/]s(page, maxRecords, [c.getParentAttribute().getClass().getName()/]Id));
+        }
+        return listEntity2DTO([logic/].get[c.name/]s([c.getParentAttribute().getClass().getName()/]Id));
+    }
+
+    /**
+     * Obtiene los datos de una instancia de [c.name/] a partir de su ID asociado a un [c.getParentAttribute().getClass().name/]
+     *
+     * @param [c.getName()/]Id Identificador de la instancia a consultar
+     * @return Instancia de [c.getBasicDTOName()/] con los datos del [c.name/] consultado
+     * @generated
+     */
+    @GET
+    @Path("{[c.getName()/]Id: \\d+}")
+    public [c.getBasicDTOName()/] get[c.name/](@PathParam("[c.getName()/]Id") Long [c.getName()/]Id) {
+        [c.getEntityName()/] entity = [logic/].get[c.name/]([c.getName()/]Id);
+        if (entity.get[c.getParentAttribute().getClass().name/]() != null && ![c.getParentAttribute().getClass().getName()/]Id.equals(entity.get[c.getParentAttribute().getClass().name/]().getId())) {
+            throw new WebApplicationException(404);
+        }
+        return new [c.getBasicDTOName()/](entity);
+    }
+
+    /**
+     * Asocia un [c.name/] existente a un [c.getParentAttribute().getClass().name/]
+     *
+     * @param dto Objeto de [c.getBasicDTOName()/] con los datos nuevos
+     * @return Objeto de [c.getBasicDTOName()/]con los datos nuevos y su ID.
+     * @generated
+     */
+    @POST
+    public [c.getBasicDTOName()/] create[c.name/]([c.getBasicDTOName()/] dto) {
+        return new [c.getBasicDTOName()/]([logic/].create[c.name/]([c.getParentAttribute().getClass().getName()/]Id, dto.toEntity()));
+    }
+
+    /**
+     * Actualiza la información de una instancia de [c.name/].
+     *
+     * @param [c.getName()/]Id Identificador de la instancia de [c.name/] a modificar
+     * @param dto Instancia de [c.getBasicDTOName()/] con los nuevos datos.
+     * @return Instancia de [c.getBasicDTOName()/] con los datos actualizados.
+     * @generated
+     */
+    @PUT
+    @Path("{[c.getName()/]Id: \\d+}")
+    public [c.getBasicDTOName()/] update[c.name/](@PathParam("[c.getName()/]Id") Long [c.getName()/]Id, [c.getBasicDTOName()/] dto) {
+        [c.getEntityName()/] entity = dto.toEntity();
+        entity.setId([c.getName()/]Id);
+        [c.getEntityName()/] oldEntity = [logic/].get[c.name/]([c.getName()/]Id);
+        [for (a : Property | c.getNonCompositeCollectionAttributes())]
+        entity.[a.setter()/](oldEntity.[a.getter()/]());
+        [/for]
+        return new [c.getBasicDTOName()/]([logic/].update[c.name/]([c.getParentAttribute().getClass().getName()/]Id, entity));
+    }
+
+    /**
+     * Elimina una instancia de [c.name/] de la base de datos.
+     *
+     * @param [c.getName()/]Id Identificador de la instancia a eliminar.
+     * @generated
+     */
+    @DELETE
+    @Path("{[c.getName()/]Id: \\d+}")
+    public void delete[c.name/](@PathParam("[c.getName()/]Id") Long [c.getName()/]Id) {
+        [logic/].delete[c.name/]([c.getName()/]Id);
+    }
+[else]
+@Path("/[c.getURI()/]")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public class [className/] {
+
+    @Inject private [c.getAPIName()/] [logic/];
+    @Context private HttpServletResponse response;
+    @QueryParam("page") private Integer page;
+    @QueryParam("limit") private Integer maxRecords;
+
+   
+    /**
+     * Convierte una lista de [c.getEntityName()/] a una lista de [c.getBasicDTOName()/].
+     *
+     * @param entityList Lista de [c.getEntityName()/] a convertir.
+     * @return Lista de [c.getBasicDTOName()/] convertida.
+     * @generated
+     */
+    private List<[c.getBasicDTOName()/]> listEntity2DTO(List<[c.getEntityName()/]> entityList){
+        List<[c.getBasicDTOName()/]> list = new ArrayList<>();
+        for ([c.getEntityName()/] entity : entityList) {
+            list.add(new [c.getBasicDTOName()/](entity));
+        }
+        return list;
+    }
+
+
+    /**
+     * Obtiene la lista de los registros de [c.name/]
+     *
+     * @return Colección de objetos de [c.getBasicDTOName()/]
      * @generated
      */
     @GET
@@ -95,55 +185,55 @@ public class [className/] {
     }
 
     /**
-     * Obtiene los datos de una instancia de Book a partir de su ID.
+     * Obtiene los datos de una instancia de [c.name/] a partir de su ID
      *
      * @param id Identificador de la instancia a consultar
-     * @return Instancia de [c.getFullDTOName()/] con los datos del Book consultado y sus Review
+     * @return Instancia de [c.getBasicDTOName()/] con los datos del [c.name/] consultado
      * @generated
      */
     @GET
     @Path("{id: \\d+}")
-    public [c.getFullDTOName()/] get[c.name/](@PathParam("id") Long id) {
-        return new [c.getFullDTOName()/]([logic/].get[c.name/](id));
+    public [c.getBasicDTOName()/] get[c.name/](@PathParam("id") Long id) {
+        return new [c.getBasicDTOName()/]([logic/].get[c.name/](id));
     }
 
     /**
-     * Se encarga de crear un book en la base de datos.
+     * Se encarga de crear un [c.name/] en la base de datos
      *
-     * @param dto Objeto de [c.getFullDTOName()/] con los datos nuevos
-     * @return Objeto de [c.getFullDTOName()/]con los datos nuevos y su ID.
+     * @param dto Objeto de [c.getBasicDTOName()/] con los datos nuevos
+     * @return Objeto de [c.getBasicDTOName()/]con los datos nuevos y su ID
      * @generated
      */
     @POST
     @StatusCreated
-    public [c.getFullDTOName()/] create[c.name/]([c.getFullDTOName()/] dto) {
-        return new [c.getFullDTOName()/]([logic/].create[c.name/](dto.toEntity()));
+    public [c.getBasicDTOName()/] create[c.name/]([c.getBasicDTOName()/] dto) {
+        return new [c.getBasicDTOName()/]([logic/].create[c.name/](dto.toEntity()));
     }
 
     /**
-     * Actualiza la información de una instancia de Book.
+     * Actualiza la información de una instancia de [c.name/]
      *
-     * @param id Identificador de la instancia de Book a modificar
-     * @param dto Instancia de [c.getFullDTOName()/] con los nuevos datos.
-     * @return Instancia de [c.getFullDTOName()/] con los datos actualizados.
+     * @param id Identificador de la instancia de [c.name/] a modificar
+     * @param dto Instancia de [c.getBasicDTOName()/] con los nuevos datos
+     * @return Instancia de [c.getBasicDTOName()/] con los datos actualizados
      * @generated
      */
     @PUT
     @Path("{id: \\d+}")
-    public [c.getFullDTOName()/] update[c.name/](@PathParam("id") Long id, [c.getFullDTOName()/] dto) {
+    public [c.getBasicDTOName()/] update[c.name/](@PathParam("id") Long id, [c.getBasicDTOName()/] dto) {
         [c.getEntityName()/] entity = dto.toEntity();
         entity.setId(id);
         [c.getEntityName()/] oldEntity = [logic/].get[c.name/](id);
         [for (a : Property | c.getNonCompositeCollectionAttributes())]
         entity.[a.setter()/](oldEntity.[a.getter()/]());
         [/for]
-        return new [c.getFullDTOName()/]([logic/].update[c.name/](entity));
+        return new [c.getBasicDTOName()/]([logic/].update[c.name/](entity));
     }
 
     /**
-     * Elimina una instancia de Book de la base de datos.
+     * Elimina una instancia de [c.name/] de la base de datos
      *
-     * @param id Identificador de la instancia a eliminar.
+     * @param id Identificador de la instancia a eliminar
      * @generated
      */
     @DELETE
@@ -151,7 +241,92 @@ public class [className/] {
     public void delete[c.name/](@PathParam("id") Long id) {
         [logic/].delete[c.name/](id);
     }
+[/if]
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
+    [c.restClassNonCompositeCollection(a,path)/]
+[/for]
+
+[for (a : Property | c.getCompositeCollectionAttributes())]
+    @Path("{[c.getEntityId()/]: \\d+}/[a.name/]")
+    public Class<[a.getClass().getJaxRsName()/]> get[a.getClass().getJaxRsName()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/]){
+        get[c.name/]([c.getEntityId()/]);
+        return [a.getClass().getJaxRsName()/].class;
+    } 
+[/for]
+}
+[/file]
+[/template]
+
+[template protected restClassNonCompositeCollection(c : Class, a : Property, path : String) {className : String = a.getClass().getJaxRsName(); logic : String = c.getName().concat('Logic');}]
+[file (path.concat(c.name+className+'.java'), false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
+package [c.getModel().baseGroup()/].resources;
+
+import co.edu.uniandes.csw.auth.provider.StatusCreated;
+import java.util.List;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import [c.getModel().baseGroup()/].api.[c.getAPIName()/];
+[for (a : Property | c.getNonCompositeCollectionAttributes())]
+import [c.getModel().baseGroup()/].dtos.basic.[a.getClass().getBasicDTOName()/];
+import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
+[/for]
+import java.util.ArrayList;
+/**
+ * @generated
+ */
+@Path("/[c.getURI()/]")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public class [c.name+className/] {
+
+    @Inject private [c.getAPIName()/] [logic/];
+    @Context private HttpServletResponse response;
+    
+
+[for (a : Property | c.getNonCompositeCollectionAttributes())]
+    /**
+     * Convierte una lista de [a.getClass().getEntityName()/] a una lista de [a.getClass().getBasicDTOName()/].
+     *
+     * @param entityList Lista de [a.getClass().getEntityName()/] a convertir.
+     * @return Lista de [a.getClass().getBasicDTOName()/] convertida.
+     * @generated
+     */
+    private List<[a.getClass().getBasicDTOName()/]> [a.name/]ListEntity2DTO(List<[a.getClass().getEntityName()/]> entityList){
+        List<[a.getClass().getBasicDTOName()/]> list = new ArrayList<>();
+        for ([a.getClass().getEntityName()/] entity : entityList) {
+            list.add(new [a.getClass().getBasicDTOName()/](entity));
+        }
+        return list;
+    }
+
+    /**
+     * Convierte una lista de [a.getClass().getBasicDTOName()/] a una lista de [a.getClass().getEntityName()/].
+     *
+     * @param dtos Lista de [a.getClass().getBasicDTOName()/] a convertir.
+     * @return Lista de [a.getClass().getEntityName()/] convertida.
+     * @generated
+     */
+    private List<[a.getClass().getEntityName()/]> [a.name/]ListDTO2Entity(List<[a.getClass().getBasicDTOName()/]> dtos){
+        List<[a.getClass().getEntityName()/]> list = new ArrayList<>();
+        for ([a.getClass().getBasicDTOName()/] dto : dtos) {
+            list.add(dto.toEntity());
+        }
+        return list;
+    }
+[/for]
 
     /**
      * Obtiene una colección de instancias de [a.getClass().getBasicDTOName()/] asociadas a una
@@ -176,8 +351,8 @@ public class [className/] {
      */
     @GET
     @Path("{[c.getEntityId()/]: \\d+}/[a.name/]/{[a.getClass().getEntityId()/]: \\d+}")
-    public [a.getClass().getFullDTOName()/] get[a.name.toUpperFirst()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
-        return new [a.getClass().getFullDTOName()/]([logic/].get[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getEntityId()/]));
+    public [a.getClass().getBasicDTOName()/] get[a.name.toUpperFirst()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
+        return new [a.getClass().getBasicDTOName()/]([logic/].get[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getEntityId()/]));
     }
 
     /**
@@ -185,13 +360,13 @@ public class [className/] {
      *
      * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
      * @param [a.getClass().getEntityId()/] Identificador de la instancia de [a.getClass().name/]
-     * @return Instancia de [a.getClass().getFullDTOName()/] que fue asociada a [c.name/]
+     * @return Instancia de [a.getClass().getBasicDTOName()/] que fue asociada a [c.name/]
      * @generated
      */
     @POST
     @Path("{[c.getEntityId()/]: \\d+}/[a.name/]/{[a.getClass().getEntityId()/]: \\d+}")
-    public [a.getClass().getFullDTOName()/] add[a.name.toUpperFirst()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
-        return new [a.getClass().getFullDTOName()/]([logic/].add[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getEntityId()/]));
+    public [a.getClass().getBasicDTOName()/] add[a.name.toUpperFirst()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
+        return new [a.getClass().getBasicDTOName()/]([logic/].add[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getEntityId()/]));
     }
 
     /**
@@ -220,11 +395,10 @@ public class [className/] {
     public void remove[a.name.toUpperFirst()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
         [logic/].remove[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getClass().getEntityId()/]);
     }
-[/for]
 }
 [/file]
 [/template]
 
 [template public getJaxRsName(c : Class)]
-[c.name.toUpperFirst().concat('Service')/]
+[c.name.toUpperFirst().concat('Resource')/]
 [/template]

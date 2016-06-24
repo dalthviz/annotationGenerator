@@ -55,7 +55,8 @@ c.allAttributes()->union(c.getReferences(false))->asOrderedSet()
 
 
 [**
- * Obtiene la colección de atributos de la clase, cuyo tipo es otra clase del modelo y son aceptados por el generador
+ * Obtiene la colección de atributos de la clase, cuyo tipo es otra clase del modelo y son aceptados por el generador.<br>
+ * 
  * Actualmente los atributos válidos cumplen con las siguientes características:
  * - Es navegable
  * - Su límite máximo de objetos es diferente de cero
@@ -89,14 +90,23 @@ c.getRelationshipAttributes()->select(
 )->asOrderedSet()
 /]
 
+[**
+ * Gets a list of attributes member of a relationship with upper cardinality higher than 1
+*/]
 [query public getCollectionAttributes(c : Class) : Set(Property) =
 c.getRelationshipAttributes()->select(getUpper() <> 1)->asSet()
 /]
 
+[**
+ * 
+*/]
 [query public hasReferences(c : Class, includeParent : Boolean) : Boolean =
 c.getReferences(includeParent)->notEmpty()
 /]
 
+[**
+ * The result of Class.getCollectionAttributes is not empty
+*/]
 [query public isMaster(c : Class) : Boolean =
 c.getCollectionAttributes()->notEmpty()
 /]
@@ -165,6 +175,15 @@ and (
     or  (a.isMany2One())
     or  ((a.isMany2Many() or a.isOne2One()) and a.name < a.getOtherEnd().name)
 )
+/]
+
+[query public getHierarchy(c : Class) : Sequence(Class) = 
+Sequence(class){c}->union(
+    if c.getParentAttribute() <> null then 
+        c.getParentAttribute().getClass().getHierarchy() 
+    else 
+        Sequence(Class){} 
+    endif) 
 /]
 
 [template public testName(c : Class)]
@@ -349,22 +368,6 @@ String[else]
 
 [template public getCSWGroupId(m : Model)]
 co.edu.uniandes.csw
-[/template]
-
-[template public getAuthLibArtifactId(m : Model)]
-auth-utils
-[/template]
-
-[template public getAuthLibVersion(m : Model)]
-0.1.0
-[/template]
-
-[template public getCrudLibArtifactId(m : Model)]
-crud-utils
-[/template]
-
-[template public getCrudLibVersion(m : Model)]
-0.1.2
 [/template]
 
 [template public asDisplayName(s : String)]

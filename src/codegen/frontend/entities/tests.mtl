@@ -28,6 +28,9 @@ exports.config = {
     jasmineNodeOpts: {
         showColors: true,
         defaultTimeoutInterval: 30000
+    },
+    onPrepare: function(){
+        browser.driver.manage().window().maximize();
     }
 };
 [/file]
@@ -39,8 +42,6 @@ exports.config = {
 [c.getModel().license()/]
 */
 describe('[c.name/] E2E Testing', function () {
-
-	browser.driver.manage().window().maximize();
 
 	[for (a : Property | c.getAllAttribs())]
 	[if(a.type.name = 'String')]

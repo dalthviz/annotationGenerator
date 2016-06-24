@@ -33,8 +33,8 @@
         </dependency>
         <dependency>
             <groupId>[m.getCSWGroupId()/]</groupId>
-            <artifactId>[m.getCrudLibArtifactId()/]</artifactId>
-            <version>[m.getCrudLibVersion()/]</version>
+            <artifactId>crud-utils</artifactId>
+            <version>0.1.3</version>
         </dependency>
     </dependencies>
 </project>
