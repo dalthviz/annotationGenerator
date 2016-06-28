@@ -4,19 +4,18 @@
 
 
 [template public mainPackageinfo(m : Model, path : String)]
-[let filePath : String = path.concat('dtos/')]
-    [m.genPackageinfo(filePath)/]
-[/let]
+    [m.genPackageinfo('minimum', path.concat('dtos/minimum/'))/]
+    [m.genPackageinfo('basic', path.concat('dtos/basic/'))/]
 [/template]
 
-[template protected genPackageinfo(m : Model, path : String)]
+[template protected genPackageinfo(m : Model, packageName : String, path : String)]
 [file (path.concat('package-info.java'), false, 'UTF-8')]
 /*
 [m.license()/]
 */
 @XmlJavaTypeAdapter(value = DateAdapter.class, type = Date.class)
 @XmlAccessorType(XmlAccessType.FIELD)
-package [m.baseGroup()/].dtos;
+package [m.baseGroup()/].dtos.[packageName/];
 
 import co.edu.uniandes.csw.auth.model.DateAdapter;
 import java.util.Date;
