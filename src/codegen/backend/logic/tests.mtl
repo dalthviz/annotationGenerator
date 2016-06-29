@@ -195,7 +195,6 @@ public class [className/] {
             [/if]
             [/for]
             [/if]
-            
 
             em.persist(entity);
             data.add(entity);

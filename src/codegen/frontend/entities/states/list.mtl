@@ -111,7 +111,7 @@
 <list-records fields="model.fields" records="records" actions="recordActions"></list-records>
 <pagination ng-if="ctrl.itemsPerPage < ctrl.totalItems"
             total-items="ctrl.totalItems"
-            max-size="5" 
+            max-size="5"
             ng-model="ctrl.currentPage"
             ng-change="ctrl.pageChanged()"
             items-per-page="ctrl.itemsPerPage"

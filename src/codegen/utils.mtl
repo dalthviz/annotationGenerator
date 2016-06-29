@@ -83,6 +83,10 @@ c.getAssociations()->collect( asc |
 )->asSet()
 /]
 
+[query public hasRelationshipAttributes(c : Class) : Boolean =
+c.getRelationshipAttributes()->notEmpty()
+/]
+
 [query public getReferences(c : Class, includeParent : Boolean) : OrderedSet(Property) =
 c.getRelationshipAttributes()->select(
     a | a.getUpper() = 1
