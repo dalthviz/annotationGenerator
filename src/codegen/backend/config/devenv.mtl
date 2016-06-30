@@ -53,6 +53,6 @@ nbactions.xml
 /[m.getApiArtifactId()/]/derby.log
 
 #Bower
-.bowerrc
+/[m.getApiArtifactId()/]/src/main/webapp/bower_components/
 [/file]
 [/template]

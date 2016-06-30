@@ -85,7 +85,7 @@
 [template protected genBowerrc(m : Model)]
 [file ('.bowerrc', false, 'UTF-8')]
 {
-  "directory" : "[m.getApiArtifactId()/]/src/main/webapp/components"
+  "directory" : "[m.getApiArtifactId()/]/src/main/webapp/bower_components"
 }
 [/file]
 [/template]
