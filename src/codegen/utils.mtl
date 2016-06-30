@@ -321,11 +321,11 @@ String[else]
 [/template]
 
 [template public getWebArtifactId(m : Model)]
-[m.getWebProjectName().asArtifactId()/]
+[m.getWebProjectName().asArtifactId().concat('/webapp/main/src')/]
 [/template]
 
 [template public getWebRoot(m : Model)]
-[m.getWebArtifactId().concat('/webapp/main/src/app/')/]
+[m.getWebArtifactId().concat('/app/')/]
 [/template]
 
 [template public getPoolName(m : Model)]
