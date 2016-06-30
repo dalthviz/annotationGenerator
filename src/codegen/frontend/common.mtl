@@ -9,5 +9,5 @@
 
 [template public genDevEnv(m : Model, path : String)]
     [m.mainEnv(path)/]
-    [m.netbeansConfig(path.concat('nbproject/'))/]
+    [comment[m.netbeansConfig(path.concat('nbproject/'))/]
 [/template]

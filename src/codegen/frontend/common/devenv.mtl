@@ -3,12 +3,13 @@
 [import ::utils /]
 
 [template public mainEnv(m : Model, path : String)]
-    [m.genPackageJson(path)/]
+    [comment[m.genPackageJson(path)/]
     [m.genBowerJson(path)/]
-    [m.genGruntFile(path)/]
-    [m.genGitIgnore(path)/]
-    [m.genTravis(path)/]
-    [m.genDummyDist(path)/]
+    [m.genBowerrc()/]
+    [comment[m.genGruntFile(path)/]
+    [comment[m.genGitIgnore(path)/]
+    [comment[m.genTravis(path)/]
+    [comment[m.genDummyDist(path)/]
 [/template]
 
 [template protected genPackageJson(m : Model, path : String)]
@@ -56,7 +57,7 @@
 [/template]
 
 [template protected genBowerJson(m : Model, path : String)]
-[file (path.concat('bower.json'), false, 'UTF-8')]
+[file ('bower.json', false, 'UTF-8')]
 {
     "name": "[m.name/]",
     "license": "MIT",
@@ -77,6 +78,14 @@
     "resolutions": {
         "angular": "^1.4.5"
     }
+}
+[/file]
+[/template]
+
+[template protected genBowerrc(m : Model)]
+[file ('.bowerrc', false, 'UTF-8')]
+{
+  "directory" : "[m.getApiArtifactId()/]/src/main/webapp/components"
 }
 [/file]
 [/template]

@@ -9,7 +9,7 @@
     [comment @main/]
     [m.genDevEnv(m.getWebArtifactId().concat('/'))/]
 	[m.genCommon(m.getWebRoot())/]
-    [m.mainE2E(m.getWebArtifactId().concat('/e2e/'))/]
+    [comment[m.mainE2E(m.getWebArtifactId().concat('/e2e/'))/]
     [for (c : Class | m.getClasses())]
     	[c.genModules(m.getWebRoot())/]
     [/for]
