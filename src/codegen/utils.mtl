@@ -301,7 +301,7 @@ String[else]
 [/template]
 
 [template public getWebProjectName(m : Model)]
-[m.name.concat('.web')/]
+[m.name.concat('.api')/]
 [/template]
 
 [template private asArtifactId(s : String)]
@@ -325,7 +325,7 @@ String[else]
 [/template]
 
 [template public getWebRoot(m : Model)]
-[m.getWebArtifactId().concat('/app/')/]
+[m.getWebArtifactId().concat('/webapp/main/src/app/')/]
 [/template]
 
 [template public getPoolName(m : Model)]
