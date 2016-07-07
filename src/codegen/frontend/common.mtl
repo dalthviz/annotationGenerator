@@ -3,6 +3,7 @@
 [import frontend::common::index /]
 [import frontend::common::devenv /]
 [import frontend::common::netbeans /]
+
 [template public genCommon(m : Model, path : String)]
     [m.indexMain(path)/]
 [/template]

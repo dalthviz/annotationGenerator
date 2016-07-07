@@ -3,9 +3,9 @@
 [import ::utils /]
 
 [template public mainEnv(m : Model, path : String)]
-    [comment[m.genPackageJson(path)/]
     [m.genBowerJson(path)/]
-    [m.genBowerrc()/]
+    [m.genBowerrc(path)/]
+    [comment[m.genPackageJson(path)/]
     [comment[m.genGruntFile(path)/]
     [comment[m.genGitIgnore(path)/]
     [comment[m.genTravis(path)/]
@@ -57,7 +57,7 @@
 [/template]
 
 [template protected genBowerJson(m : Model, path : String)]
-[file ('bower.json', false, 'UTF-8')]
+[file (path.concat('bower.json'), false, 'UTF-8')]
 {
     "name": "[m.name/]",
     "license": "MIT",
@@ -82,10 +82,10 @@
 [/file]
 [/template]
 
-[template protected genBowerrc(m : Model)]
-[file ('.bowerrc', false, 'UTF-8')]
+[template protected genBowerrc(m : Model, path : String)]
+[file (path.concat('.bowerrc'), false, 'UTF-8')]
 {
-  "directory" : "[m.getApiArtifactId()/]/src/main/webapp/bower_components"
+  "directory" : "src/main/webapp/bower_components"
 }
 [/file]
 [/template]
