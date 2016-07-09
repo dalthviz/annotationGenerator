@@ -44,9 +44,9 @@
             $sp.state('[c.getMainStateName()/]', {
                 url: '/[c.getURI()/]?page&limit',
                 abstract: true,
-                [if (c.isChild())]parent: '[c.getParentAttribute().getClass().getInstanceStateName()/]',[/if]
+                [if (c.isChild())]parent: '[c.getParentAttribute().getClass().getDetailStateName()/]',[/if]
                 views: {
-                     [if(c.isChild())][c.getParentAttribute().getClass().getInstanceView()/][else]mainView[/if]: {
+                     [if(c.isChild())][c.getParentAttribute().getClass().getDetailChieldView()/][else]mainView[/if]: {
                         templateUrl: basePath + '[c.getName()/].tpl.html',
                         controller: '[c.getCtrl()/]'
                     }
@@ -146,10 +146,10 @@
             [for (a : Property | c.getNonCompositeCollectionAttributes())]
             $sp.state('[a.getSharedAbstractState()/]', {
                 url: '/[a.name/]',
-                parent: '[c.getInstanceStateName()/]',
+                parent: '[c.getDetailStateName()/]',
                 abstract: true,
                 views: {
-                    [c.getInstanceView()/]: {
+                    [c.getDetailChieldView()/]: {
                         template: '<div ui-view="[a.getSharedAbstractView()/]"></div>'
                     }
                 },
@@ -263,6 +263,10 @@
 
 [template protected getInstanceView(c : Class)]
 [c.getName()/]InstanceView
+[/template]
+
+[template protected getDetailChieldView(c : Class)]
+[c.getName()/]ChieldView
 [/template]
 
 [**

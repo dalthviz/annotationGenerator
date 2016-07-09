@@ -105,6 +105,9 @@
     [/for]     
     </div>
 </div>
+[if(c.hasCompositeAssociations() or c.hasSharedAssociations())]
+<div ui-view="[c.getName()/]ChieldView"></div>
+[/if]
 <!-- TODO -->
 [/file]
 [/template]
