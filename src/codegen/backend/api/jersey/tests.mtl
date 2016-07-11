@@ -232,11 +232,7 @@ public class [c.getServiceTestName()/] {
         Assert.assertEquals([c.getName()/].[prop.getter()/](), [c.testName()/].[prop.getter()/]());
         [/if]
         [/for]
-        [if (c.isChild())]
-        Assert.assertEquals(Ok, response.getStatus());
-        [else]
         Assert.assertEquals(Created, response.getStatus());
-        [/if]        
         [c.getEntityName()/] entity = em.find([c.getEntityName()/].class, [c.testName()/].getId());
         Assert.assertNotNull(entity);
     }
