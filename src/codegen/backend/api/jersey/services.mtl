@@ -431,7 +431,7 @@ public void exists[c.name/](Long [c.getEntityId()/]){
         }
     }
 [/if]
-[if(c.isChild())]
+[if(c.isChild() and c.hasCompositeAssociations())]
 public void validate[c.name/]Parent(Long [c.getEntityId()/]){
         [c.getBasicDTOName()/] [c.getName()/] = get[c.name/]([c.getEntityId()/]);
         if ([c.getName()/].[c.getParentAttribute().getter()/]() == null || ![c.getParentAttribute().getClass().getEntityId()/].equals([c.getName()/].[c.getParentAttribute().getter()/]().getId())) {
@@ -444,7 +444,9 @@ public void validate[c.name/]Parent(Long [c.getEntityId()/]){
 @Path("{[c.getEntityId()/]: \\d+}/[a.name/]")
 public Class<[a.getClass().getJaxRsName()/]> get[a.getClass().getJaxRsName()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/]){
     exists[c.name/]([c.getEntityId()/]);
+    [if(c.isChild())]
     validate[c.name/]Parent([c.getEntityId()/]);
+    [/if]
     return [a.getClass().getJaxRsName()/].class;
 }
 [/for]
