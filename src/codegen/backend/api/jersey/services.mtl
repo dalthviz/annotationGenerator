@@ -1,4 +1,4 @@
-[comment encoding = UTF-8 /]
+    [comment encoding = UTF-8 /]
 [module services('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
 
@@ -423,11 +423,28 @@ public class [a.getSharedResourceClassName()/] {
 [/template]
 
 [template protected genSubResourceLocators(c : Class)]
+[if(c.hasCompositeAssociations() or c.hasSharedAssociations())]
+public void exists[c.name/](Long [c.getEntityId()/]){
+        [c.getBasicDTOName()/] [c.getName()/] = get[c.name/]([c.getEntityId()/]);
+        if ([c.getName()/]== null) {
+            throw new WebApplicationException(404);
+        }
+    }
+[/if]
+[if(c.isChild())]
+public void validate[c.name/]Parent(Long [c.getEntityId()/]){
+        [c.getBasicDTOName()/] [c.getName()/] = get[c.name/]([c.getEntityId()/]);
+        if ([c.getName()/].[c.getParentAttribute().getter()/]() == null || ![c.getParentAttribute().getClass().getEntityId()/].equals([c.getName()/].[c.getParentAttribute().getter()/]().getId())) {
+            throw new WebApplicationException(404);
+        }
+    }
+[/if]
 [for (a : Property | c.getCompositeCollectionAttributes())]
 
 @Path("{[c.getEntityId()/]: \\d+}/[a.name/]")
 public Class<[a.getClass().getJaxRsName()/]> get[a.getClass().getJaxRsName()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/]){
-    get[c.name/]([c.getEntityId()/]);
+    exists[c.name/]([c.getEntityId()/]);
+    validate[c.name/]Parent([c.getEntityId()/]);
     return [a.getClass().getJaxRsName()/].class;
 }
 [/for]
@@ -435,7 +452,7 @@ public Class<[a.getClass().getJaxRsName()/]> get[a.getClass().getJaxRsName()/](@
 
     @Path("{[c.getEntityId()/]: \\d+}/[a.name/]")
     public Class<[a.getSharedResourceClassName()/]> get[a.getSharedResourceClassName()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/]){
-        get[c.name/]([c.getEntityId()/]);
+        exists[c.name/]([c.getEntityId()/]);
         return [a.getSharedResourceClassName()/].class;
     }
 [/for]
