@@ -73,9 +73,9 @@ public class [c.getServiceTestName()/] {
     [for (cl : Class | c.getHierarchy())]
     [if (cl.name<>c.name)]
     private final String [cl.testPath()/] = "[cl.getURI()/]";
-    [cl.getEntityName()/] father[cl.name/]Entity;
+    [cl.getEntityName()/] [cl.getFatherEntity()/];
     [/if]
-    [/for]    
+    [/for]
     [/if]
 
     @ArquillianResource
@@ -122,8 +122,6 @@ public class [c.getServiceTestName()/] {
         oraculo.clear();
     }
 
-  
-
    /**
      * Datos iniciales para el correcto funcionamiento de las pruebas.
      *
@@ -134,12 +132,12 @@ public class [c.getServiceTestName()/] {
         [if (c.isChild())]
         [for (cl : Class | c.getHierarchy()->reverse())]
         [if (cl.name<>c.name)]        
-        father[cl.name/]Entity = factory.manufacturePojo([cl.getEntityName()/].class);
-        father[cl.name/]Entity.setId(1L);
+        [cl.getFatherEntity()/] = factory.manufacturePojo([cl.getEntityName()/].class);
+        [cl.getFatherEntity()/].setId(1L);
         [if (cl.isChild())]
-        father[cl.name/]Entity.set[cl.getParentAttribute().getClass().name/](father[cl.getParentAttribute().getClass().name/]Entity);
+        [cl.getFatherEntity()/].[cl.getParentAttribute().setter()/](father[cl.getParentAttribute().getClass().name/]Entity);
         [/if]        
-        em.persist(father[cl.name/]Entity);
+        em.persist([cl.getFatherEntity()/]);
         [/if]
         [/for]
         
@@ -215,7 +213,7 @@ public class [c.getServiceTestName()/] {
         Response response = target
         [for (cl : Class | c.getHierarchy()->reverse())]
             [if (cl.name<>c.name)]
-            .path([cl.testPath()/]).path(father[cl.name/]Entity.getId().toString())
+            .path([cl.testPath()/]).path([cl.getFatherEntity()/].getId().toString())
             [/if]            
         [/for]          .path([c.testPath()/])
             .request().cookie(cookieSessionId)
@@ -249,9 +247,10 @@ public class [c.getServiceTestName()/] {
         [c.getMinimumDTOName()/] [c.testName()/] = target
         [for (cl : Class | c.getHierarchy()->reverse())]
             [if (cl.name<>c.name)]
-            .path([cl.testPath()/]).path(father[cl.name/]Entity.getId().toString())
-            [/if]        
-        [/for]          .path([c.testPath()/])
+            .path([cl.testPath()/]).path([cl.getFatherEntity()/].getId().toString())
+            [/if]
+        [/for]
+            .path([c.testPath()/])
             .path(oraculo.get(0).getId().toString())
             .request().cookie(cookieSessionId).get([c.getMinimumDTOName()/].class);
         [else]
@@ -277,7 +276,7 @@ public class [c.getServiceTestName()/] {
         Response response = target
         [for (cl : Class | c.getHierarchy()->reverse())]
             [if (cl.name<>c.name)]
-            .path([cl.testPath()/]).path(father[cl.name/]Entity.getId().toString())
+            .path([cl.testPath()/]).path([cl.getFatherEntity()/].getId().toString())
             [/if]            
         [/for]          .path([c.testPath()/])
             .request().cookie(cookieSessionId).get();
@@ -312,7 +311,7 @@ public class [c.getServiceTestName()/] {
         Response response = target
         [for (cl : Class | c.getHierarchy()->reverse())]
             [if (cl.name<>c.name)]
-            .path([cl.testPath()/]).path(father[cl.name/]Entity.getId().toString())
+            .path([cl.testPath()/]).path([cl.getFatherEntity()/].getId().toString())
             [/if]            
         [/for]          .path([c.testPath()/])
             .path([c.getName()/].getId().toString())
@@ -344,9 +343,10 @@ public class [c.getServiceTestName()/] {
         Response response = target
         [for (cl : Class | c.getHierarchy()->reverse())]
             [if (cl.name<>c.name)]
-            .path([cl.testPath()/]).path(father[cl.name/]Entity.getId().toString())
+            .path([cl.testPath()/]).path([cl.getFatherEntity()/].getId().toString())
             [/if]            
-        [/for]          .path([c.testPath()/])
+        [/for]
+            .path([c.testPath()/])
             .path([c.getName()/].getId().toString())
             .request().cookie(cookieSessionId).delete();
         [else]
@@ -695,6 +695,9 @@ public class [c.name+className/] {
 [/file]
 [/template]
 
+[template private getFatherEntity(c : Class)]
+father[c.name/]Entity
+[/template]
 
 [template private getURI(a : Property)]
 [a.name.toLowerFirst()/]
@@ -705,7 +708,7 @@ public class [c.name+className/] {
 [/template]
 
 [template private testPath(c : Class)]
-[c.name.toLowerFirst().concat('Path')/]
+[c.getName().concat('Path')/]
 [/template]
 
 [template private getTestSuffix(a : Property)]

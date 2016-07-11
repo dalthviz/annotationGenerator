@@ -183,11 +183,12 @@ and (
 
 [query public getHierarchy(c : Class) : Sequence(Class) = 
 Sequence(class){c}->union(
-    if c.getParentAttribute() <> null then 
-        c.getParentAttribute().getClass().getHierarchy() 
-    else 
-        Sequence(Class){} 
-    endif) 
+    if c.getParentAttribute() <> null then
+        c.getParentAttribute().getClass().getHierarchy()
+    else
+        Sequence(Class){}
+    endif
+)
 /]
 
 [template public testName(c : Class)]
@@ -221,7 +222,9 @@ String[else]
 [/template]
 
 [template public getURI(c : Class)]
-[c.getName().concat('s')/]
+[if (c.isChild())]
+[c.getParentAttribute().getOtherEnd().name.toLowerFirst()/][else]
+[c.getName().concat('s')/][/if]
 [/template]
 
 [template public getName(c : Class)]
