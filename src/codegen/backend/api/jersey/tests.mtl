@@ -417,19 +417,10 @@ import uk.co.jemos.podam.api.PodamFactoryImpl;
 public class [c.name+className/] {
 
     private WebTarget target;
-<<<<<<< HEAD
+    private PodamFactory factory = new PodamFactoryImpl();
     private final String apiPath = Utils.apiPath;
     private final String username = Utils.username;
-    private final String password = Utils.password;    
-    [if (c.isChild())]
-    private final String [c.getParentAttribute().getClass().testPath()/] = "[c.getParentAttribute().getClass().getURI()/]";
-    [c.getParentAttribute().getClass().getEntityName()/] fatherEntity;
-    [/if]
-=======
-    private PodamFactory factory = new PodamFactoryImpl();
-    private final String apiPath = "api";
-    private final String username = System.getenv("USERNAME_USER");
-    private final String password = System.getenv("PASSWORD_USER");
+    private final String password = Utils.password;
 
     private final int Ok = Status.OK.getStatusCode();
     private final int OkWithoutContent = Status.NO_CONTENT.getStatusCode();
@@ -444,7 +435,6 @@ public class [c.name+className/] {
     [for (cl : Class | c.getHierarchy()->reverse())]
     private [cl.getEntityName()/] [cl.getFatherEntity()/];
     [/for]
->>>>>>> branch 'dev' of https://github.com/recursosCSWuniandes/gmm-generator.git
 
     @ArquillianResource
     private URL deploymentURL;
