@@ -131,6 +131,7 @@ public class [className/] implements [c.getAPIName()/] {
     /**
      * Obtiene los datos de una instancia de [c.name/] a partir de su ID.
      *
+     * @pre La existencia del elemento padre [c.getParentAttribute().getClass().name/] se debe garantizar.
      * @param [c.getName()/]id) Identificador del [c.name/] a consultar
      * @return Instancia de [c.getEntityName()/] con los datos del [c.name/] consultado.
      * @generated
@@ -272,7 +273,7 @@ public class [className/] implements [c.getAPIName()/] {
      */
     @Override
     public List<[a.getClass().getEntityName()/]> list[a.name.toUpperFirst()/](Long [c.getEntityId()/]) {
-        return persistence.find([c.getEntityId()/]).[a.getter()/]();
+        return get[c.name/]([c.getEntityId()/]).[a.getter()/]();
     }
 
     /**
@@ -284,7 +285,7 @@ public class [className/] implements [c.getAPIName()/] {
      */
     @Override
     public [a.getClass().getEntityName()/] get[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]) {
-        List<[a.getClass().getEntityName()/]> list = persistence.find([c.getEntityId()/]).[a.getter()/]();
+        List<[a.getClass().getEntityName()/]> list = get[c.name/]([c.getEntityId()/]).[a.getter()/]();
         [a.getClass().getEntityName()/] [a.getEntityLower()/] = new [a.getClass().getEntityName()/]();
         [a.getEntityLower()/].setId([a.getEntityId()/]);
         int index = list.indexOf([a.getEntityLower()/]);
@@ -305,14 +306,14 @@ public class [className/] implements [c.getAPIName()/] {
     @Override
     public [a.getClass().getEntityName()/] add[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]) {
 		[if (a.isRelationshipOwner())]
-        [c.getEntityName()/] [c.getEntityLower()/] = persistence.find([c.getEntityId()/]);
+        [c.getEntityName()/] [c.getEntityLower()/] = get[c.name/]([c.getEntityId()/]);
         [a.getClass().getEntityName()/] [a.getEntityLower()/] = new [a.getClass().getEntityName()/]();
         [a.getEntityLower()/].setId([a.getEntityId()/]);
         [c.getEntityLower()/].[a.getter()/]().add([a.getEntityLower()/]);
         return get[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getEntityId()/]);
 		[else]
         [if (a.getOtherEnd().getUpper() = 1)]
-        [c.getEntityName()/] [c.getEntityLower()/] = persistence.find([c.getEntityId()/]);
+        [c.getEntityName()/] [c.getEntityLower()/] = get[c.name/]([c.getEntityId()/]);
         [a.getClass().getEntityName()/] [a.getEntityLower()/] = [a.getClass().getBeanLower()/].get[a.getClass().name/]([a.getEntityId()/]);
         [a.getEntityLower()/].[a.getOtherEnd().setter()/]([c.getEntityLower()/]);
         return [a.getEntityLower()/];
@@ -333,7 +334,7 @@ public class [className/] implements [c.getAPIName()/] {
      */
     @Override
     public List<[a.getClass().getEntityName()/]> replace[a.name.toUpperFirst()/](Long [c.getEntityId()/], List<[a.getClass().getEntityName()/]> list) {
-        [c.getEntityName()/] [c.getEntityLower()/] = persistence.find([c.getEntityId()/]);
+        [c.getEntityName()/] [c.getEntityLower()/] = get[c.name/]([c.getEntityId()/]);
 		[if (not a.isRelationshipOwner())]
         List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]List = [a.getClass().getBeanLower()/].get[a.getClass().name/]s();
         [if (a.getOtherEnd().getUpper() = 1)]
@@ -379,7 +380,7 @@ public class [className/] implements [c.getAPIName()/] {
         [a.getClass().getBeanLower()/].remove[a.getOtherEnd().name.toUpperFirst()/]([a.getEntityId()/], [c.getEntityId()/]);
         [/if]
         [else]
-        [c.getEntityName()/] entity = persistence.find([c.getEntityId()/]);
+        [c.getEntityName()/] entity = get[c.name/]([c.getEntityId()/]);
         [a.getClass().getEntityName()/] [a.getEntityLower()/] = new [a.getClass().getEntityName()/]();
         [a.getEntityLower()/].setId([a.getEntityId()/]);
         entity.[a.getter()/]().remove([a.getEntityLower()/]);

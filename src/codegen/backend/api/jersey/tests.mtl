@@ -4,6 +4,7 @@
 
 [template public mainTests(c : Class, path : String)]
 [c.genTests(path.concat('tests/'))/]
+[c.genTestUtils(path.concat('tests/'))/]
 [/template]
 
 [template protected genTests(c : Class, path : String) {className : String = c.getServiceTestName();}]
@@ -66,9 +67,9 @@ public class [c.getServiceTestName()/] {
     private final String [c.testPath()/] = "[c.getURI()/]";
     private final static List<[c.getEntityName()/]> oraculo = new ArrayList<>();
     private WebTarget target;
-    private final String apiPath = "api";
-    private final String username = System.getenv("USERNAME_USER");
-    private final String password = System.getenv("PASSWORD_USER");    
+    private final String apiPath = Utils.apiPath;
+    private final String username = Utils.username;
+    private final String password = Utils.password;    
     [if (c.isChild())]
     [for (cl : Class | c.getHierarchy())]
     [if (cl.name<>c.name)]
@@ -424,9 +425,9 @@ public class [c.name+className/] {
     private final String [a.testPath()/] = "[a.name/]";
     private final static List<[a.getClass().getEntityName()/]> [a.getOraculo()/] = new ArrayList<>();
     private WebTarget target;
-    private final String apiPath = "api";
-    private final String username = System.getenv("USERNAME_USER");
-    private final String password = System.getenv("PASSWORD_USER");    
+    private final String apiPath = Utils.apiPath;
+    private final String username = Utils.username;
+    private final String password = Utils.password;    
     [if (c.isChild())]
     private final String [c.getParentAttribute().getClass().testPath()/] = "[c.getParentAttribute().getClass().getURI()/]";
     [c.getParentAttribute().getClass().getEntityName()/] fatherEntity;
@@ -691,6 +692,26 @@ public class [c.name+className/] {
                 .request().cookie(cookieSessionId).delete();
         Assert.assertEquals(OkWithoutContent, response.getStatus());
     }
+}
+[/file]
+[/template]
+
+[template protected genTestUtils(c : Class, path : String)]
+[file (path.concat('Utils.java'), false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
+package [c.getModel().baseGroup()/].tests;
+
+/**
+ *
+ * @generate
+ */
+public class Utils {
+    public static final String apiPath = "api";
+    public static final String username = System.getenv("USERNAME_USER");
+    public static final String password = System.getenv("PASSWORD_USER"); 
+    
 }
 [/file]
 [/template]
