@@ -425,7 +425,7 @@ public class [a.getSharedResourceClassName()/] {
 [template protected genSubResourceLocators(c : Class)]
 [for (a : Property | c.getCompositeCollectionAttributes())]
 
-@Path("{[c.getEntityId()/]: \\d+}/[a.name/]")
+@Path("{[c.getEntityId()/]: \\d+}/[a.getURI()/]")
 public Class<[a.getClass().getJaxRsName()/]> get[a.getClass().getJaxRsName()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/]){
     get[c.name/]([c.getEntityId()/]);
     return [a.getClass().getJaxRsName()/].class;
@@ -433,12 +433,16 @@ public Class<[a.getClass().getJaxRsName()/]> get[a.getClass().getJaxRsName()/](@
 [/for]
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
 
-    @Path("{[c.getEntityId()/]: \\d+}/[a.name/]")
+    @Path("{[c.getEntityId()/]: \\d+}/[a.getURI()/]")
     public Class<[a.getSharedResourceClassName()/]> get[a.getSharedResourceClassName()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/]){
         get[c.name/]([c.getEntityId()/]);
         return [a.getSharedResourceClassName()/].class;
     }
 [/for]
+[/template]
+
+[template protected getURI(a : Property)]
+[a.name.toLowerFirst()/]
 [/template]
 
 [template protected getJaxRsName(c : Class)]
