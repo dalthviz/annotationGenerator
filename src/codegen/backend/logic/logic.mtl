@@ -111,7 +111,7 @@ public class [className/] implements [c.getAPIName()/] {
     @Override
     public List<[c.getEntityName()/]> get[c.name/]s(Long [c.getParentAttribute().getClass().getName()/]id) {
         [c.getParentAttribute().getClass().getEntityName()/] [c.getParentAttribute().getClass().getName()/] = [c.getParentAttribute().getClass().getBeanLower()/].get[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]id);
-        return [c.getParentAttribute().getClass().getName()/].get[c.name/]s();
+        return [c.getParentAttribute().getClass().getName()/].[c.getParentAttribute().getOtherEnd().getter()/]();
     }
 
     /**

@@ -63,9 +63,10 @@
                     [/if]
                     model: '[c.getEntityModel()/]',
                     [if (c.isChild())]
-                    [c.getRecordsName()/]: ['['/]'[c.getParentAttribute().getClass().getName()/]', '$stateParams', function ([c.getParentAttribute().getClass().getName()/], $params) {
-                            return [c.getParentAttribute().getClass().getName()/].getList('[c.getRecordsName()/]', $params);
-                        }[']'/]
+                    [let parent : String = c.getParentAttribute().getClass().getRecordName()]
+                    [c.getRecordsName()/]: ['['/]'[parent/]', '$stateParams', 'model', function ([parent/], $params, model) {
+                            return [parent/].getList(model.url, $params);
+                        }[']'/][/let]
                     [else]
                     [c.getRecordsName()/]: ['['/]'Restangular', 'model', '$stateParams', function (r, model, $params) {
                             return r.all(model.url).getList($params);
