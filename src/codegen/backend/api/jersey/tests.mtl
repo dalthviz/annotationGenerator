@@ -5,9 +5,12 @@
 [template public mainTests(c : Class, path : String)]
 [c.genTests(path.concat('tests/'))/]
 [c.genTestUtils(path.concat('tests/'))/]
+[for (a : Property | c.getNonCompositeCollectionAttributes())]
+    [a.genTestsNonComposite(path)/]
+[/for]
 [/template]
 
-[template protected genTests(c : Class, path : String) {className : String = c.getServiceTestName();}]
+[template protected genTests(c : Class, path : String) {className : String = c.getTestName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 /*
 [c.getModel().license()/]
@@ -16,13 +19,9 @@ package [c.getModel().baseGroup()/].tests;
 
 import co.edu.uniandes.csw.auth.model.UserDTO;
 import co.edu.uniandes.csw.auth.security.JWT;
-[if (c.isChild())]
 [for (cl : Class | c.getHierarchy())]
 import [cl.getModel().baseGroup()/].entities.[cl.getEntityName()/];
 [/for]
-[else]
-import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
-[/if]
 import [c.getModel().baseGroup()/].dtos.minimum.[c.getMinimumDTOName()/];
 import [c.getModel().baseGroup()/].resources.[c.getJaxRsName()/];
 import java.io.File;
@@ -59,7 +58,7 @@ import uk.co.jemos.podam.api.PodamFactoryImpl;
 
 
 @RunWith(Arquillian.class)
-public class [c.getServiceTestName()/] {
+public class [className/] {
 
     private final int Ok = Status.OK.getStatusCode();
     private final int Created = Status.CREATED.getStatusCode();
@@ -206,7 +205,7 @@ public class [c.getServiceTestName()/] {
      * @generated
      */
     @Test
-    public void create[c.getServiceTestName()/]() throws IOException {
+    public void create[c.name/]Test() throws IOException {
         PodamFactory factory = new PodamFactoryImpl();
         [c.getMinimumDTOName()/] [c.getName()/] = factory.manufacturePojo([c.getMinimumDTOName()/].class);
         Cookie cookieSessionId = login(username, password);
@@ -242,7 +241,7 @@ public class [c.getServiceTestName()/] {
      * @generated
      */
     @Test
-    public void get[c.name/]ById() {
+    public void get[c.name/]ByIdTest() {
         Cookie cookieSessionId = login(username, password);
         [if (c.isChild())]        
         [c.getMinimumDTOName()/] [c.testName()/] = target
@@ -271,7 +270,7 @@ public class [c.getServiceTestName()/] {
      * @generated
      */
     @Test
-    public void list[c.getServiceTestName()/]() throws IOException {
+    public void list[c.name/]Test() throws IOException {
         Cookie cookieSessionId = login(username, password);
         [if (c.isChild())]
         Response response = target
@@ -299,7 +298,7 @@ public class [c.getServiceTestName()/] {
      * @generated
      */
     @Test
-    public void update[c.getServiceTestName()/]() throws IOException {
+    public void update[c.name/]Test() throws IOException {
         Cookie cookieSessionId = login(username, password);
         [c.getMinimumDTOName()/] [c.getName()/] = new [c.getMinimumDTOName()/](oraculo.get(0));
         PodamFactory factory = new PodamFactoryImpl();
@@ -338,7 +337,7 @@ public class [c.getServiceTestName()/] {
      * @generated
      */
     @Test
-    public void delete[c.getServiceTestName()/]() {
+    public void delete[c.name/]Test() {
         Cookie cookieSessionId = login(username, password);
         [c.getMinimumDTOName()/] [c.getName()/] = new [c.getMinimumDTOName()/](oraculo.get(0));
         [if (c.isChild())]
@@ -358,14 +357,14 @@ public class [c.getServiceTestName()/] {
         
         Assert.assertEquals(OkWithoutContent, response.getStatus());
     }
-    [for (a : Property | c.getNonCompositeCollectionAttributes())]
-    [c.genTestsNonComposite(a,path)/]
-    [/for]
 }
 [/file]
 [/template]
 
-[template protected genTestsNonComposite(c : Class, a : Property, path : String) {className : String = a.getClass().getServiceTestName();}]
+[template protected genTestsNonComposite(a : Property, path : String) {
+    className   : String    = a.getTestName();
+    c           : Class     = a.getOwner();
+}]
 [file (path.concat(c.name+className+'.java'), false, 'UTF-8')]
 /*
 [c.getModel().license()/]
@@ -374,13 +373,16 @@ package [c.getModel().baseGroup()/].tests;
 
 import co.edu.uniandes.csw.auth.model.UserDTO;
 import co.edu.uniandes.csw.auth.security.JWT;
-[if (c.isChild())]
-import [c.getModel().baseGroup()/].entities.[c.getParentAttribute().getClass().getEntityName()/];
+[for (cl : Class | c.getHierarchy())]
+import [cl.getModel().baseGroup()/].entities.[cl.getEntityName()/];
+[/for]
+[if (c.getEntityName() <> a.getClass().getEntityName())]
+import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 [/if]
 import [c.getModel().baseGroup()/].dtos.minimum.[c.getMinimumDTOName()/];
-import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
+[if (c.getMinimumDTOName() <> a.getDTOName())]
 import [c.getModel().baseGroup()/].dtos.minimum.[a.getDTOName()/];
-import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
+[/if]
 import [c.getModel().baseGroup()/].resources.[c.getJaxRsName()/];
 import java.io.File;
 import java.io.IOException;
@@ -414,7 +416,7 @@ import uk.co.jemos.podam.api.PodamFactoryImpl;
 
 
 @RunWith(Arquillian.class)
-public class [c.name+className/] {
+public class [className/] {
 
     private WebTarget target;
     private PodamFactory factory = new PodamFactoryImpl();
@@ -663,9 +665,16 @@ public class Utils {
     public static final String apiPath = "api";
     public static final String username = System.getenv("USERNAME_USER");
     public static final String password = System.getenv("PASSWORD_USER"); 
-    
 }
 [/file]
+[/template]
+
+[template private getTestName(c : Class)]
+[c.name/]Test
+[/template]
+
+[template protected getTestName(a : Property)]
+[a.getOwner().getTestName()/][a.name.toUpperFirst()/]Test
 [/template]
 
 [template private getFatherEntity(c : Class)]
@@ -673,11 +682,11 @@ father[c.name/]Entity
 [/template]
 
 [template private testPath(a : Property)]
-[a.name.toLowerFirst().concat('Path')/]
+[a.name.toLowerFirst()/]Path
 [/template]
 
 [template private testPath(c : Class)]
-[c.getName().concat('Path')/]
+[c.getName()/]Path
 [/template]
 
 [template private getTestSuffix(a : Property)]
@@ -685,7 +694,7 @@ father[c.name/]Entity
 [/template]
 
 [template private getResponseVarName(a : Property)]
-[a.name.toLower().concat('Test')/]
+[a.name.toLower()/]Test
 [/template]
 
 [template private getDTOName(a : Property)]

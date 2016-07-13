@@ -195,10 +195,6 @@ Sequence(class){c}->union(
 [c.name.toLower().concat('Test')/]
 [/template]
 
-[template public getServiceTestName(c : Class)]
-[c.name.concat('Test')/]
-[/template]
-
 [template public getJavaType(a : Property)]
 [if (a.type.name = 'Image')]
 String[else]

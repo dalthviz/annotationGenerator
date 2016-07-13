@@ -370,27 +370,27 @@ public class [a.getSharedResourceClassName()/] {
      * Obtiene una instancia de [a.getClass().name/] asociada a una instancia de [a.getOwner().name/]
      *
      * @param [a.getOwner().getEntityId()/] Identificador de la instancia de [a.getOwner().name/]
-     * @param [a.getClass().getEntityId()/] Identificador de la instancia de [a.getClass().name/]
+     * @param [a.getIdVariable()/] Identificador de la instancia de [a.getClass().name/]
      * @generated
      */
     @GET
-    @Path("{[a.getClass().getEntityId()/]: \\d+}")
-    public [a.getClass().getBasicDTOName()/] get[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getEntityId()/]") Long [a.getOwner().getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
-        return new [a.getClass().getBasicDTOName()/]([logic/].get[a.name.toUpperFirst()/]([a.getOwner().getEntityId()/], [a.getClass().getEntityId()/]));
+    @Path("{[a.getIdVariable()/]: \\d+}")
+    public [a.getClass().getBasicDTOName()/] get[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getEntityId()/]") Long [a.getOwner().getEntityId()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
+        return new [a.getClass().getBasicDTOName()/]([logic/].get[a.name.toUpperFirst()/]([a.getOwner().getEntityId()/], [a.getIdVariable()/]));
     }
 
     /**
      * Asocia un [a.getClass().name/] existente a un [a.getOwner().name/]
      *
      * @param [a.getOwner().getEntityId()/] Identificador de la instancia de [a.getOwner().name/]
-     * @param [a.getClass().getEntityId()/] Identificador de la instancia de [a.getClass().name/]
+     * @param [a.getIdVariable()/] Identificador de la instancia de [a.getClass().name/]
      * @return Instancia de [a.getClass().getBasicDTOName()/] que fue asociada a [a.getOwner().name/]
      * @generated
      */
     @POST
-    @Path("{[a.getClass().getEntityId()/]: \\d+}")
-    public [a.getClass().getBasicDTOName()/] add[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getEntityId()/]") Long [a.getOwner().getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
-        return new [a.getClass().getBasicDTOName()/]([logic/].add[a.name.toUpperFirst()/]([a.getOwner().getEntityId()/], [a.getClass().getEntityId()/]));
+    @Path("{[a.getIdVariable()/]: \\d+}")
+    public [a.getClass().getBasicDTOName()/] add[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getEntityId()/]") Long [a.getOwner().getEntityId()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
+        return new [a.getClass().getBasicDTOName()/]([logic/].add[a.name.toUpperFirst()/]([a.getOwner().getEntityId()/], [a.getIdVariable()/]));
     }
 
     /**
@@ -410,34 +410,34 @@ public class [a.getSharedResourceClassName()/] {
      * Desasocia un [a.getClass().name/] existente de un [a.getOwner().name/] existente
      *
      * @param [a.getOwner().getEntityId()/] Identificador de la instancia de [a.getOwner().name/]
-     * @param [a.getClass().getEntityId()/] Identificador de la instancia de [a.getClass().name/]
+     * @param [a.getIdVariable()/] Identificador de la instancia de [a.getClass().name/]
      * @generated
      */
     @DELETE
-    @Path("{[a.getClass().getEntityId()/]: \\d+}")
-    public void remove[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getEntityId()/]") Long [a.getOwner().getEntityId()/], @PathParam("[a.getClass().getEntityId()/]") Long [a.getClass().getEntityId()/]) {
-        [logic/].remove[a.name.toUpperFirst()/]([a.getOwner().getEntityId()/], [a.getClass().getEntityId()/]);
+    @Path("{[a.getIdVariable()/]: \\d+}")
+    public void remove[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getEntityId()/]") Long [a.getOwner().getEntityId()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
+        [logic/].remove[a.name.toUpperFirst()/]([a.getOwner().getEntityId()/], [a.getIdVariable()/]);
     }
 }
 [/file]
 [/template]
 
 [template protected genSubResourceLocators(c : Class)]
-[if(c.hasCompositeAssociations() or c.hasSharedAssociations())]
+[if(c.isMaster())]
 public void exists[c.name/](Long [c.getEntityId()/]){
-        [c.getBasicDTOName()/] [c.getName()/] = get[c.name/]([c.getEntityId()/]);
-        if ([c.getName()/]== null) {
-            throw new WebApplicationException(404);
-        }
+    [c.getBasicDTOName()/] [c.getName()/] = get[c.name/]([c.getEntityId()/]);
+    if ([c.getName()/]== null) {
+        throw new WebApplicationException(404);
     }
+}
 [/if]
 [if(c.isChild() and c.hasCompositeAssociations())]
 public void validate[c.name/]Parent(Long [c.getEntityId()/]){
-        [c.getBasicDTOName()/] [c.getName()/] = get[c.name/]([c.getEntityId()/]);
-        if ([c.getName()/].[c.getParentAttribute().getter()/]() == null || ![c.getParentAttribute().getClass().getEntityId()/].equals([c.getName()/].[c.getParentAttribute().getter()/]().getId())) {
-            throw new WebApplicationException(404);
-        }
+    [c.getBasicDTOName()/] [c.getName()/] = get[c.name/]([c.getEntityId()/]);
+    if ([c.getName()/].[c.getParentAttribute().getter()/]() == null || ![c.getParentAttribute().getClass().getEntityId()/].equals([c.getName()/].[c.getParentAttribute().getter()/]().getId())) {
+        throw new WebApplicationException(404);
     }
+}
 [/if]
 [for (a : Property | c.getCompositeCollectionAttributes())]
 
@@ -452,12 +452,16 @@ public Class<[a.getClass().getJaxRsName()/]> get[a.getClass().getJaxRsName()/](@
 [/for]
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
 
-    @Path("{[c.getEntityId()/]: \\d+}/[a.getURI()/]")
-    public Class<[a.getSharedResourceClassName()/]> get[a.getSharedResourceClassName()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/]){
-        exists[c.name/]([c.getEntityId()/]);
-        return [a.getSharedResourceClassName()/].class;
-    }
+@Path("{[c.getEntityId()/]: \\d+}/[a.getURI()/]")
+public Class<[a.getSharedResourceClassName()/]> get[a.getSharedResourceClassName()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/]){
+    exists[c.name/]([c.getEntityId()/]);
+    return [a.getSharedResourceClassName()/].class;
+}
 [/for]
+[/template]
+
+[template protected getIdVariable(a : Property)]
+[a.getURI()/]Id
 [/template]
 
 [template protected getURI(a : Property)]
