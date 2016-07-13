@@ -336,7 +336,7 @@ public class [className/] implements [c.getAPIName()/] {
     public List<[a.getClass().getEntityName()/]> replace[a.name.toUpperFirst()/](Long [c.getEntityId()/], List<[a.getClass().getEntityName()/]> list) {
         [c.getEntityName()/] [c.getEntityLower()/] = get[c.name/]([c.getEntityId()/]);
 		[if (not a.isRelationshipOwner())]
-        List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]List = [a.getClass().getBeanLower()/].[a.getter()/]();
+        List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]List = [a.getClass().getBeanLower()/].get[c.name/]s();
         [if (a.getOtherEnd().getUpper() = 1)]
         for ([a.getClass().getEntityName()/] [a.getClass().getName()/] : [a.getClass().getName()/]List) {
             if (list.contains([a.getClass().getName()/])) {

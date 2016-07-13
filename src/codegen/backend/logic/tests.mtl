@@ -147,8 +147,6 @@ public class [className/] {
      * @generated
      */
     private void insertData() {
-        
-        
         [if (c.isChild())]
         [for (a : Property | c.getRelationshipAttributes()->reject(isComposite()))]
         [if(c.getParentAttribute().getClass().name <> a.getClass().name)]

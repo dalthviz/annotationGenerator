@@ -3,11 +3,13 @@
 [import ::utils /]
 
 [template public mainTests(c : Class, path : String)]
-[c.genTests(path.concat('tests/'))/]
-[c.genTestUtils(path.concat('tests/'))/]
-[for (a : Property | c.getNonCompositeCollectionAttributes())]
-    [a.genTestsNonComposite(path)/]
-[/for]
+[let genPath : String = path.concat('tests/')]
+    [c.genTests(genPath)/]
+    [c.genTestUtils(genPath)/]
+    [for (a : Property | c.getNonCompositeCollectionAttributes())]
+        [a.genTestsNonComposite(genPath)/]
+    [/for]
+[/let]
 [/template]
 
 [template protected genTests(c : Class, path : String) {className : String = c.getTestName();}]
@@ -365,7 +367,7 @@ public class [className/] {
     className   : String    = a.getTestName();
     c           : Class     = a.getOwner();
 }]
-[file (path.concat(c.name+className+'.java'), false, 'UTF-8')]
+[file (path.concat(className+'.java'), false, 'UTF-8')]
 /*
 [c.getModel().license()/]
 */
@@ -674,7 +676,7 @@ public class Utils {
 [/template]
 
 [template protected getTestName(a : Property)]
-[a.getOwner().getTestName()/][a.name.toUpperFirst()/]Test
+[a.getOwner().name/][a.name.toUpperFirst()/]Test
 [/template]
 
 [template private getFatherEntity(c : Class)]
