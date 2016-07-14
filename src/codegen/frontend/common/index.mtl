@@ -1,6 +1,7 @@
 [comment encoding = UTF-8 /]
 [module index('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
+[import frontend::entities::main /]
 
 [template public indexMain(m : Model, path : String)]
 [m.appjs(path.concat('src/'))/]
@@ -13,15 +14,18 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
 
 [template protected appjs(m : Model, path : String)]
 [file (path.concat('app.js'), false, 'UTF-8')]
+/*
+[m.license()/]
+*/
 (function (ng) {
     var mod = ng.module('mainApp', ['['/]
         //'ngCrudMock',
+        'ngCrud',
+        'ui.router',
         [for (c : Class | m.getClasses())]
         '[c.getModule()/]',
         [/for]
-        'authModule',
-        'ui.router',
-        'ngCrud'
+        'authModule'
     [']'/]);
 
     mod.config(['['/]'$logProvider', function ($logProvider) {
@@ -30,24 +34,28 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
 
     mod.config(['['/]'RestangularProvider', function (rp) {
             rp.setBaseUrl('[m.getAPIURL()/]');
+            rp.setRequestInterceptor(function (elem, operation) {
+                if (operation === "remove") {
+                    return null;
+                }
+                return elem;
+            });
+            rp.addResponseInterceptor(function (data, operation, what, url, response) {
+                if (operation === "getList") {
+                    data.totalRecords = parseInt(response.headers("X-Total-Count")) || 1;
+                }
+                return data;
+            });
         }[']'/]);
 
-    mod.config(['['/]'$stateProvider', '$urlRouterProvider', 'CrudTemplateURL', 'CrudCtrlAlias', function ($stateProvider, $urlRouterProvider, tplUrl, alias) {
-            $stateProvider
-                [for (c : Class | m.getRootClasses()) separator ('\n')]
-                .state('[c.getName()/]', {
-                    url: '/[c.getName()/]',
-                    templateUrl: tplUrl,
-                    controller: '[c.getCtrl()/]',
-                    controllerAs: alias
-                })[/for];
+    mod.config(['['/]'$urlRouterProvider', function ($urlRouterProvider) {
                 $urlRouterProvider.otherwise('/');
         }[']'/]);
 
     mod.config(['['/]'authServiceProvider', function (auth) {
             auth.setValues({
                 apiUrl: '[m.getAPIURL()/]users/',
-                successState: '[m.getClasses()->any(1=1).getName()/]'
+                successState: '[m.getClasses()->any(1=1).getListStateName()/]'
             });
         }[']'/]);
 })(window.angular);
@@ -57,6 +65,9 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
 [template protected index(m : Model, path : String)]
 [file (path.concat('index.html'), false, 'UTF-8')]
 <!DOCTYPE html>
+<!--
+[m.license()/]
+-->
 <html ng-app="mainApp">
     <head>
         <title>[m.name/]</title>
@@ -86,7 +97,7 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
 
     </head>
     <body style="padding-top: 60px;">
-        <div class="container-fluid">
+        <div class="container">
             <div class="col-md-12">
                 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
                     <div class="container-fluid">
@@ -105,7 +116,7 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
                         <div class="collapse navbar-collapse" id="main-bar">
                             <ul class="nav navbar-nav">
                                 [for (c : Class | m.getRootClasses())]
-                                <li><a ui-sref="[c.getName()/]">[c.getDisplayName()/]</a></li>
+                                <li><a ui-sref="[c.getListStateName()/]">[c.getDisplayName()/]</a></li>
                                 [/for]
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
@@ -115,7 +126,7 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
                     </div> <!-- /.container-fluid -->
                 </nav>
             </div>
-            <div ui-view></div>
+            <div ui-view="mainView"></div>
         </div>
     </body>
 </html>

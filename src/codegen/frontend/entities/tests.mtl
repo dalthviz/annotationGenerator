@@ -11,6 +11,9 @@
 
 [template protected genE2EConf(m : Model, path : String)]
 [file (path.concat('e2e.conf.js'), false, 'UTF-8')]
+/*
+[m.license()/]
+*/
 exports.config = {
     allScriptsTimeout: 11000,
     specs: ['['/]
@@ -25,6 +28,9 @@ exports.config = {
     jasmineNodeOpts: {
         showColors: true,
         defaultTimeoutInterval: 30000
+    },
+    onPrepare: function(){
+        browser.driver.manage().window().maximize();
     }
 };
 [/file]
@@ -32,9 +38,10 @@ exports.config = {
 
 [template protected genE2ETests(c : Class, path : String)]
 [file (path.concat(c.getName() + '.specs.js'), false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
 describe('[c.name/] E2E Testing', function () {
-
-	browser.driver.manage().window().maximize();
 
 	[for (a : Property | c.getAllAttribs())]
 	[if(a.type.name = 'String')]

@@ -8,6 +8,9 @@
 
 [template protected genPersistence(c : Class, path : String) {className : String = c.getPersistenceName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
+/*
+[c.getModel().license()/]
+*/
 package [c.getModel().baseGroup()/].persistence;
 
 import javax.ejb.Stateless;
@@ -15,6 +18,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import co.edu.uniandes.csw.crud.spi.persistence.CrudPersistence;
+[if (c.isChild())]
+import java.util.List;
+import javax.persistence.TypedQuery;
+[/if]
 
 /**
  * @generated
@@ -40,6 +47,25 @@ public class [className/] extends CrudPersistence<[c.getEntityName()/]> {
     protected Class<[c.getEntityName()/]> getEntityClass() {
         return [c.getEntityName()/].class;
     }
+
+[if (c.isChild())]
+    public [c.getEntityName()/] find(Long [c.getParentAttribute().getClass().getName()/]id, Long [c.getName()/]id) {
+        TypedQuery<[c.getEntityName()/]> q = em.createQuery("select p from [c.getEntityName()/] p where (p.[c.getParentAttribute().getClass().getName()/].id = :[c.getParentAttribute().getClass().getName()/]id) and (p.id = :[c.getName()/]id)", [c.getEntityName()/].class);
+        q.setParameter("[c.getParentAttribute().getClass().getName()/]id", [c.getParentAttribute().getClass().getName()/]id);
+        q.setParameter("[c.getName()/]id", [c.getName()/]id);
+        return q.getSingleResult();
+    }
+    
+    public List<[c.getEntityName()/]> findAll(Integer page, Integer maxRecords, Long [c.getParentAttribute().getClass().getName()/]id) {
+        TypedQuery<[c.getEntityName()/]> q = em.createQuery("select p from [c.getEntityName()/] p where (p.[c.getParentAttribute().getClass().getName()/].id = :[c.getParentAttribute().getClass().getName()/]id)", [c.getEntityName()/].class);
+        q.setParameter("[c.getParentAttribute().getClass().getName()/]id", [c.getParentAttribute().getClass().getName()/]id);
+        if (page != null && maxRecords != null) {
+            q.setFirstResult((page - 1) * maxRecords);
+            q.setMaxResults(maxRecords);
+        }
+        return q.getResultList();
+    }
+[/if]
 }
 [/file]
 [/template]

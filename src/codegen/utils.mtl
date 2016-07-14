@@ -55,7 +55,8 @@ c.allAttributes()->union(c.getReferences(false))->asOrderedSet()
 
 
 [**
- * Obtiene la colección de atributos de la clase, cuyo tipo es otra clase del modelo y son aceptados por el generador
+ * Obtiene la colección de atributos de la clase, cuyo tipo es otra clase del modelo y son aceptados por el generador.<br>
+ * 
  * Actualmente los atributos válidos cumplen con las siguientes características:
  * - Es navegable
  * - Su límite máximo de objetos es diferente de cero
@@ -89,14 +90,23 @@ c.getRelationshipAttributes()->select(
 )->asOrderedSet()
 /]
 
+[**
+ * Gets a list of attributes member of a relationship with upper cardinality higher than 1
+*/]
 [query public getCollectionAttributes(c : Class) : Set(Property) =
 c.getRelationshipAttributes()->select(getUpper() <> 1)->asSet()
 /]
 
+[**
+ * 
+*/]
 [query public hasReferences(c : Class, includeParent : Boolean) : Boolean =
 c.getReferences(includeParent)->notEmpty()
 /]
 
+[**
+ * The result of Class.getCollectionAttributes is not empty
+*/]
 [query public isMaster(c : Class) : Boolean =
 c.getCollectionAttributes()->notEmpty()
 /]
@@ -167,6 +177,15 @@ and (
 )
 /]
 
+[query public getHierarchy(c : Class) : Sequence(Class) = 
+Sequence(class){c}->union(
+    if c.getParentAttribute() <> null then 
+        c.getParentAttribute().getClass().getHierarchy() 
+    else 
+        Sequence(Class){} 
+    endif) 
+/]
+
 [template public testName(c : Class)]
 [c.name.toLower().concat('Test')/]
 [/template]
@@ -207,6 +226,18 @@ String[else]
 
 [template public getDTOName(c : Class)]
 [c.name.toUpperFirst().concat('DTO')/]
+[/template]
+
+[template public getMinimumDTOName(c : Class)]
+[c.name.toUpperFirst().concat('MinimumDTO')/]
+[/template]
+
+[template public getBasicDTOName(c : Class)]
+[c.name.toUpperFirst().concat('BasicDTO')/]
+[/template]
+
+[template public getFullDTOName(c : Class)]
+[c.name.toUpperFirst().concat('FullDTO')/]
 [/template]
 
 [template public getAPIName(c : Class)]
@@ -339,22 +370,30 @@ String[else]
 co.edu.uniandes.csw
 [/template]
 
-[template public getAuthLibArtifactId(m : Model)]
-auth-utils
-[/template]
-
-[template public getAuthLibVersion(m : Model)]
-0.1.0
-[/template]
-
-[template public getCrudLibArtifactId(m : Model)]
-crud-utils
-[/template]
-
-[template public getCrudLibVersion(m : Model)]
-0.1.2
-[/template]
-
 [template public asDisplayName(s : String)]
 [s.replace('^\\W+','').replaceAll('(?!^)([A-Z])',' $1').replaceAll('\\W+', ' ').toUpperFirst()/]
+[/template]
+
+[template public license(m : Model)]
+The MIT License (MIT)
+
+Copyright (c) 2015 Los Andes University
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 [/template]
