@@ -487,17 +487,17 @@ public class [className/] {
      */
     public void insertData() {
         try{
-            utx.begin();
             [for (cl : Class | c.getHierarchy()->reverse())]
 
+            utx.begin();
             [cl.getFatherEntity()/] = factory.manufacturePojo([cl.getEntityName()/].class);
             [if (cl.isChild())]
             [cl.getFatherEntity()/].[cl.getParentAttribute().setter()/]([cl.getParentAttribute().getClass().getFatherEntity()/]);
             [/if]
             em.persist([cl.getFatherEntity()/]);
+            utx.commit();
             [/for]
 
-            utx.commit();
 
             for (int i = 0; i < 3; i++) {
                 utx.begin();
@@ -547,7 +547,8 @@ public class [className/] {
         }
         target = createWebTarget()
         [for (cl : Class | c.getHierarchy()->reverse())]
-                .path([cl.testPath()/]).path([cl.getFatherEntity()/].getId().toString())
+                .path([cl.testPath()/])
+                .path([cl.getFatherEntity()/].getId().toString())
         [/for]
                 .path([a.testPath()/]);
     }
