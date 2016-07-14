@@ -58,7 +58,6 @@ import org.junit.runner.RunWith;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 
-
 @RunWith(Arquillian.class)
 public class [className/] {
 
@@ -485,7 +484,7 @@ public class [className/] {
      *
      * @generated
      */
-    public void insertData() {
+    private void insertData() {
         try{
             [for (cl : Class | c.getHierarchy()->reverse())]
 
