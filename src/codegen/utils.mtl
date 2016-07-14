@@ -49,11 +49,6 @@ and a.aggregation = AggregationKind::none
 and a.getOtherEnd().getUpper() <> 1
 /]
 
-[query public getAttributesWithRef(c : Class) : OrderedSet(Property) =
-c.allAttributes()->union(c.getReferences(false))->asOrderedSet()
-/]
-
-
 [**
  * Obtiene la colección de atributos de la clase, cuyo tipo es otra clase del modelo y son aceptados por el generador.<br>
  * 

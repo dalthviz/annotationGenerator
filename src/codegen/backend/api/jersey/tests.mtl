@@ -61,23 +61,25 @@ import uk.co.jemos.podam.api.PodamFactoryImpl;
 @RunWith(Arquillian.class)
 public class [className/] {
 
-    private final int Ok = Status.OK.getStatusCode();
-    private final int Created = Status.CREATED.getStatusCode();
-    private final int OkWithoutContent = Status.NO_CONTENT.getStatusCode();
-    private final String [c.testPath()/] = "[c.getURI()/]";
-    private final static List<[c.getEntityName()/]> oraculo = new ArrayList<>();
     private WebTarget target;
     private final String apiPath = Utils.apiPath;
     private final String username = Utils.username;
-    private final String password = Utils.password;    
-    [if (c.isChild())]
-    [for (cl : Class | c.getHierarchy())]
-    [if (cl.name<>c.name)]
+    private final String password = Utils.password;
+    PodamFactory factory = new PodamFactoryImpl();
+
+    private final int Ok = Status.OK.getStatusCode();
+    private final int Created = Status.CREATED.getStatusCode();
+    private final int OkWithoutContent = Status.NO_CONTENT.getStatusCode();
+
+    private final static List<[c.getEntityName()/]> oraculo = new ArrayList<>();
+
+    [for (cl : Class | c.getHierarchy()->reverse())]
     private final String [cl.testPath()/] = "[cl.getURI()/]";
-    [cl.getEntityName()/] [cl.getFatherEntity()/];
-    [/if]
     [/for]
-    [/if]
+
+    [for (cl : Class | c.getHierarchy()->reverse()->reject(name = c.name))]
+    [cl.getEntityName()/] [cl.getFatherEntity()/];
+    [/for]
 
     @ArquillianResource
     private URL deploymentURL;
@@ -112,14 +114,9 @@ public class [className/] {
     private UserTransaction utx;
 
     private void clearData() {
-        
-    [if (c.isChild())]
         [for (cl : Class | c.getHierarchy())]
         em.createQuery("delete from [cl.getEntityName()/]").executeUpdate();
         [/for]
-    [else]
-        em.createQuery("delete from [c.getEntityName()/]").executeUpdate();    
-    [/if]
         oraculo.clear();
     }
 
@@ -129,29 +126,51 @@ public class [className/] {
      * @generated
      */
     public void insertData() {
-        PodamFactory factory = new PodamFactoryImpl();
-        [if (c.isChild())]
-        [for (cl : Class | c.getHierarchy()->reverse())]
-        [if (cl.name<>c.name)]
+        [for (cl : Class | c.getHierarchy()->reverse()->reject(name = c.name))]
         [cl.getFatherEntity()/] = factory.manufacturePojo([cl.getEntityName()/].class);
         [cl.getFatherEntity()/].setId(1L);
         [if (cl.isChild())]
-        [cl.getFatherEntity()/].[cl.getParentAttribute().setter()/](father[cl.getParentAttribute().getClass().name/]Entity);
+        [cl.getFatherEntity()/].[cl.getParentAttribute().setter()/]([cl.getParentAttribute().getClass().getFatherEntity()/]);
         [/if]
         em.persist([cl.getFatherEntity()/]);
-        [/if]
+
         [/for]
-        
-        [/if]
         for (int i = 0; i < 3; i++) {            
             [c.getEntityName()/] [c.getName()/] = factory.manufacturePojo([c.getEntityName()/].class);
             [c.getName()/].setId(i + 1L);
             [if (c.isChild())]
-            [c.getName()/].set[c.getParentAttribute().getClass().name/](father[c.getParentAttribute().getClass().name/]Entity);
+            [c.getName()/].set[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getFatherEntity()/]);
             [/if]
             em.persist([c.getName()/]);
             oraculo.add([c.getName()/]);
         }
+    }
+
+    /**
+     * Configuración inicial de la prueba.
+     *
+     * @generated
+     */
+    @Before
+    public void setUpTest() {
+        try {
+            utx.begin();
+            clearData();
+            insertData();
+            utx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                utx.rollback();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+        target = createWebTarget()
+            [for (cl : Class | c.getHierarchy()->reverse()->reject(c1 | c1.name = c.name))]
+                .path([cl.testPath()/]).path([cl.getFatherEntity()/].getId().toString())
+            [/for]
+                .path([c.testPath()/]);
     }
 
     /**
@@ -167,36 +186,12 @@ public class [className/] {
         user.setUserName(username);
         user.setPassword(password);
         user.setRememberMe(true);
-        Response response = target.path("users").path("login").request()
+        Response response = createWebTarget().path("users").path("login").request()
                 .post(Entity.entity(user, MediaType.APPLICATION_JSON));
         if (response.getStatus() == Ok) {
             return response.getCookies().get(JWT.cookieName);
         } else {
             return null;
-        }
-    }
-
-
-    /**
-     * Configuración inicial de la prueba.
-     *
-     * @generated
-     */
-    @Before
-    public void setUpTest() {
-        target = createWebTarget();
-        try {
-            utx.begin();
-            clearData();
-            insertData();
-            utx.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            try {
-                utx.rollback();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
         }
     }
 
@@ -207,31 +202,21 @@ public class [className/] {
      */
     @Test
     public void create[c.name/]Test() throws IOException {
-        PodamFactory factory = new PodamFactoryImpl();
         [c.getMinimumDTOName()/] [c.getName()/] = factory.manufacturePojo([c.getMinimumDTOName()/].class);
         Cookie cookieSessionId = login(username, password);
-        [if (c.isChild())]
+
         Response response = target
-        [for (cl : Class | c.getHierarchy()->reverse())]
-            [if (cl.name<>c.name)]
-            .path([cl.testPath()/]).path([cl.getFatherEntity()/].getId().toString())
-            [/if]            
-        [/for]          .path([c.testPath()/])
             .request().cookie(cookieSessionId)
             .post(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
-        [else]
-        Response response = target.path([c.testPath()/])
-            .request().cookie(cookieSessionId)
-            .post(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
-        [/if]
-        
+
         [c.getMinimumDTOName()/]  [c.testName()/] = ([c.getMinimumDTOName()/]) response.readEntity([c.getMinimumDTOName()/].class);
-        [for (prop : Property | c.attribute)]
-        [if(not prop.isID())]
-        Assert.assertEquals([c.getName()/].[prop.getter()/](), [c.testName()/].[prop.getter()/]());
-        [/if]
-        [/for]
+
         Assert.assertEquals(Created, response.getStatus());
+
+        [for (prop : Property | c.attribute->reject(isID()))]
+        Assert.assertEquals([c.getName()/].[prop.getter()/](), [c.testName()/].[prop.getter()/]());
+        [/for]
+
         [c.getEntityName()/] entity = em.find([c.getEntityName()/].class, [c.testName()/].getId());
         Assert.assertNotNull(entity);
     }
@@ -244,21 +229,10 @@ public class [className/] {
     @Test
     public void get[c.name/]ByIdTest() {
         Cookie cookieSessionId = login(username, password);
-        [if (c.isChild())]        
+
         [c.getMinimumDTOName()/] [c.testName()/] = target
-        [for (cl : Class | c.getHierarchy()->reverse())]
-            [if (cl.name<>c.name)]
-            .path([cl.testPath()/]).path([cl.getFatherEntity()/].getId().toString())
-            [/if]
-        [/for]
-            .path([c.testPath()/])
             .path(oraculo.get(0).getId().toString())
             .request().cookie(cookieSessionId).get([c.getMinimumDTOName()/].class);
-        [else]
-        [c.getMinimumDTOName()/] [c.testName()/] = target.path([c.testPath()/])
-                .path(oraculo.get(0).getId().toString())
-                .request().cookie(cookieSessionId).get([c.getMinimumDTOName()/].class);
-        [/if]
         
         [for (prop : Property | c.attribute)]
         Assert.assertEquals([c.testName()/].[prop.getter()/](), oraculo.get(0).[prop.getter()/]());
@@ -273,20 +247,10 @@ public class [className/] {
     @Test
     public void list[c.name/]Test() throws IOException {
         Cookie cookieSessionId = login(username, password);
-        [if (c.isChild())]
+
         Response response = target
-        [for (cl : Class | c.getHierarchy()->reverse())]
-            [if (cl.name<>c.name)]
-            .path([cl.testPath()/]).path([cl.getFatherEntity()/].getId().toString())
-            [/if]            
-        [/for]
-            .path([c.testPath()/])
             .request().cookie(cookieSessionId).get();
-        [else]
-        Response response = target.path([c.testPath()/])
-                .request().cookie(cookieSessionId).get();
-        [/if]
-        
+
         String list[c.name/] = response.readEntity(String.class);
         List<[c.getMinimumDTOName()/]> list[c.name/]Test = new ObjectMapper().readValue(list[c.name/], List.class);
         Assert.assertEquals(Ok, response.getStatus());
@@ -302,36 +266,26 @@ public class [className/] {
     public void update[c.name/]Test() throws IOException {
         Cookie cookieSessionId = login(username, password);
         [c.getMinimumDTOName()/] [c.getName()/] = new [c.getMinimumDTOName()/](oraculo.get(0));
-        PodamFactory factory = new PodamFactoryImpl();
+
         [c.getMinimumDTOName()/] [c.getName()/]Changed = factory.manufacturePojo([c.getMinimumDTOName()/].class);
-        [for (prop : Property | c.attribute)]
-        [if (not prop.isID())]
+
+        [for (prop : Property | c.attribute->reject(isID()))]
         [c.getName()/].[prop.setter()/]([c.getName()/]Changed.[prop.getter()/]());
-        [/if]
         [/for]
-        [if (c.isChild())]
+
         Response response = target
-        [for (cl : Class | c.getHierarchy()->reverse())]
-            [if (cl.name<>c.name)]
-            .path([cl.testPath()/]).path([cl.getFatherEntity()/].getId().toString())
-            [/if]            
-        [/for]          .path([c.testPath()/])
             .path([c.getName()/].getId().toString())
-            .request().cookie(cookieSessionId).put(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
-        [else]
-        Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
-                .request().cookie(cookieSessionId).put(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
-        [/if]
-        
+            .request().cookie(cookieSessionId)
+            .put(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
+
         [c.getMinimumDTOName()/] [c.testName()/] = ([c.getMinimumDTOName()/]) response.readEntity([c.getMinimumDTOName()/].class);
+
         Assert.assertEquals(Ok, response.getStatus());
-        [for (prop : Property | c.attribute)]
-        [if (not prop.isID())]
+        [for (prop : Property | c.attribute->reject(isID()))]
         Assert.assertEquals([c.getName()/].[prop.getter()/](), [c.testName()/].[prop.getter()/]());
-        [/if]
         [/for]
     }
-    
+
     /**
      * Prueba para eliminar un [c.name/]
      *
@@ -341,21 +295,10 @@ public class [className/] {
     public void delete[c.name/]Test() {
         Cookie cookieSessionId = login(username, password);
         [c.getMinimumDTOName()/] [c.getName()/] = new [c.getMinimumDTOName()/](oraculo.get(0));
-        [if (c.isChild())]
         Response response = target
-        [for (cl : Class | c.getHierarchy()->reverse())]
-            [if (cl.name<>c.name)]
-            .path([cl.testPath()/]).path([cl.getFatherEntity()/].getId().toString())
-            [/if]            
-        [/for]
-            .path([c.testPath()/])
             .path([c.getName()/].getId().toString())
             .request().cookie(cookieSessionId).delete();
-        [else]
-        Response response = target.path([c.testPath()/]).path([c.getName()/].getId().toString())
-                .request().cookie(cookieSessionId).delete();
-        [/if]
-        
+
         Assert.assertEquals(OkWithoutContent, response.getStatus());
     }
 }
@@ -496,7 +439,6 @@ public class [className/] {
             em.persist([cl.getFatherEntity()/]);
             utx.commit();
             [/for]
-
 
             for (int i = 0; i < 3; i++) {
                 utx.begin();
