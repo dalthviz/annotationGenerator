@@ -1,5 +1,5 @@
 [comment encoding = UTF-8 /]
-[module tests('http://www.eclipse.org/uml2/5.0.0/UML')]
+[module tests('http://www.eclipse.org/uml2/5.0.0/UML') extends backend::logic::logic]
 [import ::utils /]
 
 [template public mainTests(c : Class, path : String)]
@@ -471,4 +471,8 @@ public class [className/] {
 
 [template private getListVar(a : Property)]
 [a.name.toLowerFirst()/]Data
+[/template]
+
+[template private getTestName(c : Class)]
+[c.name.concat('LogicTest')/]
 [/template]

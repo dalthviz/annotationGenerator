@@ -33,3 +33,7 @@
     [/let]
 [/for]
 [/template]
+
+[template private getWebInfPath(m : Model)]
+[m.getApiArtifactId().concat('/src/main/webapp/WEB-INF/')/]
+[/template]

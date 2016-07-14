@@ -410,3 +410,7 @@ public class [className/] implements [c.getAPIName()/] {
 [template private getEntityLower(a : Property)]
 [a.name.toLowerFirst().concat('Entity')/]
 [/template]
+
+[template protected getBeanName(c : Class)]
+[c.name.concat('Logic')/]
+[/template]

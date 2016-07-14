@@ -342,3 +342,7 @@ public class [className/] {
 [/let]
 
 [/template]
+
+[template private getPersistenceTestName(c : Class)]
+[c.name.concat('PersistenceTest')/]
+[/template]

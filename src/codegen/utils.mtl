@@ -191,14 +191,12 @@ Sequence(class){c}->union(
 )
 /]
 
-[template public testName(c : Class)]
-[c.name.toLower().concat('Test')/]
-[/template]
-
-[template public getJavaType(a : Property)]
+[template public getJavaType(a : Property) post (trim())]
 [if (a.type.name = 'Image')]
-String[else]
-[a.type.name/][/if]
+    String
+[else]
+    [a.type.name/]
+[/if]
 [/template]
 
 [template public getModelName(c : Class)]
@@ -249,28 +247,12 @@ String[else]
 ['I'.concat(c.name).concat('Logic')/]
 [/template]
 
-[template public getBeanName(c : Class)]
-[c.name.concat('Logic')/]
-[/template]
-
 [template public getEntityName(c : Class)]
 [c.name.concat('Entity')/]
 [/template]
 
 [template public getPersistenceName(c : Class)]
 [c.name.concat('Persistence')/]
-[/template]
-
-[template public getConverterName(c : Class)]
-[c.name.concat('Converter')/]
-[/template]
-
-[template public getTestName(c : Class)]
-[c.name.concat('LogicTest')/]
-[/template]
-
-[template public getPersistenceTestName(c : Class)]
-[c.name.concat('PersistenceTest')/]
 [/template]
 
 [template public baseGroup(m : Model)]
@@ -321,10 +303,6 @@ String[else]
 [m.getWebProjectName().asArtifactId()/]
 [/template]
 
-[template public getWebRoot(m : Model)]
-[m.getWebArtifactId().concat('/src/main/webapp/')/]
-[/template]
-
 [template public getPoolName(m : Model)]
 [m.name.concat('_pool')/]
 [/template]
@@ -347,10 +325,6 @@ String[else]
 
 [template public getTestServicesMetaInfPath(m : Model)]
 [m.getApiArtifactId().concat('/src/test/resources/META-INF/')/]
-[/template]
-
-[template public getWebInfPath(m : Model)]
-[m.getApiArtifactId().concat('/src/main/webapp/WEB-INF/')/]
 [/template]
 
 [template public getProjectVersion(m : Model)]

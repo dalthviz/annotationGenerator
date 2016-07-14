@@ -702,3 +702,7 @@ father[c.name/]Entity
 [template private getDTOName(a : Property)]
 [a.getClass().getMinimumDTOName()/]
 [/template]
+
+[template private testName(c : Class)]
+[c.name.toLower().concat('Test')/]
+[/template]
