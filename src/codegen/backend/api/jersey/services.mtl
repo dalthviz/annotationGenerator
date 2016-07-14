@@ -15,7 +15,10 @@
 [/let]
 [/template]
 
-[template protected genResourceClass(c : Class, path : String) {className : String = c.getJaxRsName(); logic : String = c.getName().concat('Logic');}]
+[template protected genResourceClass(c : Class, path : String) ? (not c.isChild()) {
+    className : String = c.getJaxRsName();
+    logic : String = c.getName().concat('Logic');
+}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 /*
 [c.getModel().license()/]
@@ -44,6 +47,7 @@ import java.util.ArrayList;
 import javax.ws.rs.WebApplicationException;
 
 /**
+ * URI: [c.getFullURI()/]
  * @generated
  */
 @Path("/[c.getURI()/]")
@@ -150,7 +154,10 @@ public class [className/] {
 [/file]
 [/template]
 
-[template protected genCompositeResourceClass(c : Class, path : String) {className : String = c.getJaxRsName(); logic : String = c.getName().concat('Logic');}]
+[template protected genCompositeResourceClass(c : Class, path : String) ? (c.isChild()) {
+    className : String = c.getJaxRsName();
+    logic : String = c.getName().concat('Logic');
+}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 /*
 [c.getModel().license()/]
@@ -179,6 +186,7 @@ import java.util.ArrayList;
 import javax.ws.rs.WebApplicationException;
 
 /**
+ * URI: [c.getFullURI()/]
  * @generated
  */
 @Consumes(MediaType.APPLICATION_JSON)
@@ -289,8 +297,11 @@ public class [className/] {
 [/file]
 [/template]
 
-[template protected genSharedResourceClass(a : Property, path : String) {logic : String = a.getOwner().getName().concat('Logic');}]
-[file (path.concat(a.getSharedResourceClassName()+'.java'), false, 'UTF-8')]
+[template protected genSharedResourceClass(a : Property, path : String) {
+    className : String = a.getSharedResourceClassName();
+    logic : String = a.getOwner().getName().concat('Logic');
+}]
+[file (path.concat(className+'.java'), false, 'UTF-8')]
 /*
 [a.getClass().getModel().license()/]
 */
@@ -314,11 +325,12 @@ import [a.getClass().getModel().baseGroup()/].dtos.basic.[a.getClass().getBasicD
 import [a.getClass().getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 import java.util.ArrayList;
 /**
+ * URI: [a.getFullURI()/]
  * @generated
  */
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class [a.getSharedResourceClassName()/] {
+public class [className/] {
 
     @Inject private [a.getOwner().getAPIName()/] [logic/];
     @Context private HttpServletResponse response;
@@ -357,104 +369,103 @@ public class [a.getSharedResourceClassName()/] {
      * Obtiene una colección de instancias de [a.getClass().getBasicDTOName()/] asociadas a una
      * instancia de [a.getOwner().name/]
      *
-     * @param [a.getOwner().getEntityId()/] Identificador de la instancia de [a.getOwner().name/]
+     * @param [a.getOwner().getIdVariable()/] Identificador de la instancia de [a.getOwner().name/]
      * @return Colección de instancias de [a.getClass().getBasicDTOName()/] asociadas a la instancia de [a.getOwner().name/]
      * @generated
      */
     @GET
-    public List<[a.getClass().getBasicDTOName()/]> list[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getEntityId()/]") Long [a.getOwner().getEntityId()/]) {
-        return [a.name/]ListEntity2DTO([logic/].list[a.name.toUpperFirst()/]([a.getOwner().getEntityId()/]));
+    public List<[a.getClass().getBasicDTOName()/]> list[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/]) {
+        return [a.name/]ListEntity2DTO([logic/].list[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/]));
     }
 
     /**
      * Obtiene una instancia de [a.getClass().name/] asociada a una instancia de [a.getOwner().name/]
      *
-     * @param [a.getOwner().getEntityId()/] Identificador de la instancia de [a.getOwner().name/]
+     * @param [a.getOwner().getIdVariable()/] Identificador de la instancia de [a.getOwner().name/]
      * @param [a.getIdVariable()/] Identificador de la instancia de [a.getClass().name/]
      * @generated
      */
     @GET
     @Path("{[a.getIdVariable()/]: \\d+}")
-    public [a.getClass().getBasicDTOName()/] get[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getEntityId()/]") Long [a.getOwner().getEntityId()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
-        return new [a.getClass().getBasicDTOName()/]([logic/].get[a.name.toUpperFirst()/]([a.getOwner().getEntityId()/], [a.getIdVariable()/]));
+    public [a.getClass().getBasicDTOName()/] get[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
+        return new [a.getClass().getBasicDTOName()/]([logic/].get[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/], [a.getIdVariable()/]));
     }
 
     /**
      * Asocia un [a.getClass().name/] existente a un [a.getOwner().name/]
      *
-     * @param [a.getOwner().getEntityId()/] Identificador de la instancia de [a.getOwner().name/]
+     * @param [a.getOwner().getIdVariable()/] Identificador de la instancia de [a.getOwner().name/]
      * @param [a.getIdVariable()/] Identificador de la instancia de [a.getClass().name/]
      * @return Instancia de [a.getClass().getBasicDTOName()/] que fue asociada a [a.getOwner().name/]
      * @generated
      */
     @POST
     @Path("{[a.getIdVariable()/]: \\d+}")
-    public [a.getClass().getBasicDTOName()/] add[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getEntityId()/]") Long [a.getOwner().getEntityId()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
-        return new [a.getClass().getBasicDTOName()/]([logic/].add[a.name.toUpperFirst()/]([a.getOwner().getEntityId()/], [a.getIdVariable()/]));
+    public [a.getClass().getBasicDTOName()/] add[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
+        return new [a.getClass().getBasicDTOName()/]([logic/].add[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/], [a.getIdVariable()/]));
     }
 
     /**
      * Remplaza las instancias de [a.getClass().name/] asociadas a una instancia de [a.getOwner().name/]
      *
-     * @param [a.getOwner().getEntityId()/] Identificador de la instancia de [a.getOwner().name/]
+     * @param [a.getOwner().getIdVariable()/] Identificador de la instancia de [a.getOwner().name/]
      * @param [a.getClass().getURI()/] Colección de instancias de [a.getClass().getDTOName()/] a asociar a instancia de [a.getOwner().name/]
      * @return Nueva colección de [a.getClass().getDTOName()/] asociada a la instancia de [a.getOwner().name/]
      * @generated
      */
     @PUT
-    public List<[a.getClass().getBasicDTOName()/]> replace[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getEntityId()/]") Long [a.getOwner().getEntityId()/], List<[a.getClass().getBasicDTOName()/]> [a.getClass().getURI()/]) {
-        return [a.name/]ListEntity2DTO([logic/].replace[a.name.toUpperFirst()/]([a.getOwner().getEntityId()/], [a.name/]ListDTO2Entity([a.getClass().getURI()/])));
+    public List<[a.getClass().getBasicDTOName()/]> replace[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], List<[a.getClass().getBasicDTOName()/]> [a.getClass().getURI()/]) {
+        return [a.name/]ListEntity2DTO([logic/].replace[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/], [a.name/]ListDTO2Entity([a.getClass().getURI()/])));
     }
 
     /**
      * Desasocia un [a.getClass().name/] existente de un [a.getOwner().name/] existente
      *
-     * @param [a.getOwner().getEntityId()/] Identificador de la instancia de [a.getOwner().name/]
+     * @param [a.getOwner().getIdVariable()/] Identificador de la instancia de [a.getOwner().name/]
      * @param [a.getIdVariable()/] Identificador de la instancia de [a.getClass().name/]
      * @generated
      */
     @DELETE
     @Path("{[a.getIdVariable()/]: \\d+}")
-    public void remove[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getEntityId()/]") Long [a.getOwner().getEntityId()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
-        [logic/].remove[a.name.toUpperFirst()/]([a.getOwner().getEntityId()/], [a.getIdVariable()/]);
+    public void remove[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
+        [logic/].remove[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/], [a.getIdVariable()/]);
     }
 }
 [/file]
 [/template]
 
-[template protected genSubResourceLocators(c : Class)]
-[if(c.isMaster())]
-public void exists[c.name/](Long [c.getEntityId()/]){
-    [c.getBasicDTOName()/] [c.getName()/] = get[c.name/]([c.getEntityId()/]);
+[template protected genSubResourceLocators(c : Class) ? (c.isMaster())]
+public void exists[c.name/](Long [c.getIdVariable()/]){
+    [c.getBasicDTOName()/] [c.getName()/] = get[c.name/]([c.getIdVariable()/]);
     if ([c.getName()/]== null) {
         throw new WebApplicationException(404);
     }
 }
-[/if]
+
 [if(c.isChild() and c.hasCompositeAssociations())]
-public void validate[c.name/]Parent(Long [c.getEntityId()/]){
-    [c.getBasicDTOName()/] [c.getName()/] = get[c.name/]([c.getEntityId()/]);
-    if ([c.getName()/].[c.getParentAttribute().getter()/]() == null || ![c.getParentAttribute().getClass().getEntityId()/].equals([c.getName()/].[c.getParentAttribute().getter()/]().getId())) {
+public void validate[c.name/]Parent(Long [c.getIdVariable()/]){
+    [c.getBasicDTOName()/] [c.getName()/] = get[c.name/]([c.getIdVariable()/]);
+    if ([c.getName()/].[c.getParentAttribute().getter()/]() == null || ![c.getParentAttribute().getClass().getIdVariable()/].equals([c.getName()/].[c.getParentAttribute().getter()/]().getId())) {
         throw new WebApplicationException(404);
     }
 }
 [/if]
 [for (a : Property | c.getCompositeCollectionAttributes())]
 
-@Path("{[c.getEntityId()/]: \\d+}/[a.getURI()/]")
-public Class<[a.getClass().getJaxRsName()/]> get[a.getClass().getJaxRsName()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/]){
-    exists[c.name/]([c.getEntityId()/]);
+@Path("{[c.getIdVariable()/]: \\d+}/[a.getURI()/]")
+public Class<[a.getClass().getJaxRsName()/]> get[a.getClass().getJaxRsName()/](@PathParam("[c.getIdVariable()/]") Long [c.getIdVariable()/]){
+    exists[c.name/]([c.getIdVariable()/]);
     [if(c.isChild())]
-    validate[c.name/]Parent([c.getEntityId()/]);
+    validate[c.name/]Parent([c.getIdVariable()/]);
     [/if]
     return [a.getClass().getJaxRsName()/].class;
 }
 [/for]
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
 
-@Path("{[c.getEntityId()/]: \\d+}/[a.getURI()/]")
-public Class<[a.getSharedResourceClassName()/]> get[a.getSharedResourceClassName()/](@PathParam("[c.getEntityId()/]") Long [c.getEntityId()/]){
-    exists[c.name/]([c.getEntityId()/]);
+@Path("{[c.getIdVariable()/]: \\d+}/[a.getURI()/]")
+public Class<[a.getSharedResourceClassName()/]> get[a.getSharedResourceClassName()/](@PathParam("[c.getIdVariable()/]") Long [c.getIdVariable()/]){
+    exists[c.name/]([c.getIdVariable()/]);
     return [a.getSharedResourceClassName()/].class;
 }
 [/for]
@@ -464,8 +475,22 @@ public Class<[a.getSharedResourceClassName()/]> get[a.getSharedResourceClassName
 [a.getURI()/]Id
 [/template]
 
+[template protected getIdVariable(c : Class)]
+[c.getURI()/]Id
+[/template]
+
 [template protected getURI(a : Property)]
 [a.name.toLowerFirst()/]
+[/template]
+
+[template protected getFullURI(c : Class) post (trim())]
+[for (cl : Class | c.getHierarchy()->reverse())]
+[cl.getURI()/]/[if (cl.name <> c.name)]{[c.getIdVariable()/]: \\d+}/[/if][/for]
+[/template]
+
+[template protected getFullURI(a : Property) post (trim())]
+[for (cl : Class | a.getOwner().getHierarchy()->reverse())]
+[cl.getURI()/]/{[cl.getIdVariable()/]: \\d+}/[/for][a.getURI()/]
 [/template]
 
 [template protected getJaxRsName(c : Class)]

@@ -257,10 +257,6 @@ String[else]
 [c.name.concat('Entity')/]
 [/template]
 
-[template public getEntityId(c : Class)]
-[c.name.toLowerFirst().concat('Id')/]
-[/template]
-
 [template public getPersistenceName(c : Class)]
 [c.name.concat('Persistence')/]
 [/template]
