@@ -12,7 +12,9 @@
 [/let]
 [/template]
 
-[template protected genTests(c : Class, path : String) {className : String = c.getTestName();}]
+[template private genTests(c : Class, path : String) {
+    className : String = c.getTestName();
+}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 /*
 [c.getModel().license()/]
@@ -58,6 +60,9 @@ import org.junit.runner.RunWith;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 
+/*
+ * Testing URI: [c.getFullURI()/]
+ */
 @RunWith(Arquillian.class)
 public class [className/] {
 
@@ -168,7 +173,8 @@ public class [className/] {
         }
         target = createWebTarget()
             [for (cl : Class | c.getHierarchy()->reverse()->reject(c1 | c1.name = c.name))]
-                .path([cl.testPath()/]).path([cl.getFatherEntity()/].getId().toString())
+                .path([cl.testPath()/])
+                .path([cl.getFatherEntity()/].getId().toString())
             [/for]
                 .path([c.testPath()/]);
     }
@@ -305,7 +311,7 @@ public class [className/] {
 [/file]
 [/template]
 
-[template protected genTestsNonComposite(a : Property, path : String) {
+[template private genTestsNonComposite(a : Property, path : String) {
     className   : String    = a.getTestName();
     c           : Class     = a.getOwner();
 }]
@@ -358,7 +364,9 @@ import org.junit.runner.RunWith;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 
-
+/*
+ * Testing URI: [c.getFullURI()/]
+ */
 @RunWith(Arquillian.class)
 public class [className/] {
 
@@ -594,7 +602,7 @@ public class [className/] {
 [/file]
 [/template]
 
-[template protected genTestUtils(c : Class, path : String)]
+[template private genTestUtils(c : Class, path : String)]
 [file (path.concat('Utils.java'), false, 'UTF-8')]
 /*
 [c.getModel().license()/]
@@ -617,7 +625,7 @@ public class Utils {
 [c.name/]Test
 [/template]
 
-[template protected getTestName(a : Property)]
+[template private getTestName(a : Property)]
 [a.getOwner().name/][a.name.toUpperFirst()/]Test
 [/template]
 
