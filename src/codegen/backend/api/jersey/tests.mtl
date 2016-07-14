@@ -546,7 +546,7 @@ public class [className/] {
             }
         }
         target = createWebTarget()
-        [for (cl : Class | c.getHierarchy()->reverse()->reject(name = c.name))]
+        [for (cl : Class | c.getHierarchy()->reverse())]
                 .path([cl.testPath()/]).path([cl.getFatherEntity()/].getId().toString())
         [/for]
                 .path([a.testPath()/]);
