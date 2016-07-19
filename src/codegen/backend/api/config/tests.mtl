@@ -4,7 +4,7 @@
 
 [template public mainTests(m : Model)]
 [m.genLoggingProperties(m.getTestServicesMetaInfPath())/]
-[m.genTestUtils(m.baseTestPath().concat('tests/'))/]
+[m.genTestUtils(m.getApiArtifactId().concat(m.baseTestPath().concat('tests/')))/]
 [/template]
 
 [template protected genLoggingProperties(m : Model, path : String)]
