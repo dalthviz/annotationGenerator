@@ -86,7 +86,7 @@ El objeto [c.name/] tiene 2 representaciones JSON:
 ```
 
 [if (c.hasReferences(false))]
-#### Representación Basic
+#### Representación Detail
 ```javascript
 {
     // todo lo de la representación Minimum más los objetos Minimum con relación simple.
@@ -104,7 +104,7 @@ El objeto [c.name/] tiene 2 representaciones JSON:
 #### Representación Full
 ```javascript
 {
-    // todo lo de la representación Basic más la collección de los objetos de relaciones composite.
+    // todo lo de la representación Detail más la collección de los objetos de relaciones composite.
     [for(a : Property | c.getCompositeCollectionAttributes()) separator(',\n')]
     [ a.name /]: ['['/]{
     [for(a2 : Property | a.getClass().allAttributes()) separator(',\n')]
@@ -118,7 +118,7 @@ El objeto [c.name/] tiene 2 representaciones JSON:
 
 #### GET /[c.getURI()/]
 
-Retorna una colección de objetos [c.name/] en representación Basic.
+Retorna una colección de objetos [c.name/] en representación Detail.
 [if (c.hasReferences(false))] 
 Cada [c.name/] en la colección tiene embebidos los siguientes objetos: [for(a : Property | c.getReferences(false)) separator(', ')][ a.getClass().name /][/for].
 [/if]
@@ -131,7 +131,7 @@ Cada [c.name/] en la colección tiene embebidos los siguientes objetos: [for(a :
 
 Código|Descripción|Cuerpo
 :--|:--|:--
-200|OK|Colección de ['['/]representaciones Basic[']'/](#recurso-[c.name.toLowerCase()/])
+200|OK|Colección de ['['/]representaciones Detail[']'/](#recurso-[c.name.toLowerCase()/])
 409|Un objeto relacionado no existe|Mensaje de error
 500|Error interno|Mensaje de error
 
@@ -226,7 +226,7 @@ Código|Descripción|Cuerpo
 [for (elem : Property | c.getNonCompositeCollectionAttributes())]
 #### GET [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]
 
-Retorna una colección de objetos [ elem.getClass().name /] asociados a un objeto [c.name/] en representación Basic.
+Retorna una colección de objetos [ elem.getClass().name /] asociados a un objeto [c.name/] en representación Detail.
 
 #### Parámetros
 
@@ -238,12 +238,12 @@ id|Path|ID del objeto [c.name/] a consultar|Sí|Integer
 
 Código|Descripción|Cuerpo
 :--|:--|:--
-200|OK|Colección de objetos [ elem.getClass().name /] en ['['/]representación Basic[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
+200|OK|Colección de objetos [ elem.getClass().name /] en ['['/]representación Detail[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
 500|Error consultando [ elem.name /] |Mensaje de error
 
 #### GET [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
 
-Retorna un objeto [ elem.getClass().name /] asociados a un objeto [c.name/] en representación Basic.
+Retorna un objeto [ elem.getClass().name /] asociados a un objeto [c.name/] en representación Detail.
 
 #### Parámetros
 
@@ -256,7 +256,7 @@ Nombre|Ubicación|Descripción|Requerido|Esquema
 
 Código|Descripción|Cuerpo
 :--|:--|:--
-200|OK|Objeto [ elem.getClass().name /] en ['['/]representación Basic[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
+200|OK|Objeto [ elem.getClass().name /] en ['['/]representación Detail[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
 404|No existe un objeto [ elem.getClass().name /] con el ID solicitado asociado al objeto [c.name/] indicado |Mensaje de error
 500|Error interno|Mensaje de error
 
@@ -275,7 +275,7 @@ Nombre|Ubicación|Descripción|Requerido|Esquema
 
 Código|Descripción|Cuerpo
 :--|:--|:--
-200|Objeto [ elem.getClass().name /] asociado|['['/]Representación Basic de [ elem.getClass().name /][']'/](#recurso-[elem.getClass().name.toLowerCase()/])
+200|Objeto [ elem.getClass().name /] asociado|['['/]Representación Detail de [ elem.getClass().name /][']'/](#recurso-[elem.getClass().name.toLowerCase()/])
 500|No se pudo asociar el objeto [ elem.getClass().name /]|Mensaje de error
 
 #### PUT [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]
@@ -287,13 +287,13 @@ Es el encargado de remplazar la colección de objetos [ elem.getClass().name /] 
 Nombre|Ubicación|Descripción|Requerido|Esquema
 :--|:--|:--|:--|:--
 [c.getURI()/]id|Path|ID del objeto [c.name/] cuya colección será remplazada|Sí|Integer
-body|body|Colección de objetos [ elem.getClass().name /]|Sí|['['/]Representación Basic[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
+body|body|Colección de objetos [ elem.getClass().name /]|Sí|['['/]Representación Detail[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
 
 #### Respuesta
 
 Código|Descripción|Cuerpo
 :--|:--|:--
-200|Se remplazó la colección|Colección de objetos [ elem.getClass().name /] en ['['/]Representación Basic[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
+200|Se remplazó la colección|Colección de objetos [ elem.getClass().name /] en ['['/]Representación Detail[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
 500|No se pudo remplazar la colección|Mensaje de error
 
 #### DELETE [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
