@@ -423,7 +423,10 @@ public class [className/] {
     private UserTransaction utx;
 
     private void clearData() {
-        em.createQuery("delete from [a.getClass().getEntityName()/]").executeUpdate();
+        List<[a.getClass().getEntityName()/]> records = em.createQuery("SELECT u FROM [a.getClass().getEntityName()/] u").getResultList();
+        for ([a.getClass().getEntityName()/] record : records) {
+            em.remove(record);
+        }
         [for (cl : Class | c.getHierarchy())]
         em.createQuery("delete from [cl.getEntityName()/]").executeUpdate();
         [/for]
@@ -452,15 +455,17 @@ public class [className/] {
                 utx.begin();
                 [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
                 em.persist([a.name/]);
+                if(i<2){                
                 [if (a.isRelationshipOwner())]
-                [c.getFatherEntity()/].[a.getter()/]().add([a.name/]);
+                    [c.getFatherEntity()/].[a.getter()/]().add([a.name/]);
                 [else]
                 [if (a.getOtherEnd().getUpper() = 1)]
-                [a.name/].[a.getOtherEnd().setter()/]([c.getFatherEntity()/]);
+                    [a.name/].[a.getOtherEnd().setter()/]([c.getFatherEntity()/]);
                 [else]
-                [a.name/].[a.getOtherEnd().getter()/]().add([c.getFatherEntity()/] );
+                    [a.name/].[a.getOtherEnd().getter()/]().add([c.getFatherEntity()/] );
                 [/if]
                 [/if]
+                }
                 utx.commit();
                 oraculo.add([a.name/]);
             }
@@ -536,7 +541,7 @@ public class [className/] {
     public void add[a.getTestSuffix()/]() {
         Cookie cookieSessionId = login(username, password);
 
-        [a.getDTOName()/] [a.name/] = new [a.getDTOName()/](oraculo.get(1));
+        [a.getDTOName()/] [a.name/] = new [a.getDTOName()/](oraculo.get(2));
 
         Response response = target.path([a.name/].getId().toString())
                 .request().cookie(cookieSessionId)
@@ -562,7 +567,7 @@ public class [className/] {
         String [a.name/]List = response.readEntity(String.class);
         List<[a.getDTOName()/]> [a.name/]ListTest = new ObjectMapper().readValue([a.name/]List, List.class);
         Assert.assertEquals(Ok, response.getStatus());
-        Assert.assertEquals(3, [a.name/]ListTest.size());
+        Assert.assertEquals(2, [a.name/]ListTest.size());
     }
 
     /**
