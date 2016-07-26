@@ -5,7 +5,6 @@
 [template public mainTests(c : Class, path : String)]
 [let genPath : String = path.concat('tests/')]
     [c.genTests(genPath)/]
-    [c.genTestUtils(genPath)/]
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
         [a.genTestsNonComposite(genPath)/]
     [/for]
@@ -607,24 +606,6 @@ public class [className/] {
 [/file]
 [/template]
 
-[template private genTestUtils(c : Class, path : String)]
-[file (path.concat('Utils.java'), false, 'UTF-8')]
-/*
-[c.getModel().license()/]
-*/
-package [c.getModel().baseGroup()/].tests;
-
-/**
- *
- * @generate
- */
-public class Utils {
-    public static final String apiPath = "api";
-    public static final String username = System.getenv("USERNAME_USER");
-    public static final String password = System.getenv("PASSWORD_USER"); 
-}
-[/file]
-[/template]
 
 [template private getTestName(c : Class)]
 [c.name/]Test

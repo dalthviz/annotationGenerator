@@ -5,7 +5,7 @@
 [template public mainDTOs(c : Class, path : String)]
 [let dtoPath : String = path.concat('dtos/')]
     [c.genMinimumDTO(dtoPath.concat('minimum/'))/]
-    [c.genBasicDTO(dtoPath.concat('basic/'))/]
+    [c.genBasicDTO(dtoPath.concat('detail/'))/]
 [/let]
 [/template]
 

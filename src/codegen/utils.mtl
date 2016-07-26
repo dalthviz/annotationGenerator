@@ -227,11 +227,11 @@ Sequence(class){c}->union(
 [/template]
 
 [template public getMinimumDTOName(c : Class)]
-[c.name.toUpperFirst().concat('MinimumDTO')/]
+[c.name.toUpperFirst().concat('DTO')/]
 [/template]
 
 [template public getBasicDTOName(c : Class)]
-[c.name.toUpperFirst().concat('BasicDTO')/]
+[c.name.toUpperFirst().concat('DetailDTO')/]
 [/template]
 
 [template public getFullDTOName(c : Class)]

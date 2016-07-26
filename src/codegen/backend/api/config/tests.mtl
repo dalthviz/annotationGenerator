@@ -4,6 +4,7 @@
 
 [template public mainTests(m : Model)]
 [m.genLoggingProperties(m.getTestServicesMetaInfPath())/]
+[m.genTestUtils(m.getApiArtifactId().concat(m.baseTestPath().concat('tests/')))/]
 [/template]
 
 [template protected genLoggingProperties(m : Model, path : String)]
@@ -11,5 +12,24 @@
 handlers=java.util.logging.ConsoleHandler
 java.util.logging.ConsoleHandler.formatter=java.util.logging.SimpleFormatter
 java.util.logging.ConsoleHandler.level=INFO
+[/file]
+[/template]
+
+[template private genTestUtils(m : Model, path : String)]
+[file (path.concat('Utils.java'), false, 'UTF-8')]
+/*
+[m.license()/]
+*/
+package [m.baseGroup()/].tests;
+
+/**
+ *
+ * @generate
+ */
+public class Utils {
+    public static final String apiPath = "api";
+    public static final String username = System.getenv("USERNAME_USER");
+    public static final String password = System.getenv("PASSWORD_USER"); 
+}
 [/file]
 [/template]
