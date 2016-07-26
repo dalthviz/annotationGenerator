@@ -9,7 +9,7 @@
 [/template]
 
 [template private getAPIURL(m : Model)]
-http://localhost:8080/[m.getApiArtifactId()/]/api/
+api
 [/template]
 
 [template protected appjs(m : Model, path : String)]
@@ -54,7 +54,7 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
 
     mod.config(['['/]'authServiceProvider', function (auth) {
             auth.setValues({
-                apiUrl: '[m.getAPIURL()/]users/',
+                apiUrl: '[m.getAPIURL()/]/users/',
                 successState: '[m.getClasses()->any(1=1).getListStateName()/]'
             });
         }[']'/]);
