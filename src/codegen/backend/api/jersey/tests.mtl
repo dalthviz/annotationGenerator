@@ -422,11 +422,12 @@ public class [className/] {
     private UserTransaction utx;
 
     private void clearData() {
-        List<[a.getClass().getEntityName()/]> records = em.createQuery("SELECT u FROM [a.getClass().getEntityName()/] u").getResultList();
-        for ([a.getClass().getEntityName()/] record : records) {
+        List<[c.getEntityName()/]> records = em.createQuery("SELECT u FROM [c.getEntityName()/] u").getResultList();
+        for ([c.getEntityName()/] record : records) {
             em.remove(record);
         }
-        [for (cl : Class | c.getHierarchy())]
+        em.createQuery("delete from [a.getClass().getEntityName()/]").executeUpdate();
+        [for (cl : Class | c.getHierarchy()->reject(class | class=c))]
         em.createQuery("delete from [cl.getEntityName()/]").executeUpdate();
         [/for]
         oraculo.clear();
@@ -438,20 +439,15 @@ public class [className/] {
      * @generated
      */
     private void insertData() {
-        try{
             [for (cl : Class | c.getHierarchy()->reverse())]
-
-            utx.begin();
             [cl.getFatherEntity()/] = factory.manufacturePojo([cl.getEntityName()/].class);
             [if (cl.isChild())]
             [cl.getFatherEntity()/].[cl.getParentAttribute().setter()/]([cl.getParentAttribute().getClass().getFatherEntity()/]);
             [/if]
             em.persist([cl.getFatherEntity()/]);
-            utx.commit();
             [/for]
 
             for (int i = 0; i < 3; i++) {
-                utx.begin();
                 [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
                 em.persist([a.name/]);
                 if(i<2){                
@@ -465,17 +461,8 @@ public class [className/] {
                 [/if]
                 [/if]
                 }
-                utx.commit();
                 oraculo.add([a.name/]);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            try {
-                utx.rollback();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-        }
     }
 
     /**
@@ -488,8 +475,8 @@ public class [className/] {
         try {
             utx.begin();
             clearData();
-            utx.commit();
             insertData();
+            utx.commit();            
         } catch (Exception e) {
             e.printStackTrace();
             try {
