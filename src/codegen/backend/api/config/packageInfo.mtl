@@ -5,7 +5,7 @@
 
 [template public mainPackageinfo(m : Model, path : String)]
     [m.genPackageinfo('minimum', path.concat('dtos/minimum/'))/]
-    [m.genPackageinfo('basic', path.concat('dtos/basic/'))/]
+    [m.genPackageinfo('detail', path.concat('dtos/detail/'))/]
 [/template]
 
 [template protected genPackageinfo(m : Model, packageName : String, path : String)]

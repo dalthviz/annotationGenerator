@@ -103,7 +103,7 @@ public class [className/] implements Serializable{
 /*
 [c.getModel().license()/]
 */
-package [c.getModel().baseGroup()/].dtos.basic;
+package [c.getModel().baseGroup()/].dtos.detail;
 
 import [c.getModel().baseGroup()/].dtos.minimum.*;
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
