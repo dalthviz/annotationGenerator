@@ -23,7 +23,7 @@
 [m.license()/]
 */
 
-package [m.baseGroup()/].tests.selenium;
+package [m.baseGroup()/].tests.selenium.pages;
 
 import [m.baseGroup()/].tests.Utils;
 import static org.jboss.arquillian.graphene.Graphene.guardAjax;
@@ -113,7 +113,7 @@ import org.openqa.selenium.support.FindBy;
 
 public class [c.name/]DeletePage {
 
-    FindBy(id = "confirm-delete")
+    @FindBy(id = "confirm-delete")
     private WebElement confirmDeleteBtn;
 
     @FindBy(id = "cancel-delete")
@@ -175,7 +175,11 @@ public class [c.name/]DetailPage {
     public [c.getMinimumDTOName()/] getData() {
         [c.getMinimumDTOName()/] [c.getName()/] = new [c.getMinimumDTOName()/]();        
         [for (a : Property | c.attribute->reject(isID()))]
+        [if (a.type.name<>'String' and a.type.name<>'Image')]
+        [c.getName()/].[a.setter()/]([a.type.name/].parse[a.type.name/]([a.name/].getText()));
+        [else]
         [c.getName()/].[a.setter()/]([a.name/].getText());
+        [/if]
         [/for]
         return [c.getName()/];
     }
@@ -311,13 +315,13 @@ public class [c.name/]ListPage {
 package [c.getModel().baseGroup()/].tests.selenium;
 
 import [c.getModel().baseGroup()/].dtos.minimum.[c.getMinimumDTOName()/];
-import [c.getModel().baseGroup()/].resources.[c.getName()/]Resource;
-import [c.getModel().baseGroup()/].tests.selenium.pages.[c.name/].[c.getName()/]CreatePage;
-import [c.getModel().baseGroup()/].tests.selenium.pages.[c.name/].[c.getName()/]ListPage;
+import [c.getModel().baseGroup()/].resources.[c.name/]Resource;
+import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getName()/].[c.name/]CreatePage;
+import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getName()/].[c.name/]ListPage;
 import [c.getModel().baseGroup()/].tests.selenium.pages.LoginPage;
-import [c.getModel().baseGroup()/].tests.selenium.pages.[c.name/].[c.getName()/]DeletePage;
-import [c.getModel().baseGroup()/].tests.selenium.pages.[c.name/].[c.getName()/]DetailPage;
-import [c.getModel().baseGroup()/].tests.selenium.pages.[c.name/].[c.getName()/]EditPage;
+import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getName()/].[c.name/]DeletePage;
+import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getName()/].[c.name/]DetailPage;
+import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getName()/].[c.name/]EditPage;
 import java.io.File;
 import java.net.URL;
 import org.jboss.arquillian.container.test.api.Deployment;
