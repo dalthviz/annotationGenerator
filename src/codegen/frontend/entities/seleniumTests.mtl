@@ -217,7 +217,11 @@ public class [c.name/]EditPage {
          [for (a : Property | c.attribute->reject(isID()))]
          waitGui().until().element([a.getInputName()/]).is().visible();
          [a.getInputName()/].clear();
+         [if (a.type.name<>'String' or a.type.name<>'Image')]
+         [a.getInputName()/].sendKeys([c.getName()/].[a.getter()/]().toString());
+         [else]
          [a.getInputName()/].sendKeys([c.getName()/].[a.getter()/]());
+         [/if]
          [/for]        
         guardAjax(saveBtn).click();
     }
