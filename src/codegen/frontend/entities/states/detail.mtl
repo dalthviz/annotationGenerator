@@ -93,16 +93,18 @@
     <div class="col-md-12">
     [for (a : Property | c.allAttributes()->reject(isID()))]
         <p>
-        [if (a.isDate())]
-        <label><b>[a.name.toUpperFirst()/]: </b></label><span> {{currentRecord.[a.name.toLowerFirst()/] | date}}</span>
-        [else]
-        <label><b>[a.name.toUpperFirst()/]: </b></label><span> {{currentRecord.[a.name.toLowerFirst()/]}}</span>
-        [/if]
+            <label><strong>[a.name.toUpperFirst()/]: </strong></label>
+            <span id="[a.name/]">{{currentRecord.[a.name.toLowerFirst()/][if (a.isDate())] | date[/if]}}</span>
         </p>
     [/for]
     [for (a : Property | c.getReferences(false))]
-        <p><label><b>[a.name.toUpperFirst()/]: </b></label><span> {{currentRecord.[a.name.toLowerFirst()/].name}}</span></p>
-    [/for]     
+        <p>
+            <label><strong>[a.name.toUpperFirst()/]: </strong></label>
+            <span id="[a.name/]">
+                {{currentRecord.[a.name.toLowerFirst()/].name}}
+            </span>
+        </p>
+    [/for]
     </div>
 </div>
 [if(c.hasCompositeAssociations() or c.hasSharedAssociations())]
