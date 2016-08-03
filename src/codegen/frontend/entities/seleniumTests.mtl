@@ -17,7 +17,7 @@
 [/let]
 [/template]
 
-[template public getLoginPage(m : Model, path : String)] 
+[template public getLoginPage(m : Model, path : String) ] 
 [file (path.concat('LoginPage.java'), false, 'UTF-8')]
 /*
 [m.license()/]
@@ -315,7 +315,7 @@ public class [c.name/]ListPage {
 [/file]
 [/template]
 
-[template public getIntegrationTests(c : Class, path : String) {className : String = c.getTestName();}]
+[template public getIntegrationTests(c : Class, path : String)  ? (not c.isChild()) {className : String = c.getTestName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 /*
 [c.getModel().license()/]
