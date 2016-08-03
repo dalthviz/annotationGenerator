@@ -11,7 +11,7 @@
 [c.getDetailPage(genPath.concat('pages/'+c.getName()+'/'))/]
 [c.getEditPage(genPath.concat('pages/'+c.getName()+'/'))/]
 [c.getListPage(genPath.concat('pages/'+c.getName()+'/'))/]
-[c.getIntegrationTests(genPath.concat('pages/'))/]
+[c.getIntegrationTests(genPath)/]
 [/for]
 
 [/let]
