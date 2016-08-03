@@ -20,7 +20,8 @@
         name: '[c.getName()/]',
         displayName: '[c.getDisplayName()/]',
 		url: '[c.getURI()/]',
-        fields: {[for (a : Property | c.getAllAttribs()) separator(',\n')]
+        fields: {
+            [for (a : Property | c.getAllAttribs()) separator(',\n')]
             [a.name/]: {
                 displayName: '[a.getDisplayName()/]',
                 type: '[a.type.name/]',

@@ -91,7 +91,7 @@ public class [c.name/]CreatePage {
          [for (a : Property | c.attribute->reject(isID()))]
          waitGui().until().element([a.getInputName()/]).is().visible();
          [a.getInputName()/].clear();
-         [a.getInputName()/].sendKeys([c.getName()/].getName());
+         [a.getInputName()/].sendKeys([c.getName()/].[a.getter()/]());
          [/for]        
         guardAjax(saveBtn).click();
     }
@@ -217,7 +217,7 @@ public class [c.name/]EditPage {
          [for (a : Property | c.attribute->reject(isID()))]
          waitGui().until().element([a.getInputName()/]).is().visible();
          [a.getInputName()/].clear();
-         [a.getInputName()/].sendKeys([c.getName()/].getName());
+         [a.getInputName()/].sendKeys([c.getName()/].[a.getter()/]());
          [/for]        
         guardAjax(saveBtn).click();
     }
@@ -344,6 +344,7 @@ import org.openqa.selenium.WebDriver;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 
+@RunWith(Arquillian.class)
 public class [className/] {
 
     private static PodamFactory factory = new PodamFactoryImpl();

@@ -37,9 +37,9 @@ public class Utils {
 
 [template private genArquillianConfig(m : Model, path : String)]
 [file (path.concat('arquillian.xml'), false, 'UTF-8')]
-/*
+<!--
 [m.license()/]
-*/
+-->
 <?xml version="1.0"?>
 <arquillian xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xmlns="http://jboss.org/schema/arquillian"
