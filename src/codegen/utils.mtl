@@ -322,6 +322,10 @@ Sequence(class){c}->union(
 [m.getApiArtifactId().concat('/src/test/resources/META-INF/')/]
 [/template]
 
+[template public getTestServicesResourcesPath(m : Model)]
+[m.getApiArtifactId().concat('/src/test/resources/')/]
+[/template]
+ 
 [template public getProjectVersion(m : Model)]
 0.1.0
 [/template]

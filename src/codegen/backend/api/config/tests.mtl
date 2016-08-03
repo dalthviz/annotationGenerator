@@ -5,6 +5,7 @@
 [template public mainTests(m : Model)]
 [m.genLoggingProperties(m.getTestServicesMetaInfPath())/]
 [m.genTestUtils(m.getApiArtifactId().concat(m.baseTestPath().concat('tests/')))/]
+[m.genArquillianConfig(m.getTestServicesResourcesPath())/]
 [/template]
 
 [template protected genLoggingProperties(m : Model, path : String)]
@@ -31,5 +32,25 @@ public class Utils {
     public static final String username = System.getenv("USERNAME_USER");
     public static final String password = System.getenv("PASSWORD_USER"); 
 }
+[/file]
+[/template]
+
+[template private genArquillianConfig(m : Model, path : String)]
+[file (path.concat('arquillian.xml'), false, 'UTF-8')]
+/*
+[m.license()/]
+*/
+<?xml version="1.0"?>
+<arquillian xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://jboss.org/schema/arquillian"
+            xsi:schemaLocation="http://jboss.org/schema/arquillian http://www.jboss.org/schema/arquillian/arquillian_1_0.xsd">
+    <extension qualifier="webdriver">
+        <property name="browser">firefox</property>
+    </extension>
+    <extension qualifier="graphene">
+        <!-- https://docs.jboss.org/author/display/ARQGRA2/Graphene+Configuration -->
+        <property name="waitGuardInterval">20</property>
+    </extension>
+</arquillian>
 [/file]
 [/template]

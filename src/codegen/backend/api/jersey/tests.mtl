@@ -3,7 +3,7 @@
 [import ::utils /]
 
 [template public mainTests(c : Class, path : String)]
-[let genPath : String = path.concat('tests/')]
+[let genPath : String = path.concat('tests/rest/')]
     [c.genTests(genPath)/]
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
         [a.genTestsNonComposite(genPath)/]
@@ -11,14 +11,12 @@
 [/let]
 [/template]
 
-[template private genTests(c : Class, path : String) {
-    className : String = c.getTestName();
-}]
+[template private genTests(c : Class, path : String) {className : String = c.getTestName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 /*
 [c.getModel().license()/]
 */
-package [c.getModel().baseGroup()/].tests;
+package [c.getModel().baseGroup()/].tests.rest;
 
 import co.edu.uniandes.csw.auth.model.UserDTO;
 import co.edu.uniandes.csw.auth.security.JWT;
@@ -27,6 +25,7 @@ import [cl.getModel().baseGroup()/].entities.[cl.getEntityName()/];
 [/for]
 import [c.getModel().baseGroup()/].dtos.minimum.[c.getMinimumDTOName()/];
 import [c.getModel().baseGroup()/].resources.[c.getJaxRsName()/];
+import [c.getModel().baseGroup()/].tests.Utils;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -318,7 +317,7 @@ public class [className/] {
 /*
 [c.getModel().license()/]
 */
-package [c.getModel().baseGroup()/].tests;
+package [c.getModel().baseGroup()/].tests.rest;
 
 import co.edu.uniandes.csw.auth.model.UserDTO;
 import co.edu.uniandes.csw.auth.security.JWT;
@@ -333,6 +332,7 @@ import [c.getModel().baseGroup()/].dtos.minimum.[c.getMinimumDTOName()/];
 import [c.getModel().baseGroup()/].dtos.minimum.[a.getDTOName()/];
 [/if]
 import [c.getModel().baseGroup()/].resources.[c.getJaxRsName()/];
+import [c.getModel().baseGroup()/].tests.Utils;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;

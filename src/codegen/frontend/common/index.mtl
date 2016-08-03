@@ -8,9 +8,6 @@
 [m.index(path)/]
 [/template]
 
-[template private getAPIURL(m : Model)]
-api
-[/template]
 
 [template protected appjs(m : Model, path : String)]
 [file (path.concat('app.js'), false, 'UTF-8')]
@@ -28,12 +25,14 @@ api
         'authModule'
     [']'/]);
 
+    mod.constant('baseUrl', 'api');
+
     mod.config(['['/]'$logProvider', function ($logProvider) {
             $logProvider.debugEnabled(true);
         }[']'/]);
 
-    mod.config(['['/]'RestangularProvider', function (rp) {
-            rp.setBaseUrl('[m.getAPIURL()/]');
+    mod.config(['['/]'RestangularProvider', 'baseUrl', function (rp, baseUrl) {
+            rp.setBaseUrl(baseUrl);
             rp.setRequestInterceptor(function (elem, operation) {
                 if (operation === "remove") {
                     return null;
@@ -52,9 +51,9 @@ api
                 $urlRouterProvider.otherwise('/');
         }[']'/]);
 
-    mod.config(['['/]'authServiceProvider', function (auth) {
+    mod.config(['['/]'authServiceProvider', 'baseUrl', function (auth, baseUrl) {
             auth.setValues({
-                apiUrl: '[m.getAPIURL()/]/users/',
+                apiUrl: baseUrl + '/users/',
                 successState: '[m.getClasses()->any(1=1).getListStateName()/]'
             });
         }[']'/]);
