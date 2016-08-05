@@ -411,7 +411,7 @@ public class [className/] {
 
     @Test
     @InSequence(1)
-    public void createEditorial(@InitialPage [c.name/]ListPage listPage) {
+    public void create[c.name/](@InitialPage [c.name/]ListPage listPage) {
         Integer expected = 0;
         Assert.assertEquals(expected, listPage.count[c.name/]s());
 
