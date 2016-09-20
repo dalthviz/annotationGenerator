@@ -26,7 +26,6 @@
 -  ['['/]Introducción[']'/](#introducción)
 -  ['['/]API[']'/](#api-de-la-aplicación-[m.name.toLowerCase()/])
 [for (c : Class | m.getClasses())]
-[if (not c.isChild())]
   - ['['/]Recurso [c.name+']'/](#recurso-[c.name.toLowerCase()/])
     - ['['/]GET /[c.getURI()/][']'/](#GET-/[c.getURI()/])
     - ['['/]GET /[c.getURI()/]/{id}[']'/](#GET-/[c.getURI()/]/{id})
@@ -40,7 +39,6 @@
     - ['['/]PUT [c.getURI()/]/{[c.getURI()/]id}/[elem.name/][']'/](#PUT-[c.getURI()/]/{[c.getURI()/]id}/[elem.name/])
     - ['['/]DELETE [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}[']'/](#DELETE-[c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}[']'/])
 [/for]
-[/if]
 [/for]
 
 # API Rest
@@ -68,13 +66,8 @@ La respuesta del servidor al solicitar una colección presenta el siguiente form
 
 ## API de la aplicación [m.name/]
 [for(c : Class | m.getClasses()) ]
-[if (not c.isChild())]
 ### Recurso [c.name/]
-[if (c.hasReferences(false) and c.hasCompositeAssociations())]
-El objeto [c.name/] tiene 3 representaciones JSON:
-[elseif (c.hasReferences(false) or c.hasCompositeAssociations())]
 El objeto [c.name/] tiene 2 representaciones JSON:	
-[/if]
 
 #### Representación Minimum
 ```javascript
@@ -100,20 +93,6 @@ El objeto [c.name/] tiene 2 representaciones JSON:
 ```
 [/if]
 
-[if (c.hasCompositeAssociations())]
-#### Representación Full
-```javascript
-{
-    // todo lo de la representación Detail más la collección de los objetos de relaciones composite.
-    [for(a : Property | c.getCompositeCollectionAttributes()) separator(',\n')]
-    [ a.name /]: ['['/]{
-    [for(a2 : Property | a.getClass().allAttributes()) separator(',\n')]
-    [ a2.name /]: '' /*Tipo [ a2.type.name /]*/[/for]
-    }[']'/][/for]
-
-}
-```
-[/if]
 
 
 #### GET /[c.getURI()/]
@@ -137,12 +116,9 @@ Código|Descripción|Cuerpo
 
 #### GET /[c.getURI()/]/{id}
 
-Retorna una colección de objetos [c.name/] en representación Full.
+Retorna una colección de objetos [c.name/] en representación Detail.
 [if (c.hasReferences(false))] 
 Cada [c.name/] en la colección tiene los siguientes objetos: [for(a : Property | c.getReferences(false)) separator(', ')][ a.getClass().name /][/for].
-[/if]
-[if (c.hasCompositeAssociations())] 
-Cada [c.name/] en la colección tiene embebidos los siguientes objetos con relaciones composite: [for(a : Property | c.getCompositeCollectionAttributes()) separator(', ')][ a.getClass().name /][/for].
 [/if]
 
 #### Parámetros
@@ -155,54 +131,44 @@ id|Path|ID del objeto [c.name/] a consultar|Sí|Integer
 
 Código|Descripción|Cuerpo
 :--|:--|:--
-200|OK|Objeto [c.name/] en ['['/]representaciones Full[']'/](#recurso-[c.name.toLowerCase()/])
+200|OK|Objeto [c.name/] en ['['/]representaciones Detail[']'/](#recurso-[c.name.toLowerCase()/])
 404|No existe un objeto [c.name/] con el ID solicitado|Mensaje de error
 500|Error interno|Mensaje de error
 
 #### POST /[c.getURI()/]
 
 Es el encargado de crear objetos [c.name/].
-[if (c.hasCompositeAssociations())] 
-[for(a : Property | c.getCompositeCollectionAttributes())]
-Dado que [ a.getClass().name /] es una clase hija de [c.name/] a través de una relación composite, este servicio también permite la creación de [ a.name /] asociados con un [c.name/].
-[/for].
-[/if]
 
 #### Parámetros
 
 Nombre|Ubicación|Descripción|Requerido|Esquema
 :--|:--|:--|:--|:--
-body|body|Objeto [c.name/] que será creado|Sí|['['/]Representación Full[']'/](#recurso-[c.name.toLowerCase()/])
+body|body|Objeto [c.name/] que será creado|Sí|['['/]Representación Detail[']'/](#recurso-[c.name.toLowerCase()/])
 
 #### Respuesta
 
 Código|Descripción|Cuerpo
 :--|:--|:--
-201|El objeto [c.name/] ha sido creado|['['/]Representación Full[']'/](#recurso-[c.name.toLowerCase()/])
+201|El objeto [c.name/] ha sido creado|['['/]Representación Detail[']'/](#recurso-[c.name.toLowerCase()/])
 409|Un objeto relacionado no existe|Mensaje de error
 500|No se pudo crear el objeto [c.name/]|Mensaje de error
 
 #### PUT /[c.getURI()/]/{id}
 
 Es el encargado de actualizar objetos [c.name/].
-[if (c.hasCompositeAssociations())] 
-[for(a : Property | c.getCompositeCollectionAttributes())]
-Dado que [ a.getClass().name /] es una clase hija de [c.name/] a través de una relación composite, este servicio también permite la actualización de [ a.name /] asociados con un [c.name/].
-[/for].
-[/if]
 
 #### Parámetros
 
 Nombre|Ubicación|Descripción|Requerido|Esquema
 :--|:--|:--|:--|:--
 id|Path|ID del objeto [c.name/] a actualizar|Sí|Integer
-body|body|Objeto [c.name/] nuevo|Sí|['['/]Representación Full[']'/](#recurso-[c.name.toLowerCase()/])
+body|body|Objeto [c.name/] nuevo|Sí|['['/]Representación Detail[']'/](#recurso-[c.name.toLowerCase()/])
 
 #### Respuesta
 
 Código|Descripción|Cuerpo
 :--|:--|:--
-201|El objeto [c.name/] actualizado|['['/]Representación Full[']'/](#recurso-[c.name.toLowerCase()/])
+201|El objeto [c.name/] actualizado|['['/]Representación Detail[']'/](#recurso-[c.name.toLowerCase()/])
 409|Un objeto relacionado no existe|Mensaje de error
 500|No se pudo actualizar el objeto [c.name/]|Mensaje de error
 
@@ -317,7 +283,6 @@ Código|Descripción|Cuerpo
 [/for]
 
 ['['/]Volver arriba[']'/](#tabla-de-contenidos)
-[/if]
 [/for]
 [/file]
 [/template]
