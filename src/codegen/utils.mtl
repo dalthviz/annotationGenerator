@@ -49,11 +49,6 @@ and a.aggregation = AggregationKind::none
 and a.getOtherEnd().getUpper() <> 1
 /]
 
-[query public getAttributesWithRef(c : Class) : OrderedSet(Property) =
-c.allAttributes()->union(c.getReferences(false))->asOrderedSet()
-/]
-
-
 [**
  * Obtiene la colección de atributos de la clase, cuyo tipo es otra clase del modelo y son aceptados por el generador.<br>
  * 
@@ -81,6 +76,10 @@ c.getAssociations()->collect( asc |
         and (a.isComposite() implies a.getOtherEnd().isNavigable())
     )
 )->asSet()
+/]
+
+[query public hasRelationshipAttributes(c : Class) : Boolean =
+c.getRelationshipAttributes()->notEmpty()
 /]
 
 [query public getReferences(c : Class, includeParent : Boolean) : OrderedSet(Property) =
@@ -179,25 +178,20 @@ and (
 
 [query public getHierarchy(c : Class) : Sequence(Class) = 
 Sequence(class){c}->union(
-    if c.getParentAttribute() <> null then 
-        c.getParentAttribute().getClass().getHierarchy() 
-    else 
-        Sequence(Class){} 
-    endif) 
+    if c.getParentAttribute() <> null then
+        c.getParentAttribute().getClass().getHierarchy()
+    else
+        Sequence(Class){}
+    endif
+)
 /]
 
-[template public testName(c : Class)]
-[c.name.toLower().concat('Test')/]
-[/template]
-
-[template public getServiceTestName(c : Class)]
-[c.name.concat('Test')/]
-[/template]
-
-[template public getJavaType(a : Property)]
+[template public getJavaType(a : Property) post (trim())]
 [if (a.type.name = 'Image')]
-String[else]
-[a.type.name/][/if]
+    String
+[else]
+    [a.type.name/]
+[/if]
 [/template]
 
 [template public getModelName(c : Class)]
@@ -216,8 +210,12 @@ String[else]
 [c.getName().concat('Module')/]
 [/template]
 
-[template public getURI(c : Class)]
-[c.getName().concat('s')/]
+[template public getURI(c : Class) post (trim())]
+[if (c.isChild())]
+    [c.getParentAttribute().getOtherEnd().name.toLowerFirst()/]
+[else]
+    [c.getName().concat('s')/]
+[/if]
 [/template]
 
 [template public getName(c : Class)]
@@ -229,11 +227,11 @@ String[else]
 [/template]
 
 [template public getMinimumDTOName(c : Class)]
-[c.name.toUpperFirst().concat('MinimumDTO')/]
+[c.name.toUpperFirst().concat('DTO')/]
 [/template]
 
 [template public getBasicDTOName(c : Class)]
-[c.name.toUpperFirst().concat('BasicDTO')/]
+[c.name.toUpperFirst().concat('DetailDTO')/]
 [/template]
 
 [template public getFullDTOName(c : Class)]
@@ -244,32 +242,12 @@ String[else]
 ['I'.concat(c.name).concat('Logic')/]
 [/template]
 
-[template public getBeanName(c : Class)]
-[c.name.concat('Logic')/]
-[/template]
-
 [template public getEntityName(c : Class)]
 [c.name.concat('Entity')/]
 [/template]
 
-[template public getEntityId(c : Class)]
-[c.name.toLowerFirst().concat('Id')/]
-[/template]
-
 [template public getPersistenceName(c : Class)]
 [c.name.concat('Persistence')/]
-[/template]
-
-[template public getConverterName(c : Class)]
-[c.name.concat('Converter')/]
-[/template]
-
-[template public getTestName(c : Class)]
-[c.name.concat('LogicTest')/]
-[/template]
-
-[template public getPersistenceTestName(c : Class)]
-[c.name.concat('PersistenceTest')/]
 [/template]
 
 [template public baseGroup(m : Model)]
@@ -297,7 +275,7 @@ String[else]
 [/template]
 
 [template public getWebProjectName(m : Model)]
-[m.name.concat('.web')/]
+[m.name.concat('.api')/]
 [/template]
 
 [template private asArtifactId(s : String)]
@@ -318,10 +296,6 @@ String[else]
 
 [template public getWebArtifactId(m : Model)]
 [m.getWebProjectName().asArtifactId()/]
-[/template]
-
-[template public getWebRoot(m : Model)]
-[m.getWebArtifactId().concat('/app/')/]
 [/template]
 
 [template public getPoolName(m : Model)]
@@ -348,10 +322,10 @@ String[else]
 [m.getApiArtifactId().concat('/src/test/resources/META-INF/')/]
 [/template]
 
-[template public getWebInfPath(m : Model)]
-[m.getApiArtifactId().concat('/src/main/webapp/WEB-INF/')/]
+[template public getTestServicesResourcesPath(m : Model)]
+[m.getApiArtifactId().concat('/src/test/resources/')/]
 [/template]
-
+ 
 [template public getProjectVersion(m : Model)]
 0.1.0
 [/template]

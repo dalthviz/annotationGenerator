@@ -20,7 +20,8 @@
         name: '[c.getName()/]',
         displayName: '[c.getDisplayName()/]',
 		url: '[c.getURI()/]',
-        fields: {[for (a : Property | c.getAllAttribs()) separator(',\n')]
+        fields: {
+            [for (a : Property | c.getAllAttribs()) separator(',\n')]
             [a.name/]: {
                 displayName: '[a.getDisplayName()/]',
                 type: '[a.type.name/]',
@@ -44,9 +45,9 @@
             $sp.state('[c.getMainStateName()/]', {
                 url: '/[c.getURI()/]?page&limit',
                 abstract: true,
-                [if (c.isChild())]parent: '[c.getParentAttribute().getClass().getInstanceStateName()/]',[/if]
+                [if (c.isChild())]parent: '[c.getParentAttribute().getClass().getDetailStateName()/]',[/if]
                 views: {
-                     [if(c.isChild())][c.getParentAttribute().getClass().getInstanceView()/][else]mainView[/if]: {
+                     [if(c.isChild())][c.getParentAttribute().getClass().getDetailChieldView()/][else]mainView[/if]: {
                         templateUrl: basePath + '[c.getName()/].tpl.html',
                         controller: '[c.getCtrl()/]'
                     }
@@ -63,9 +64,10 @@
                     [/if]
                     model: '[c.getEntityModel()/]',
                     [if (c.isChild())]
-                    [c.getRecordsName()/]: ['['/]'[c.getParentAttribute().getClass().getName()/]', '$stateParams', function ([c.getParentAttribute().getClass().getName()/], $params) {
-                            return [c.getParentAttribute().getClass().getName()/].getList('[c.getRecordsName()/]', $params);
-                        }[']'/]
+                    [let parent : String = c.getParentAttribute().getClass().getRecordName()]
+                    [c.getRecordsName()/]: ['['/]'[parent/]', '$stateParams', 'model', function ([parent/], $params, model) {
+                            return [parent/].getList(model.url, $params);
+                        }[']'/][/let]
                     [else]
                     [c.getRecordsName()/]: ['['/]'Restangular', 'model', '$stateParams', function (r, model, $params) {
                             return r.all(model.url).getList($params);
@@ -146,10 +148,10 @@
             [for (a : Property | c.getNonCompositeCollectionAttributes())]
             $sp.state('[a.getSharedAbstractState()/]', {
                 url: '/[a.name/]',
-                parent: '[c.getInstanceStateName()/]',
+                parent: '[c.getDetailStateName()/]',
                 abstract: true,
                 views: {
-                    [c.getInstanceView()/]: {
+                    [c.getDetailChieldView()/]: {
                         template: '<div ui-view="[a.getSharedAbstractView()/]"></div>'
                     }
                 },
@@ -263,6 +265,10 @@
 
 [template protected getInstanceView(c : Class)]
 [c.getName()/]InstanceView
+[/template]
+
+[template protected getDetailChieldView(c : Class)]
+[c.getName()/]ChieldView
 [/template]
 
 [**

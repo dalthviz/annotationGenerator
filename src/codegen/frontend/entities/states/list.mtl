@@ -35,7 +35,7 @@
             this.totalItems = [c.getRecordsName()/].totalRecords;
 
             this.pageChanged = function () {
-                $state.go('[c.getListStateName()/]', $params);
+                $state.go('[c.getListStateName()/]', {page: this.currentPage});
             };
 
             $scope.actions = {
@@ -109,8 +109,9 @@
     <toolbar name="model.name" display-name="model.displayName" actions='actions'></toolbar>
 </header>
 <list-records fields="model.fields" records="records" actions="recordActions"></list-records>
-<pagination total-items="ctrl.totalItems"
-            max-size="5" 
+<pagination ng-if="ctrl.itemsPerPage < ctrl.totalItems"
+            total-items="ctrl.totalItems"
+            max-size="5"
             ng-model="ctrl.currentPage"
             ng-change="ctrl.pageChanged()"
             items-per-page="ctrl.itemsPerPage"

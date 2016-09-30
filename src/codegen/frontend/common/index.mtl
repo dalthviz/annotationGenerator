@@ -8,9 +8,6 @@
 [m.index(path)/]
 [/template]
 
-[template private getAPIURL(m : Model)]
-http://localhost:8080/[m.getApiArtifactId()/]/api/
-[/template]
 
 [template protected appjs(m : Model, path : String)]
 [file (path.concat('app.js'), false, 'UTF-8')]
@@ -28,12 +25,14 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
         'authModule'
     [']'/]);
 
+    mod.constant('baseUrl', 'api');
+
     mod.config(['['/]'$logProvider', function ($logProvider) {
             $logProvider.debugEnabled(true);
         }[']'/]);
 
-    mod.config(['['/]'RestangularProvider', function (rp) {
-            rp.setBaseUrl('[m.getAPIURL()/]');
+    mod.config(['['/]'RestangularProvider', 'baseUrl', function (rp, baseUrl) {
+            rp.setBaseUrl(baseUrl);
             rp.setRequestInterceptor(function (elem, operation) {
                 if (operation === "remove") {
                     return null;
@@ -52,10 +51,20 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
                 $urlRouterProvider.otherwise('/');
         }[']'/]);
 
-    mod.config(['['/]'authServiceProvider', function (auth) {
+    mod.config(['['/]'authServiceProvider', 'baseUrl', function (auth, baseUrl) {
             auth.setValues({
-                apiUrl: '[m.getAPIURL()/]users/',
+                apiUrl: baseUrl + '/users/',
                 successState: '[m.getClasses()->any(1=1).getListStateName()/]'
+            });
+        }[']'/]);
+
+    /*
+     * When there's an error changing state, ui-router doesn't raise an error
+     * This configuration allows to print said errors
+     */
+    mod.run(['['/]'$rootScope', '$log', function ($rootScope, $log) {
+            $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+                $log.warn(error);
             });
         }[']'/]);
 })(window.angular);
@@ -77,6 +86,7 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
 
         <!-- build:css(<%= meta.src %>) styles/vendor.css -->
         <!-- bower:css -->
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
         <!-- endbower -->
         <!-- endbuild -->
 
@@ -87,11 +97,41 @@ http://localhost:8080/[m.getApiArtifactId()/]/api/
 
         <!-- build:js(<%= meta.src %>) scripts/vendor.js -->
         <!-- bower:js -->
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+        <script src="bower_components/angular-mocks/angular-mocks.js"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="bower_components/lodash/lodash.js"></script>
+        <script src="bower_components/restangular/dist/restangular.js"></script>
+        <script src="bower_components/ng-crud/dist/ngcrud.js"></script>
+        <script src="bower_components/angular-messages/angular-messages.js"></script>
+        <script src="bower_components/ngstorage/ngStorage.js"></script>
+        <script src="bower_components/checklist-model/checklist-model.js"></script>
+        <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+        <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+        <script src="bower_components/csw-ng-auth/dist/csw-ng-auth.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
 
         <!-- build:js(<%= meta.src %>) scripts/scripts.js -->
         <!-- include: "type": "js", "files": "<%= meta.includeJsFiles %>" -->
+        <script src="src/app.js"></script>
+        [for (c : Class | m.getClasses())]
+        <script src="src/modules/[c.getName()/]/[c.getName()/].mod.js"></script>
+        [/for]
+        [for (c : Class | m.getClasses())]
+        <script src="src/modules/[c.getName()/]/[c.getName()/].ctrl.js"></script>
+        [for (a : Property | c.getNonCompositeCollectionAttributes())]
+        <script src="src/modules/[c.getName()/]/instance/[a.name/]/edit/[c.getName()/].[a.name/].edit.ctrl.js"></script>
+        <script src="src/modules/[c.getName()/]/instance/[a.name/]/list/[c.getName()/].[a.name/].list.ctrl.js"></script>
+        [/for]
+        <script src="src/modules/[c.getName()/]/instance/delete/[c.getName()/].delete.ctrl.js"></script>
+        <script src="src/modules/[c.getName()/]/instance/detail/[c.getName()/].detail.ctrl.js"></script>
+        <script src="src/modules/[c.getName()/]/instance/edit/[c.getName()/].edit.ctrl.js"></script>
+        <script src="src/modules/[c.getName()/]/list/[c.getName()/].list.ctrl.js"></script>
+        <script src="src/modules/[c.getName()/]/new/[c.getName()/].new.ctrl.js"></script>
+        [/for]
         <!-- /include -->
         <!-- endbuild -->
 

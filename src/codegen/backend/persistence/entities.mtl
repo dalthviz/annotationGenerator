@@ -23,7 +23,7 @@ import javax.persistence.TemporalType;
 import uk.co.jemos.podam.common.PodamStrategyValue;
 import co.edu.uniandes.csw.crud.api.podam.strategy.DateStrategy;
 [/if]
-[if (c.getRelationshipAttributes()->exists(not isComposite()))]
+[if (c.hasRelationshipAttributes())]
 import uk.co.jemos.podam.common.PodamExclude;
 [for (s : String | c.getJPAAnnotations())]
 import javax.persistence.[s/];
@@ -52,7 +52,7 @@ public class [className/] extends BaseEntity implements Serializable {
 [/for]
 [for (a : Property | c.getRelationshipAttributes())]
 
-    [if (not a.isComposite())]@PodamExclude[/if]
+    @PodamExclude
     @[a.getJPAAnnotation()/][a.genParameters()/]
     [if (a.getUpper() = 1)]
     private [a.getClass().getEntityName()/] [a.name/];

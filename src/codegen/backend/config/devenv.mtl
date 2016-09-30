@@ -52,5 +52,7 @@ nbactions.xml
 /[m.getLogicArtifactId()/]/derby.log
 /[m.getApiArtifactId()/]/derby.log
 
+#Bower
+/[m.getApiArtifactId()/]/src/main/webapp/bower_components/
 [/file]
 [/template]

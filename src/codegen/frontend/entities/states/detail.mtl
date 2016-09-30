@@ -37,14 +37,14 @@
                 edit: {
                     displayName: 'Edit',
                     icon: 'edit',
-                    fn: function (rc) {
+                    fn: function () {
                         $state.go('[c.getEditStateName()/]');
                     }
                 },
                 delete: {
                     displayName: 'Delete',
                     icon: 'minus',
-                    fn: function (rc) {
+                    fn: function () {
                         $state.go('[c.getDeleteStateName()/]');
                     }
                 },
@@ -73,8 +73,8 @@
                         $state.go('[a.getSharedListState()/]');
                         [/if]
                     }
-                }
-                [/for][/if]
+                }[/for][/if]
+
             };
         }[']'/]);
 })(window.angular);
@@ -89,23 +89,27 @@
 <header>
     <toolbar name="model.name" display-name="model.displayName" actions='actions'></toolbar>
 </header>
-<div  class="container well">
+<div  class="container-fluid well">
     <div class="col-md-12">
     [for (a : Property | c.allAttributes()->reject(isID()))]
-
-        [if (a.isDate())]
-        <label><b>[a.name.toUpperFirst()/]: </b></label><span> {{currentRecord.[a.name.toLowerFirst()/] | date}}</span><br>
-        [else]
-        <label><b>[a.name.toUpperFirst()/]: </b></label><span> {{currentRecord.[a.name.toLowerFirst()/]}}</span><br>
-        [/if]
-    [/for]   
-    [for (a : Property | c.getRelationshipAttributes())]
-        [if (a.getUpper() = 1)]
-        <label><b>[a.name.toUpperFirst()/]: </b></label><span> {{currentRecord.[a.name.toLowerFirst()/].name}}</span><br>    
-        [/if]
-    [/for]     
+        <p>
+            <label><strong>[a.name.toUpperFirst()/]: </strong></label>
+            <span id="[a.name/]">{{currentRecord.[a.name.toLowerFirst()/][if (a.isDate())] | date[/if]}}</span>
+        </p>
+    [/for]
+    [for (a : Property | c.getReferences(false))]
+        <p>
+            <label><strong>[a.name.toUpperFirst()/]: </strong></label>
+            <span id="[a.name/]">
+                {{currentRecord.[a.name.toLowerFirst()/].name}}
+            </span>
+        </p>
+    [/for]
     </div>
 </div>
+[if(c.hasCompositeAssociations() or c.hasSharedAssociations())]
+<div ui-view="[c.getName()/]ChieldView"></div>
+[/if]
 <!-- TODO -->
 [/file]
 [/template]

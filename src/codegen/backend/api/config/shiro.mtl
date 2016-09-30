@@ -17,7 +17,7 @@ securityManager.cacheManager = $cacheManager
 authc.loginUrl = /#/login
 restFilter = co.edu.uniandes.csw.auth.filter.RestFilter
 jwt = co.edu.uniandes.csw.auth.filter.JWTFilter
-cors = co.edu.uniandes.csw.auth.filter.CORSFilter
+# cors = co.edu.uniandes.csw.auth.filter.CORSFilter
 
 #Integrate with Stormpath:
 stormpathClient = com.stormpath.shiro.client.ClientFactory
@@ -46,13 +46,13 @@ securityManager.realm = $stormpathRealm
 # securityManager.authenticator.authenticationListeners = $authListener
 
 ['['/]urls]
-/api/users/login = noSessionCreation, cors, anon
-/api/users/logout = noSessionCreation, cors, jwt
-/api/users/me = noSessionCreation, cors, jwt['['/]permissive]
+/api/users/login = noSessionCreation, anon
+/api/users/logout = noSessionCreation, jwt
+/api/users/me = noSessionCreation, jwt['['/]permissive]
 [for (c : Class | m.getClasses())]
-/api/[c.getURI()/]/** = noSessionCreation, cors, jwt, restFilter['['.concat(c.getName()).concat(']')/]
+/api/[c.getURI()/]/** = noSessionCreation, jwt, restFilter['['.concat(c.getName()).concat(']')/]
 [/for]
-/** = noSessionCreation, cors
+/** = noSessionCreation
 [/file]
 [/template]
 
