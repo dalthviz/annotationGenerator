@@ -147,6 +147,9 @@ package [c.getModel().baseGroup()/].tests.selenium.pages.[c.getName()/];
 import [c.getModel().baseGroup()/].dtos.minimum.[c.getMinimumDTOName()/];
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+[if(c.hasDateAttribute())]
+import java.sql.Date;
+[/if]
 
 public class [c.name/]DetailPage {
 
