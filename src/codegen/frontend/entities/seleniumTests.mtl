@@ -180,10 +180,14 @@ public class [c.name/]DetailPage {
     public [c.getMinimumDTOName()/] getData() {
         [c.getMinimumDTOName()/] [c.getName()/] = new [c.getMinimumDTOName()/]();        
         [for (a : Property | c.attribute->reject(isID()))]
-        [if (a.type.name<>'String' and a.type.name<>'Image')]
-        [c.getName()/].[a.setter()/]([a.type.name/].parse[a.type.name/]([a.name/].getText()));
+        [if (a.type.name='String' or a.type.name='Image')]
+        [c.getName()/].[a.setter()/](this.[a.name/].getText());        
+        [elseif (a.type.name='Date')]
+        [c.getName()/].[a.setter()/]([a.type.name/].valueOf(this.[a.name/].getText()));
+        [elseif (a.type.name='Integer')]
+        [c.getName()/].[a.setter()/]([a.type.name/].parseInt(this.[a.name/].getText()));
         [else]
-        [c.getName()/].[a.setter()/]([a.name/].getText());
+        [c.getName()/].[a.setter()/]([a.type.name/].parse[a.type.name/](this.[a.name/].getText()));
         [/if]
         [/for]
         return [c.getName()/];
