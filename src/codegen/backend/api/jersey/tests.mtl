@@ -422,6 +422,7 @@ public class [className/] {
     private UserTransaction utx;
 
     private void clearData() {
+        [if (a.isRelationshipOwner())]
         List<[c.getEntityName()/]> records = em.createQuery("SELECT u FROM [c.getEntityName()/] u").getResultList();
         for ([c.getEntityName()/] record : records) {
             em.remove(record);
@@ -430,6 +431,16 @@ public class [className/] {
         [for (cl : Class | c.getHierarchy()->reject(class | class=c))]
         em.createQuery("delete from [cl.getEntityName()/]").executeUpdate();
         [/for]
+        [else]
+        List<[a.getClass().getEntityName()/]> records = em.createQuery("SELECT u FROM [a.getClass().getEntityName()/] u").getResultList();
+        for ([a.getClass().getEntityName()/] record : records) {
+            em.remove(record);
+        }
+        em.createQuery("delete from [c.getEntityName()/]").executeUpdate();
+        [for (cl : Class | c.getHierarchy()->reject(class | class=c))]
+        em.createQuery("delete from [cl.getEntityName()/]").executeUpdate();
+        [/for]
+        [/if]
         oraculo.clear();
     }
 
