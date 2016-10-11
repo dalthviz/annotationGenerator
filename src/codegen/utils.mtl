@@ -186,6 +186,18 @@ Sequence(class){c}->union(
 )
 /]
 
+[query public hasProperty(m : Element, p : String) : Boolean = 
+m.getEAnnotation('genmymodel').details->exists(key = p)
+/]
+
+[query public valueOf(m : Element, p : String) : String = 
+if (m.hasProperty(p)) then
+m.getEAnnotation('genmymodel').details->any(key = p).value
+else 
+null
+endif
+/]
+
 [template public getJavaType(a : Property) post (trim())]
 [if (a.type.name = 'Image')]
     String
