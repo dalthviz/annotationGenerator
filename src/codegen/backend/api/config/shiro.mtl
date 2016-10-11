@@ -45,12 +45,23 @@ securityManager.realm = $stormpathRealm
 # authListener = co.edu.uniandes.csw.bookbasico.shiro.AuthenticationEventListener
 # securityManager.authenticator.authenticationListeners = $authListener
 
+# PERMISOS:
+# Según la aplicación se deben establecer los permisos necesarios por cada recurso.
+# Ejemplo:
+
+# /api/users/login = noSessionCreation, anon
+# /api/users/logout = noSessionCreation, jwt
+# /api/users/me = noSessionCreation, jwt['['/]permissive]
+[for (c : Class | m.getClasses())]
+# /api/[c.getURI()/]/** = noSessionCreation, jwt, restFilter['['.concat(c.getName()).concat(']')/]
+[/for]
+
 ['['/]urls]
 /api/users/login = noSessionCreation, anon
 /api/users/logout = noSessionCreation, jwt
 /api/users/me = noSessionCreation, jwt['['/]permissive]
 [for (c : Class | m.getClasses())]
-/api/[c.getURI()/]/** = noSessionCreation, jwt, restFilter['['.concat(c.getName()).concat(']')/]
+/api/[c.getURI()/]/** = noSessionCreation, anon
 [/for]
 /** = noSessionCreation
 [/file]
