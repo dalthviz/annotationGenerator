@@ -31,9 +31,7 @@ and a.getOtherEnd().aggregation = AggregationKind::none
 [query public isOne2One(a : Property) : Boolean =
     a.isNavigable()
 and a.getUpper() = 1
-and a.aggregation = AggregationKind::none
 and a.getOtherEnd().getUpper() = 1
-and a.getOtherEnd().aggregation = AggregationKind::none
 /]
 
 [query public isOne2Many(a : Property) : Boolean =
