@@ -163,11 +163,13 @@ public class [className/] {
         em.persist(fatherEntity);
         [else]
         [for (a : Property | c.getRelationshipAttributes()->reject(isComposite()))]
+        [if(c.name <> a.getClass().name)]
         for (int i = 0; i < 3; i++) {
             [a.getClass().getEntityName()/] [a.name/] = factory.manufacturePojo([a.getClass().getEntityName()/].class);
             em.persist([a.name/]);
             [a.getListVar()/].add([a.name/]);
         }
+        [/if]
         [/for]
         [/if]
         for (int i = 0; i < 3; i++) {
@@ -186,10 +188,12 @@ public class [className/] {
             [/for]
             [else]
             [for (a : Property | c.getRelationshipAttributes()->reject(isComposite() or not isRelationshipOwner()))]
+            [if(c.name <> a.getClass().name)]
             [if (a.getUpper() = 1)]
             entity.[a.setter()/]([a.getListVar()/].get(0));
             [else]
             entity.[a.getter()/]().add([a.getListVar()/].get(0));
+            [/if]
             [/if]
             [/for]
             [/if]
