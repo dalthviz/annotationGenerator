@@ -87,7 +87,7 @@
         [elseif (a.type.name='Boolean')]
             <input id="[a.name/]" name="[a.name/]" class="form-control" ng-checked="currentRecord.[a.name/]" type="checkbox" ng-model="currentRecord.[a.name/]" ng-required="[a.isRequired()/] && currentRecord.[a.name/].$isEmpty" />
         [elseif (a.type.name='Date')]
-            <date-picker ng-switch-when="Date" value="currentRecord.[a.name/]" model="[a.name/]"></date-picker>
+            <date-picker value="currentRecord.[a.name/]" model="[a.name/]"></date-picker>
         [/if]
         </div>
     </div>
