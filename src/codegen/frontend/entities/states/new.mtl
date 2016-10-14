@@ -72,24 +72,34 @@
 </header>
 <form novalidate name="[c.getFormId()/]" role="form">
     <fieldset>
-        [if (c.getModel().valueOf('form')='true')]
-        <input id="id" class="form-control" type="hidden" ng-model="currentRecord.id"/>
-<div class="form-group col-md-12" ng-repeat="(fieldName, field) in model.fields" ng-switch="field.type" ng-class="{'has-success': [c.getFormId()/]['['/]fieldName].$valid && [c.getFormId()/]['['/]fieldName].$dirty, 'has-error': [c.getFormId()/]['['/]fieldName].$invalid && [c.getFormId()/]['['/]fieldName].$dirty}" >
-    <label for="{{fieldName}}" class="col-md-2 control-label">{{field.displayName}}</label>
-    <div class="col-md-10">
-        <input ng-switch-when="String" id="{{fieldName}}" name="{{fieldName}}" class="form-control" type="text" ng-model="currentRecord['['/]fieldName]" ng-required="field.required" />
-        <input ng-switch-when="Currency" id="{{fieldName}}" name="{{fieldName}}" class="form-control" type="number" ng-model="currentRecord['['/]fieldName]" ng-required="field.required" />
-        <input ng-switch-when="Integer" id="{{fieldName}}" name="{{fieldName}}" class="form-control" type="number" ng-model="currentRecord['['/]fieldName]" ng-required="field.required" />
-        <input ng-switch-when="Number" id="{{fieldName}}" name="{{fieldName}}" class="form-control" type="number" ng-model="currentRecord['['/]fieldName]" ng-required="field.required" />
-        <input ng-switch-when="Long" id="{{fieldName}}" name="{{fieldName}}" class="form-control" type="number" ng-model="currentRecord['['/]fieldName]" ng-required="field.required" />
-        <input ng-switch-when="Boolean" id="{{fieldName}}" name="{{fieldName}}" ng-checked="currentRecord['['/]fieldName]" type="checkbox" ng-model="currentRecord['['/]fieldName]" ng-required="field.required && currentRecord['['/]fieldName].$isEmpty" />
-        <input ng-switch-when="Computed" id="{{fieldName}}" name="{{fieldName}}" class="form-control" type="text" ng-value="field.fn(record)" readonly />
-        <input ng-switch-when="Image" id="{{fieldName}}" name="{{fieldName}}" class="form-control" type="url" ng-model="currentRecord['['/]fieldName]" ng-required="field.required"/>
-        <select ng-switch-when="Reference" id="{{fieldName}}" name="{{fieldName}}" class="form-control" ng-options="rc.name for rc in references['['/]fieldName] track by rc.id" ng-model="currentRecord['['/]fieldName]"></select>
-        <date-picker ng-switch-when="Date" value="currentRecord['['/]fieldName]" model="field"></date-picker>
-        <input ng-switch-default id="{{fieldName}}" name="{{fieldName}}" class="form-control" type="text" ng-model="currentRecord['['/]fieldName]" ng-required="field.required" />
+[if (c.getModel().valueOf('form')='true')]
+    <input id="id" class="form-control" type="hidden" ng-model="currentRecord.id"/>
+        [for (a : Property | c.getAllAttribs())]
+    <div class="form-group col-md-12" ng-class="{'has-success': [c.getFormId()/].[a.name/].$valid && [c.getFormId()/].[a.name/].$dirty, 'has-error': [c.getFormId()/].[a.name/].$invalid && [c.getFormId()/].[a.name/].$dirty}" >
+        <label for="[a.name/]" class="col-md-2 control-label">[a.name.toUpperFirst()/]</label>
+        <div class="col-md-10">
+        [if (a.type.name='String')]
+            <input id="[a.name/]" name="[a.name/]" class="form-control" type="text" ng-model="currentRecord.[a.name/]" ng-required="[a.isRequired()/]" />
+        [elseif (a.type.name='Integer' or a.type.name='Long')]
+            <input id="[a.name/]" name="[a.name/]" class="form-control" type="number" ng-model="currentRecord.[a.name/]" ng-required="[a.isRequired()/]" />
+        [elseif (a.type.name='Image')]
+            <input id="[a.name/]" name="[a.name/]" class="form-control" type="url" ng-model="currentRecord.[a.name/]" ng-required="[a.isRequired()/]" />
+        [elseif (a.type.name='Boolean')]
+            <input id="[a.name/]" name="[a.name/]" class="form-control" ng-checked="currentRecord.[a.name/]" type="checkbox" ng-model="currentRecord.[a.name/]" ng-required="[a.isRequired()/] && currentRecord.[a.name/].$isEmpty" />
+        [elseif (a.type.name='Date')]
+            <date-picker ng-switch-when="Date" value="currentRecord.[a.name/]" model="[a.name/]"></date-picker>
+        [/if]
+        </div>
     </div>
-</div>
+        [/for]
+        [for (a : Property | c.getReferences(false))]
+    <div class="form-group col-md-12" ng-class="{'has-success': [c.getFormId()/].[a.name/].$valid && [c.getFormId()/].[a.name/].$dirty, 'has-error': [c.getFormId()/].[a.name/].$invalid && [c.getFormId()/].[a.name/].$dirty}" >
+        <label for="[a.name/]" class="col-md-2 control-label">[a.name.toUpperFirst()/]</label>
+        <div class="col-md-10">
+            <select id="[a.name/]" name="[a.name/]" class="form-control" ng-options="rc.name for rc in references.[a.name/] track by rc.id" ng-model="currentRecord.[a.name/]"></select>
+        </div>
+    </div>
+        [/for]    
         [else]
         <crud-form fields='model.fields' record='currentRecord' lists-of-values="references"></crud-form>
         [/if]
