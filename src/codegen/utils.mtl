@@ -116,6 +116,10 @@ c.getCollectionAttributes()->select(isComposite())
 c.getCollectionAttributes()->reject(isComposite())
 /]
 
+[query public hasOne2OneCompositeAssociations(c : Class) : Boolean =
+c.getRelationshipAttributes()->select(isComposite())->notEmpty()
+/]
+
 [query public hasCompositeAssociations(c : Class) : Boolean =
 c.getCompositeCollectionAttributes()->notEmpty()
 /]

@@ -138,6 +138,15 @@ public class [className/] {
         em.persist([cl.getFatherEntity()/]);
 
         [/for]
+        [if (c.isChild() and c.getParentAttribute().isOne2One())]        
+            [c.getEntityName()/] [c.getName()/] = factory.manufacturePojo([c.getEntityName()/].class);
+            [c.getName()/].setId(i + 1L);
+            [if (c.isChild())]
+            [c.getName()/].set[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getFatherEntity()/]);
+            [/if]
+            em.persist([c.getName()/]);
+            oraculo.add([c.getName()/]);
+        [else]
         for (int i = 0; i < 3; i++) {            
             [c.getEntityName()/] [c.getName()/] = factory.manufacturePojo([c.getEntityName()/].class);
             [c.getName()/].setId(i + 1L);
@@ -147,6 +156,7 @@ public class [className/] {
             em.persist([c.getName()/]);
             oraculo.add([c.getName()/]);
         }
+        [/if]
     }
 
     /**

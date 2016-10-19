@@ -68,6 +68,9 @@ import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 import [c.getModel().baseGroup()/].api.[a.getClass().getAPIName()/];
 [/if]
 [/for]
+[if(c.getParentAttribute().isOne2One())]
+import java.util.ArrayList;
+[/if]
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -111,7 +114,14 @@ public class [className/] implements [c.getAPIName()/] {
     @Override
     public List<[c.getEntityName()/]> get[c.name/]s(Long [c.getParentAttribute().getClass().getName()/]id) {
         [c.getParentAttribute().getClass().getEntityName()/] [c.getParentAttribute().getClass().getName()/] = [c.getParentAttribute().getClass().getBeanLower()/].get[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]id);
+        [if(c.getParentAttribute().isOne2One())]
+        List<[c.getEntityName()/]>[c.getName()/] = new ArrayList<>();
+        [c.getName()/].add([c.getParentAttribute().getClass().getName()/].[c.getParentAttribute().getOtherEnd().getter()/]())
+        return [c.getName()/];
+        [else]
         return [c.getParentAttribute().getClass().getName()/].[c.getParentAttribute().getOtherEnd().getter()/]();
+        [/if]
+        
     }
 
     /**
