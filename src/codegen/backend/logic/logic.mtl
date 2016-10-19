@@ -68,7 +68,7 @@ import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 import [c.getModel().baseGroup()/].api.[a.getClass().getAPIName()/];
 [/if]
 [/for]
-[if(c.getParentAttribute().isOne2One())]
+[if(c.isChild() and c.getParentAttribute().isOne2One())]
 import java.util.ArrayList;
 [/if]
 import java.util.List;
