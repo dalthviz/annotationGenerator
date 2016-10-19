@@ -31,10 +31,10 @@ import javax.persistence.[s/];
 [if (c.isMaster())]
 import java.util.List;
 import java.util.ArrayList;
+[/if]
+[/if]
 [if (c.hasCompositeAssociations() or c.hasOne2OneCompositeAssociations())]
 import javax.persistence.CascadeType;
-[/if]
-[/if]
 [/if]
 
 /**

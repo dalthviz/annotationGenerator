@@ -116,7 +116,7 @@ public class [className/] implements [c.getAPIName()/] {
         [c.getParentAttribute().getClass().getEntityName()/] [c.getParentAttribute().getClass().getName()/] = [c.getParentAttribute().getClass().getBeanLower()/].get[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]id);
         [if(c.getParentAttribute().isOne2One())]
         List<[c.getEntityName()/]>[c.getName()/] = new ArrayList<>();
-        [c.getName()/].add([c.getParentAttribute().getClass().getName()/].[c.getParentAttribute().getOtherEnd().getter()/]())
+        [c.getName()/].add([c.getParentAttribute().getClass().getName()/].[c.getParentAttribute().getOtherEnd().getter()/]());
         return [c.getName()/];
         [else]
         return [c.getParentAttribute().getClass().getName()/].[c.getParentAttribute().getOtherEnd().getter()/]();

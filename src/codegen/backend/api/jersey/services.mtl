@@ -464,6 +464,17 @@ public Class<[a.getClass().getJaxRsName()/]> get[a.getClass().getJaxRsName()/](@
     return [a.getClass().getJaxRsName()/].class;
 }
 [/for]
+[for (a : Property | c.getRelationshipAttributes()->select(isComposite())->select(getUpper() = 1)->asSet())]
+
+@Path("{[c.getIdVariable()/]: \\d+}/[a.getURI()/]")
+public Class<[a.getClass().getJaxRsName()/]> get[a.getClass().getJaxRsName()/](@PathParam("[c.getIdVariable()/]") Long [c.getIdVariable()/]){
+    exists[c.name/]([c.getIdVariable()/]);
+    [if(c.isChild())]
+    validate[c.name/]Parent([c.getIdVariable()/]);
+    [/if]
+    return [a.getClass().getJaxRsName()/].class;
+}
+[/for]
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
 
 @Path("{[c.getIdVariable()/]: \\d+}/[a.getURI()/]")

@@ -140,7 +140,7 @@ public class [className/] {
         [/for]
         [if (c.isChild() and c.getParentAttribute().isOne2One())]        
             [c.getEntityName()/] [c.getName()/] = factory.manufacturePojo([c.getEntityName()/].class);
-            [c.getName()/].setId(i + 1L);
+            [c.getName()/].setId(1L);
             [if (c.isChild())]
             [c.getName()/].set[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getFatherEntity()/]);
             [/if]
