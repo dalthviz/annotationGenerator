@@ -268,7 +268,7 @@ public class [className/] {
         String list[c.name/] = response.readEntity(String.class);
         List<[c.getMinimumDTOName()/]> list[c.name/]Test = new ObjectMapper().readValue(list[c.name/], List.class);
         Assert.assertEquals(Ok, response.getStatus());
-        Assert.assertEquals(3, list[c.name/]Test.size());
+        Assert.assertEquals(oraculo.size(), list[c.name/]Test.size());
     }
 
     /**
