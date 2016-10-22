@@ -73,7 +73,7 @@
                         $state.go('[a.getSharedListState()/]');
                         [/if]
                     }
-                }[/for][for (a : Property | c.getReferences(false)->select(isComposite())) separator(',\n')]
+                }[/for][/if][for (a : Property | c.getReferences(false)->select(isComposite())) separator(',\n')]
                 [a.name/]: {
                     displayName: '[a.getDisplayName()/]',
                     icon: 'link',
@@ -84,7 +84,7 @@
                         $state.go('[a.getSharedListState()/]');
                         [/if]
                     }
-                }[/for][/if]
+                }[/for]
 
             };
         }[']'/]);
