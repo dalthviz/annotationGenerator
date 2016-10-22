@@ -26,7 +26,7 @@
                 displayName: '[a.getDisplayName()/]',
                 type: '[a.type.name/]',
                 required: [a.isRequired()/]
-            }[/for][for (a : Property | c.getReferences(false))],
+            }[/for][for (a : Property | c.getReferences(false)->reject(isComposite()))],
             [a.name/]: {
                 displayName: '[a.getDisplayName()/]',
                 type: 'Reference',

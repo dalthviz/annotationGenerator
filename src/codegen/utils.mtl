@@ -98,7 +98,7 @@ c.getRelationshipAttributes()->select(getUpper() <> 1)->asSet()
  * 
 */]
 [query public hasReferences(c : Class, includeParent : Boolean) : Boolean =
-c.getReferences(includeParent)->notEmpty()
+c.getReferences(includeParent)->reject(isComposite())->notEmpty()
 /]
 
 [**

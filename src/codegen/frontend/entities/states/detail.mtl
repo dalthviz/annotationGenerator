@@ -73,6 +73,17 @@
                         $state.go('[a.getSharedListState()/]');
                         [/if]
                     }
+                }[/for][for (a : Property | c.getReferences(false)->select(isComposite())) separator(',\n')]
+                [a.name/]: {
+                    displayName: '[a.getDisplayName()/]',
+                    icon: 'link',
+                    fn: function () {
+                        [if (a.isComposite())]
+                        $state.go('[a.getClass().getListStateName()/]');
+                        [else]
+                        $state.go('[a.getSharedListState()/]');
+                        [/if]
+                    }
                 }[/for][/if]
 
             };
@@ -107,7 +118,7 @@
     [/for]
     </div>
 </div>
-[if(c.hasCompositeAssociations() or c.hasSharedAssociations())]
+[if(c.hasCompositeAssociations() or c.hasSharedAssociations() or c.hasOne2OneCompositeAssociations())]
 <div ui-view="[c.getName()/]ChieldView"></div>
 [/if]
 <!-- TODO -->

@@ -116,7 +116,9 @@ public class [className/] implements [c.getAPIName()/] {
         [c.getParentAttribute().getClass().getEntityName()/] [c.getParentAttribute().getClass().getName()/] = [c.getParentAttribute().getClass().getBeanLower()/].get[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]id);
         [if(c.getParentAttribute().isOne2One())]
         List<[c.getEntityName()/]>[c.getName()/] = new ArrayList<>();
+        if ([c.getParentAttribute().getClass().getName()/].[c.getParentAttribute().getOtherEnd().getter()/]()!=null){
         [c.getName()/].add([c.getParentAttribute().getClass().getName()/].[c.getParentAttribute().getOtherEnd().getter()/]());
+        }
         return [c.getName()/];
         [else]
         return [c.getParentAttribute().getClass().getName()/].[c.getParentAttribute().getOtherEnd().getter()/]();
@@ -166,8 +168,21 @@ public class [className/] implements [c.getAPIName()/] {
     @Override
     public [c.getEntityName()/] create[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity) {
         [c.getParentAttribute().getClass().getEntityName()/] [c.getParentAttribute().getClass().getName()/] = [c.getParentAttribute().getClass().getBeanLower()/].get[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]id);
+        [if(c.getParentAttribute().isOne2One())]
+        Long [c.getName()/]id=0L;
+        if ([c.getParentAttribute().getClass().getName()/].get[c.name/]()!=null){
+        [c.getName()/]id=[c.getParentAttribute().getClass().getName()/].get[c.name/]().getId();
+        }
+        [/if]
         entity.set[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]);
         entity = persistence.create(entity);
+        [if(c.getParentAttribute().isOne2One())]
+        [c.getParentAttribute().getClass().getName()/].set[c.name/](entity);
+        [c.getParentAttribute().getClass().getBeanLower()/].update[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]);
+        if ([c.getName()/]id!=0L){
+        persistence.delete([c.getName()/]id);
+        }
+        [/if]
         return entity;
     }
 

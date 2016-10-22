@@ -53,7 +53,7 @@ public class [className/] extends BaseEntity implements Serializable {
 [for (a : Property | c.getRelationshipAttributes())]
 
     @PodamExclude
-    @[a.getJPAAnnotation()/][a.genParameters()/]
+    @[a.getJPAAnnotation()/][if(not a.isOne2One())][a.genParameters()/][/if]
     [if (a.getUpper() = 1)]
     private [a.getClass().getEntityName()/] [a.name/];
     [else]
