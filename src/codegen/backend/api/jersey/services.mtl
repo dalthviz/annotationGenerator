@@ -131,10 +131,12 @@ public class [className/] {
     public [c.getBasicDTOName()/] update[c.name/](@PathParam("id") Long id, [c.getBasicDTOName()/] dto) {
         [c.getEntityName()/] entity = dto.toEntity();
         entity.setId(id);
+        [if (c.hasSharedAssociations())]
         [c.getEntityName()/] oldEntity = [logic/].get[c.name/](id);
         [for (a : Property | c.getNonCompositeCollectionAttributes())]
         entity.[a.setter()/](oldEntity.[a.getter()/]());
         [/for]
+        [/if]
         return new [c.getBasicDTOName()/]([logic/].update[c.name/](entity));
     }
 
