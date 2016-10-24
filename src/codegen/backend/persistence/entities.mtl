@@ -36,7 +36,7 @@ import java.util.ArrayList;
 [if (c.hasCompositeAssociations() or c.hasOne2OneCompositeAssociations())]
 import javax.persistence.CascadeType;
 [/if]
-[if (c.hasOne2OneCompositeAssociations())]
+[if (c.hasReferences(true))]
 import javax.persistence.FetchType;
 [/if]
 
