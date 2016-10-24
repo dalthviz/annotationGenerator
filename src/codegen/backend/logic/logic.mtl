@@ -176,9 +176,7 @@ public class [className/] implements [c.getAPIName()/] {
         [/if]
         entity.set[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]);
         entity = persistence.create(entity);
-        [if(c.getParentAttribute().isOne2One())]
-        [c.getParentAttribute().getClass().getName()/].set[c.name/](entity);
-        [c.getParentAttribute().getClass().getBeanLower()/].update[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]);
+        [if(c.getParentAttribute().isOne2One())]        
         if ([c.getName()/]id!=0L){
         persistence.delete([c.getName()/]id);
         }
