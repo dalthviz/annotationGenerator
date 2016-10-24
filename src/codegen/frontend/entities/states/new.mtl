@@ -92,7 +92,7 @@
         </div>
     </div>
         [/for]
-        [for (a : Property | c.getReferences(false))]
+        [for (a : Property | c.getReferences(false)->reject(isComposite()))]
     <div class="form-group col-md-12" ng-class="{'has-success': [c.getFormId()/].[a.name/].$valid && [c.getFormId()/].[a.name/].$dirty, 'has-error': [c.getFormId()/].[a.name/].$invalid && [c.getFormId()/].[a.name/].$dirty}" >
         <label for="[a.name/]" class="col-md-2 control-label">[a.name.toUpperFirst()/]</label>
         <div class="col-md-10">

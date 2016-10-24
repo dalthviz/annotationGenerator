@@ -56,7 +56,7 @@
                     [if (c.hasReferences(false))]
                     references: ['['/]'$q', 'Restangular', function ($q, r) {
                             return $q.all({
-                             [for (a : Property | c.getReferences(false)) separator(', ')]
+                             [for (a : Property | c.getReferences(false)->reject(isComposite())) separator(', ')]
                                 [a.name/]: r.all('[a.getClass().getURI()/]').getList()
                             [/for]
                             });
