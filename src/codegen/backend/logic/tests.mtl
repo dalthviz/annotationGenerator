@@ -273,6 +273,9 @@ public class [className/] {
     @Test
     public void delete[c.name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
+        [for (a : Property | c.getNonCompositeCollectionAttributes())]
+        [bean/].remove[a.name.toUpperFirst()/](entity.getId(), [a.getListVar()/].get(0).getId());
+        [/for]
         [bean/].delete[c.name/](entity.getId());
         [c.getEntityName()/] deleted = em.find([c.getEntityName()/].class, entity.getId());
         Assert.assertNull(deleted);
@@ -359,6 +362,9 @@ public class [className/] {
     @Test
     public void delete[c.name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
+        [for (a : Property | c.getNonCompositeCollectionAttributes())]
+        [bean/].remove[a.name.toUpperFirst()/](entity.getId(), [a.getListVar()/].get(0).getId());
+        [/for]
         [bean/].delete[c.name/](entity.getId());
         [c.getEntityName()/] deleted = em.find([c.getEntityName()/].class, entity.getId());
         Assert.assertNull(deleted);
