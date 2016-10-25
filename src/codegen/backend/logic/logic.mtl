@@ -174,7 +174,7 @@ public class [className/] implements [c.getAPIName()/] {
         [c.getName()/]id=[c.getParentAttribute().getClass().getName()/].get[c.name/]().getId();
         }
         [/if]
-        entity.set[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]);
+        entity.[c.getParentAttribute().setter()/]([c.getParentAttribute().getClass().getName()/]);
         entity = persistence.create(entity);
         [if(c.getParentAttribute().isOne2One())]        
         if ([c.getName()/]id!=0L){
@@ -195,7 +195,7 @@ public class [className/] implements [c.getAPIName()/] {
     @Override
     public [c.getEntityName()/] update[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity) {
         [c.getParentAttribute().getClass().getEntityName()/] [c.getParentAttribute().getClass().getName()/] = [c.getParentAttribute().getClass().getBeanLower()/].get[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]id);
-        entity.set[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]);
+        entity.[c.getParentAttribute().setter()/]([c.getParentAttribute().getClass().getName()/]);
         return persistence.update(entity);
     }
 

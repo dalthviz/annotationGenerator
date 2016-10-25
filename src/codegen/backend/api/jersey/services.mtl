@@ -245,7 +245,7 @@ public class [className/] {
     @Path("{[c.getName()/]Id: \\d+}")
     public [c.getBasicDTOName()/] get[c.name/](@PathParam("[c.getName()/]Id") Long [c.getName()/]Id) {
         [c.getEntityName()/] entity = [logic/].get[c.name/]([c.getName()/]Id);
-        if (entity.get[c.getParentAttribute().getClass().name/]() != null && ![parentId/].equals(entity.get[c.getParentAttribute().getClass().name/]().getId())) {
+        if (entity.[c.getParentAttribute().setter()/]() != null && ![parentId/].equals(entity.[c.getParentAttribute().setter()/]().getId())) {
             throw new WebApplicationException(404);
         }
         return new [c.getBasicDTOName()/](entity);

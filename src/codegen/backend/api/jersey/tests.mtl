@@ -142,7 +142,7 @@ public class [className/] {
             [c.getEntityName()/] [c.getName()/] = factory.manufacturePojo([c.getEntityName()/].class);
             [c.getName()/].setId(1L);
             [if (c.isChild())]
-            [c.getName()/].set[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getFatherEntity()/]);
+            [c.getName()/].[c.getParentAttribute().setter()/]([c.getParentAttribute().getClass().getFatherEntity()/]);
             [/if]
             em.persist([c.getName()/]);
             oraculo.add([c.getName()/]);
@@ -151,7 +151,7 @@ public class [className/] {
             [c.getEntityName()/] [c.getName()/] = factory.manufacturePojo([c.getEntityName()/].class);
             [c.getName()/].setId(i + 1L);
             [if (c.isChild())]
-            [c.getName()/].set[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getFatherEntity()/]);
+            [c.getName()/].[c.getParentAttribute().setter()/]([c.getParentAttribute().getClass().getFatherEntity()/]);
             [/if]
             em.persist([c.getName()/]);
             oraculo.add([c.getName()/]);

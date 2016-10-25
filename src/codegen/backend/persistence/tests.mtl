@@ -141,7 +141,7 @@ public class [className/] {
             [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);
             
             [if (c.isChild())]
-            entity.set[c.getParentAttribute().getClass().name/](fatherEntity);
+            entity.[c.getParentAttribute().setter()/](fatherEntity);
             [/if]
             em.persist(entity);
             data.add(entity);
@@ -157,7 +157,7 @@ public class [className/] {
     public void create[c.name/]Test() {
 		PodamFactory factory = new PodamFactoryImpl();
         [c.getEntityName()/] newEntity = factory.manufacturePojo([c.getEntityName()/].class);
-        newEntity.set[c.getParentAttribute().getClass().name/](fatherEntity);
+        newEntity.[c.getParentAttribute().setter()/](fatherEntity);
         [c.getEntityName()/] result = [bean/].create(newEntity);
 
         Assert.assertNotNull(result);
@@ -199,7 +199,7 @@ public class [className/] {
     @Test
     public void get[c.name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
-        [c.getEntityName()/] newEntity = [bean/].find(entity.get[c.getParentAttribute().getClass().name/]().getId(), entity.getId());
+        [c.getEntityName()/] newEntity = [bean/].find(entity.[c.getParentAttribute().setter()/]().getId(), entity.getId());
         Assert.assertNotNull(newEntity);
         [for (a : Property | c.getAllAttribs())]
         Assert.assertEquals(entity.[a.getter()/](), newEntity.[a.getter()/]());

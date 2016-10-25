@@ -175,7 +175,7 @@ public class [className/] {
         for (int i = 0; i < [if (c.isChild() and c.getParentAttribute().isOne2One())]1[else]3[/if]; i++) {
             [c.getEntityName()/] entity = factory.manufacturePojo([c.getEntityName()/].class);
             [if (c.isChild())]
-                entity.set[c.getParentAttribute().getClass().name/](fatherEntity);
+                entity.[c.getParentAttribute().setter()/](fatherEntity);
     
                 [for (a : Property | c.getRelationshipAttributes()->reject(isComposite() or not isRelationshipOwner()))]
                 [if(c.getParentAttribute().getClass().name <> a.getClass().name)]
