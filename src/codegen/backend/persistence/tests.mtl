@@ -199,7 +199,7 @@ public class [className/] {
     @Test
     public void get[c.name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
-        [c.getEntityName()/] newEntity = [bean/].find(entity.[c.getParentAttribute().setter()/]().getId(), entity.getId());
+        [c.getEntityName()/] newEntity = [bean/].find(entity.[c.getParentAttribute().getter()/]().getId(), entity.getId());
         Assert.assertNotNull(newEntity);
         [for (a : Property | c.getAllAttribs())]
         Assert.assertEquals(entity.[a.getter()/](), newEntity.[a.getter()/]());
