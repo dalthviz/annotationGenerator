@@ -447,7 +447,7 @@ public void exists[c.name/](Long [c.getIdVariable()/]){
     }
 }
 
-[if(c.isChild() and c.hasCompositeAssociations())]
+[if(c.isChild() and (c.hasCompositeAssociations() or c.hasOne2OneCompositeAssociations()))]
 public void validate[c.name/]Parent(Long [c.getIdVariable()/]){
     [c.getBasicDTOName()/] [c.getName()/] = get[c.name/]([c.getIdVariable()/]);
     if ([c.getName()/].[c.getParentAttribute().getter()/]() == null || ![c.getParentAttribute().getClass().getIdVariable()/].equals([c.getName()/].[c.getParentAttribute().getter()/]().getId())) {
