@@ -439,7 +439,7 @@ public class [className/] {
 [/file]
 [/template]
 
-[template protected genSubResourceLocators(c : Class) ? (c.hasCompositeAssociations() or c.hasOne2OneCompositeAssociations())]
+[template protected genSubResourceLocators(c : Class) ? (c.hasCompositeAssociations() or c.hasOne2OneCompositeAssociations() or c.hasSharedAssociations())]
 public void exists[c.name/](Long [c.getIdVariable()/]){
     [c.getBasicDTOName()/] [c.getName()/] = get[c.name/]([c.getIdVariable()/]);
     if ([c.getName()/]== null) {
