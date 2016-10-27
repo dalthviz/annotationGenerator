@@ -170,8 +170,8 @@ public class [className/] implements [c.getAPIName()/] {
         [c.getParentAttribute().getClass().getEntityName()/] [c.getParentAttribute().getClass().getName()/] = [c.getParentAttribute().getClass().getBeanLower()/].get[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]id);
         [if(c.getParentAttribute().isOne2One())]
         Long [c.getName()/]id=0L;
-        if ([c.getParentAttribute().getClass().getName()/].get[c.name/]()!=null){
-        [c.getName()/]id=[c.getParentAttribute().getClass().getName()/].get[c.name/]().getId();
+        if ([c.getParentAttribute().getClass().getName()/].[c.getParentAttribute().getOtherEnd().getter()/]()!=null){
+        [c.getName()/]id=[c.getParentAttribute().getClass().getName()/].[c.getParentAttribute().getOtherEnd().getter()/]().getId();
         }
         [/if]
         entity.[c.getParentAttribute().setter()/]([c.getParentAttribute().getClass().getName()/]);
