@@ -23,7 +23,7 @@ import co.edu.uniandes.csw.auth.security.JWT;
 [for (cl : Class | c.getHierarchy())]
 import [cl.getModel().baseGroup()/].entities.[cl.getEntityName()/];
 [/for]
-import [c.getModel().baseGroup()/].dtos.minimum.[c.getMinimumDTOName()/];
+import [c.getModel().baseGroup()/].dtos.detail.[c.getBasicDTOName()/];
 import [c.getModel().baseGroup()/].resources.[c.getJaxRsName()/];
 import [c.getModel().baseGroup()/].tests.Utils;
 import java.io.File;
@@ -216,14 +216,14 @@ public class [className/] {
      */
     @Test
     public void create[c.name/]Test() throws IOException {
-        [c.getMinimumDTOName()/] [c.getName()/] = factory.manufacturePojo([c.getMinimumDTOName()/].class);
+        [c.getBasicDTOName()/] [c.getName()/] = factory.manufacturePojo([c.getBasicDTOName()/].class);
         Cookie cookieSessionId = login(username, password);
 
         Response response = target
             .request().cookie(cookieSessionId)
             .post(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
 
-        [c.getMinimumDTOName()/]  [c.testName()/] = ([c.getMinimumDTOName()/]) response.readEntity([c.getMinimumDTOName()/].class);
+        [c.getBasicDTOName()/]  [c.testName()/] = ([c.getBasicDTOName()/]) response.readEntity([c.getBasicDTOName()/].class);
 
         Assert.assertEquals(Created, response.getStatus());
 
@@ -244,9 +244,9 @@ public class [className/] {
     public void get[c.name/]ByIdTest() {
         Cookie cookieSessionId = login(username, password);
 
-        [c.getMinimumDTOName()/] [c.testName()/] = target
+        [c.getBasicDTOName()/] [c.testName()/] = target
             .path(oraculo.get(0).getId().toString())
-            .request().cookie(cookieSessionId).get([c.getMinimumDTOName()/].class);
+            .request().cookie(cookieSessionId).get([c.getBasicDTOName()/].class);
         
         [for (prop : Property | c.attribute)]
         Assert.assertEquals([c.testName()/].[prop.getter()/](), oraculo.get(0).[prop.getter()/]());
@@ -266,7 +266,7 @@ public class [className/] {
             .request().cookie(cookieSessionId).get();
 
         String list[c.name/] = response.readEntity(String.class);
-        List<[c.getMinimumDTOName()/]> list[c.name/]Test = new ObjectMapper().readValue(list[c.name/], List.class);
+        List<[c.getBasicDTOName()/]> list[c.name/]Test = new ObjectMapper().readValue(list[c.name/], List.class);
         Assert.assertEquals(Ok, response.getStatus());
         Assert.assertEquals(oraculo.size(), list[c.name/]Test.size());
     }
@@ -279,9 +279,9 @@ public class [className/] {
     @Test
     public void update[c.name/]Test() throws IOException {
         Cookie cookieSessionId = login(username, password);
-        [c.getMinimumDTOName()/] [c.getName()/] = new [c.getMinimumDTOName()/](oraculo.get(0));
+        [c.getBasicDTOName()/] [c.getName()/] = new [c.getBasicDTOName()/](oraculo.get(0));
 
-        [c.getMinimumDTOName()/] [c.getName()/]Changed = factory.manufacturePojo([c.getMinimumDTOName()/].class);
+        [c.getBasicDTOName()/] [c.getName()/]Changed = factory.manufacturePojo([c.getBasicDTOName()/].class);
 
         [for (prop : Property | c.attribute->reject(isID()))]
         [c.getName()/].[prop.setter()/]([c.getName()/]Changed.[prop.getter()/]());
@@ -292,7 +292,7 @@ public class [className/] {
             .request().cookie(cookieSessionId)
             .put(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
 
-        [c.getMinimumDTOName()/] [c.testName()/] = ([c.getMinimumDTOName()/]) response.readEntity([c.getMinimumDTOName()/].class);
+        [c.getBasicDTOName()/] [c.testName()/] = ([c.getBasicDTOName()/]) response.readEntity([c.getBasicDTOName()/].class);
 
         Assert.assertEquals(Ok, response.getStatus());
         [for (prop : Property | c.attribute->reject(isID()))]
@@ -308,7 +308,7 @@ public class [className/] {
     @Test
     public void delete[c.name/]Test() {
         Cookie cookieSessionId = login(username, password);
-        [c.getMinimumDTOName()/] [c.getName()/] = new [c.getMinimumDTOName()/](oraculo.get(0));
+        [c.getBasicDTOName()/] [c.getName()/] = new [c.getBasicDTOName()/](oraculo.get(0));
         Response response = target
             .path([c.getName()/].getId().toString())
             .request().cookie(cookieSessionId).delete();
@@ -337,9 +337,9 @@ import [cl.getModel().baseGroup()/].entities.[cl.getEntityName()/];
 [if (c.getEntityName() <> a.getClass().getEntityName())]
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 [/if]
-import [c.getModel().baseGroup()/].dtos.minimum.[c.getMinimumDTOName()/];
-[if (c.getMinimumDTOName() <> a.getDTOName())]
-import [c.getModel().baseGroup()/].dtos.minimum.[a.getDTOName()/];
+import [c.getModel().baseGroup()/].dtos.detail.[c.getBasicDTOName()/];
+[if (c.getBasicDTOName() <> a.getDTOName())]
+import [c.getModel().baseGroup()/].dtos.detail.[a.getDTOName()/];
 [/if]
 import [c.getModel().baseGroup()/].resources.[c.getJaxRsName()/];
 import [c.getModel().baseGroup()/].tests.Utils;
@@ -644,7 +644,7 @@ father[c.name/]Entity
 [/template]
 
 [template private getDTOName(a : Property)]
-[a.getClass().getMinimumDTOName()/]
+[a.getClass().getBasicDTOName()/]
 [/template]
 
 [template private testName(c : Class)]
