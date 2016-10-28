@@ -64,7 +64,7 @@
         <div class="col-md-10">
         [if (a.type.name='String')]
             <input id="[a.name/]" name="[a.name/]" class="form-control" type="text" ng-model="currentRecord.[a.name/]" ng-required="[a.isRequired()/]" />
-        [elseif (a.type.name='Integer' or a.type.name='Long')]
+        [elseif (a.type.name='Integer' or a.type.name='Long'  or a.type.name='Float')]
             <input id="[a.name/]" name="[a.name/]" class="form-control" type="number" ng-model="currentRecord.[a.name/]" ng-required="[a.isRequired()/]" />
         [elseif (a.type.name='Image')]
             <input id="[a.name/]" name="[a.name/]" class="form-control" type="url" ng-model="currentRecord.[a.name/]" ng-required="[a.isRequired()/]" />
