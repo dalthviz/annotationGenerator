@@ -132,11 +132,11 @@ public class [className/] {
      * @generated
      */
     private void clearData() {
-        [for (a : Property | c.getRelationshipAttributes()->reject(isRelationshipOwner()))]
+        [for (a : Property | c.getRelationshipAttributes()->select(a|not a.isRelationshipOwner() or not a.getOtherEnd().isNavigable()))]
         em.createQuery("delete from [a.getClass().getEntityName()/]").executeUpdate();
         [/for]
         em.createQuery("delete from [c.getEntityName()/]").executeUpdate();
-        [for (a : Property | c.getRelationshipAttributes()->select(isRelationshipOwner()))]
+        [for (a : Property | c.getRelationshipAttributes()->select(a|a.isRelationshipOwner() and a.getOtherEnd().isNavigable()))]
         em.createQuery("delete from [a.getClass().getEntityName()/]").executeUpdate();
         [/for]
     }

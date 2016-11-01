@@ -432,7 +432,7 @@ public class [className/] {
     private UserTransaction utx;
 
     private void clearData() {
-        [if (a.isRelationshipOwner())]
+        [if (a.isRelationshipOwner() and a.getOtherEnd().isNavigable())]
         List<[c.getEntityName()/]> records = em.createQuery("SELECT u FROM [c.getEntityName()/] u").getResultList();
         for ([c.getEntityName()/] record : records) {
             em.remove(record);
