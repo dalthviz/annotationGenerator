@@ -148,6 +148,11 @@ Set{'String','Boolean', 'Date', 'Long', 'Integer', 'Image'}->exists(t | a.type <
 cl.getRelationshipAttributes()->select(a2| a2.name<>a.name and a2.getClass().name=a.getClass().name)->notEmpty()
 /]
 
+[query public has2Relationships(cl : Class) : Boolean =
+cl.getRelationshipAttributes()->select(a| cl.getRelationshipAttributes()->select(
+                            a2 | a.name<>a2.name and a2.getClass().name=a.getClass().name)->notEmpty())->notEmpty()
+/]
+
 [query public hasDateAttribute(c : Class) : Boolean = c.allAttributes()->exists(isDate()) /]
 
 [query public isDate(a : Property) : Boolean = a.type.name = 'Date' /]
