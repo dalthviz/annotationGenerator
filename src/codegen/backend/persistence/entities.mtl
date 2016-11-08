@@ -39,7 +39,7 @@ import javax.persistence.CascadeType;
 [if (c.hasReferences(true))]
 import javax.persistence.FetchType;
 [/if]
-[if (c.has2Relationships())]import javax.persistence.JoinColumn;[/if]
+[if (c.has2Relationships())]import javax.persistence.JoinTable;[/if]
 
 /**
  * @generated
@@ -59,14 +59,11 @@ public class [className/] extends BaseEntity implements Serializable {
     @PodamExclude
     @[a.getJPAAnnotation()/][a.genParameters()/]
     [if (a.has2Relationships(c))]
-    @JoinColumn(nullable = true)
+    @JoinTable(name = "[c.name/]_[a.name.toUpper()/]")
     [/if]
     [if (a.getUpper() = 1)]
     private [a.getClass().getEntityName()/] [a.name/];
     [else]
-    [if (a.isOne2Many() and not a.getOtherEnd().isNavigable())]
-    @JoinColumn(name="[c.name/]_ID")
-    [/if]
     private List<[a.getClass().getEntityName()/]> [a.name/] = new ArrayList<>();
     [/if]
 [/for]
