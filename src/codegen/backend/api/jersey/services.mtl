@@ -239,14 +239,14 @@ public class [className/] {
     /**
      * Obtiene los datos de una instancia de [c.name/] a partir de su ID asociado a un [c.getParentAttribute().getClass().name/]
      *
-     * @param [c.getName()/]Id Identificador de la instancia a consultar
+     * @param [a.getIdVariable()/] Identificador de la instancia a consultar
      * @return Instancia de [c.getBasicDTOName()/] con los datos del [c.name/] consultado
      * @generated
      */
     @GET
-    @Path("{[c.getName()/]Id: \\d+}")
-    public [c.getBasicDTOName()/] get[a.name.toUpperFirst()/](@PathParam("[c.getName()/]Id") Long [c.getName()/]Id) {
-        [c.getEntityName()/] entity = [logic/].get[c.name/]([c.getName()/]Id);
+    @Path("{[a.getIdVariable()/]: \\d+}")
+    public [c.getBasicDTOName()/] get[a.name.toUpperFirst()/](@PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
+        [c.getEntityName()/] entity = [logic/].get[c.name/]([a.getIdVariable()/]);
         if (entity.[c.getParentAttribute().getter()/]() != null && ![parentId/].equals(entity.[c.getParentAttribute().getter()/]().getId())) {
             throw new WebApplicationException(404);
         }
@@ -269,18 +269,18 @@ public class [className/] {
     /**
      * Actualiza la información de una instancia de [c.name/].
      *
-     * @param [c.getName()/]Id Identificador de la instancia de [c.name/] a modificar
+     * @param [a.getIdVariable()/] Identificador de la instancia de [c.name/] a modificar
      * @param dto Instancia de [c.getBasicDTOName()/] con los nuevos datos.
      * @return Instancia de [c.getBasicDTOName()/] con los datos actualizados.
      * @generated
      */
     @PUT
-    @Path("{[c.getName()/]Id: \\d+}")
-    public [c.getBasicDTOName()/] update[a.name.toUpperFirst()/](@PathParam("[c.getName()/]Id") Long [c.getName()/]Id, [c.getBasicDTOName()/] dto) {
+    @Path("{[a.getIdVariable()/]: \\d+}")
+    public [c.getBasicDTOName()/] update[a.name.toUpperFirst()/](@PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/], [c.getBasicDTOName()/] dto) {
         [c.getEntityName()/] entity = dto.toEntity();
-        entity.setId([c.getName()/]Id);
+        entity.setId([a.getIdVariable()/]);
         [if (c.hasSharedAssociations())]
-        [c.getEntityName()/] oldEntity = [logic/].get[c.name/]([c.getName()/]Id);
+        [c.getEntityName()/] oldEntity = [logic/].get[c.name/]([a.getIdVariable()/]);
         [for (a : Property | c.getNonCompositeCollectionAttributes())]
         entity.[a.setter()/](oldEntity.[a.getter()/]());
         [/for]
@@ -295,9 +295,9 @@ public class [className/] {
      * @generated
      */
     @DELETE
-    @Path("{[c.getName()/]Id: \\d+}")
-    public void delete[a.name.toUpperFirst()/](@PathParam("[c.getName()/]Id") Long [c.getName()/]Id) {
-        [logic/].delete[c.name/]([c.getName()/]Id);
+    @Path("[a.getIdVariable()/]: \\d+}")
+    public void delete[a.name.toUpperFirst()/](@PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
+        [logic/].delete[c.name/]([a.getIdVariable()/]);
     }
     [c.genSubResourceLocators()/]
 }
@@ -460,23 +460,23 @@ public void validate[c.name/]Parent(Long [c.getIdVariable()/]){
 [for (a : Property | c.getCompositeCollectionAttributes())]
 
 @Path("{[c.getIdVariable()/]: \\d+}/[a.getURI()/]")
-public Class<[a.getClass().getJaxRsName()/]> get[a.getCompositeResourceClassName()/](@PathParam("[c.getIdVariable()/]") Long [c.getIdVariable()/]){
+public Class<[a.getCompositeResourceClassName()/]> get[a.getCompositeResourceClassName()/](@PathParam("[c.getIdVariable()/]") Long [c.getIdVariable()/]){
     exists[c.name/]([c.getIdVariable()/]);
     [if(c.isChild())]
     validate[c.name/]Parent([c.getIdVariable()/]);
     [/if]
-    return [a.getClass().getJaxRsName()/].class;
+    return [a.getCompositeResourceClassName()/].class;
 }
 [/for]
 [for (a : Property | c.getRelationshipAttributes()->select(isComposite())->select(getUpper() = 1)->asSet())]
 
 @Path("{[c.getIdVariable()/]: \\d+}/[a.getURI()/]")
-public Class<[a.getClass().getJaxRsName()/]> get[a.getCompositeResourceClassName()/](@PathParam("[c.getIdVariable()/]") Long [c.getIdVariable()/]){
+public Class<[a.getCompositeResourceClassName()/]> get[a.getCompositeResourceClassName()/](@PathParam("[c.getIdVariable()/]") Long [c.getIdVariable()/]){
     exists[c.name/]([c.getIdVariable()/]);
     [if(c.isChild())]
     validate[c.name/]Parent([c.getIdVariable()/]);
     [/if]
-    return [a.getClass().getJaxRsName()/].class;
+    return [a.getCompositeResourceClassName()/].class;
 }
 [/for]
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
