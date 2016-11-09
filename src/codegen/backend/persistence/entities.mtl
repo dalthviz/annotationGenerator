@@ -58,7 +58,7 @@ public class [className/] extends BaseEntity implements Serializable {
 
     @PodamExclude
     @[a.getJPAAnnotation()/][a.genParameters()/]
-    [if (a.has2Relationships(c))]
+    [if (a.has2Relationships(c) and not a.isComposite())]
     @JoinTable(name = "[c.name/]_[a.name.toUpper()/]")
     [/if]
     [if (a.getUpper() = 1)]
