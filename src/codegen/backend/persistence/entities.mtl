@@ -40,12 +40,23 @@ import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 [/if]
 [if (c.has2Relationships())]import javax.persistence.JoinTable;[/if]
+[if (c.isFatherGeneralization())]
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+[elseif(c.isGeneralization())]
+import javax.persistence.PrimaryKeyJoinColumn;
+[/if]
 
 /**
  * @generated
  */
 @Entity
-public class [className/] extends BaseEntity implements Serializable {
+[if (c.isFatherGeneralization())]
+@Inheritance(strategy=InheritanceType.JOINED)
+[elseif(c.isGeneralization())]
+@PrimaryKeyJoinColumn(name="[c.generalization.general.name/]_ID")
+[/if]
+public class [className/] extends [if(c.isGeneralization())][c.getGeneralizationClass().getEntityName()/][else]BaseEntity[/if] implements Serializable {
 [for (a : Property | c.allAttributes()->reject(isID() or isName()))]
 
     [if (a.isDate())]

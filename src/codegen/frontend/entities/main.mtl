@@ -19,14 +19,20 @@
     mod.constant('[c.getEntityModel()/]', {
         name: '[c.getName()/]',
         displayName: '[c.getDisplayName()/]',
-		url: '[c.getURI()/]',
+        url: '[c.getURI()/]',
         fields: {
             [for (a : Property | c.getAllAttribs()) separator(',\n')]
             [a.name/]: {
                 displayName: '[a.getDisplayName()/]',
                 type: '[a.type.name/]',
                 required: [a.isRequired()/]
-            }[/for][for (a : Property | c.getReferences(false)->reject(isComposite()))],
+            }[/for][if(c.isGeneralization())][for (a : Property | c.getGeneralizationClass().getAllAttribs())]
+            [if (a.existAttribute(c)=false)],
+            [a.name/]: {
+                displayName: '[a.getDisplayName()/]',
+                type: '[a.type.name/]',
+                required: [a.isRequired()/]
+            }[/if][/for][/if][for (a : Property | c.getReferences(false)->reject(isComposite()))],
             [a.name/]: {
                 displayName: '[a.getDisplayName()/]',
                 type: 'Reference',
@@ -371,4 +377,8 @@ instance/
 
 [query protected getOwner(a : Property) : Class = 
 a.getOtherEnd().getClass()
+/]
+
+[query public existAttribute(a : Property, cl : Class) : Boolean = 
+cl.allAttributes()->select(a1 | a1.name=a.name)->notEmpty()
 /]

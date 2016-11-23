@@ -66,6 +66,16 @@ public class [className/] extends CrudPersistence<[c.getEntityName()/]> {
         return q.getResultList();
     }
 [/if]
+
+[if(c.isGeneralization())]
+    @Override
+    public [c.getEntityName()/] find(Long [c.generalization.general.name.toLowerCase()/]_id) {
+        TypedQuery<[c.getEntityName()/]> q = em.createQuery("select p from [c.getEntityName()/] p where (p.id = :[c.generalization.general.name.toLowerCase()/]_id) ", [c.getEntityName()/].class);
+        q.setParameter("[c.generalization.general.name.toLowerCase()/]_id", [c.generalization.general.name.toLowerCase()/]_id);
+        return q.getSingleResult();
+    }
+[/if]
+
 }
 [/file]
 [/template]

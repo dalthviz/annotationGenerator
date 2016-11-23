@@ -29,14 +29,25 @@ import co.edu.uniandes.csw.crud.api.podam.strategy.DateStrategy;
  * @generated
  */
 @XmlRootElement
-public class [className/] implements Serializable{
+public class [className/] [if(c.isGeneralization())] extends [c.getGeneralizationClass().getMinimumDTOName()/][/if] implements Serializable{
 
+[if(c.isGeneralization())]
+[for(a : Property | c.getGeneralizationClass().allAttributes())]
+    [if (a.existAttribute(c)=false)]
+    [if(a.isDate())]
+    @PodamStrategyValue(DateStrategy.class)
+    [/if]
+    private [a.type.name/] [a.name/];
+    [/if]
+[/for]
+[/if]
 [for(a : Property | c.allAttributes())]
     [if(a.isDate())]
     @PodamStrategyValue(DateStrategy.class)
     [/if]
     private [a.type.name/] [a.name/];
 [/for]
+
 
     /**
      * @generated
@@ -52,6 +63,13 @@ public class [className/] implements Serializable{
      */
     public [className/]([c.getEntityName()/] entity) {
 	   if (entity!=null){
+    [if(c.isGeneralization())]
+    [for(a : Property | c.getGeneralizationClass().allAttributes())]
+        [if (a.existAttribute(c)=false)]
+        this.[a.name/]=entity.[a.getter()/]();
+        [/if]
+    [/for]
+    [/if]
     [for(a : Property | c.allAttributes())]
         this.[a.name/]=entity.[a.getter()/]();
 	[/for]
@@ -66,6 +84,13 @@ public class [className/] implements Serializable{
      */
     public [c.getEntityName()/] toEntity() {
         [c.getEntityName()/] entity = new [c.getEntityName()/]();
+    [if(c.isGeneralization())]
+    [for(a : Property | c.getGeneralizationClass().allAttributes())]
+        [if (a.existAttribute(c)=false)]
+        entity.[a.setter()/](this.[a.getter()/]());
+        [/if]
+    [/for]
+    [/if]
 	[for(a : Property | c.allAttributes())]
         entity.[a.setter()/](this.[a.getter()/]());
 	[/for]
@@ -94,6 +119,32 @@ public class [className/] implements Serializable{
     }
 
 [/for]
+
+[if(c.isGeneralization())]
+    [for(a : Property | c.getGeneralizationClass().allAttributes())]
+        [if (a.existAttribute(c)=false)]
+    /**
+     * Obtiene el atributo [a.name/].
+     *
+     * @return atributo [a.name/].
+     * @generated
+     */
+    public [a.type.name/] [a.getter()/]() {
+        return [a.name/];
+    }
+
+    /**
+     * Establece el valor del atributo [a.name/].
+     *
+     * @param [a.name.toLower()/] nuevo valor del atributo
+     * @generated
+     */
+    public void [a.setter()/]([a.type.name/] [a.name.toLower()/]) {
+        this.[a.name/] = [a.name.toLower()/];
+    }
+        [/if]
+    [/for]
+[/if]
 }
 [/file]
 [/template]
@@ -191,3 +242,7 @@ public class [className/] extends [c.getMinimumDTOName()/]{
 }
 [/file]
 [/template]
+
+[query public existAttribute(a : Property, cl : Class) : Boolean = 
+cl.allAttributes()->select(a1 | a1.name=a.name)->notEmpty()
+/]

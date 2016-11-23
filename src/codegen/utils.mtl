@@ -153,6 +153,14 @@ cl.getRelationshipAttributes()->select(a| cl.getRelationshipAttributes()->select
                             a2 | a.name<>a2.name and a2.getClass().name=a.getClass().name)->notEmpty())->notEmpty()
 /]
 
+[query public isFatherGeneralization(cl : Class) : Boolean = 
+Class.allInstances()->select(c | c.isGeneralization() and c.generalization->select(g | g.general.name=cl.name)->notEmpty())->notEmpty()
+/]
+
+[query public isGeneralization(cl : Class) : Boolean =
+cl.generalization->notEmpty()
+/]
+
 [query public hasDateAttribute(c : Class) : Boolean = c.allAttributes()->exists(isDate()) /]
 
 [query public isDate(a : Property) : Boolean = a.type.name = 'Date' /]
@@ -168,6 +176,10 @@ cl.getRelationshipAttributes()->select(a| cl.getRelationshipAttributes()->select
 [query public setter(a : Property) : String = 'set'.concat(a.name.toUpperFirst()) /]
 
 [query public getClass(a : Property) : Class = Class.allInstances()->any(c | c.name = a.type.name) /]
+
+[query public getGeneralizationClass(cl : Class) : Class = 
+Class.allInstances()->select(c | cl.generalization->select(g | g.general.name=c.name)->notEmpty())->asSequence()->first()
+/]
 
 [query public isRequired(a : Property) : Boolean = self.getLower() > 0 /]
 
