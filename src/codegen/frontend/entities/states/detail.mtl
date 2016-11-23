@@ -102,6 +102,7 @@
 </header>
 <div  class="container-fluid well">
     <div class="col-md-12">
+    [if(c.isGeneralization())]
     [for (a : Property | c.getGeneralizationClass().allAttributes()->reject(isID()))]
         [if (a.existAttribute(c)=false)]
         <p>
@@ -110,6 +111,7 @@
         </p>
         [/if]
     [/for]
+    [/if]
     [for (a : Property | c.allAttributes()->reject(isID()))]
         <p>
             <label><strong>[a.name.toUpperFirst()/]: </strong></label>
