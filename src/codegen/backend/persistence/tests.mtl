@@ -164,7 +164,7 @@ public class [className/] {
 
         [c.getEntityName()/] entity = em.find([c.getEntityName()/].class, result.getId());
 
-        [for (a : Property | c.getAllAttribs())]
+        [for (a : Property | c.getAllAttribs()->reject(a2| c.isGeneralization() and a2.existAttribute(c.getGeneralizationClass())))]
 		[if (not a.isDate())]
         Assert.assertEquals(newEntity.[a.getter()/](), entity.[a.getter()/]());
 		[/if]
@@ -201,7 +201,7 @@ public class [className/] {
         [c.getEntityName()/] entity = data.get(0);
         [c.getEntityName()/] newEntity = [bean/].find(entity.[c.getParentAttribute().getter()/]().getId(), entity.getId());
         Assert.assertNotNull(newEntity);
-        [for (a : Property | c.getAllAttribs())]
+        [for (a : Property | c.getAllAttribs()->reject(a2| c.isGeneralization() and a2.existAttribute(c.getGeneralizationClass())))]
         Assert.assertEquals(entity.[a.getter()/](), newEntity.[a.getter()/]());
         [/for]
     }
@@ -236,7 +236,7 @@ public class [className/] {
 
         [c.getEntityName()/] resp = em.find([c.getEntityName()/].class, entity.getId());
 
-        [for (a : Property | c.getAllAttribs())]
+        [for (a : Property | c.getAllAttribs()->reject(a2| c.isGeneralization() and a2.existAttribute(c.getGeneralizationClass())))]
 		[if (not a.isDate())]
         Assert.assertEquals(newEntity.[a.getter()/](), resp.[a.getter()/]());
 		[/if]
@@ -258,7 +258,7 @@ public class [className/] {
 
         [c.getEntityName()/] entity = em.find([c.getEntityName()/].class, result.getId());
 
-        [for (a : Property | c.getAllAttribs())]
+        [for (a : Property | c.getAllAttribs()->reject(a2| c.isGeneralization() and a2.existAttribute(c.getGeneralizationClass())))]
         [if (not a.isDate())]
         Assert.assertEquals(newEntity.[a.getter()/](), entity.[a.getter()/]());
         [/if]
@@ -295,7 +295,7 @@ public class [className/] {
         [c.getEntityName()/] entity = data.get(0);
         [c.getEntityName()/] newEntity = [bean/].find(entity.getId());
         Assert.assertNotNull(newEntity);
-        [for (a : Property | c.getAllAttribs())]
+        [for (a : Property | c.getAllAttribs()->reject(a2| c.isGeneralization() and a2.existAttribute(c.getGeneralizationClass())))]
         Assert.assertEquals(entity.[a.getter()/](), newEntity.[a.getter()/]());
         [/for]
     }
@@ -330,7 +330,7 @@ public class [className/] {
 
         [c.getEntityName()/] resp = em.find([c.getEntityName()/].class, entity.getId());
 
-        [for (a : Property | c.getAllAttribs())]
+        [for (a : Property | c.getAllAttribs()->reject(a2| c.isGeneralization() and a2.existAttribute(c.getGeneralizationClass())))]
         [if (not a.isDate())]
         Assert.assertEquals(newEntity.[a.getter()/](), resp.[a.getter()/]());
         [/if]
@@ -346,3 +346,7 @@ public class [className/] {
 [template private getPersistenceTestName(c : Class)]
 [c.name.concat('PersistenceTest')/]
 [/template]
+
+[query public existAttribute(a : Property, cl : Class) : Boolean = 
+cl.allAttributes()->select(a1 | a1.name=a.name)->notEmpty()
+/]

@@ -23,6 +23,12 @@ import java.io.Serializable;
 import java.util.Date;
 import uk.co.jemos.podam.common.PodamStrategyValue;
 import co.edu.uniandes.csw.crud.api.podam.strategy.DateStrategy;
+[elseif(c.isGeneralization())]
+[if (c.getGeneralizationClass().hasDateAttribute())]
+import java.util.Date;
+import uk.co.jemos.podam.common.PodamStrategyValue;
+import co.edu.uniandes.csw.crud.api.podam.strategy.DateStrategy;
+[/if]
 [/if]
 
 /**

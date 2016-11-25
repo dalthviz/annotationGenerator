@@ -22,6 +22,9 @@ import co.edu.uniandes.csw.crud.spi.persistence.CrudPersistence;
 import java.util.List;
 import javax.persistence.TypedQuery;
 [/if]
+[if(c.isGeneralization() and c.isChild()=false)]
+import javax.persistence.TypedQuery;
+[/if]
 
 /**
  * @generated
