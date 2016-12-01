@@ -89,8 +89,8 @@ public class [className/] implements [c.getAPIName()/] {
     private [c.getParentAttribute().getClass().getAPIName()/] [c.getParentAttribute().getClass().getBeanLower()/];
     [/if]
 
-    [for (a : Property | c.getNonCompositeCollectionAttributes()->reject(isRelationshipOwner()))]
-    @Inject private [a.getClass().getAPIName()/] [a.getClass().getBeanLower()/];
+    [for (cl : Class | c.getNonCompositeCollectionAttributes()->reject(isRelationshipOwner())->collect(a| a.getClass())->asOrderedSet())]
+    @Inject private [cl.getAPIName()/] [cl.getBeanLower()/];
 
     [/for]
     /**
