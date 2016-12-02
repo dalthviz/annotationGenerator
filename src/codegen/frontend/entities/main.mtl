@@ -26,8 +26,8 @@
                 displayName: '[a.getDisplayName()/]',
                 type: '[a.type.name/]',
                 required: [a.isRequired()/]
-            }[/for][if(c.isGeneralization())][for (a : Property | c.getGeneralizationClass().getAllAttribs())]
-            [if (a.existAttribute(c)=false)],
+            }[/for][if(c.isGeneralization())][if(c.getAllAttribs()->notEmpty())],[/if][for (a : Property | c.getGeneralizationClass().getAllAttribs()) separator(',\n')]
+            [if (a.existAttribute(c)=false)]
             [a.name/]: {
                 displayName: '[a.getDisplayName()/]',
                 type: '[a.type.name/]',
