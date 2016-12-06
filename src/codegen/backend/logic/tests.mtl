@@ -83,11 +83,12 @@ public class [className/] {
      */
     private List<[c.getEntityName()/]> data = new ArrayList<[c.getEntityName()/]>();
     [for (a : Property | c.getRelationshipAttributes()->reject(isComposite()))]
-
+    [if(c.name <> a.getClass().name)]
     /**
      * @generated
      */
     private List<[a.getClass().getEntityName()/]> [a.getListVar()/] = new ArrayList<>();
+    [/if]
     [/for]
 
     /**
@@ -200,7 +201,7 @@ public class [className/] {
 
             em.persist(entity);
             data.add(entity);
-            [for (a : Property | c.getRelationshipAttributes()->reject(isComposite() or isRelationshipOwner()))]
+            [for (a : Property | c.getRelationshipAttributes()->reject(isComposite() or isRelationshipOwner() or isOne2One()))]
 
             [if (a.getOtherEnd().getUpper() = 1)]
             if (i == 0) {
@@ -274,7 +275,9 @@ public class [className/] {
     public void delete[c.name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
         [for (a : Property | c.getNonCompositeCollectionAttributes())]
+        [if(c.name <> a.getClass().name)]
         [bean/].remove[a.name.toUpperFirst()/](entity.getId(), [a.getListVar()/].get(0).getId());
+        [/if]
         [/for]
         [bean/].delete[c.name/](entity.getId());
         [c.getEntityName()/] deleted = em.find([c.getEntityName()/].class, entity.getId());
@@ -363,7 +366,9 @@ public class [className/] {
     public void delete[c.name/]Test() {
         [c.getEntityName()/] entity = data.get(0);
         [for (a : Property | c.getNonCompositeCollectionAttributes())]
+        [if(c.name <> a.getClass().name)]
         [bean/].remove[a.name.toUpperFirst()/](entity.getId(), [a.getListVar()/].get(0).getId());
+        [/if]
         [/for]
         [bean/].delete[c.name/](entity.getId());
         [c.getEntityName()/] deleted = em.find([c.getEntityName()/].class, entity.getId());
@@ -391,7 +396,7 @@ public class [className/] {
         [/for]
     }
 [/if]
-    [for (a : Property | c.getNonCompositeCollectionAttributes())]
+    [for (a : Property | c.getNonCompositeCollectionAttributes()->reject(at | c.name=at.getClass().name))]
 
     /**
      * Prueba para obtener una instancia de [a.name.toUpperFirst()/] asociada a una instancia [c.name/]
