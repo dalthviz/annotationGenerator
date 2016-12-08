@@ -6,7 +6,15 @@
 [import ::utils /]
 
 [template public generate(m : Model)]
-    [comment @main/]
+[comment @main 
+Modulos a generar:
+all
+front
+rest_back
+rest_mock
+doc_rest
+/]
+[if (m.valueOf('generate')='all' or m.valueOf('generate')='front' or m.valueOf('generate')=null)]
     [m.genDevEnv(m.getWebArtifactId().concat('/'))/]
 	[m.genCommon(m.getWebRoot())/]
     [m.mainSeleniumTests(m.getApiArtifactId().concat(m.baseTestPath()))/]
@@ -16,6 +24,7 @@
     	[c.genModules(m.getWebRoot())/]
         [/if]
     [/for]
+[/if]
 [/template]
 
 [template public getWebRoot(m : Model)]
