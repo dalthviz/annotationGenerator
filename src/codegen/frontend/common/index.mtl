@@ -112,13 +112,16 @@
         <script src="bower_components/checklist-model/checklist-model.js"></script>
         <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
         <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-        <script src="bower_components/csw-ng-auth/dist/csw-ng-auth.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
 
         <!-- build:js(<%= meta.src %>) scripts/scripts.js -->
         <!-- include: "type": "js", "files": "<%= meta.includeJsFiles %>" -->
         <script src="src/app.js"></script>
+        <script src="src/modules/login/js/auth.mod.js"></script>
+        <script src="src/modules/login/js/auth.ctrl.js"></script>
+        <script src="src/modules/login/js/auth.dir.js"></script>
+        <script src="src/modules/login/js/auth.svc.js"></script>
         [for (c : Class | m.getClasses())]
         [if(c.isAbstract=false)]
         <script src="src/modules/[c.getName()/]/[c.getName()/].mod.js"></script>

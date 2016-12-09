@@ -3,9 +3,11 @@
 [import frontend::common::index /]
 [import frontend::common::devenv /]
 [import frontend::common::netbeans /]
+[import frontend::common::login /]
 
 [template public genCommon(m : Model, path : String)]
     [m.indexMain(path)/]
+    [m.genLogin(path)/]
 [/template]
 
 [template public genDevEnv(m : Model, path : String)]
