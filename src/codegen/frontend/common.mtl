@@ -8,6 +8,7 @@
 
 [template public genCommon(m : Model, path : String)]
     [m.indexMain(path)/]
+    [m.genLogin(path)/]
     [m.genDirectives(path)/]
 [/template]
 
