@@ -18,6 +18,13 @@
 
 [template public genCtrl(path : String)]
 [file (path.concat('auth.ctrl.js'), false, 'UTF-8')]
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+(function (ng) {
+
     var mod = ng.module('authModule');
 
     mod.controller('authController', ['['/]'$scope', 'authService', function ($scope, authSvc) {
@@ -81,7 +88,6 @@
                     $scope.loading = true;
                     authSvc.login(user).then(function (data) {
                     }, function (data) {
-                        alert("error");
                         self.showError(data.data);
                     }).finally(function () {
                         $scope.loading = false;
@@ -155,13 +161,6 @@
 
 [template public genDir(path : String)]
 [file (path.concat('auth.dir.js'), false, 'UTF-8')]
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-(function (ng) {
-
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
