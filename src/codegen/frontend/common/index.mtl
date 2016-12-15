@@ -166,7 +166,7 @@
                             <ul class="nav navbar-nav">
                                 [for (c : Class | m.getRootClasses())]
                                 [if(c.isAbstract=false)]
-                                <li><a ui-sref="[c.getListStateName()/]">[c.getDisplayName()/]</a></li>
+                                <li><a ui-sref="[c.getListStateName()/]({page: 1, limit: 15})">[c.getDisplayName()/]</a></li>
                                 [/if]
                                 [/for]
                             </ul>
