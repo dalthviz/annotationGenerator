@@ -150,9 +150,9 @@ public class [className/] extends [if(c.isGeneralization())][c.getGeneralization
 
 [template protected genParameters(a : Property)]
 [if (a.isOne2One() and a.isComposite())]
-(mappedBy = "[a.getOtherEnd().name/]", cascade = CascadeType.ALL, orphanRemoval = true)[elseif (a.isOne2One() and not a.isComposite())]
+(mappedBy = "[a.getOtherEnd().name/]", cascade = CascadeType.REMOVE)[elseif (a.isOne2One() and not a.isComposite())]
 (fetch=FetchType.LAZY)[elseif (not a.isRelationshipOwner() and a.isComposite())]
-(mappedBy = "[a.getOtherEnd().name/]", cascade = CascadeType.ALL, orphanRemoval = true)[elseif (not a.isRelationshipOwner())]
+(mappedBy = "[a.getOtherEnd().name/]", cascade = CascadeType.REMOVE)[elseif (not a.isRelationshipOwner())]
 (mappedBy = "[a.getOtherEnd().name/]")[elseif (a.isComposite())] 
 (cascade = CascadeType.ALL, orphanRemoval = true)[/if]
 [/template]
