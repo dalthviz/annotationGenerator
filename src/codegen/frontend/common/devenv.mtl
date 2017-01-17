@@ -59,7 +59,7 @@
 [template protected genBowerJson(m : Model, path : String)]
 [file (path.concat('bower.json'), false, 'UTF-8')]
 {
-    "name": "[m.name/]",
+    "name": "[m.name.toLower()/]",
     "license": "MIT",
     "dependencies": {
         "bootstrap": "^3.3.5",
