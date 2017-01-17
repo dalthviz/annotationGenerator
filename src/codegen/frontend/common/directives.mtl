@@ -14,6 +14,7 @@
 [m.genListTemplate(path.concat('src/modules/directives/templates/'))/]
 [m.genModalTemplate(path.concat('src/modules/directives/templates/'))/]
 [m.genMoveListTemplate(path.concat('src/modules/directives/templates/'))/]
+[m.genDataTableTemplate(path.concat('src/modules/directives/templates/'))/]
 [m.genSearchTemplate(path.concat('src/modules/directives/templates/'))/]
 [m.genToolBarTemplate(path.concat('src/modules/directives/templates/'))/]
 [/template]
@@ -86,6 +87,79 @@
             }]
         };
     }]);
+
+    /**
+     * @ngdoc directive
+     * @name ngCrud.directive:datatable
+     * @priority 0
+     * @restrict E
+     * @scope
+     * 
+     * @param {array} records Array with records to display
+     * @param {object} fields definition of the fields
+     * @param {object} actions Actions available per record
+     * 
+     * @description 
+     * 
+     * Creates a table showing the registered fields for every record in <strong>records</strong>
+     * 
+     */
+    mod.directive('datatable', ['['/]'CrudTemplatesDir', function (tplDir) {
+            return {
+                scope: {
+                    records: '=*',
+                    fields: '=*',
+                    actions: '=*?'
+                },
+                restrict: 'E',
+                templateUrl: tplDir + 'dataTable.tpl.html',
+                controller: ['['/]'$scope', function ($scope) {
+                        // Grid header definitions
+                        var columnDefsValues = ['['/]];
+                        angular.forEach($scope.fields, function (value, key)
+                        {
+                            if (value.listDisplay === undefined || value.listDisplay)
+                            {
+                                var recordValue = key;
+                                if (value.model !== undefined)
+                                {
+                                    recordValue = (value.model + '.name').replace("Model", "");
+                                }
+                                this.push({name: value.displayName, field: recordValue, enableFiltering: (value.enableFiltering === undefined || value.enableFiltering), minWidth: (value.displayName.length * 40)});
+                            }
+                        }, columnDefsValues);
+                        
+                        // Grid row actions definitions
+            var columnActionsValues = ['['/]];
+            angular.forEach($scope.actions, function(value, key) 
+            {
+                this.push('<button class="btn btn-default btn-sm" type="button" ng-hide="grid.appScope.actions.' + key + '.show && !grid.appScope.actions.' + key + '.show(row.entity)" ng-click="grid.appScope.actions.' + key + '.fn(row.entity)"><span class="glyphicon glyphicon-' + value.icon + '"></span> <md-tooltip>' + value.displayName  + '</md-tooltip></button>');
+            }, columnActionsValues);
+            
+            columnDefsValues.push({name:'Acciones', cellTemplate: '<div>' + columnActionsValues.join(" " ) + '</div>', enableFiltering:false, enableSorting: false, pinnedRight:true, width:250 });
+            
+            
+            $scope.gridOptions  = 
+            {                
+                useExternalPagination: true,
+                useExternalSorting: false,
+                enablePinning:true,
+                enableColumnResizing: true,
+                exporterMenuCsv: true,
+                enableGridMenu: true,
+                enableFiltering: true,
+                enableSorting: true,
+                columnDefs: columnDefsValues,
+                data : $scope.records,
+                totalItems :  $scope.records.totalRecords
+            }; 
+            
+            
+                    }]
+            };
+            
+            
+        }]);
 
     /**
      * @ngdoc directive
@@ -532,6 +606,14 @@
     </table>
 </div>
 
+[/file]
+[/template]
+
+[template public genDataTableTemplate(path : String)]
+[file (path.concat('dataTable.tpl.html'), false, 'UTF-8')]
+<div>
+    <div id="mainGridList" ui-grid="gridOptions" class="grid" ui-grid-move-columns ui-grid-pinning ui-grid-exporter   ui-grid-selection ui-grid-auto-resize></div>
+</div>
 [/file]
 [/template]
 

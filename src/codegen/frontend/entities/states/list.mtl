@@ -108,7 +108,19 @@
 <header>
     <toolbar name="model.name" display-name="model.displayName" actions='actions'></toolbar>
 </header>
+[comment  
+Tipos de lista (typeList):
+list
+gallery
+dataTable
+/]
+[if (c.valueOf('typeList')='list')]
 <list-records fields="model.fields" records="records" actions="recordActions"></list-records>
+[elseif (c.valueOf('typeList')='gellery')]
+<gallery fields="model.fields" records="records" actions="recordActions"></gallery>
+[elseif (c.valueOf('typeList')='dataTable')]
+<datatable fields="model.fields" records="records" actions="recordActions" ></datatable>
+[/if]
 <pagination ng-if="ctrl.itemsPerPage < ctrl.totalItems"
             total-items="ctrl.totalItems"
             max-size="5"

@@ -19,6 +19,7 @@
         //'ngCrudMock',
         'ngCrud',
         'ui.router',
+        'ui.grid',
         [for (c : Class | m.getClasses())]
         [if(c.isAbstract=false)]
         '[c.getModule()/]',
@@ -89,6 +90,7 @@
         <!-- build:css(<%= meta.src %>) styles/vendor.css -->
         <!-- bower:css -->
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css" type="text/css">
         <!-- endbower -->
         <!-- endbuild -->
 
@@ -110,6 +112,10 @@
         <script src="bower_components/checklist-model/checklist-model.js"></script>
         <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
         <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+        <script src="bower_components/pdfmake/build/pdfmake.min.js"></script>
+        <script src="bower_components/angular-ui-grid/ui-grid.min.js"></script>
+        <script src="bower_components/angular-touch/angular-touch.min.js"></script>
+        <script src="bower_components/angular-animate/angular-animate.min.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
 
