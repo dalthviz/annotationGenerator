@@ -30,7 +30,9 @@
     mod.controller('authController', ['['/]'$scope', 'authService', function ($scope, authSvc) {
             $scope.alerts = ['['/]];
             $scope.roles = authSvc.getRoles();
-            authSvc.userAuthenticated().then(function (data) {
+            
+            authSvc.userAuthenticated().then(function (data) {             
+                $scope.permissions = data.data.permissions;
                 $scope.currentUser = data.data;
                 if ($scope.currentUser !== "" && !$scope.menuitems) {
                     $scope.setMenu($scope.currentUser);
@@ -38,17 +40,16 @@
             });
             $scope.loading = false;
             $scope.$on('logged-in', function (events, user) {
-                $scope.currentUser = user;
+                $scope.currentUser = user;     
                 $scope.setMenu($scope.currentUser);
             });
-
             $scope.setMenu = function (user) {
-                $scope.menuitems = ['['/]];
+                $scope.menuitems = ['['/]];      
                 for (var rol in $scope.roles) {
                     if (user.roles.indexOf(rol) !== -1) {
-                        for (var menu in $scope.roles['['/]rol]) {
-                            if ($scope.menuitems.indexOf($scope.roles['['/]rol]['['/]menu]) === -1) {
-                                $scope.menuitems.push($scope.roles['['/]rol]['['/]menu]);
+                        for (var menu in $scope.roles['['/]rol]) {                       
+                            if ($scope.menuitems.indexOf($scope.roles['['/]rol]['['/]menu]) === -1) {                          
+                                $scope.menuitems.push($scope.roles['['/]rol]['['/]menu]);                                
                             }
                         }
                     }
@@ -155,6 +156,7 @@
         }]);
 
 })(window.angular);
+
 
 [/file]
 [/template]
@@ -300,8 +302,35 @@
         };
 
         //Default Roles
-        var roles = {};
-
+        var roles = {
+            admin:{
+                administrador:{
+                state:"artistList",
+                icon:"list",
+                label:"administrador",
+                options:['['/]"create","edit","delete"]
+            },
+             artist:{        
+                state:"artistList",
+                icon:"list",
+                label:"artista",
+                options:['['/]"create","edit","delete"]
+                }
+            },
+            artist:{
+                   artista:{        
+                state:"artistList",
+                icon:"list",
+                label:"artista"
+                }
+            },
+            client:
+                    {
+                state:"cliente"
+            }
+            };
+        
+         
         this.setValues = function (newValues) {
             values = ng.extend(values, newValues);
         };
@@ -318,27 +347,37 @@
             roles = newRoles;
         };
 
-        this.$get = ['['/]'$state', '$http','$rootScope', function ($state, $http, $rootScope) {
+        this.$get = ['['/]'$state', '$http','$rootScope','$cookies','Restangular', function ($state, $http, $rootScope,$cookies,Restangular) {
             return {
                 getRoles: function(){
                     return roles;
                 },
                 login: function (user) {
                     return $http.post(values.apiUrl+values.loginURL, user).then(function (response) {
-                        $rootScope.$broadcast('logged-in', response.data);
+                        $rootScope.$broadcast('logged-in', response.data);        
+                        $cookies.put("id_token",response.headers("id_token"));
+                        $cookies.put("username",user.userName);
+                        var permissions = JSON.stringify(response.data.permissions);
+                        $cookies.put("permissions",permissions);
                         $state.go(values.successState);
+                      
                     });
                 },
                 getConf: function () {
                     return values;
                 },
                 logout: function () {
+                    
                     return $http.get(values.apiUrl+values.logoutURL).then(function () {
                         $rootScope.$broadcast('logged-out');
+                        $cookies.remove("id_token");
+                        $cookies.remove("username");
+                        $cookies.remove("permissions");
                         $state.go(values.logoutRedirectState);
                     });
                 },
                 register: function (user) {
+                    
                     return $http.post(values.apiUrl+values.registerURL, user).then(function (data) {
                         $state.go(values.loginState);
                     });
@@ -361,6 +400,7 @@
                     $state.go(values.loginState);
                 },
                 goToSuccess: function () {
+                    
                     $state.go(values.successState);
                 },
                 goToForbidden: function(){
