@@ -97,6 +97,7 @@ public class [className/] {
                         .withTransitivity().asFile())
                 // Se agregan los compilados de los paquetes de servicios
                 .addPackage([c.getJaxRsName()/].class.getPackage())
+                .addPackage("co.edu.uniandes.csw.auth.properties")
                 // El archivo que contiene la configuracion a la base de datos.
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
                 // El archivo beans.xml es necesario para injeccion de dependencias.
@@ -195,18 +196,18 @@ public class [className/] {
      * @return Cookie con información de la sesión del usuario
      * @generated
      */
-    public Cookie login(String username, String password) {
+   public String login() throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException { 
+        auth=new AuthenticationApi();
         UserDTO user = new UserDTO();
-        user.setUserName(username);
-        user.setPassword(password);
-        user.setRememberMe(true);
-        Response response = createWebTarget().path("users").path("login").request()
-                .post(Entity.entity(user, MediaType.APPLICATION_JSON));
-        if (response.getStatus() == Ok) {
-            return response.getCookies().get(JWT.cookieName);
-        } else {
-            return null;
-        }
+        user.setUserName(auth.getProp().getProperty("username").trim());
+        user.setPassword(auth.getProp().getProperty("password").trim());
+        JSONObject json = new JSONObject(auth.authenticationToken(user).getBody()); 
+        return (String)json.get("id_token");
+    }
+   
+    public String getUsername() throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException{
+     auth=new AuthenticationApi();
+    return auth.getProp().getProperty("username").trim();
     }
 
     /**
@@ -217,10 +218,12 @@ public class [className/] {
     @Test
     public void create[c.name/]Test() throws IOException {
         [c.getBasicDTOName()/] [c.getName()/] = factory.manufacturePojo([c.getBasicDTOName()/].class);
-        Cookie cookieSessionId = login(username, password);
+        String token= login();
 
         Response response = target
-            .request().cookie(cookieSessionId)
+            .request()
+             .cookie("username",getUsername())
+             .cookie("id_token",token)
             .post(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
 
         [c.getBasicDTOName()/]  [c.testName()/] = ([c.getBasicDTOName()/]) response.readEntity([c.getBasicDTOName()/].class);
@@ -242,11 +245,14 @@ public class [className/] {
      */
     @Test
     public void get[c.name/]ByIdTest() {
-        Cookie cookieSessionId = login(username, password);
+        String token= login();
 
         [c.getBasicDTOName()/] [c.testName()/] = target
             .path(oraculo.get(0).getId().toString())
-            .request().cookie(cookieSessionId).get([c.getBasicDTOName()/].class);
+            .request()
+            .cookie("username",getUsername())
+            .cookie("id_token",token)
+            .get([c.getBasicDTOName()/].class);
         
         [for (prop : Property | c.attribute)]
         Assert.assertEquals([c.testName()/].[prop.getter()/](), oraculo.get(0).[prop.getter()/]());
@@ -260,10 +266,13 @@ public class [className/] {
      */
     @Test
     public void list[c.name/]Test() throws IOException {
-        Cookie cookieSessionId = login(username, password);
+         String token= login();
 
         Response response = target
-            .request().cookie(cookieSessionId).get();
+            .request()
+            .cookie("username",getUsername())
+            .cookie("id_token",token)
+            .get();
 
         String list[c.name/] = response.readEntity(String.class);
         List<[c.getBasicDTOName()/]> list[c.name/]Test = new ObjectMapper().readValue(list[c.name/], List.class);
@@ -278,7 +287,7 @@ public class [className/] {
      */
     @Test
     public void update[c.name/]Test() throws IOException {
-        Cookie cookieSessionId = login(username, password);
+        String token= login();
         [c.getBasicDTOName()/] [c.getName()/] = new [c.getBasicDTOName()/](oraculo.get(0));
 
         [c.getBasicDTOName()/] [c.getName()/]Changed = factory.manufacturePojo([c.getBasicDTOName()/].class);
@@ -289,7 +298,9 @@ public class [className/] {
 
         Response response = target
             .path([c.getName()/].getId().toString())
-            .request().cookie(cookieSessionId)
+            .request()
+            .cookie("username",getUsername())
+            .cookie("id_token",token)
             .put(Entity.entity([c.getName()/], MediaType.APPLICATION_JSON));
 
         [c.getBasicDTOName()/] [c.testName()/] = ([c.getBasicDTOName()/]) response.readEntity([c.getBasicDTOName()/].class);
@@ -307,11 +318,14 @@ public class [className/] {
      */
     @Test
     public void delete[c.name/]Test() {
-        Cookie cookieSessionId = login(username, password);
+        String token= login();
         [c.getBasicDTOName()/] [c.getName()/] = new [c.getBasicDTOName()/](oraculo.get(0));
         Response response = target
             .path([c.getName()/].getId().toString())
-            .request().cookie(cookieSessionId).delete();
+            .request()
+            .cookie("username",getUsername())
+            .cookie("id_token",token)
+            .delete();
 
         Assert.assertEquals(OkWithoutContent, response.getStatus());
     }
@@ -414,12 +428,11 @@ public class [className/] {
                         .withTransitivity().asFile())
                 // Se agregan los compilados de los paquetes de servicios
                 .addPackage([c.getJaxRsName()/].class.getPackage())
+                .addPackage("co.edu.uniandes.csw.auth.properties")
                 // El archivo que contiene la configuracion a la base de datos.
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
                 // El archivo beans.xml es necesario para injeccion de dependencias.
                 .addAsWebInfResource(new File("src/main/webapp/WEB-INF/beans.xml"))
-                // El archivo shiro.ini es necesario para injeccion de dependencias
-                .addAsWebInfResource(new File("src/main/webapp/WEB-INF/shiro.ini"))
                 // El archivo web.xml es necesario para el despliegue de los servlets
                 .setWebXML(new File("src/main/webapp/WEB-INF/web.xml"));
     }
@@ -525,21 +538,18 @@ public class [className/] {
      * @return Cookie con información de la sesión del usuario
      * @generated
      */
-    public Cookie login(String username, String password) {
+    public String login() throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException { 
+        auth=new AuthenticationApi();
         UserDTO user = new UserDTO();
-        user.setUserName(username);
-        user.setPassword(password);
-        user.setRememberMe(true);
-        Response response = createWebTarget()
-                .path("users")
-                .path("login")
-                .request()
-                .post(Entity.entity(user, MediaType.APPLICATION_JSON));
-        if (response.getStatus() == Ok) {
-            return response.getCookies().get(JWT.cookieName);
-        } else {
-            return null;
-        }
+        user.setUserName(auth.getProp().getProperty("username").trim());
+        user.setPassword(auth.getProp().getProperty("password").trim());
+        JSONObject json = new JSONObject(auth.authenticationToken(user).getBody()); 
+        return (String)json.get("id_token");
+    }
+   
+    public String getUsername() throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException{
+     auth=new AuthenticationApi();
+    return auth.getProp().getProperty("username").trim();
     }
 
     /**
@@ -549,12 +559,14 @@ public class [className/] {
      */
     @Test
     public void add[a.getTestSuffix()/]() {
-        Cookie cookieSessionId = login(username, password);
+        String token= login();
 
         [a.getDTOName()/] [a.name/] = new [a.getDTOName()/](oraculo.get(2));
 
         Response response = target.path([a.name/].getId().toString())
-                .request().cookie(cookieSessionId)
+                .request()
+                .cookie("username",getUsername())
+                .cookie("id_token",token)
                 .post(Entity.entity([a.name/], MediaType.APPLICATION_JSON));
 
         [a.getDTOName()/] [a.getResponseVarName()/] = ([a.getDTOName()/]) response.readEntity([a.getDTOName()/].class);
@@ -569,10 +581,13 @@ public class [className/] {
      */
     @Test
     public void list[a.getTestSuffix()/]() throws IOException {
-        Cookie cookieSessionId = login(username, password);
+        String token= login();
 
         Response response = target
-                .request().cookie(cookieSessionId).get();
+                .request()
+                .cookie("username",getUsername())
+                .cookie("id_token",token)
+                .get();
 
         String [a.name/]List = response.readEntity(String.class);
         List<[a.getDTOName()/]> [a.name/]ListTest = new ObjectMapper().readValue([a.name/]List, List.class);
@@ -587,11 +602,14 @@ public class [className/] {
      */
     @Test
     public void get[a.getTestSuffix()/]() throws IOException {
-        Cookie cookieSessionId = login(username, password);
+        String token= login();
         [a.getDTOName()/] [a.name/] = new [a.getDTOName()/](oraculo.get(0));
 
         [a.getDTOName()/] [a.getResponseVarName()/] = target.path([a.name/].getId().toString())
-                .request().cookie(cookieSessionId).get([a.getDTOName()/].class);
+                .request()
+                .cookie("username",getUsername())
+                .cookie("id_token",token)
+                .get([a.getDTOName()/].class);
 
         [for (prop : Property | a.getClass().attribute)]
         Assert.assertEquals([a.name/].[prop.getter()/](), [a.getResponseVarName()/].[prop.getter()/]());
@@ -605,12 +623,15 @@ public class [className/] {
      */
     @Test
     public void remove[a.getTestSuffix()/]() {
-        Cookie cookieSessionId = login(username, password);
+        String token= login();
 
         [a.getDTOName()/] [a.name/] = new [a.getDTOName()/](oraculo.get(0));
 
         Response response = target.path([a.name/].getId().toString())
-                .request().cookie(cookieSessionId).delete();
+                .request()
+                .cookie("username",getUsername())
+                .cookie("id_token",token)
+                .delete();
         Assert.assertEquals(OkWithoutContent, response.getStatus());
     }
 }

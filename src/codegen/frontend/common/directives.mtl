@@ -52,7 +52,7 @@
     }]);
 
 
-mod.directive('ifPermission', ['['/]CrudTemplatesDir', '$cookies', function (tplDir, $cookies) {
+mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tplDir, $cookies) {
       function link(scope, element, attrs) {
         var permissions = $cookies.get("permissions");
             permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(",");
@@ -88,7 +88,7 @@ mod.directive('ifPermission', ['['/]CrudTemplatesDir', '$cookies', function (tpl
      * Creates a table showing the registered fields for every record in <strong>records</strong>
      * 
      */
-    mod.directive('listRecords', ['['/]CrudTemplatesDir', function (tplDir) {
+    mod.directive('listRecords', ['['/]'CrudTemplatesDir', function (tplDir) {
       return {
         scope: {
           records: '=*',
@@ -99,7 +99,7 @@ mod.directive('ifPermission', ['['/]CrudTemplatesDir', '$cookies', function (tpl
         },
         restrict: 'E',
         templateUrl: tplDir + 'list.tpl.html',
-        controller: ['['/]$scope', '$cookies', function ($scope, $cookies) {
+        controller: ['['/]'$scope', '$cookies', function ($scope, $cookies) {
             var permissions = $cookies.get("permissions");
             permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(",");
             var actions = $scope.actions;
