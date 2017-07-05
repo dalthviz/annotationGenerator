@@ -293,6 +293,18 @@ endif
 ['/src/main/java/'.concat(m.baseGroup().replaceAll('[.]', '/')).concat('/')/]
 [/template]
 
+[template public basePathAuth0(m : Model)]
+['/auth/properties'.concat(m.baseGroup().replaceAll('[.]', '/')).concat('/')/]
+[/template]
+
+[template public baseGroupCrudUtils(m : Model)]
+['co.edu.uniandes.csw.crud.spi'.concat(m.name.toLowerCase())/]
+[/template]
+
+[template public basePathCrudUtils(m : Model)]
+['/crud/spi'.concat(m.baseGroup().replaceAll('[.]', '/')).concat('/')/]
+[/template]
+
 [template public baseTestPath(m : Model)]
 ['/src/test/java/'.concat(m.baseGroup().replaceAll('[.]', '/')).concat('/')/]
 [/template]

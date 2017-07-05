@@ -85,30 +85,37 @@
                 url: '/list',
                 parent: '[c.getMainStateName()/]',
                 views: {
-                    [c.getMainView()/]: {
+                     [if(c.isChild())]'[c.getParentAttribute().getClass().getInstanceView()/]@[c.getParentAttribute().getClass().getInstanceStateName()/]'[else][c.getMainView()/][/if]: {
                         templateUrl: basePath + 'list/[c.getName()/].list.tpl.html',
                         controller: '[c.getListCtrlName()/]',
                         controllerAs: 'ctrl'
                     }
-                }
+                },
+                     ncyBreadcrumb: {
+                                label: '[c.getMainStateName()/]'
+                           }
             });
             $sp.state('[c.getNewStateName()/]', {
                 url: '/new',
                 parent: '[c.getMainStateName()/]',
                 views: {
-                    [c.getMainView()/]: {
+                    [if(c.isChild())]'[c.getParentAttribute().getClass().getInstanceView()/]@[c.getParentAttribute().getClass().getInstanceStateName()/]'[else][c.getMainView()/][/if]: {
                         templateUrl: basePath + 'new/[c.getName()/].new.tpl.html',
                         controller: '[c.getNewCtrlName()/]',
                         controllerAs: 'ctrl'
                     }
-                }
+                },
+                     ncyBreadcrumb: {
+                                parent :'[c.getListStateName()/]', 
+                                label: 'new'
+                           }
             });
             $sp.state('[c.getInstanceStateName()/]', {
                 url: '/{[c.getIdParamName()/]:int}',
                 abstract: true,
                 parent: '[c.getMainStateName()/]',
                 views: {
-                    [c.getMainView()/]: {
+                    [if(c.isChild())]'[c.getParentAttribute().getClass().getInstanceView()/]@[c.getParentAttribute().getClass().getInstanceStateName()/]'[else][c.getMainView()/][/if]: {
                         template: '<div ui-view="[c.getInstanceView()/]"></div>'
                     }
                 },
@@ -126,7 +133,11 @@
                         templateUrl: baseInstancePath + 'detail/[c.getName()/].detail.tpl.html',
                         controller: '[c.getDetailCtrlName()/]'
                     }
-                }
+                },
+                     ncyBreadcrumb: {
+                                parent :'[c.getListStateName()/]', 
+                                label: 'details'
+                           }
             });
             $sp.state('[c.getEditStateName()/]', {
                 url: '/edit',
@@ -138,7 +149,11 @@
                         controller: '[c.getEditCtrlName()/]',
                         controllerAs: 'ctrl'
                     }
-                }
+                },
+                     ncyBreadcrumb: {
+                                parent :'[c.getDetailStateName()/]', 
+                                label: 'new'
+                           }
             });
             $sp.state('[c.getDeleteStateName()/]', {
                 url: '/delete',
@@ -223,7 +238,7 @@
             Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
                 switch(response.status) {
                     case 400:
-                        $scope.showError('Error 400: La solicitud contiene sintaxis errÃ³nea.');
+                        $scope.showError('Error 400: La solicitud contiene sintaxis errónea.');
                         return false; 
                         break;
                     case 401:
@@ -239,7 +254,7 @@
                         return false; 
                         break;
                     case 413:
-                        $scope.showError('Error 413: PeticiÃ³n demasiado grande.');
+                        $scope.showError('Error 413: Petición demasiado grande.');
                         return false; 
                         break;
                     case 500:
@@ -255,7 +270,7 @@
                 return true; // error not handled
             });
 
-            /* FunciÃ³n showMessage: Recibe el mensaje en String y
+            /* Función showMessage: Recibe el mensaje en String y
              * su tipo con el fin de almacenarlo en el array $scope.alerts.
              */
             function showMessage(msg, type) {

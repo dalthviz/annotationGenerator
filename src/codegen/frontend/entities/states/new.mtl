@@ -68,6 +68,7 @@
     </ng-message>
 </div>
 <header>
+    <div ncy-breadcrumb></div>
     <toolbar name="model.name" display-name="model.displayName" actions='actions'></toolbar>
 </header>
 <form novalidate name="[c.getFormId()/]" role="form">

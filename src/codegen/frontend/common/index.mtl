@@ -25,7 +25,8 @@
         '[c.getModule()/]',
         [/if]
         [/for]
-        'authModule'
+        'authModule',
+        'ncy-angular-breadcrumb'
     [']'/]);
 
     mod.constant('baseUrl', 'api');
@@ -60,6 +61,13 @@
                 successState: '[m.getClasses()->any(1=1).getListStateName()/]'
             });
         }[']'/]);
+    mod.config(function($breadcrumbProvider) {
+    $breadcrumbProvider.setOptions({
+      prefixStateName: '[m.getClasses()->any(1=1).getListStateName()/]',
+      template: 'bootstrap3'
+      
+    });
+  });
 
     /*
      * When there's an error changing state, ui-router doesn't raise an error
@@ -116,6 +124,8 @@
         <script src="bower_components/angular-ui-grid/ui-grid.min.js"></script>
         <script src="bower_components/angular-touch/angular-touch.min.js"></script>
         <script src="bower_components/angular-animate/angular-animate.min.js"></script>
+        <script src="bower_components/angular-breadcrumb/release/angular-breadcrumb.min.js" type="text/javascript"></script>
+      
         <!-- endbower -->
         <!-- endbuild -->
 
@@ -172,7 +182,7 @@
                             <ul class="nav navbar-nav">
                                 [for (c : Class | m.getRootClasses())]
                                 [if(c.isAbstract=false)]
-                                <li><a ui-sref="[c.getListStateName()/]({page: 1, limit: 15})">[c.getDisplayName()/]</a></li>
+                                <li if-permission name='[c.getName()/]'><a ui-sref="[c.getListStateName()/]({page: 1, limit: 15})">[c.getDisplayName()/]</a></li>
                                 [/if]
                                 [/for]
                             </ul>

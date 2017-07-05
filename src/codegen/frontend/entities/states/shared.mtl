@@ -19,6 +19,7 @@
 [a.getClass().getModel().license()/]
 -->
 <header>
+    <div ncy-breadcrumb></div>
     <toolbar name="model.name" display-name="model.displayName" actions='actions'></toolbar>
 </header>
 <list-records fields="model.fields" records="records"></list-records>
