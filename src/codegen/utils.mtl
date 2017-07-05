@@ -302,7 +302,7 @@ endif
 [/template]
 
 [template public basePathCrudUtils(m : Model)]
-[ m.getLogicArtifactId().concat(m.basePath().concat('/crud/spi/')) /]
+[ m.getLogicArtifactId().concat('/src/main/java/co/edu/uniandes/csw/crud/spi/') /]
 [/template]
 
 [template public baseTestPath(m : Model)]
