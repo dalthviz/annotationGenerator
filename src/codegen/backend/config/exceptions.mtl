@@ -10,7 +10,7 @@
 [/template]
 
 [template public genExceptions(m : Model, path : String)]
-[file (path.concat('BusinessLogicException.java'), false, 'UTF-8')]
+[file (path.concat('BussinesLogicException.java'), false, 'UTF-8')]
 /*
 [m.license()/]
 */
@@ -59,7 +59,7 @@ import javax.ws.rs.ext.Provider;
  * @author Asistente
  */
 @Provider
-public class BusinessLogicExceptionMapper implements ExceptionMapper<BusinessLogicException>{
+public class BussinesExceptionMapper implements ExceptionMapper<BusinessLogicException>{
 
     @Override
     public Response toResponse(BusinessLogicException exception) {
