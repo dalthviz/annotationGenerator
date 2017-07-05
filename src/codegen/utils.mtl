@@ -298,7 +298,7 @@ endif
 [/template]
 
 [template public baseGroupCrudUtils(m : Model)]
-['co.edu.uniandes.csw.crud.spi'.concat(m.name.toLowerCase())/]
+['co.edu.uniandes.csw.crud.spi'/]
 [/template]
 
 [template public basePathCrudUtils(m : Model)]
