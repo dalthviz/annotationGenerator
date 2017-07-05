@@ -4,13 +4,13 @@
 
 [template public mainExceptions(m : Model, path : String)]
 [m.genExceptions(path.concat(m.basePath().concat('exceptions/')))/]
-[m.genBussinesExceptionMapper(path.concat(m.basePath().concat('exceptions/')))/]
+[m.genBusinessExceptionMapper(path.concat(m.basePath().concat('exceptions/')))/]
 [m.genEJBExceptionMapper(path.concat(m.basePath().concat('exceptions/')))/]
 [m.genWebApplicationExceptionMapper(path.concat(m.basePath().concat('exceptions/')))/]
 [/template]
 
 [template public genExceptions(m : Model, path : String)]
-[file (path.concat('BussinesLogicException.java'), false, 'UTF-8')]
+[file (path.concat('BusinessLogicException.java'), false, 'UTF-8')]
 /*
 [m.license()/]
 */
@@ -40,8 +40,8 @@ public class BusinessLogicException extends Exception {
 }
 [/file]
 [/template]
-[template protected genBussinesExceptionMapper(m: Model,path: String) ]
-[file (path.concat('BussinesExceptionMapper.java'), false, 'UTF-8')]
+[template protected genBusinessExceptionMapper(m: Model,path: String) ]
+[file (path.concat('BusinessExceptionMapper.java'), false, 'UTF-8')]
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -59,7 +59,7 @@ import javax.ws.rs.ext.Provider;
  * @author Asistente
  */
 @Provider
-public class BussinesExceptionMapper implements ExceptionMapper<BusinessLogicException>{
+public class BusinessExceptionMapper implements ExceptionMapper<BusinessLogicException>{
 
     @Override
     public Response toResponse(BusinessLogicException exception) {
