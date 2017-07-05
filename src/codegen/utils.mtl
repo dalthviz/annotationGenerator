@@ -294,7 +294,7 @@ endif
 [/template]
 
 [template public basePathAuth0(m : Model)]
-['/auth/properties'.concat(m.baseGroup().replaceAll('[.]', '/')).concat('/')/]
+['/auth/properties'.concat(m.basePath()).concat('/')/]
 [/template]
 
 [template public baseGroupCrudUtils(m : Model)]
@@ -302,7 +302,7 @@ endif
 [/template]
 
 [template public basePathCrudUtils(m : Model)]
-['/crud/spi'.concat(m.baseGroup().replaceAll('[.]', '/')).concat('/')/]
+['/crud/spi'.concat(m.basePath()).concat('/')/]
 [/template]
 
 [template public baseTestPath(m : Model)]

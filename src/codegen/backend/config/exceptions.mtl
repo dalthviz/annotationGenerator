@@ -6,6 +6,7 @@
 [m.genExceptions(path.concat(m.basePath().concat('exceptions/')))/]
 [m.genBussinesExceptionMapper(path.concat(m.basePath().concat('exceptions/')))/]
 [m.genEJBExceptionMapper(path.concat(m.basePath().concat('exceptions/')))/]
+[m.genWebApplicationExceptionMapper(path.concat(m.basePath().concat('exceptions/')))/]
 [/template]
 
 [template public genExceptions(m : Model, path : String)]

@@ -2,7 +2,7 @@
 [module crudutils('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
 
-[template public mainCrudUtils(m : Model)]
+[template public mainCrudUtils(m : Model )]
 [m.genCrudEntity(m.basePathCrudUtils().concat('entity/'))/]
 [m.genCrudPersistence(m.basePathCrudUtils().concat('persistence/'))/]
 [/template]
