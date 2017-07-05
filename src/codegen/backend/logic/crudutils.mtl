@@ -3,7 +3,7 @@
 [import ::utils /]
 
 [template public mainCrudUtils(m : Model )]
-[m.genCrudEntity(m.basePathCrudUtils().concat('entity/'))/]
+[m.genCrudEntity(m.basePathCrudUtils())/]
 [m.genCrudPersistence(m.basePathCrudUtils().concat('persistence/'))/]
 [/template]
 
