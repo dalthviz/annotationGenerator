@@ -245,7 +245,7 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void get[c.name/]ByIdTest() {
+    public void get[c.name/]ByIdTest() throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException= {
         String token= login();
 
         [c.getBasicDTOName()/] [c.testName()/] = target
@@ -318,7 +318,7 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void delete[c.name/]Test() {
+    public void delete[c.name/]Test() throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException {
         String token= login();
         [c.getBasicDTOName()/] [c.getName()/] = new [c.getBasicDTOName()/](oraculo.get(0));
         Response response = target
