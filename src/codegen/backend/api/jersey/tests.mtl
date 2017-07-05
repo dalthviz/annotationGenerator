@@ -76,6 +76,7 @@ public class [className/] {
     private final int OkWithoutContent = Status.NO_CONTENT.getStatusCode();
 
     private final static List<[c.getEntityName()/]> oraculo = new ArrayList<>();
+    private  AuthenticationApi auth;
 
     [for (cl : Class | c.getHierarchy()->reverse())]
     private final String [cl.testPath()/] = "[cl.getURI()/]";
@@ -216,7 +217,7 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void create[c.name/]Test() throws IOException {
+    public void create[c.name/]Test() throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException {
         [c.getBasicDTOName()/] [c.getName()/] = factory.manufacturePojo([c.getBasicDTOName()/].class);
         String token= login();
 
@@ -265,7 +266,7 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void list[c.name/]Test() throws IOException {
+    public void list[c.name/]Test() throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException {
          String token= login();
 
         Response response = target
@@ -286,7 +287,7 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void update[c.name/]Test() throws IOException {
+    public void update[c.name/]Test() throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException {
         String token= login();
         [c.getBasicDTOName()/] [c.getName()/] = new [c.getBasicDTOName()/](oraculo.get(0));
 
@@ -406,6 +407,7 @@ public class [className/] {
     private final int OkWithoutContent = Status.NO_CONTENT.getStatusCode();
 
     private final static List<[a.getClass().getEntityName()/]> oraculo = new ArrayList<>();
+    private  AuthenticationApi auth;
 
     [for (cl : Class | c.getHierarchy()->reverse())]
     private final String [cl.testPath()/] = "[cl.getURI()/]";
@@ -558,7 +560,7 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void add[a.getTestSuffix()/]() {
+    public void add[a.getTestSuffix()/]() throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException{
         String token= login();
 
         [a.getDTOName()/] [a.name/] = new [a.getDTOName()/](oraculo.get(2));
@@ -580,7 +582,7 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void list[a.getTestSuffix()/]() throws IOException {
+    public void list[a.getTestSuffix()/]() throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException {
         String token= login();
 
         Response response = target
@@ -601,7 +603,7 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void get[a.getTestSuffix()/]() throws IOException {
+    public void get[a.getTestSuffix()/]() throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException {
         String token= login();
         [a.getDTOName()/] [a.name/] = new [a.getDTOName()/](oraculo.get(0));
 
@@ -622,7 +624,7 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void remove[a.getTestSuffix()/]() {
+    public void remove[a.getTestSuffix()/]() throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException {
         String token= login();
 
         [a.getDTOName()/] [a.name/] = new [a.getDTOName()/](oraculo.get(0));
