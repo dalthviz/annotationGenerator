@@ -294,7 +294,7 @@ endif
 [/template]
 
 [template public basePathAuth0(m : Model)]
-[m.getApiArtifactId().concat(m.baseGroup().replaceAll('[.]', '/')).concat('/auth/properties/')/]
+[m.getApiArtifactId().concat('/co/edu/uniandes/csw/auth/properties')/]
 [/template]
 
 [template public baseGroupCrudUtils(m : Model)]
