@@ -20,6 +20,7 @@
         'ngCrud',
         'ui.router',
         'ui.grid',
+        'ngCookies',
         [for (c : Class | m.getClasses())]
         [if(c.isAbstract=false)]
         '[c.getModule()/]',
