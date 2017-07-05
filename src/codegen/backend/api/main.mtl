@@ -9,11 +9,13 @@
 [import backend::api::config::jerseyapp /]
 [import backend::api::config::packageInfo /]
 [import backend::api::config::tests /]
+[import backend::api::config::properties/]
 
 [template public genServices(m : Model, path : String)]
 [m.mainPOM()/]
 [m.mainJerseyApp(path.concat(m.basePath()))/]
 [m.mainTests()/]
+[m.mainProperties()/]
 [let webinf : String = m.getWebInfPath()]
     [m.mainXML(webinf)/]
 [/let]
