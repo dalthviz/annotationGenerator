@@ -245,7 +245,7 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void get[c.name/]ByIdTest() throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException= {
+    public void get[c.name/]ByIdTest() throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException {
         String token= login();
 
         [c.getBasicDTOName()/] [c.testName()/] = target
