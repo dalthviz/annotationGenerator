@@ -250,10 +250,45 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
                 records: '=*',
                 fields: '=*',
                 actions: '=*?',
-                checklist: '=?'
+                checklist: '=?',
+                name: '='
             },
             restrict: 'E',
             templateUrl: tplDir + 'gallery.tpl.html'
+         controller: ['['/]'$scope', '$cookies', function ($scope, $cookies) {
+            var permissions = $cookies.get("permissions");
+            permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(",");
+            var actions = $scope.actions;
+            var allowedButtons = ['['/]];
+            var name = $scope.name.toLowerCase().concat("s");
+
+            for (var key in permissions) {
+
+              if (permissions['['/]key].includes(name)) {
+                if ("read" === permissions['['/]key].split(":")['['/]0])
+                  allowedButtons.push("list", "detail", "artworks", "refresh");
+                if ("update" === permissions['['/]key].split(":")['['/]0])
+                  allowedButtons.push("edit", "save", "cancel");
+                if ("create" === permissions['['/]key].split(":")['['/]0])
+                  allowedButtons.push("create");
+                if ("delete" === permissions['['/]key].split(":")['['/]0])
+                  allowedButtons.push("delete");
+              }
+            }
+            for (var action in actions) {
+              if (allowedButtons.indexOf(action) === -1)
+                delete actions['['/]action];
+            }
+
+            $scope.actions = actions;
+
+
+            $scope.checkAll = function () {
+              this.records.forEach(function (item) {
+                item.selected = !item.selected;
+              });
+            };
+          }]
         };
     }]);
 
