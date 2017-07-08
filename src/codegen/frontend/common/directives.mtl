@@ -50,11 +50,19 @@
             templateUrl: tplDir + 'search.tpl.html'
         };
     }]);
-
-
 mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tplDir, $cookies) {
       function link(scope, element, attrs) {
         var permissions = $cookies.get("permissions");
+         if(permissions === undefined){
+                 var actions = scope.actions;
+                 scope.actions = {};
+                 for(var action in actions){
+                     if("read" !== action){
+                         delete actions['['/]action];
+                     }
+                 }
+                 scope.actions = actions;
+            }else{
             permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(",");
         var havePermission = false;//Util variable
         for(var key in permissions){//iterates all the input roles
@@ -65,11 +73,9 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
         if(!havePermission){//if don't have any of the roles hides the element
           angular.element(element).css({display: 'none'});
         }
-        
-      }
       return {
         link:link
-      };
+      };}}
     }]);
     /**
      * @ngdoc directive
@@ -100,14 +106,23 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
         restrict: 'E',
         templateUrl: tplDir + 'list.tpl.html',
         controller: ['['/]'$scope', '$cookies', function ($scope, $cookies) {
+                
             var permissions = $cookies.get("permissions");
+            if(permissions === undefined){
+                 var actions = $scope.actions;
+                 $scope.actions = {};
+                 for(var action in actions){
+                     if("read" !== action){
+                         delete actions['['/]action];
+                     }
+                 }
+                 $scope.actions = actions;
+            }else{
             permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(",");
             var actions = $scope.actions;
             var allowedButtons = ['['/]];
             var name = $scope.name.toLowerCase().concat("s");
-
             for (var key in permissions) {
-
               if (permissions['['/]key].includes(name)) {
                 if ("read" === permissions['['/]key].split(":")['['/]0])
                   allowedButtons.push("list", "detail", "artworks", "refresh");
@@ -123,15 +138,12 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
               if (allowedButtons.indexOf(action) === -1)
                 delete actions['['/]action];
             }
-
             $scope.actions = actions;
-
-
             $scope.checkAll = function () {
               this.records.forEach(function (item) {
                 item.selected = !item.selected;
               });
-            };
+            };}
           }]
       };
     }]);
@@ -163,7 +175,6 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
         templateUrl: tplDir + 'dataTable.tpl.html',
         controller: ['['/]'$scope', '$cookies', function ($scope, $cookies) {
 
-
             // Grid header definitions
             var columnDefsValues = ['['/]];
             angular.forEach($scope.fields, function (value, key)
@@ -182,6 +193,16 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
             // Grid row actions definitions
             var columnActionsValues = ['['/]];
             var permissions = $cookies.get("permissions");
+             if(permissions === undefined){
+                 var actions = $scope.actions;
+                 $scope.actions = {};
+                 for(var action in actions){
+                     if("read" !== action){
+                         delete actions['['/]action];
+                     }
+                 }
+                 $scope.actions = actions;
+            }else{
             permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(",");
             var actions = $scope.actions;
             var allowedButtons = ['['/]];
@@ -229,7 +250,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
                       data: $scope.records,
                       totalItems: $scope.records.totalRecords
                     };
-
+                    }
 
           }]
       };
@@ -254,9 +275,19 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
                 name: '='
             },
             restrict: 'E',
-            templateUrl: tplDir + 'gallery.tpl.html'
-         controller: ['['/]'$scope', '$cookies', function ($scope, $cookies) {
+            templateUrl: tplDir + 'gallery.tpl.html',
+        controller: ['['/]'$scope', '$cookies', function ($scope, $cookies) {
             var permissions = $cookies.get("permissions");
+             if(permissions === undefined){
+                 var actions = $scope.actions;
+                 $scope.actions = {};
+                 for(var action in actions){
+                     if("read" !== action){
+                         delete actions['['/]action];
+                     }
+                 }
+                 $scope.actions = actions;
+            }else{
             permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(",");
             var actions = $scope.actions;
             var allowedButtons = ['['/]];
@@ -282,14 +313,15 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
 
             $scope.actions = actions;
 
-
             $scope.checkAll = function () {
               this.records.forEach(function (item) {
                 item.selected = !item.selected;
               });
-            };
+            };}
           }]
-        };
+      };
+            
+         
     }]);
 
     /**
@@ -310,6 +342,16 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
         templateUrl: tplDir + 'toolbar.tpl.html',
         controller: ['['/]'$scope', '$cookies', function ($scope, $cookies) {
             var permissions = $cookies.get("permissions");
+             if(permissions === undefined){
+                 var actions = $scope.actions;
+                 $scope.actions = {};
+                 for(var action in actions){
+                     if("read" !== action){
+                         delete actions['['/]action];
+                     }
+                 }
+                 $scope.actions = actions;
+            }else{
             permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(",");
             var actions = $scope.actions;
             $scope.actions = {};
@@ -334,8 +376,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
                 delete actions['['/]action];
             }
             $scope.actions = actions;
-
-
+            }
           }]
       };
     }]);
