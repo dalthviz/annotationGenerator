@@ -10,7 +10,7 @@
 [/template]
 
 [**
- * Generates a controller for the detail state
+ * Generates 
  * @param c Class for which the controller is create
  * @param path Parent folder in which the file should be created
 */]
