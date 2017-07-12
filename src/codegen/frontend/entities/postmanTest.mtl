@@ -1,0 +1,255 @@
+[comment encoding = UTF-8 /]
+[module postmanTest('http://www.eclipse.org/uml2/5.0.0/UML')]
+[import ::utils /]
+
+[template public mainPostmanTest(m : Model, path:String)]
+[let genPath : String = path.concat('tests/postman/')]
+
+[for (c : Class | m.getClasses())]
+[c.genPostmanTest(genPath)/]
+[c.genCollectionPrepare(genPath.concat('collections/'))/]
+[/for]
+
+[/let]
+[/template]
+
+[template protected genPostmanTest(c:Class, path: String)]
+[file (path.concat(c.name+'IT.java'),false,'UTF-8')]
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package [c.getModel().baseGroup()/].tests.postman;
+
+import co.edu.uniandes.csw.artwork.tests.CollectionPrepare;
+import co.edu.uniandes.csw.artwork.dtos.detail.[c.getDTOName()/];
+import co.edu.uniandes.csw.artwork.entities.[c.getEntityName()/];
+import co.edu.uniandes.csw.artwork.resources.[c.name/]Resource;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Logger;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.UserTransaction;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import uk.co.jemos.podam.api.PodamFactory;
+import uk.co.jemos.podam.api.PodamFactoryImpl;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import org.json.JSONException;
+
+/**
+ *
+ * @author Asistente
+ */
+@RunWith(Arquillian.class)
+public class [c.name/]IT {
+   String path= System.getProperty("user.dir").concat("\\run.bat");
+   
+   PodamFactory factory = new PodamFactoryImpl();
+   JSONParser parser = new JSONParser();
+   Gson gson = new Gson();
+ 
+    private final static List<[c.getEntityName()/]> oraculo = new ArrayList<>();
+ 
+    @Deployment(testable = false)
+    public static WebArchive createDeployment() {
+        return ShrinkWrap.create(WebArchive.class,"artwork-api.war")
+                // Se agrega las dependencias
+                .addAsLibraries(Maven.resolver().loadPomFromFile("pom.xml")
+                        .importRuntimeDependencies().resolve()
+                        .withTransitivity().asFile())
+                // Se agregan los compilados de los paquetes de servicios
+                .addPackage([c.name/]Resource.class.getPackage())
+                
+                // El archivo que contiene la configuracion a la base de datos.
+                .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
+                // El archivo beans.xml es necesario para injeccion de dependencias.
+                .addAsWebInfResource(new File("src/main/webapp/WEB-INF/beans.xml"))
+                // El archivo web.xml es necesario para el despliegue de los servlets
+                .setWebXML(new File("src/main/webapp/WEB-INF/web.xml"));
+                 
+    }   
+    
+
+public void setPostmanCollectionValues(String action) throws FileNotFoundException, IOException, ParseException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, UnirestException, JSONException, InterruptedException, ExecutionException{
+    
+    System.out.println(CollectionPrepare.getPATH()); 
+    Object obj;
+       try (FileReader reader = new FileReader(CollectionPrepare.getPATH())) {
+           obj = parser.parse(reader);
+       } 
+       try (FileWriter writer = new FileWriter(CollectionPrepare.getPATH())) {
+           [c.getDTOName()/] [c.name/] = factory.manufacturePojo([c.getDTOName()/].class);
+           JsonArray jsonArray=gson.toJsonTree(obj).getAsJsonObject().get("item").getAsJsonArray();
+           Integer index= CollectionPrepare.findJsonIndex(jsonArray,action);
+           JsonElement jsonElement=gson.toJsonTree(obj);
+           CollectionPrepare.setCollectionBody(jsonElement, index, [c.name/], gson);
+           writer.write(jsonElement.toString());
+           writer.flush();
+       }
+}
+
+
+    @Test 
+    public void postman() throws FileNotFoundException, IOException, ParseException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, UnirestException, JSONException, InterruptedException, ExecutionException{
+      CollectionPrepare.loginCredentials(); 
+      setPostmanCollectionValues("create");
+      setPostmanCollectionValues("edit");
+
+   try {              
+            Process process = Runtime.getRuntime().exec(path);
+            InputStream inputStream = process.getInputStream();
+            BufferedReader bf= new BufferedReader(new InputStreamReader(inputStream));
+            String line="";
+            String ln;
+            while ((ln=bf.readLine()) != null) {
+                line=line.concat(ln+"\n");
+            }
+              System.out.println(line);   
+            inputStream.close();
+            bf.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } 
+    }
+    
+}
+
+[/file]
+[/template]
+[template protected genCollectionPrepare(c: Class, path:String)]
+[file (path.concat(c.name+'Prepare.java'),false,'UTF-8')]
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package [c.getModel().baseGroup()/].tests.postman.prepare;
+
+import [c.getModel().baseGroup()/].dtos.detail.ArtistDetailDTO;
+import co.edu.uniandes.csw.auth.conexions.AuthenticationApi;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Iterator;
+import java.lang.Class;
+import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.ExecutionException;
+import org.json.JSONException;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+/**
+ *
+ * @author Asistente
+ */
+public class [c.name/]Prepare  {
+    
+   private static final String PATH = "[c.getModel().getApiArtifactId().concat('/collections/')/]postman_collection[c.name/].json";
+   private static final String PATHENV = "[c.getModel().getApiArtifactId().concat('/collections/')/]postman_env.json";
+
+ public static Integer findJsonIndex(JsonArray jarray,String action){
+     Iterator<JsonElement> it=jarray.iterator();
+     int count =0;
+    while(it.hasNext()){
+       if(it.next().getAsJsonObject().get("name").getAsString().contains(action))
+          break;
+       count++;
+           }
+    return count;
+ }
+public static void setCollectionBody(JsonElement jsonElement,Integer index,[c.getDTOName()/] [c.getURI()/],Gson gson) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+
+String val=getFields([c.getURI()/]);
+ 
+jsonElement.getAsJsonObject().get("item")
+      .getAsJsonArray().get(index)
+      .getAsJsonObject().get("request")
+      .getAsJsonObject().get("body")
+      .getAsJsonObject().addProperty("raw", val);
+}
+    /**
+     * @return the PATH
+     */
+    public static String getPATH() {
+        return PATH;
+    }
+    public static String getFields([c.getDTOName()/] [c.getURI()/]) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+        String open="{\"";
+        String content="";
+        String close="}";
+       for(Method m:[c.getURI()/].getClass().getMethods()){
+           if(m.getName().contains("get") & !"getClass".equals(m.getName())) {
+         content=content.concat(m.getName().substring(3).toLowerCase().concat("\":\"").concat(m.invoke([c.getURI()/], null).toString().concat("\",\""))); 
+           }
+       }
+     return open.concat(content).substring(0,open.concat(content).length()-2 ).concat(close);
+    } 
+
+    /**
+     * @return the PATHENV
+     */
+    public static String getPATHENV() {
+        return PATHENV;
+    }
+    public static void loginCredentials() throws FileNotFoundException, IOException, ParseException, UnirestException, JSONException, InterruptedException, ExecutionException{
+
+        AuthenticationApi api = new AuthenticationApi();
+   JSONParser parser = new JSONParser();
+   Gson gson = new Gson();
+   Object obj;
+       try (FileReader fr = new FileReader(PATHENV)) {
+           obj = parser.parse(fr);
+            fr.close();
+       }
+        JsonElement je = gson.toJsonTree(obj);
+        je.getAsJsonObject()
+                .get("values").getAsJsonArray()
+                .get(0).getAsJsonObject().addProperty("value", api.getProp().getProperty("username"));
+        je.getAsJsonObject()
+                .get("values").getAsJsonArray()
+                .get(1).getAsJsonObject().addProperty("value", api.getProp().getProperty("password"));
+                
+       FileWriter fw = new FileWriter(PATHENV);
+       fw.write(je.toString());
+       fw.flush();
+       fw.close();
+
+    }
+   
+}
+
+[/file]
+[/template]
