@@ -3,9 +3,9 @@
 [import ::utils /]
 
 [template public mainPostmanTest(m : Model)]
-[m.genPostmanEnvironment(m.basePath().concat(m.getApiArtifactId()).concat('/collections/'))/]
+[m.genPostmanEnvironment(m.getApiArtifactId().concat('/collections/'))/]
 [for (c : Class | m.getClasses())]
-[c.genPostmanCollections(m.basePath().concat(m.getApiArtifactId()).concat('/collections/'))/]
+[c.genPostmanCollections(m.getApiArtifactId().concat('/collections/'))/]
 [/for]
 
 [/template]
