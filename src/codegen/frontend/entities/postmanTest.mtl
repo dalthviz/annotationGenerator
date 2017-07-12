@@ -2,7 +2,7 @@
 [module postmanTest('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
 
-[template public mainPostmanTest(m : Model, path:String)]
+[template public mainPostman(m : Model, path:String)]
 [let genPath : String = path.concat('tests/postman/')]
 
 [for (c : Class | m.getClasses())]

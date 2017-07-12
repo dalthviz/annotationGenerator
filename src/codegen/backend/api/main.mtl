@@ -12,10 +12,11 @@
 [import backend::api::config::tests /]
 [import backend::api::config::properties/]
 
+
 [template public genServices(m : Model, path : String)]
 [m.mainPOM()/]
 [m.mainJerseyApp(path.concat(m.basePath()))/]
-[m.mainPostmanTest()/]
+[m.mainPostmanCollections()/]
 [m.mainTests()/]
 [m.mainProperties()/]
 [let webinf : String = m.getWebInfPath()]
