@@ -22,10 +22,10 @@
  */
 package [c.getModel().baseGroup()/].tests.postman;
 
-import co.edu.uniandes.csw.artwork.tests.CollectionPrepare;
-import co.edu.uniandes.csw.artwork.dtos.detail.[c.getDTOName()/];
-import co.edu.uniandes.csw.artwork.entities.[c.getEntityName()/];
-import co.edu.uniandes.csw.artwork.resources.[c.name/]Resource;
+import [c.getModel().baseGroup()/].tests.postman.collections.[c.name/]Prepare;
+import [c.getModel().baseGroup()/].dtos.detail.[c.getBasicDTOName()/];
+import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
+import [c.getModel().baseGroup()/].resources.[c.name/]Resource;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -69,8 +69,8 @@ import org.json.JSONException;
  */
 @RunWith(Arquillian.class)
 public class [c.name/]IT {
-   String path= System.getProperty("user.dir").concat("\\run.bat");
-   
+   String path= System.getProperty("user.dir").concat("\\collections\\runner\\[c.getURI().concat('CollectionRunner.bat')/]");
+   c.getURI()+'CollectionRunner.bat'
    PodamFactory factory = new PodamFactoryImpl();
    JSONParser parser = new JSONParser();
    Gson gson = new Gson();
@@ -79,7 +79,7 @@ public class [c.name/]IT {
  
     @Deployment(testable = false)
     public static WebArchive createDeployment() {
-        return ShrinkWrap.create(WebArchive.class,"artwork-api.war")
+        return ShrinkWrap.create(WebArchive.class,"[ c.getModel().getApiArtifactId() /].war")
                 // Se agrega las dependencias
                 .addAsLibraries(Maven.resolver().loadPomFromFile("pom.xml")
                         .importRuntimeDependencies().resolve()
@@ -105,7 +105,7 @@ public void setPostmanCollectionValues(String action) throws FileNotFoundExcepti
            obj = parser.parse(reader);
        } 
        try (FileWriter writer = new FileWriter(CollectionPrepare.getPATH())) {
-           [c.getDTOName()/] [c.name/] = factory.manufacturePojo([c.getDTOName()/].class);
+           [c.getBasicDTOName()/] [c.name/] = factory.manufacturePojo([c.getBasicDTOName()/].class);
            JsonArray jsonArray=gson.toJsonTree(obj).getAsJsonObject().get("item").getAsJsonArray();
            Integer index= CollectionPrepare.findJsonIndex(jsonArray,action);
            JsonElement jsonElement=gson.toJsonTree(obj);
@@ -118,7 +118,7 @@ public void setPostmanCollectionValues(String action) throws FileNotFoundExcepti
 
     @Test 
     public void postman() throws FileNotFoundException, IOException, ParseException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, UnirestException, JSONException, InterruptedException, ExecutionException{
-      CollectionPrepare.loginCredentials(); 
+      [c.name/]Prepare.loginCredentials(); 
       setPostmanCollectionValues("create");
       setPostmanCollectionValues("edit");
 
@@ -150,9 +150,9 @@ public void setPostmanCollectionValues(String action) throws FileNotFoundExcepti
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package [c.getModel().baseGroup()/].tests.postman.prepare;
+package [c.getModel().baseGroup()/].tests.postman.collections;
 
-import [c.getModel().baseGroup()/].dtos.detail.ArtistDetailDTO;
+import [c.getModel().baseGroup()/].dtos.detail.[c.getBasicDTOName()/];
 import co.edu.uniandes.csw.auth.conexions.AuthenticationApi;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -177,8 +177,8 @@ import org.json.simple.parser.ParseException;
  */
 public class [c.name/]Prepare  {
     
-   private static final String PATH = "[c.getModel().getApiArtifactId().concat('/collections/')/]postman_collection[c.name/].json";
-   private static final String PATHENV = "[c.getModel().getApiArtifactId().concat('/collections/')/]postman_env.json";
+   private static final String PATH = System.getProperty("user.dir").concat("['\\'.concat(c.getModel().getApiArtifactId().concat('\\collections\\'))/]postman_collection[c.name/].json");
+   private static final String PATHENV = System.getProperty("user.dir").concat("['\\'.concat(c.getModel().getApiArtifactId().concat('\\collections\\'))/]postman_env.json");
 
  public static Integer findJsonIndex(JsonArray jarray,String action){
      Iterator<JsonElement> it=jarray.iterator();
@@ -190,7 +190,7 @@ public class [c.name/]Prepare  {
            }
     return count;
  }
-public static void setCollectionBody(JsonElement jsonElement,Integer index,[c.getDTOName()/] [c.getURI()/],Gson gson) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+public static void setCollectionBody(JsonElement jsonElement,Integer index,[c.getBasicDTOName()/] [c.getURI()/],Gson gson) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 
 String val=getFields([c.getURI()/]);
  
@@ -206,7 +206,7 @@ jsonElement.getAsJsonObject().get("item")
     public static String getPATH() {
         return PATH;
     }
-    public static String getFields([c.getDTOName()/] [c.getURI()/]) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+    public static String getFields([c.getBasicDTOName()/] [c.getURI()/]) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
         String open="{\"";
         String content="";
         String close="}";
