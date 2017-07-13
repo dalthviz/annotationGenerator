@@ -98,17 +98,17 @@ public class [c.name/]IT {
 
 public void setPostmanCollectionValues(String action) throws FileNotFoundException, IOException, ParseException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, UnirestException, JSONException, InterruptedException, ExecutionException{
     
-    System.out.println(CollectionPrepare.getPATH()); 
+     
     Object obj;
-       try (FileReader reader = new FileReader(CollectionPrepare.getPATH())) {
+       try (FileReader reader = new FileReader([c.name/]Prepare.getPATH())) {
            obj = parser.parse(reader);
        } 
        try (FileWriter writer = new FileWriter(CollectionPrepare.getPATH())) {
            [c.getBasicDTOName()/] [c.name/] = factory.manufacturePojo([c.getBasicDTOName()/].class);
            JsonArray jsonArray=gson.toJsonTree(obj).getAsJsonObject().get("item").getAsJsonArray();
-           Integer index= CollectionPrepare.findJsonIndex(jsonArray,action);
+           Integer index= [c.name/]Prepare.findJsonIndex(jsonArray,action);
            JsonElement jsonElement=gson.toJsonTree(obj);
-           CollectionPrepare.setCollectionBody(jsonElement, index, [c.name/], gson);
+           [c.name/]Prepare.setCollectionBody(jsonElement, index, [c.name/], gson);
            writer.write(jsonElement.toString());
            writer.flush();
        }
