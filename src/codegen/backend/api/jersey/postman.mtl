@@ -6,7 +6,7 @@
 [m.genPostmanEnvironment(m.getApiArtifactId().concat('/collections/'))/]
 [for (c : Class | m.getClasses())]
 [c.genPostmanCollections(m.getApiArtifactId().concat('/collections/'))/]
-[c.genCollectionRunner(m.getArtifactId().concat('/collections/runners/'))/]
+[c.genCollectionRunner(m.getApiArtifactId().concat('/collections/runners/'))/]
 [/for]
 
 [/template]
