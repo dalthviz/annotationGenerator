@@ -181,8 +181,8 @@ import org.json.simple.parser.ParseException;
  */
 public class [c.name/]Prepare  {
     
-   private static final String PATH = System.getProperty("user.dir").concat("\\[c.getModel().getApiArtifactId()/]\\collections\\postman_collection[c.name/].json");
-   private static final String PATHENV = System.getProperty("user.dir").concat("\\[c.getModel().getApiArtifactId()/]\\collections\\postman_env.json");
+   private static final String PATH = System.getProperty("user.dir").concat("\\collections\\postman_collection[c.name/].json");
+   private static final String PATHENV = System.getProperty("user.dir").concat("\\collections\\postman_env.json");
 
  public static Integer findJsonIndex(JsonArray jarray,String action){
      Iterator<JsonElement> it=jarray.iterator();
