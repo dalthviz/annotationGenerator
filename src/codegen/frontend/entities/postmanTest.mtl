@@ -103,7 +103,7 @@ public void setPostmanCollectionValues(String action) throws FileNotFoundExcepti
        try (FileReader reader = new FileReader([c.name/]Prepare.getPATH())) {
            obj = parser.parse(reader);
        } 
-       try (FileWriter writer = new FileWriter(CollectionPrepare.getPATH())) {
+       try (FileWriter writer = new FileWriter([c.name/]Prepare.getPATH())) {
            [c.getBasicDTOName()/] [c.name/] = factory.manufacturePojo([c.getBasicDTOName()/].class);
            JsonArray jsonArray=gson.toJsonTree(obj).getAsJsonObject().get("item").getAsJsonArray();
            Integer index= [c.name/]Prepare.findJsonIndex(jsonArray,action);
