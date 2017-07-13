@@ -69,8 +69,7 @@ import org.json.JSONException;
  */
 @RunWith(Arquillian.class)
 public class [c.name/]IT {
-   String path= System.getProperty("user.dir").concat("\\collections\\runner\\[c.getURI().concat('CollectionRunner.bat')/]");
-   c.getURI()+'CollectionRunner.bat'
+   String path= System.getProperty("user.dir").concat("\\collections\\runners\\[c.getURI().concat('CollectionRunner.bat')/]");
    PodamFactory factory = new PodamFactoryImpl();
    JSONParser parser = new JSONParser();
    Gson gson = new Gson();

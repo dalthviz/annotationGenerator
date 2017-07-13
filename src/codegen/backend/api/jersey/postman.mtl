@@ -213,7 +213,7 @@
 [/template]
 [template protected genCollectionRunner(c :Class,path:String)]
 [file(path.concat(c.getURI()+'CollectionRunner.bat'),false,'UTF-8')]
-newman run [c.getModel().getApiArtifactId()/]/collections/postman_collection[c.name/].json -e [c.getModel().getApiArtifactId()/]/collections/postman_env.json --disable-unicode 
+newman run ../postman_collection[c.name/].json -e ../postman_env.json --disable-unicode 
 
 [/file]
 [/template]
