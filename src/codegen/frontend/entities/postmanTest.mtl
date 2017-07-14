@@ -104,7 +104,7 @@ public class [className/] {
 
     @Deployment
     public static WebArchive createDeployment() {
-        return ShrinkWrap.create(WebArchive.class)
+        return ShrinkWrap.create(WebArchive.class,"[c.getModel().getApiArtifactId()/].war")
                 // Se agrega las dependencias
                 .addAsLibraries(Maven.resolver().loadPomFromFile("pom.xml")
                         .importRuntimeDependencies().resolve()
@@ -259,7 +259,7 @@ public class [className/] {
 /*
 [c.getModel().license()/]
 */
-package [c.getModel().baseGroup()/].tests.rest;
+package [c.getModel().baseGroup()/].tests.postman;
 
 
 [for (cl : Class | c.getHierarchy())]
@@ -274,6 +274,7 @@ import [c.getModel().baseGroup()/].dtos.detail.[a.getDTOName()/];
 [/if]
 import [c.getModel().baseGroup()/].resources.[c.getJaxRsName()/];
 import [c.getModel().baseGroup()/].tests.Utils;
+import [c.getModel().baseGroup()/].tests.postman.collections.[c.name/]Prepare;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -353,7 +354,7 @@ public class [className/] {
 
     @Deployment
     public static WebArchive createDeployment() {
-        return ShrinkWrap.create(WebArchive.class)
+        return ShrinkWrap.create(WebArchive.class,"[c.getModel().getApiArtifactId()/].war")
                 // Se agrega las dependencias
                 .addAsLibraries(Maven.resolver().loadPomFromFile("pom.xml")
                         .importRuntimeDependencies().resolve()
