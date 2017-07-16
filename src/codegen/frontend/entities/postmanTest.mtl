@@ -6,9 +6,6 @@
 [let genPath : String = path.concat('tests/postman/')]
     [c.genPostmanTests(genPath)/]
     [c.genCollectionPrepare(genPath.concat('collections/'))/]
-    [for (a : Property | c.getNonCompositeCollectionAttributes())]
-        [a.genPostmanTestsNonComposite(genPath)/]
-    [/for]
 [/let]
 [/template]
 
@@ -86,18 +83,6 @@ public class [className/] {
    JSONParser parser = new JSONParser();
    Gson gson = new Gson();
 
-    private final static List<[c.getEntityName()/]> oraculo = new ArrayList<>();
-
-    [for (cl : Class | c.getHierarchy()->reverse())]
-    private final String [cl.testPath()/] = "[cl.getURI()/]";
-    [/for]
-
-    [for (cl : Class | c.getHierarchy()->reverse()->reject(name = c.name))]
-    [cl.getEntityName()/] [cl.getFatherEntity()/];
-    [/for]
-
-   
-
     @Deployment
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class,"[c.getModel().getApiArtifactId()/].war")
@@ -116,77 +101,7 @@ public class [className/] {
                 // El archivo web.xml es necesario para el despliegue de los servlets
                 .setWebXML(new File("src/main/webapp/WEB-INF/web.xml"));
     }
-    @PersistenceContext(unitName = "[c.getModel().getPUName()/]")
-    private EntityManager em;
-
-    @Inject
-    private UserTransaction utx;
-
-    private void clearData() {
-        [for (cl : Class | c.getHierarchy())]
-        em.createQuery("delete from [cl.getEntityName()/]").executeUpdate();
-        [/for]
-        oraculo.clear();
-    }
-
-   /**
-     * Datos iniciales para el correcto funcionamiento de las pruebas.
-     *
-     * @generated
-     */
-    public void insertData() {
-        [for (cl : Class | c.getHierarchy()->reverse()->reject(name = c.name))]
-        [cl.getFatherEntity()/] = factory.manufacturePojo([cl.getEntityName()/].class);
-        [cl.getFatherEntity()/].setId(1L);
-        [if (cl.isChild())]
-        [cl.getFatherEntity()/].[cl.getParentAttribute().setter()/]([cl.getParentAttribute().getClass().getFatherEntity()/]);
-        [/if]
-        em.persist([cl.getFatherEntity()/]);
-
-        [/for]
-        [if (c.isChild() and c.getParentAttribute().isOne2One())]        
-            [c.getEntityName()/] [c.getName()/] = factory.manufacturePojo([c.getEntityName()/].class);
-            [c.getName()/].setId(1L);
-            [if (c.isChild())]
-            [c.getName()/].[c.getParentAttribute().setter()/]([c.getParentAttribute().getClass().getFatherEntity()/]);
-            [/if]
-            em.persist([c.getName()/]);
-            oraculo.add([c.getName()/]);
-        [else]
-        for (int i = 0; i < 3; i++) {            
-            [c.getEntityName()/] [c.getName()/] = factory.manufacturePojo([c.getEntityName()/].class);
-            [c.getName()/].setId(i + 1L);
-            [if (c.isChild())]
-            [c.getName()/].[c.getParentAttribute().setter()/]([c.getParentAttribute().getClass().getFatherEntity()/]);
-            [/if]
-            em.persist([c.getName()/]);
-            oraculo.add([c.getName()/]);
-        }
-        [/if]
-    }
-
-    /**
-     * Configuración inicial de la prueba.
-     *
-     * @generated
-     */
-    @Before
-    public void setUpTest() {
-        try {
-            utx.begin();
-            clearData();
-            insertData();
-            utx.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            try {
-                utx.rollback();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-        }
-    }
-
+   
     public void setPostmanCollectionValues(String action) throws FileNotFoundException, IOException, ParseException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, UnirestException, JSONException, InterruptedException, ExecutionException{
     
     try(FileWriter wrt = new FileWriter(path)){
