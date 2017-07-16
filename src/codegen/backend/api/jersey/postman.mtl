@@ -5,8 +5,10 @@
 [template public mainPostmanCollections(m : Model)]
 [m.genPostmanEnvironment(m.getApiArtifactId().concat('/collections/'))/]
 [for (c : Class | m.getClasses())]
+[if not c.isChild() ]
 [c.genPostmanCollections(m.getApiArtifactId().concat('/collections/'))/]
 [c.genCollectionRunner(m.getApiArtifactId().concat('/collections/runners/'))/]
+[/if]
 [/for]
 
 [/template]
@@ -88,12 +90,7 @@
 				"mode": "raw",
 				"raw": "{\"name\":\"6poy52l65d\",\"id\":\"7717189549645300\"}"
 			},
-            [if c.isChild()]
-			"url": "{{host}}/[c.getParentAttribute().getClass().getURI()/]/1/[c.getURI()/]"
-             [elseif (not c.isChild())]
              "url": "{{host}}/[c.getURI()/]"
-              [else]   
-             [/if] 
 		},
 		"response": ['['/]],
 		"name": "[c.getURI()/] create",
@@ -118,12 +115,7 @@
 			}],
 			"description": "list all [c.getURI()/]",
 			"body": {},
-			 [if c.isChild()]
-			"url": "{{host}}/[c.getParentAttribute().getClass().getURI()/]/1/[c.getURI()/]"
-             [elseif (not c.isChild())]
              "url": "{{host}}/[c.getURI()/]"
-              [else]   
-             [/if] 
 		},
 		"response": ['['/]],
 		"name": "[c.getURI()/] list",
@@ -148,12 +140,7 @@
 			}],
 			"description": "find [c.getURI()/]",
 			"body": {},
-              [if c.isChild()]
-			"url": "{{host}}/[c.getParentAttribute().getClass().getURI()/]/1/[c.getURI()/]/{{new_id}}"
-             [elseif (not c.isChild())]
              "url": "{{host}}/[c.getURI()/]/{{new_id}}"
-              [else]   
-             [/if]
 		},
 		"response":['['/]],
 		"name": "[c.getURI()/] find",
@@ -185,12 +172,7 @@
 				"mode": "raw",
 				"raw": "{\"name\":\"h09eWTgos4\",\"id\":\"7717189558941000\"}"
 			},
-            [if c.isChild()]
-			"url": "{{host}}/[c.getParentAttribute().getClass().getURI()/]/1/[c.getURI()/]/{{new_id}}"
-             [elseif (not c.isChild())]
              "url": "{{host}}/[c.getURI()/]/{{new_id}}"
-              [else]   
-             [/if]
 		},
 		"response": ['['/]],
 		"name": "[c.getURI()/] edit",
@@ -215,12 +197,7 @@
 			}],
 			"description": "",
 			"body": {},
-            [if c.isChild()]
-			"url": "{{host}}/[c.getParentAttribute().getClass().getURI()/]/1/[c.getURI()/]/{{new_id}}"
-             [elseif (not c.isChild())]
              "url": "{{host}}/[c.getURI()/]/{{new_id}}"
-              [else]   
-             [/if]
 		},
 		"response": ['['/]],
 		"name": "[c.getURI()/] delete"
