@@ -25,13 +25,13 @@
             [a.name/]: {
                 
                 displayName:[if a.valueOf('displayName') <> null ] '[a.valueOf('displayName')/]'[elseif a.valueOf('displayName') = null] '[a.getDisplayName()/]'[else][/if],
-                type: [if a.valueOf('isImage') = 'true']'Imagen'[elseif] '[a.type.name/]'[else][/if],
+                type: [if a.valueOf('isImage') = 'true']'Imagen'[elseif a.valueOf('isImage') <> 'true'] '[a.type.name/]'[else][/if],
                 required: [a.isRequired()/]
             }[/for][if(c.isGeneralization())][if(c.getAllAttribs()->notEmpty())],[/if][for (a : Property | c.getGeneralizationClass().getAllAttribs()) separator(',\n')]
             [if (a.existAttribute(c)=false)]
             [a.name/]: {
                 displayName: [if a.valueOf('displayName') <> null ] '[a.valueOf('displayName')/]'[elseif a.valueOf('displayName') = null] '[a.getDisplayName()/]'[else][/if],
-                type: [if a.valueOf('isImage') = 'true']'Imagen'[elseif] '[a.type.name/]'[else][/if],
+                type: [if a.valueOf('isImage') = 'true']'Imagen'[elseif a.valueOf('isImage') <> 'true'] '[a.type.name/]'[else][/if],
                 required: [a.isRequired()/]
             }[/if][/for][/if][for (a : Property | c.getReferences(false)->reject(isComposite()))],
             [a.name/]: {
