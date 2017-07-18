@@ -51,31 +51,36 @@
         };
     }]);
 mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tplDir, $cookies) {
-      function link(scope, element, attrs) {
-        var permissions = $cookies.get("permissions");
-         if(permissions === undefined){
-                 var actions = scope.actions;
-                 scope.actions = {};
-                 for(var action in actions){
-                     if("read" !== action){
-                         delete actions['['/]action];
-                     }
-                 }
-                 scope.actions = actions;
-            }else{
-            permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(",");
-        var havePermission = false;//Util variable
-        for(var key in permissions){//iterates all the input roles
-          if (permissions['['/]key].includes(attrs.name)) {//if has the rol change the variable to true
-            havePermission = true;
-          }
-        }
-        if(!havePermission){//if don't have any of the roles hides the element
-          angular.element(element).css({display: 'none'});
-        }
       return {
-        link:link
-      };}}
+        scope: {
+          name: '='
+        },
+        restrict: 'A',
+        controller: ['['/]'$scope', '$cookies', function (scope, $cookies) {
+            var permissions = $cookies.get("permissions");
+            if(permissions === undefined){
+              var actions = scope.actions;
+              scope.actions = {};
+              for(var action in actions){
+                  if("read" !== action){
+                      delete actions['['/]action];
+                  }
+              }
+              scope.actions = actions;
+            }else{
+              permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(",");
+              var havePermission = false;//Util variable
+              for(var key in permissions){//iterates all the input roles
+                if (permissions['['/]key].includes(attrs.name)) {//if has the rol change the variable to true
+                  havePermission = true;
+                }
+              }
+              if(!havePermission){//if don't have any of the roles hides the element
+                angular.element(element).css({display: 'none'});
+              }
+            }
+          }]
+      };
     }]);
     /**
      * @ngdoc directive
