@@ -463,6 +463,15 @@ jsonElement.getAsJsonObject().get("item")
         String open="{\"";
         String content="";
         String close="}";
+  for(Method m:[c.getURI()/].getClass().getMethods()){
+           if(m.getName().contains("getName") & !"getClass".equals(m.getName())) {
+         content=content.concat(m.getName().substring(3).toLowerCase().concat("\":\"").concat(m.inv['oke'/]([c.getURI()/], null).toString().concat("\",\""))); 
+           }
+          if(m.getName().contains("getId") & !"getClass".equals(m.getName())) {
+         content=content.concat(m.getName().substring(3).toLowerCase().concat("\":\"").concat(m.inv['oke'/]([c.getURI()/], null).toString().concat("\",\""))); 
+           }
+       }
+     return open.concat(content).substring(0,open.concat(content).length()-2 ).concat(close);
   
     } 
 
