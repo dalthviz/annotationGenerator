@@ -497,6 +497,7 @@ public class [className/] {
 [template public getCompositeIntegrationTests(c : Class, path : String)  ? (c.isChild()) {className : String = c.getTestName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 /*
+composite
 [c.getModel().license()/]
 */
 package [c.getModel().baseGroup()/].tests.selenium;
