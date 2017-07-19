@@ -126,7 +126,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
             permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(",");
             var actions = $scope.actions;
             var allowedButtons = ['['/]];
-            var name = $scope.name.toLowerCase().concat("s");
+            var name = $scope.name.toLowerCase();
             for (var key in permissions) {
               if (permissions['['/]key].includes(name)) {
                 if ("read" === permissions['['/]key].split(":")['['/]0])
@@ -211,7 +211,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
             permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(",");
             var actions = $scope.actions;
             var allowedButtons = ['['/]];
-            var name = $scope.name.toLowerCase().concat("s");
+            var name = $scope.name.toLowerCase();
 
 
             for (var key in permissions) {
@@ -296,7 +296,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
             permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(",");
             var actions = $scope.actions;
             var allowedButtons = ['['/]];
-            var name = $scope.name.toLowerCase().concat("s");
+            var name = $scope.name.toLowerCase();
 
             for (var key in permissions) {
 
@@ -361,7 +361,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
             var actions = $scope.actions;
             $scope.actions = {};
             var allowedButtons = ['['/]];
-            var name = $scope.displayName.toLowerCase().concat("s");
+            var name = $scope.displayName.toLowerCase();
 
             for (var key in permissions) {
 
