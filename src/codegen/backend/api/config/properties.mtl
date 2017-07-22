@@ -99,7 +99,7 @@ public class GetDriver {
         Files.delete(zip.toPath());
     }
 
-    private static void unzip(String zipFilePath, String destDir) {
+    private static void unzip(String zipFilePath, String destDir) throws Exception{
         File dir = new File(destDir);
         // create output directory if it doesn't exist
         if (!dir.exists()) {
