@@ -519,7 +519,7 @@ import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getName()/].[c.name/]
 import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getParentAttribute().getClass().name.toLowerCase()/].[c.getParentAttribute().getClass().name/]ListPage;
 import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getParentAttribute().getClass().name.toLowerCase()/].[c.getParentAttribute().getClass().name/]CreatePage;
 import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getParentAttribute().getClass().name.toLowerCase()/].[c.getParentAttribute().getClass().name/]DeletePage;
-import [c.getModel().baseGroup()/].dtos.minimum.[c.getParentAttribute().getClass().getBasicDTOName()/];
+import [c.getModel().baseGroup()/].dtos.minimum.[c.getParentAttribute().getClass().getMinimumDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getParentAttribute().getClass().getEntityName()/];
 import co.edu.uniandes.csw.auth.conexions.AuthenticationApi;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -617,7 +617,7 @@ public class [className/] {
     @InSequence(1)
     public void create[c.getParentAttribute().getClass().name/](@InitialPage [c.getParentAttribute().getClass().name/]ListPage listPage){
         listPage.create();
-        [c.getParentAttribute().getClass().getBasicDTOName()/] expected_[c.getParentAttribute().getClass().name.toLowerCase()/] = factory.manufacturePojo(ArtistDTO.class);
+        [c.getParentAttribute().getClass().getMinimumDTOName()/] expected_[c.getParentAttribute().getClass().name.toLowerCase()/] = factory.manufacturePojo(ArtistDTO.class);
         [c.getParentAttribute().getClass().name.toLowerCase()/]CreatePage.save[c.getParentAttribute().getClass().name/](expected_[c.getParentAttribute().getClass().name.toLowerCase()/]); 
     }
 
