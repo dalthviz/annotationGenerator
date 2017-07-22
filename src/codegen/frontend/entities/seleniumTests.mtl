@@ -560,7 +560,7 @@ public class [className/] {
     @Page
     private [c.name/]DeletePage deletePage;
 /*
-     [c.getHierarchy().toString()/] c.getHierarchy()
+     [for (c:Class | c.getHierarchy()) ][c.name/][/for] c.getHierarchy()
      [c.getParentAttribute().getClass().toString()/] parent
 
 */
