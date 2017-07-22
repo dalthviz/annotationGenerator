@@ -270,7 +270,7 @@
              "url": "{{host}}/[c.getParentAttribute().getClass().getURI()/]"
 		},
 		"response": ['['/]],
-		"name": "parent [c.getURI()/] create",
+		"name": "parentIdCrear [c.getURI()/] ",
 		"event": ['['/]{
 			"listen": "test",
 			"script": {
@@ -428,7 +428,7 @@
              "url": "{{host}}/[c.getParentAttribute().getClass().getURI()/]/{{new_parent_id}}"
 		},
 		"response": ['['/]],
-		"name": "parent [c.getURI()/] delete"
+		"name": "parentIdBorrar [c.getURI()/] delete"
 	}],
 	"info": {
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
