@@ -117,7 +117,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
                  var actions = $scope.actions;
                  $scope.actions = {};
                  for(var action in actions){
-                     if("read" !== action){
+                     if("list" !== action){
                          delete actions['['/]action];
                      }
                  }
@@ -202,7 +202,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
                  var actions = $scope.actions;
                  $scope.actions = {};
                  for(var action in actions){
-                     if("read" !== action){
+                     if("list" !== action){
                          delete actions['['/]action];
                      }
                  }
@@ -287,7 +287,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
                  var actions = $scope.actions;
                  $scope.actions = {};
                  for(var action in actions){
-                     if("read" !== action){
+                     if("list" !== action){
                          delete actions['['/]action];
                      }
                  }
