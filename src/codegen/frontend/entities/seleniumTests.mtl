@@ -559,7 +559,9 @@ public class [className/] {
 
     @Page
     private [c.name/]DeletePage deletePage;
-
+/*
+     [c.getHierarchy().toString()/]
+*/
     @Deployment(testable = false)
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class)

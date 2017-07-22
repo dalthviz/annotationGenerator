@@ -18,8 +18,9 @@
 
     var mod = ng.module("[c.getModule()/]");
 
-    mod.controller("[c.getDeleteCtrlName()/]", ['['/]"$state", "[c.getRecordName()/]", function ($state, [c.getRecordName()/]) {
-            this.confirmDelete = function () {
+    mod.controller("[c.getDeleteCtrlName()/]", ['['/]"$state", "[c.getRecordName()/]","model","$scope" function ($state, [c.getRecordName()/],model,$scope) {
+           $scope.model = model;
+             this.confirmDelete = function () {
                 [c.getRecordName()/].remove().then(function () {
                     $state.go('[c.getListStateName()/]', null, {reload: true});
                 });

@@ -91,7 +91,9 @@
                         controller: '[c.getListCtrlName()/]',
                         controllerAs: 'ctrl'
                     }
-                },
+                },resolve:{
+						model: '[c.getEntityModel()/]'
+					},
                      ncyBreadcrumb: {
                                 label: '[c.getMainStateName()/]'
                            }
@@ -106,6 +108,9 @@
                         controllerAs: 'ctrl'
                     }
                 },
+                  resolve:{
+						model: '[c.getEntityModel()/]'
+					},
                      ncyBreadcrumb: {
                                 parent :'[c.getListStateName()/]', 
                                 label: 'new'
@@ -135,6 +140,9 @@
                         controller: '[c.getDetailCtrlName()/]'
                     }
                 },
+                  resolve:{
+						model: '[c.getEntityModel()/]'
+					},
                      ncyBreadcrumb: {
                                 parent :'[c.getListStateName()/]', 
                                 label: 'details'
@@ -151,6 +159,9 @@
                         controllerAs: 'ctrl'
                     }
                 },
+                  resolve:{
+						model: '[c.getEntityModel()/]'
+					},
                      ncyBreadcrumb: {
                                 parent :'[c.getDetailStateName()/]', 
                                 label: 'new'
@@ -165,7 +176,10 @@
                         controller: '[c.getDeleteCtrlName()/]',
                         controllerAs: 'ctrl'
                     }
-                }
+                },
+                  resolve:{
+						model: '[c.getEntityModel()/]'
+					}
             });
             [for (a : Property | c.getNonCompositeCollectionAttributes())]
             $sp.state('[a.getSharedAbstractState()/]', {
@@ -178,6 +192,7 @@
                     }
                 },
                 resolve: {
+                     
                     [a.name/]: ['['/]'[c.getRecordName()/]', function ([c.getRecordName()/]) {
                             return [c.getRecordName()/].getList('[a.name/]');
                         }[']'/],
@@ -205,6 +220,7 @@
                     }
                 },
                 resolve: {
+                    model: '[a.getClass().getEntityModel()/]',
                     pool: ['['/]'Restangular', 'model', function (r, model) {
                             return r.all(model.url).getList();
                         }[']'/]

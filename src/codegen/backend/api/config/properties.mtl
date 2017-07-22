@@ -90,7 +90,11 @@ public class GetDriver {
         fos.close();
         String zipFilePath = "chromeDriv.zip";
         String destDir = "[m.getApiArtifactId()/]/drivers";
-        unzip(zipFilePath, destDir);
+        try {
+            unzip(zipFilePath, destDir);
+        } catch (Exception ex) {
+            System.out.println("file already exist");
+        }
         File zip = new File("chromeDriv.zip");
         Files.delete(zip.toPath());
     }
@@ -100,6 +104,8 @@ public class GetDriver {
         // create output directory if it doesn't exist
         if (!dir.exists()) {
             dir.mkdirs();
+        }else{
+        throw new Exception();
         }
         FileInputStream fis;
         //buffer for read and write data to file
