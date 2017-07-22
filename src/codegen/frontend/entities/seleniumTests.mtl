@@ -284,7 +284,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+[if (c.isChild())]
+@Location("#/[c.getParentAttribute().getClass().getURI()/]/1/details/[c.getURI()/]/list")
+[elseif (not c.isChild())]
 @Location("#/[c.getURI()/]/list")
+[else]
+[/if]
+
 public class [c.name/]ListPage {
 
     @Drone
@@ -510,6 +516,11 @@ import [c.getModel().baseGroup()/].tests.selenium.pages.LoginPage;
 import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getName()/].[c.name/]DeletePage;
 import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getName()/].[c.name/]DetailPage;
 import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getName()/].[c.name/]EditPage;
+import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getParentAttribute().getClass().name.toLowerCase()/].[c.getParentAttribute().getClass().name/]ListPage;
+import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getParentAttribute().getClass().name.toLowerCase()/].[c.getParentAttribute().getClass().name/]CreatePage;
+import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getParentAttribute().getClass().name.toLowerCase()/].[c.getParentAttribute().getClass().name/]DeletePage;
+import [c.getModel().baseGroup()/].dtos.minimum.[c.getParentAttribute().getClass().getBasicDTOName()/];
+import [c.getModel().baseGroup()/].entities.[c.getParentAttribute().getClass().getEntityName()/];
 import co.edu.uniandes.csw.auth.conexions.AuthenticationApi;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import java.io.File;
@@ -559,11 +570,15 @@ public class [className/] {
 
     @Page
     private [c.name/]DeletePage deletePage;
-/*
-     [for (c:Class | c.getHierarchy()) ][c.name/][/for] c.getHierarchy()
-     [c.getParentAttribute().getClass().toString()/] parent
+    
+    @page
+    private [c.getParentAttribute().getClass().name/]CreatePage [c.getParentAttribute().getClass().name.toLowerCase()/]CreatePage;
+    
+      @page
+    private [c.getParentAttribute().getClass().name/]DeletePage [c.getParentAttribute().getClass().name.toLowerCase()/]DeletePage;
 
-*/
+
+
     @Deployment(testable = false)
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class)
@@ -598,8 +613,16 @@ public class [className/] {
         loginPage.login();
     }
 
-    @Test
+   @Test
     @InSequence(1)
+    public void create[c.getParentAttribute().getClass().name/](@InitialPage [c.getParentAttribute().getClass().name/]ListPage listPage){
+        listPage.create();
+        [c.getParentAttribute().getClass().getBasicDTOName()/] expected_[c.getParentAttribute().getClass().name.toLowerCase()/] = factory.manufacturePojo(ArtistDTO.class);
+        [c.getParentAttribute().getClass().name.toLowerCase()/]CreatePage.save[c.getParentAttribute().getClass().name/](expected_[c.getParentAttribute().getClass().name.toLowerCase()/]); 
+    }
+
+    @Test
+    @InSequence(2)
     public void create[c.name/](@InitialPage [c.name/]ListPage listPage) {
         Integer expected = 0;
         Assert.assertEquals(expected, listPage.count[c.name/]s());
@@ -615,7 +638,7 @@ public class [className/] {
     }
 
     @Test
-    @InSequence(2)
+    @InSequence(3)
     public void edit[c.name/](@InitialPage [c.name/]ListPage listPage) {
         [c.getMinimumDTOName()/] [c.getExpectectName()/] = factory.manufacturePojo([c.getMinimumDTOName()/].class);
 
@@ -629,12 +652,19 @@ public class [className/] {
     }
 
     @Test
-    @InSequence(3)
+    @InSequence(4)
     public void delete[c.name/](@InitialPage [c.name/]ListPage listPage) {
         listPage.delete[c.name/](0);
         deletePage.confirm();
         Integer expected = 0;
         Assert.assertEquals(expected, listPage.count[c.name/]s());
+    }
+
+ @Test
+    @InSequence(5)
+    public void delete[c.getParentAttribute().getClass().name/](@InitialPage [c.getParentAttribute().getClass().name/]ListPage listPage) {
+        listPage.delete[c.getParentAttribute().getClass().name/](0);
+        [c.getParentAttribute().getClass().name.toLowerCase()/]DeletePage.confirm();
     }
 
 }
