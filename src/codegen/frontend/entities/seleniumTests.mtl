@@ -286,9 +286,9 @@ import org.openqa.selenium.support.FindBy;
 
 [if (c.isChild())]
 @Location("#/[c.getParentAttribute().getClass().getURI()/]/1/details/[c.getURI()/]/list")
-[elseif (not c.isChild())]
+[/if]
+[if (not c.isChild())]
 @Location("#/[c.getURI()/]/list")
-[else]
 [/if]
 
 public class [c.name/]ListPage {
