@@ -571,10 +571,10 @@ public class [className/] {
     @Page
     private [c.name/]DeletePage deletePage;
     
-    @page
+    @Page
     private [c.getParentAttribute().getClass().name/]CreatePage [c.getParentAttribute().getClass().name.toLowerCase()/]CreatePage;
     
-      @page
+    @Page
     private [c.getParentAttribute().getClass().name/]DeletePage [c.getParentAttribute().getClass().name.toLowerCase()/]DeletePage;
 
 
@@ -617,7 +617,7 @@ public class [className/] {
     @InSequence(1)
     public void create[c.getParentAttribute().getClass().name/](@InitialPage [c.getParentAttribute().getClass().name/]ListPage listPage){
         listPage.create();
-        [c.getParentAttribute().getClass().getMinimumDTOName()/] expected_[c.getParentAttribute().getClass().name.toLowerCase()/] = factory.manufacturePojo(ArtistDTO.class);
+        [c.getParentAttribute().getClass().getMinimumDTOName()/] expected_[c.getParentAttribute().getClass().name.toLowerCase()/] = factory.manufacturePojo([c.getParentAttribute().getClass().getMinimumDTOName()/].class);
         [c.getParentAttribute().getClass().name.toLowerCase()/]CreatePage.save[c.getParentAttribute().getClass().name/](expected_[c.getParentAttribute().getClass().name.toLowerCase()/]); 
     }
 
