@@ -560,7 +560,9 @@ public class [className/] {
     @Page
     private [c.name/]DeletePage deletePage;
 /*
-     [c.getHierarchy().toString()/]
+     [c.getHierarchy().toString()/] c.getHierarchy()
+     [c.getParentAttribute().getClass().toString()/] parent
+
 */
     @Deployment(testable = false)
     public static WebArchive createDeployment() {
