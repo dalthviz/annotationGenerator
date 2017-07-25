@@ -91,12 +91,13 @@
                         controller: '[c.getListCtrlName()/]',
                         controllerAs: 'ctrl'
                     }
-                },resolve:{
-						model: '[c.getEntityModel()/]'
+                },
+                 resolve:{
+				   model: '[c.getEntityModel()/]'
 					},
-                     ncyBreadcrumb: {
-                                label: '[c.getMainStateName()/]'
-                           }
+                 ncyBreadcrumb: {
+                   label: '[c.getMainStateName()/]'
+                    }
             });
             $sp.state('[c.getNewStateName()/]', {
                 url: '/new',
@@ -111,10 +112,10 @@
                   resolve:{
 						model: '[c.getEntityModel()/]'
 					},
-                     ncyBreadcrumb: {
-                                parent :'[c.getListStateName()/]', 
-                                label: 'new'
-                           }
+                  ncyBreadcrumb: {
+                        parent :'[c.getListStateName()/]', 
+                        label: 'new'
+                   }
             });
             $sp.state('[c.getInstanceStateName()/]', {
                 url: '/{[c.getIdParamName()/]:int}',
@@ -143,10 +144,10 @@
                   resolve:{
 						model: '[c.getEntityModel()/]'
 					},
-                     ncyBreadcrumb: {
-                                parent :'[c.getListStateName()/]', 
-                                label: 'details'
-                           }
+                  ncyBreadcrumb: {
+                        parent :'[c.getListStateName()/]', 
+                        label: 'details'
+                    }
             });
             $sp.state('[c.getEditStateName()/]', {
                 url: '/edit',
@@ -162,10 +163,10 @@
                   resolve:{
 						model: '[c.getEntityModel()/]'
 					},
-                     ncyBreadcrumb: {
-                                parent :'[c.getDetailStateName()/]', 
-                                label: 'edit'
-                           }
+                  ncyBreadcrumb: {
+                        parent :'[c.getDetailStateName()/]', 
+                        label: 'edit'
+                    }
             });
             $sp.state('[c.getDeleteStateName()/]', {
                 url: '/delete',
@@ -178,7 +179,7 @@
                     }
                 },
                   resolve:{
-						model: '[c.getEntityModel()/]'
+				      model: '[c.getEntityModel()/]'
 					}
             });
             [for (a : Property | c.getNonCompositeCollectionAttributes())]
