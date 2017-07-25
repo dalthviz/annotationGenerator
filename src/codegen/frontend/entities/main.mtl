@@ -164,7 +164,7 @@
 					},
                      ncyBreadcrumb: {
                                 parent :'[c.getDetailStateName()/]', 
-                                label: 'new'
+                                label: 'edit'
                            }
             });
             $sp.state('[c.getDeleteStateName()/]', {

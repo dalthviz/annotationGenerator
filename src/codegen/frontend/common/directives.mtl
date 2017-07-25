@@ -361,7 +361,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
             var actions = $scope.actions;
             $scope.actions = {};
             var allowedButtons = ['['/]];
-            var name = $scope.displayName.toLowerCase();
+            var name = $scope.name.toLowerCase();
 
             for (var key in permissions) {
 
