@@ -18,7 +18,7 @@
 
     mod.constant('[c.getEntityModel()/]', {
         name: '[c.getName()/]',
-        displayName: '[c.getDisplayName()/]',
+        displayName: [if c.valueOf('displayName') <> null ] '[c.valueOf('displayName')/]'[elseif c.valueOf('displayName') = null] '[c.getDisplayName()/]'[else][/if],
         url: '[c.getURI()/]',
         fields: {
             [for (a : Property | c.getAllAttribs()) separator(',\n')]
