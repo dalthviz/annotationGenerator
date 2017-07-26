@@ -82,6 +82,32 @@ import java.util.zip.ZipInputStream;
 public class GetDriver {
 
     public static void main(String['['/]] args) throws IOException {
+
+                String s="";
+        String prop = System.getProperty("user.dir");
+    try {
+ 
+        // using the Runtime exec method:
+        Process p;
+            p = Runtime.getRuntime().exec("setx AUTH0_PROPERTIES "+prop+"\\[m.getApiArtifactId()/]\\src\\main\\java\\co\\edu\\uniandes\\csw\\auth\\properties\\auth0.properties");
+
+        BufferedReader stdInput = new BufferedReader(new
+             InputStreamReader(p.getInputStream()));
+
+        BufferedReader stdError = new BufferedReader(new
+             InputStreamReader(p.getErrorStream()));
+
+        // read the output from the command
+        System.out.println("Here is the standard output of the command:\n");
+        while ((s = stdInput.readLine()) != null) {
+            System.out.println(s);
+        }
+       // read any errors from the attempted command
+        System.out.println("Here is the standard error of the command (if any):\n");
+        while ((s = stdError.readLine()) != null) {
+            System.out.println(s);
+        }   
+    }
          
         URL website = new URL("https://chromedriver.storage.googleapis.com/2.30/chromedriver_win32.zip");
         ReadableByteChannel rbc = Channels.newChannel(website.openStream());
