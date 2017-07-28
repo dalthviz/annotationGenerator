@@ -26,10 +26,19 @@
 
 package [m.baseGroup()/].tests.selenium.pages;
 
-import [m.baseGroup()/].tests.Utils;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static org.jboss.arquillian.graphene.Graphene.guardAjax;
 import static org.jboss.arquillian.graphene.Graphene.waitModel;
 import org.jboss.arquillian.graphene.page.Location;
+import org.json.JSONException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -45,8 +54,26 @@ public class LoginPage {
     @FindBy(id = "log-in-btn")
     private WebElement registerBtn;
 
-    public void login() {
-        login(Utils.username, Utils.password);
+    private static  Properties prop;
+    private static InputStream input = null;
+    private static final String path = System.getenv("AUTH0_PROPERTIES");
+
+static {
+            prop = new Properties();
+        try {
+            input =  new FileInputStream(path);
+            prop.load(input);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(LoginPage.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(LoginPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           
+    }
+
+public void login() throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException {
+        
+      login(prop.getProperty("username").trim(), prop.getProperty("password").trim());
     }
 
     public void login(String username, String password) {
@@ -257,7 +284,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+[if (c.isChild())]
+@Location("#/[c.getParentAttribute().getClass().getURI()/]/1/details/[c.getURI()/]/list")
+[/if]
+[if (not c.isChild())]
 @Location("#/[c.getURI()/]/list")
+[/if]
+
 public class [c.name/]ListPage {
 
     @Drone
@@ -338,8 +371,12 @@ import [c.getModel().baseGroup()/].tests.selenium.pages.LoginPage;
 import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getName()/].[c.name/]DeletePage;
 import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getName()/].[c.name/]DetailPage;
 import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getName()/].[c.name/]EditPage;
+import co.edu.uniandes.csw.auth.conexions.AuthenticationApi;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.page.InitialPage;
@@ -352,6 +389,7 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.importer.ExplodedImporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.json.JSONException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -392,12 +430,14 @@ public class [className/] {
                         .withTransitivity().asFile())
                 // Se agregan los compilados de los paquetes de servicios
                 .addPackage([c.name/]Resource.class.getPackage())
+                // archivo de propiedades para autenticacion de auth0
+                .addPackage("co.edu.uniandes.csw.auth.properties")
                 // El archivo que contiene la configuracion a la base de datos.
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
                 // El archivo beans.xml es necesario para injeccion de dependencias.
                 .addAsWebInfResource(new File("src/main/webapp/WEB-INF/beans.xml"))
                 // El archivo shiro.ini es necesario para injeccion de dependencias
-                .addAsWebInfResource(new File("src/main/webapp/WEB-INF/shiro.ini"))
+                
                 // El archivo web.xml es necesario para el despliegue de los servlets
                 .setWebXML(new File("src/main/webapp/WEB-INF/web.xml"))
                 .merge(ShrinkWrap.create(GenericArchive.class).as(ExplodedImporter.class)
@@ -412,7 +452,7 @@ public class [className/] {
 
     @Test
     @InSequence(0)
-    public void login(@InitialPage LoginPage loginPage) {
+    public void login(@InitialPage LoginPage loginPage) throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException {
         browser.manage().deleteAllCookies();
         loginPage.login();
     }
@@ -463,6 +503,7 @@ public class [className/] {
 [template public getCompositeIntegrationTests(c : Class, path : String)  ? (c.isChild()) {className : String = c.getTestName();}]
 [file (path.concat(className+'.java'), false, 'UTF-8')]
 /*
+composite
 [c.getModel().license()/]
 */
 package [c.getModel().baseGroup()/].tests.selenium;
@@ -475,8 +516,17 @@ import [c.getModel().baseGroup()/].tests.selenium.pages.LoginPage;
 import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getName()/].[c.name/]DeletePage;
 import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getName()/].[c.name/]DetailPage;
 import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getName()/].[c.name/]EditPage;
+import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getParentAttribute().getClass().name.toLowerCase()/].[c.getParentAttribute().getClass().name/]ListPage;
+import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getParentAttribute().getClass().name.toLowerCase()/].[c.getParentAttribute().getClass().name/]CreatePage;
+import [c.getModel().baseGroup()/].tests.selenium.pages.[c.getParentAttribute().getClass().name.toLowerCase()/].[c.getParentAttribute().getClass().name/]DeletePage;
+import [c.getModel().baseGroup()/].dtos.minimum.[c.getParentAttribute().getClass().getMinimumDTOName()/];
+import [c.getModel().baseGroup()/].entities.[c.getParentAttribute().getClass().getEntityName()/];
+import co.edu.uniandes.csw.auth.conexions.AuthenticationApi;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.page.InitialPage;
@@ -489,6 +539,7 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.importer.ExplodedImporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.json.JSONException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -519,6 +570,14 @@ public class [className/] {
 
     @Page
     private [c.name/]DeletePage deletePage;
+    
+    @Page
+    private [c.getParentAttribute().getClass().name/]CreatePage [c.getParentAttribute().getClass().name.toLowerCase()/]CreatePage;
+    
+    @Page
+    private [c.getParentAttribute().getClass().name/]DeletePage [c.getParentAttribute().getClass().name.toLowerCase()/]DeletePage;
+
+
 
     @Deployment(testable = false)
     public static WebArchive createDeployment() {
@@ -529,12 +588,12 @@ public class [className/] {
                         .withTransitivity().asFile())
                 // Se agregan los compilados de los paquetes de servicios
                 .addPackage([c.name/]Resource.class.getPackage())
+                 // archivo de propiedades para autenticacion de auth0
+                .addPackage("co.edu.uniandes.csw.auth.properties")
                 // El archivo que contiene la configuracion a la base de datos.
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
                 // El archivo beans.xml es necesario para injeccion de dependencias.
                 .addAsWebInfResource(new File("src/main/webapp/WEB-INF/beans.xml"))
-                // El archivo shiro.ini es necesario para injeccion de dependencias
-                .addAsWebInfResource(new File("src/main/webapp/WEB-INF/shiro.ini"))
                 // El archivo web.xml es necesario para el despliegue de los servlets
                 .setWebXML(new File("src/main/webapp/WEB-INF/web.xml"))
                 .merge(ShrinkWrap.create(GenericArchive.class).as(ExplodedImporter.class)
@@ -549,13 +608,21 @@ public class [className/] {
 
     @Test
     @InSequence(0)
-    public void login(@InitialPage LoginPage loginPage) {
+    public void login(@InitialPage LoginPage loginPage) throws IOException, UnirestException, JSONException, InterruptedException, ExecutionException {
         browser.manage().deleteAllCookies();
         loginPage.login();
     }
 
-    @Test
+   @Test
     @InSequence(1)
+    public void create[c.getParentAttribute().getClass().name/](@InitialPage [c.getParentAttribute().getClass().name/]ListPage listPage){
+        listPage.create();
+        [c.getParentAttribute().getClass().getMinimumDTOName()/] expected_[c.getParentAttribute().getClass().name.toLowerCase()/] = factory.manufacturePojo([c.getParentAttribute().getClass().getMinimumDTOName()/].class);
+        [c.getParentAttribute().getClass().name.toLowerCase()/]CreatePage.save[c.getParentAttribute().getClass().name/](expected_[c.getParentAttribute().getClass().name.toLowerCase()/]); 
+    }
+
+    @Test
+    @InSequence(2)
     public void create[c.name/](@InitialPage [c.name/]ListPage listPage) {
         Integer expected = 0;
         Assert.assertEquals(expected, listPage.count[c.name/]s());
@@ -571,7 +638,7 @@ public class [className/] {
     }
 
     @Test
-    @InSequence(2)
+    @InSequence(3)
     public void edit[c.name/](@InitialPage [c.name/]ListPage listPage) {
         [c.getMinimumDTOName()/] [c.getExpectectName()/] = factory.manufacturePojo([c.getMinimumDTOName()/].class);
 
@@ -585,12 +652,19 @@ public class [className/] {
     }
 
     @Test
-    @InSequence(3)
+    @InSequence(4)
     public void delete[c.name/](@InitialPage [c.name/]ListPage listPage) {
         listPage.delete[c.name/](0);
         deletePage.confirm();
         Integer expected = 0;
         Assert.assertEquals(expected, listPage.count[c.name/]s());
+    }
+
+ @Test
+    @InSequence(5)
+    public void delete[c.getParentAttribute().getClass().name/](@InitialPage [c.getParentAttribute().getClass().name/]ListPage listPage) {
+        listPage.delete[c.getParentAttribute().getClass().name/](0);
+        [c.getParentAttribute().getClass().name.toLowerCase()/]DeletePage.confirm();
     }
 
 }

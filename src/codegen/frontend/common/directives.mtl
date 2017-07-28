@@ -20,7 +20,7 @@
 [/template]
 
 
-[template public genDir(path : String)]
+[template public genDir(m:Model,path : String)]
 [file (path.concat('crud.dir.js'), false, 'UTF-8')]
 (function (ng) {
     var mod = ng.module('ngCrud');
@@ -51,32 +51,37 @@
         };
     }]);
 mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tplDir, $cookies) {
-      function link(scope, element, attrs) {
-        var permissions = $cookies.get("permissions");
-         if(permissions === undefined){
-                 var actions = scope.actions;
-                 scope.actions = {};
-                 for(var action in actions){
-                     if("read" !== action){
-                         delete actions['['/]action];
-                     }
+     return {
+       scope: {
+         name: '='
+       },
+       restrict: 'A',
+       link: function (scope, element, attrs) {
+           var permissions = $cookies.get("permissions");
+           if(permissions === undefined){
+             var actions = scope.actions;
+             scope.actions = {};
+             for(var action in actions){
+                 if("list" !== action){
+                     delete actions['['/]action];
                  }
-                 scope.actions = actions;
-            }else{
-            permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(",");
-        var havePermission = false;//Util variable
-        for(var key in permissions){//iterates all the input roles
-          if (permissions['['/]key].includes(attrs.name)) {//if has the rol change the variable to true
-            havePermission = true;
-          }
-        }
-        if(!havePermission){//if don't have any of the roles hides the element
-          angular.element(element).css({display: 'none'});
-        }
-      return {
-        link:link
-      };}}
-    }]);
+             }
+             scope.actions = actions;
+           }else{
+             permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(","); 
+             var havePermission = false;//Util variable
+             for(var key in permissions){//iterates all the input roles
+               if (permissions['['/]key].includes(attrs.name)) {//if has the rol change the variable to true
+                 havePermission = true;
+               }
+             }
+             if(!havePermission){//if don't have any of the roles hides the element
+               angular.element(element).css({display: 'none'});
+             }
+           }
+         }
+     };
+   }]);
     /**
      * @ngdoc directive
      * @name ngCrud.directive:listRecords
@@ -112,7 +117,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
                  var actions = $scope.actions;
                  $scope.actions = {};
                  for(var action in actions){
-                     if("read" !== action){
+                     if("list" !== action){
                          delete actions['['/]action];
                      }
                  }
@@ -121,11 +126,11 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
             permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(",");
             var actions = $scope.actions;
             var allowedButtons = ['['/]];
-            var name = $scope.name.toLowerCase().concat("s");
+            var name = $scope.name.toLowerCase();
             for (var key in permissions) {
               if (permissions['['/]key].includes(name)) {
                 if ("read" === permissions['['/]key].split(":")['['/]0])
-                  allowedButtons.push("list", "detail", "artworks", "refresh");
+                  allowedButtons.push("list", "detail", "refresh");
                 if ("update" === permissions['['/]key].split(":")['['/]0])
                   allowedButtons.push("edit", "save", "cancel");
                 if ("create" === permissions['['/]key].split(":")['['/]0])
@@ -197,7 +202,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
                  var actions = $scope.actions;
                  $scope.actions = {};
                  for(var action in actions){
-                     if("read" !== action){
+                     if("list" !== action){
                          delete actions['['/]action];
                      }
                  }
@@ -206,13 +211,13 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
             permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(",");
             var actions = $scope.actions;
             var allowedButtons = ['['/]];
-            var name = $scope.name.toLowerCase().concat("s");
+            var name = $scope.name.toLowerCase();
 
 
             for (var key in permissions) {
               if (permissions['['/]key].includes(name)) {
                 if ("read" === permissions['['/]key].split(":")['['/]0])
-                  allowedButtons.push("list", "artworks", "refresh");
+                  allowedButtons.push("list", "detail", "refresh");
                 if ("update" === permissions['['/]key].split(":")['['/]0])
                   allowedButtons.push("edit", "save", "cancel");
                 if ("create" === permissions['['/]key].split(":")['['/]0])
@@ -227,10 +232,10 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
             }
 
             $scope.actions = actions;
-
+            var ln = 0;
             angular.forEach($scope.actions, function (value, key)
             {
-              this.push('<button class="btn btn-default btn-sm" type="button" ng-hide="grid.appScope.actions.' + key + '.show && !grid.appScope.actions.' + key + '.show(row.entity)" ng-click="grid.appScope.actions.' + key + '.fn(row.entity)"><span class="glyphicon glyphicon-' + value.icon + '"></span> <md-tooltip>' + value.displayName + '</md-tooltip></button>');
+              this.push('<button id="'+ln+'-'+key+'-btn" class="btn btn-default btn-sm" type="button" ng-hide="grid.appScope.actions.' + key + '.show && !grid.appScope.actions.' + key + '.show(row.entity)" ng-click="grid.appScope.actions.' + key + '.fn(row.entity)"><span class="glyphicon glyphicon-' + value.icon + '"></span> <md-tooltip>' + value.displayName + '</md-tooltip></button>');
             }, columnActionsValues);
 
             columnDefsValues.push({name: 'Acciones', cellTemplate: '<div>' + columnActionsValues.join(" ") + '</div>', enableFiltering: false, enableSorting: false, pinnedRight: true, width: 250});
@@ -282,7 +287,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
                  var actions = $scope.actions;
                  $scope.actions = {};
                  for(var action in actions){
-                     if("read" !== action){
+                     if("list" !== action){
                          delete actions['['/]action];
                      }
                  }
@@ -291,13 +296,13 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
             permissions = permissions.replace(/['[['/]"']+/g, "").replace(/]+/g, "").split(",");
             var actions = $scope.actions;
             var allowedButtons = ['['/]];
-            var name = $scope.name.toLowerCase().concat("s");
+            var name = $scope.name.toLowerCase();
 
             for (var key in permissions) {
 
               if (permissions['['/]key].includes(name)) {
                 if ("read" === permissions['['/]key].split(":")['['/]0])
-                  allowedButtons.push("list", "detail", "artworks", "refresh");
+                  allowedButtons.push("list", "detail", "refresh" );
                 if ("update" === permissions['['/]key].split(":")['['/]0])
                   allowedButtons.push("edit", "save", "cancel");
                 if ("create" === permissions['['/]key].split(":")['['/]0])
@@ -356,13 +361,13 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
             var actions = $scope.actions;
             $scope.actions = {};
             var allowedButtons = ['['/]];
-            var name = $scope.displayName.toLowerCase().concat("s");
+            var name = $scope.name.toLowerCase();
 
             for (var key in permissions) {
 
               if (permissions['['/]key].includes(name)) {
                 if ("read" === permissions['['/]key].split(":")['['/]0])
-                  allowedButtons.push("list", "artworks", "refresh");
+                  allowedButtons.push("list",  [for (c: Class | m.getClasses()) ]"[c.getURI()/]",[/for] "refresh");
                 if ("update" === permissions['['/]key].split(":")['['/]0])
                   allowedButtons.push("edit", "save", "cancel");
                 if ("create" === permissions['['/]key].split(":")['['/]0])

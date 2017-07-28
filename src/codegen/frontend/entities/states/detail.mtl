@@ -10,7 +10,7 @@
 [/template]
 
 [**
- * Generates a controller for the detail state
+ * Generates 
  * @param c Class for which the controller is create
  * @param path Parent folder in which the file should be created
 */]
@@ -23,8 +23,9 @@
 
     var mod = ng.module("[c.getModule()/]");
 
-    mod.controller("[c.getDetailCtrlName()/]", ['['/]'$scope', "$state", "[c.getRecordName()/]",
-        function ($scope, $state, [c.getRecordName()/]) {
+    mod.controller("[c.getDetailCtrlName()/]", ['['/]'$scope', "$state", "[c.getRecordName()/]","model",
+        function ($scope, $state, [c.getRecordName()/],model) {
+            $scope.model = model;
             $scope.currentRecord = [c.getRecordName()/];
             $scope.actions = {
                 create: {

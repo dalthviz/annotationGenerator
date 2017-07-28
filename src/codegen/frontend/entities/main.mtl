@@ -18,27 +18,28 @@
 
     mod.constant('[c.getEntityModel()/]', {
         name: '[c.getName()/]',
-        displayName: '[c.getDisplayName()/]',
+        displayName: [if c.valueOf('displayName') <> null ]'[c.valueOf('displayName')/]'[elseif c.valueOf('displayName') = null] '[c.getDisplayName()/]'[else][/if],
         url: '[c.getURI()/]',
         fields: {
             [for (a : Property | c.getAllAttribs()) separator(',\n')]
             [a.name/]: {
-                displayName: '[a.getDisplayName()/]',
-                type: '[a.type.name/]',
-                required: [a.isRequired()/]
+                
+                displayName:[if a.valueOf('displayName') <> null ] '[a.valueOf('displayName')/]'[elseif a.valueOf('displayName') = null] '[a.getDisplayName()/]'[else][/if],
+                type: [if a.valueOf('isImage') = 'true']'Imagen'[elseif a.valueOf('isImage') <> 'true'] '[a.type.name/]'[else][/if],
+                required:[if a.valueOf('isRequired')= null ] [a.isRequired()/] [elseif a.valueOf('isRequired') = 'false' ]false[else][/if]
             }[/for][if(c.isGeneralization())][if(c.getAllAttribs()->notEmpty())],[/if][for (a : Property | c.getGeneralizationClass().getAllAttribs()) separator(',\n')]
             [if (a.existAttribute(c)=false)]
             [a.name/]: {
-                displayName: '[a.getDisplayName()/]',
-                type: '[a.type.name/]',
-                required: [a.isRequired()/]
+                displayName: [if a.valueOf('displayName') <> null ] '[a.valueOf('displayName')/]'[elseif a.valueOf('displayName') = null] '[a.getDisplayName()/]'[else][/if],
+                type: [if a.valueOf('isImage') = 'true']'Imagen'[elseif a.valueOf('isImage') <> 'true'] '[a.type.name/]'[else][/if],
+                required: [if a.valueOf('isRequired')= null ] [a.isRequired()/] [elseif a.valueOf('isRequired') = 'false' ]false[else][/if]
             }[/if][/for][/if][for (a : Property | c.getReferences(false)->reject(isComposite()))],
             [a.name/]: {
-                displayName: '[a.getDisplayName()/]',
+                displayName: [if a.valueOf('displayName') <> null ] '[a.valueOf('displayName')/]'[elseif a.valueOf('displayName') = null] '[a.getDisplayName()/]'[else][/if],
                 type: 'Reference',
                 model: '[a.getClass().getEntityModel()/]',
                 options: ['[]'/],
-                required: [a.isRequired()/]
+                required: [if a.valueOf('isRequired') = null ] [a.isRequired()/] [elseif a.valueOf('isRequired') = 'false' ]false[else][/if]
             }[/for]
         }
     });
@@ -91,9 +92,12 @@
                         controllerAs: 'ctrl'
                     }
                 },
-                     ncyBreadcrumb: {
-                                label: '[c.getMainStateName()/]'
-                           }
+                 resolve:{
+				   model: '[c.getEntityModel()/]'
+					},
+                 ncyBreadcrumb: {
+                   label: '[c.getMainStateName()/]'
+                    }
             });
             $sp.state('[c.getNewStateName()/]', {
                 url: '/new',
@@ -105,10 +109,13 @@
                         controllerAs: 'ctrl'
                     }
                 },
-                     ncyBreadcrumb: {
-                                parent :'[c.getListStateName()/]', 
-                                label: 'new'
-                           }
+                  resolve:{
+						model: '[c.getEntityModel()/]'
+					},
+                  ncyBreadcrumb: {
+                        parent :'[c.getListStateName()/]', 
+                        label: 'new'
+                   }
             });
             $sp.state('[c.getInstanceStateName()/]', {
                 url: '/{[c.getIdParamName()/]:int}',
@@ -134,10 +141,13 @@
                         controller: '[c.getDetailCtrlName()/]'
                     }
                 },
-                     ncyBreadcrumb: {
-                                parent :'[c.getListStateName()/]', 
-                                label: 'details'
-                           }
+                  resolve:{
+						model: '[c.getEntityModel()/]'
+					},
+                  ncyBreadcrumb: {
+                        parent :'[c.getListStateName()/]', 
+                        label: 'details'
+                    }
             });
             $sp.state('[c.getEditStateName()/]', {
                 url: '/edit',
@@ -150,10 +160,13 @@
                         controllerAs: 'ctrl'
                     }
                 },
-                     ncyBreadcrumb: {
-                                parent :'[c.getDetailStateName()/]', 
-                                label: 'new'
-                           }
+                  resolve:{
+						model: '[c.getEntityModel()/]'
+					},
+                  ncyBreadcrumb: {
+                        parent :'[c.getDetailStateName()/]', 
+                        label: 'edit'
+                    }
             });
             $sp.state('[c.getDeleteStateName()/]', {
                 url: '/delete',
@@ -164,7 +177,10 @@
                         controller: '[c.getDeleteCtrlName()/]',
                         controllerAs: 'ctrl'
                     }
-                }
+                },
+                  resolve:{
+				      model: '[c.getEntityModel()/]'
+					}
             });
             [for (a : Property | c.getNonCompositeCollectionAttributes())]
             $sp.state('[a.getSharedAbstractState()/]', {
@@ -177,6 +193,7 @@
                     }
                 },
                 resolve: {
+                     
                     [a.name/]: ['['/]'[c.getRecordName()/]', function ([c.getRecordName()/]) {
                             return [c.getRecordName()/].getList('[a.name/]');
                         }[']'/],
@@ -204,6 +221,7 @@
                     }
                 },
                 resolve: {
+                    model: '[a.getClass().getEntityModel()/]',
                     pool: ['['/]'Restangular', 'model', function (r, model) {
                             return r.all(model.url).getList();
                         }[']'/]
@@ -238,33 +256,37 @@
             Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
                 switch(response.status) {
                     case 400:
-                        $scope.showError('Error 400: La solicitud contiene sintaxis errónea.');
+                        $scope.showError(response.data);
                         return false; 
                         break;
                     case 401:
-                        $scope.showError('Error 401: No autorizado.');
+                        $scope.showError(response.data);
                         return false; 
                         break;
                     case 403:
-                        $scope.showError('Error 403: No autorizado.');
+                        $scope.showError(response.data);
                         return false; 
                         break;
                     case 404:
-                        $scope.showError('Error 404: Recurso no encontrado.');
+                        $scope.showError(response.data);
                         return false; 
                         break;
                     case 413:
-                        $scope.showError('Error 413: Petición demasiado grande.');
+                        $scope.showError(response.data);
                         return false; 
                         break;
                     case 500:
-                        $scope.showError('Error 500: Error interno del servidor.');
+                        $scope.showError(response.data);
                         return false; 
                         break;
                     case 503:
-                        $scope.showError('Error 503: Servicio no disponible.');
+                        $scope.showError(response.data);
                         return false; 
                         break;  
+                    case 412:
+                        $scope.showError(response.data);
+                        return false; 
+                        break; 
                 }
 
                 return true; // error not handled

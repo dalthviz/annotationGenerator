@@ -4,6 +4,7 @@
 [import backend::api::jersey::services /]
 [import backend::api::jersey::tests /]
 [import backend::api::jersey::dto /]
+[import backend::api::jersey::postman /]
 [import backend::api::config::xml /]
 [import backend::api::config::pom /]
 [import backend::api::config::jerseyapp /]
@@ -11,9 +12,11 @@
 [import backend::api::config::tests /]
 [import backend::api::config::properties/]
 
+
 [template public genServices(m : Model, path : String)]
 [m.mainPOM()/]
 [m.mainJerseyApp(path.concat(m.basePath()))/]
+[m.mainPostmanCollections()/]
 [m.mainTests()/]
 [m.mainProperties()/]
 [let webinf : String = m.getWebInfPath()]

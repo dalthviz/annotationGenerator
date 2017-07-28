@@ -3,6 +3,7 @@
 [import frontend::common /]
 [import frontend::modules /]
 [import frontend::entities::seleniumTests /]
+[import frontend::entities::postmanTest /]
 [import ::utils /]
 
 [template public generate(m : Model)]
@@ -18,6 +19,11 @@ doc_rest
     [m.genDevEnv(m.getWebArtifactId().concat('/'))/]
 	[m.genCommon(m.getWebRoot())/]
     [m.mainSeleniumTests(m.getApiArtifactId().concat(m.baseTestPath()))/]
+    [for(c: Class | m.getClasses())]
+    
+    [c.mainPostman(m.getApiArtifactId().concat(m.baseTestPath())) /]
+    
+    [/for]
     [comment[m.mainE2E(m.getWebArtifactId().concat('/e2e/'))/]
     [for (c : Class | m.getClasses())]
         [if(c.isAbstract=false)]
