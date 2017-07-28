@@ -179,7 +179,7 @@ body|body|Objeto [c.name/] nuevo|Sí|['['/]Representación Detail[']'/](#recurso
 Código|Descripción|Cuerpo
 :--|:--|:--
 201|El objeto [c.name/] actualizado|['['/]Representación Detail[']'/](#recurso-[c.name.toLowerCase()/])
-409|Un objeto relacionado no existe|Mensaje de error
+412|business exception, no se cumple con las reglas de negocio|Mensaje de error
 500|No se pudo actualizar el objeto [c.name/]|Mensaje de error
 
 #### DELETE /[c.getURI()/]/{id}
