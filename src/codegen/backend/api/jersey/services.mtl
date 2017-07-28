@@ -120,6 +120,11 @@ public class [className/] {
     @POST
     @StatusCreated
     public [c.getBasicDTOName()/] create[c.name/]([c.getBasicDTOName()/] dto) {
+        [for (a : Property | c.getAllAttribs()) separator(',\n')]
+           [if a.valueOf('avoidDuplicated')='true']
+           isDuplicated(dto);
+           [/if]
+           [/for]
         return new [c.getBasicDTOName()/]([logic/].create[c.name/](dto.toEntity()));
     }
 
@@ -157,6 +162,16 @@ public class [className/] {
         [logic/].delete[c.name/](id);
     }
     [c.genSubResourceLocators()/]
+
+[for (a : Property | c.getAllAttribs()) separator(',\n')]
+           [if a.valueOf('avoidDuplicated')='true']
+   public void isDuplicated([c.getBasicDTOName()/] dto) throws BusinessLogicException{
+   for([c.getEntityName()/] ae:[logic/].get[c.name/]s())
+       if(ae.getName().equals(dto.getName()))
+           throw new BusinessLogicException("el nombre de [c.name/] ya existe");      
+   }
+           [/if]
+           [/for]
 }
 [/file]
 [/template]
@@ -267,6 +282,11 @@ public class [className/] {
     @POST
     @StatusCreated
     public [c.getBasicDTOName()/] create[a.name.toUpperFirst()/]([c.getBasicDTOName()/] dto) {
+           [for (a : Property | c.getAllAttribs()) separator(',\n')]
+           [if a.valueOf('avoidDuplicated')='true']
+           isDuplicated(dto);
+           [/if]
+           [/for]
         return new [c.getBasicDTOName()/]([logic/].create[c.name/]([parentId/], dto.toEntity()));
     }
 
@@ -304,6 +324,17 @@ public class [className/] {
         [logic/].delete[c.name/]([a.getIdVariable()/]);
     }
     [c.genSubResourceLocators()/]
+
+ [for (a : Property | c.getAllAttribs()) separator(',\n')]
+           [if a.valueOf('avoidDuplicated')='true']
+   public void isDuplicated([c.getBasicDTOName()/] dto) throws BusinessLogicException{
+   for([c.getEntityName()/] ae:[logic/].get[c.name/]s())
+       if(ae.getName().equals(dto.getName()))
+           throw new BusinessLogicException("el nombre de [c.name/] ya existe");      
+   }
+           [/if]
+           [/for]
+
 }
 [/file]
 [/template]
@@ -441,6 +472,7 @@ public class [className/] {
     public void remove[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
         [logic/].remove[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/], [a.getIdVariable()/]);
     }
+
 }
 [/file]
 [/template]

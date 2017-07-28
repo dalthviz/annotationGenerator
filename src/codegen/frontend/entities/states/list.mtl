@@ -29,6 +29,7 @@
         function ($scope, $state, [c.getRecordsName()/], $params, model) {
             $scope.model = model;
             $scope.records = [c.getRecordsName()/];
+            $scope.buttons = ['['/][if c.valueOf('buttons') <> null ]'[c.valueOf('buttons')/]'[elseif c.valueOf('buttons') = null]'none'[else][/if]];
 
             //Paginación
             this.itemsPerPage = $params.limit;
@@ -117,13 +118,13 @@ gallery
 dataTable
 /]
 [if (c.valueOf('typeList')='list')]
-<list-records name="model.name" fields="model.fields" records="records" actions="recordActions"></list-records>
+<list-records name="model.name" fields="model.fields" records="records" actions="recordActions" buttons="buttons"></list-records>
 [elseif (c.valueOf('typeList')='gallery')]
-<gallery  name="model.name" fields="model.fields" records="records" actions="recordActions"></gallery>
+<gallery  name="model.name" fields="model.fields" records="records" actions="recordActions" buttons="buttons"></gallery>
 [elseif (c.valueOf('typeList')='dataTable')]
-<datatable name="model.name" fields="model.fields" records="records" actions="recordActions" ></datatable>
+<datatable name="model.name" fields="model.fields" records="records" actions="recordActions" buttons="buttons" ></datatable>
 [else]
-<list-records  name="model.name" fields="model.fields" records="records" actions="recordActions"></list-records>
+<list-records  name="model.name" fields="model.fields" records="records" actions="recordActions" buttons="buttons" ></list-records>
 [/if]
 <pagination ng-if="ctrl.itemsPerPage < ctrl.totalItems"
             total-items="ctrl.totalItems"
