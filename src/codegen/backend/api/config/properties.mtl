@@ -89,7 +89,7 @@ public class GetDriver {
                 String s="";
         String prop = System.getProperty("user.dir");
         // using the Runtime exec method:
-        if(System.getenv("AUTH0_PROPERTIES")==null){  
+        
         Process p;
             p = Runtime.getRuntime().exec("setx AUTH0_PROPERTIES "+prop+"\\src\\main\\java\\co\\edu\\uniandes\\csw\\auth\\properties\\auth0.properties");
 
@@ -109,7 +109,7 @@ public class GetDriver {
         while ((s = stdError.readLine()) != null) {
             System.out.println(s);
         }  
-        }
+        
       
         URL website = new URL("https://chromedriver.storage.googleapis.com/2.30/chromedriver_win32.zip");
         ReadableByteChannel rbc = Channels.newChannel(website.openStream());
