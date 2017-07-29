@@ -88,18 +88,8 @@ public class GetDriver {
 
                 String s="";
         String prop = System.getProperty("user.dir");
-        URL website = new URL("https://chromedriver.storage.googleapis.com/2.30/chromedriver_win32.zip");
-        ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-        FileOutputStream fos = new FileOutputStream("chromeDriv.zip");
-        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-        fos.close();
-        String zipFilePath = "chromeDriv.zip";
-        String destDir = "drivers";
-
-         try {
-            unzip(zipFilePath, destDir);
-        
         // using the Runtime exec method:
+        if(System.getenv("AUTH0_PROPERTIES")==null){  
         Process p;
             p = Runtime.getRuntime().exec("setx AUTH0_PROPERTIES "+prop+"\\src\\main\\java\\co\\edu\\uniandes\\csw\\auth\\properties\\auth0.properties");
 
@@ -118,7 +108,19 @@ public class GetDriver {
         System.out.println("Here is the standard error of the command (if any):\n");
         while ((s = stdError.readLine()) != null) {
             System.out.println(s);
-        }   
+        }  
+        }
+      
+        URL website = new URL("https://chromedriver.storage.googleapis.com/2.30/chromedriver_win32.zip");
+        ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+        FileOutputStream fos = new FileOutputStream("chromeDriv.zip");
+        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+        fos.close();
+        String zipFilePath = "chromeDriv.zip";
+        String destDir = "drivers";
+
+         try {
+            unzip(zipFilePath, destDir);
          
         } catch (Exception ex) {
             System.out.println("file already exist");
