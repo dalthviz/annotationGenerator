@@ -29,7 +29,7 @@
         function ($scope, $state, [c.getRecordsName()/], $params, model) {
             $scope.model = model;
             $scope.records = [c.getRecordsName()/];
-            $scope.buttons = ['['/][if c.valueOf('buttons') <> null ]'[c.valueOf('buttons')/]'[elseif c.valueOf('buttons') = null]'none'[else][/if]];
+            $scope.buttons = ['['/][if c.valueOf('buttons') <> null ][c.valueOf('buttons')/][elseif c.valueOf('buttons') = null]'none'[else][/if]];
 
             //Paginación
             this.itemsPerPage = $params.limit;

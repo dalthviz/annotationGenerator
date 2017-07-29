@@ -27,6 +27,7 @@
         function ($scope, $state, [c.getRecordName()/],model) {
             $scope.model = model;
             $scope.currentRecord = [c.getRecordName()/];
+            $scope.buttons = ['['/][if c.valueOf('buttons') <> null ][c.valueOf('buttons')/][elseif c.valueOf('buttons') = null]'none'[else][/if]];
             $scope.actions = {
                 create: {
                     displayName: 'Create',
