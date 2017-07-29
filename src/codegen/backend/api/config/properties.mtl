@@ -92,7 +92,7 @@ public class GetDriver {
  
         // using the Runtime exec method:
         Process p;
-            p = Runtime.getRuntime().exec("setx AUTH0_PROPERTIES "+prop+"\\[m.getApiArtifactId()/]\\src\\main\\java\\co\\edu\\uniandes\\csw\\auth\\properties\\auth0.properties");
+            p = Runtime.getRuntime().exec("setx AUTH0_PROPERTIES "+prop+"\\src\\main\\java\\co\\edu\\uniandes\\csw\\auth\\properties\\auth0.properties");
 
         BufferedReader stdInput = new BufferedReader(new
              InputStreamReader(p.getInputStream()));
