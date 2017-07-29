@@ -204,7 +204,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
                  var actions = $scope.actions;
                  $scope.actions = {};
                  for(var action in actions){
-                     if($scope.buttons.indexOf['['/]action]=== -1){
+                     if("list" !== action ){
                          delete actions['['/]action];
                      }
                  }
@@ -279,7 +279,8 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
                 fields: '=*',
                 actions: '=*?',
                 checklist: '=?',
-                name: '='
+                name: '=',
+                buttons: '=*?'
             },
             restrict: 'E',
             templateUrl: tplDir + 'gallery.tpl.html',
