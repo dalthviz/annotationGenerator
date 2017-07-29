@@ -283,7 +283,7 @@ public class [className/] {
     @POST
     @StatusCreated
     public [c.getBasicDTOName()/] create[a.name.toUpperFirst()/]([c.getBasicDTOName()/] dto) {
-           [for (a : Property | c.getAllAttribs()) separator(',\n')]
+           [for (a : Property | c.getAllAttribs())]
            [if a.valueOf('avoidDuplicated')='true']
            isDuplicated(dto);
            [/if]
@@ -326,7 +326,7 @@ public class [className/] {
     }
     [c.genSubResourceLocators()/]
 
- [for (a : Property | c.getAllAttribs()) separator(',\n')]
+ [for (a : Property | c.getAllAttribs())]
            [if a.valueOf('avoidDuplicated')='true']
    public void isDuplicated([c.getBasicDTOName()/] dto) throws BusinessLogicException{
    for([c.getEntityName()/] ae:[logic/].get[c.name/]s())
