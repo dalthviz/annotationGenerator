@@ -50,6 +50,7 @@ import [c.getModel().baseGroup()/].dtos.detail.[c.getBasicDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import java.util.ArrayList;
 import javax.ws.rs.WebApplicationException;
+import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;
 
 /**
  * URI: [c.getFullURI()/]
@@ -120,7 +121,7 @@ public class [className/] {
     @POST
     @StatusCreated
     public [c.getBasicDTOName()/] create[c.name/]([c.getBasicDTOName()/] dto) {
-        [for (a : Property | c.getAllAttribs()) separator(',\n')]
+        [for (a : Property | c.getAllAttribs())]
            [if a.valueOf('avoidDuplicated')='true']
            isDuplicated(dto);
            [/if]
@@ -163,7 +164,7 @@ public class [className/] {
     }
     [c.genSubResourceLocators()/]
 
-[for (a : Property | c.getAllAttribs()) separator(',\n')]
+[for (a : Property | c.getAllAttribs())]
            [if a.valueOf('avoidDuplicated')='true']
    public void isDuplicated([c.getBasicDTOName()/] dto) throws BusinessLogicException{
    for([c.getEntityName()/] ae:[logic/].get[c.name/]s())
