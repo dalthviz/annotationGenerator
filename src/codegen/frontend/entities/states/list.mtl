@@ -25,8 +25,9 @@
 
     var mod = ng.module("[c.getModule()/]");
 
-    mod.controller("[c.getListCtrlName()/]", ['['/]"$scope", '$state', '[c.getRecordsName()/]', '$stateParams','model',
-        function ($scope, $state, [c.getRecordsName()/], $params, model) {
+    mod.controller("[c.getListCtrlName()/]", ['['/]"$scope", '$state', '[c.getRecordsName()/]', '$stateParams','model','$controller',
+        function ($scope, $state, [c.getRecordsName()/], $params, model,$controller) {
+            $controller("authController",{$scope:$scope});
             $scope.model = model;
             $scope.records = [c.getRecordsName()/];
             $scope.buttons = ['['/][if c.valueOf('buttons') <> null ][c.valueOf('buttons')/][elseif c.valueOf('buttons') = null]'none'[else][/if]];
@@ -109,7 +110,7 @@
 -->
 <header>
     <div ncy-breadcrumb></div>
-    <toolbar name="model.name" display-name="model.displayName" actions='actions'></toolbar>
+    <toolbar ng-if="isAuthenticated()" name="model.name" display-name="model.displayName" actions='actions'></toolbar>
 </header>
 [comment  
 Tipos de lista (typeList):
