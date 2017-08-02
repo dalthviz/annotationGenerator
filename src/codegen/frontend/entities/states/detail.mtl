@@ -23,8 +23,9 @@
 
     var mod = ng.module("[c.getModule()/]");
 
-    mod.controller("[c.getDetailCtrlName()/]", ['['/]'$scope', "$state", "[c.getRecordName()/]","model",
-        function ($scope, $state, [c.getRecordName()/],model) {
+    mod.controller("[c.getDetailCtrlName()/]", ['['/]'$scope', "$state", "[c.getRecordName()/]","model","$controller",
+        function ($scope, $state, [c.getRecordName()/],model,$controller) {
+           $controller("authController",{$scope:$scope});
             $scope.model = model;
             $scope.currentRecord = [c.getRecordName()/];
             $scope.buttons = ['['/][if c.valueOf('buttons') <> null ][c.valueOf('buttons')/][elseif c.valueOf('buttons') = null]'none'[else][/if]];
@@ -101,7 +102,7 @@
 -->
 <header>
     <div ncy-breadcrumb></div>
-    <toolbar name="model.name" display-name="model.displayName" actions='actions'></toolbar>
+    <toolbar name="model.name" ng-if="isAuthenticated()" display-name="model.displayName" actions='actions'></toolbar>
 </header>
 <div  class="container-fluid well">
     <div class="col-md-12">
