@@ -121,7 +121,7 @@ Cada [c.name/] en la colección tiene embebidos los siguientes objetos: [for(a :
 Código|Descripción|Cuerpo
 :--|:--|:--
 200|OK|Colección de ['['/]representaciones Detail[']'/](#recurso-[c.name.toLowerCase()/])
-409|Un objeto relacionado no existe|Mensaje de error
+412|precondition failed, no se cumple la regla de negocio establecida|Mensaje de error
 500|Error interno|Mensaje de error
 
 #### GET /[c.getURI()/]/{id}
@@ -160,7 +160,7 @@ body|body|Objeto [c.name/] que será creado|Sí|['['/]Representación Detail[']'
 Código|Descripción|Cuerpo
 :--|:--|:--
 201|El objeto [c.name/] ha sido creado|['['/]Representación Detail[']'/](#recurso-[c.name.toLowerCase()/])
-409|Un objeto relacionado no existe|Mensaje de error
+412|precondition failed, no se cumple la regla de negocio establecida|Mensaje de error
 500|No se pudo crear el objeto [c.name/]|Mensaje de error
 
 #### PUT /[c.getURI()/]/{id}
