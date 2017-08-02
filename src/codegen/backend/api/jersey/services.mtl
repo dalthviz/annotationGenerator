@@ -50,7 +50,8 @@ import [c.getModel().baseGroup()/].dtos.detail.[c.getBasicDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import java.util.ArrayList;
 import javax.ws.rs.WebApplicationException;
-import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;
+[for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;[/if][/for]
+
 
 /**
  * URI: [c.getFullURI()/]
@@ -121,11 +122,7 @@ public class [className/] {
     @POST
     @StatusCreated
     public [c.getBasicDTOName()/] create[c.name/]([c.getBasicDTOName()/] dto)[for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException [/if][/for] {
-        [for (a : Property | c.getAllAttribs())]
-           [if a.valueOf('avoidDuplicated')='true']
-           isDuplicated(dto);
-           [/if]
-           [/for]
+       
         return new [c.getBasicDTOName()/]([logic/].create[c.name/](dto.toEntity()));
     }
 
@@ -164,15 +161,7 @@ public class [className/] {
     }
     [c.genSubResourceLocators()/]
 
-[for (a : Property | c.getAllAttribs())]
-           [if a.valueOf('avoidDuplicated')='true']
-   public void isDuplicated([c.getBasicDTOName()/] dto) throws BusinessLogicException{
-   for([c.getEntityName()/] ae:[logic/].get[c.name/]s())
-       if(ae.getName().equals(dto.getName()))
-           throw new BusinessLogicException("el nombre de [c.name/] ya existe");      
-   }
-           [/if]
-           [/for]
+
 }
 [/file]
 [/template]
@@ -209,6 +198,7 @@ import [c.getModel().baseGroup()/].dtos.detail.[c.getBasicDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import java.util.ArrayList;
 import javax.ws.rs.WebApplicationException;
+[for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']import [c.getModel().baseGroup()/].exceptions.BusinessLogicException  [/if][/for]
 
 /**
  * URI: [a.getFullURI()/]
@@ -283,11 +273,7 @@ public class [className/] {
     @POST
     @StatusCreated
     public [c.getBasicDTOName()/] create[a.name.toUpperFirst()/]([c.getBasicDTOName()/] dto) [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException [/if][/for] {
-           [for (a : Property | c.getAllAttribs())]
-           [if a.valueOf('avoidDuplicated')='true']
-           isDuplicated(dto);
-           [/if]
-           [/for]
+          
         return new [c.getBasicDTOName()/]([logic/].create[c.name/]([parentId/], dto.toEntity()));
     }
 
@@ -325,16 +311,6 @@ public class [className/] {
         [logic/].delete[c.name/]([a.getIdVariable()/]);
     }
     [c.genSubResourceLocators()/]
-
- [for (a : Property | c.getAllAttribs())]
-           [if a.valueOf('avoidDuplicated')='true']
-   public void isDuplicated([c.getBasicDTOName()/] dto) throws BusinessLogicException{
-   for([c.getEntityName()/] ae:[logic/].get[c.name/]s())
-       if(ae.getName().equals(dto.getName()))
-           throw new BusinessLogicException("el nombre de [c.name/] ya existe");      
-   }
-           [/if]
-           [/for]
 
 }
 [/file]
