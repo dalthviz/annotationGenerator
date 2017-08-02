@@ -68,10 +68,10 @@
         <alert type="warning">Image field must be a URL</alert>
     </ng-message>
 </div>
-[for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']
+
 <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="ctrl.closeAlert($index)">{{alert.msg}} </alert>
 <div ui-view="[c.getMainView()/]"></div>
-[/if][/for]
+
 <header>
     <div ncy-breadcrumb></div>
     <toolbar name="model.name" display-name="model.displayName" actions='actions'></toolbar>
