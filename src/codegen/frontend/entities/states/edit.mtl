@@ -56,7 +56,7 @@
     <div ncy-breadcrumb></div>
     <toolbar name="model.name" display-name="model.displayName" actions='actions'></toolbar>
 </header>
-<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="ctrl.closeAlert($index)">{{alert.msg}} </alert>
+
 <div ui-view="[c.getMainView()/]"></div>
 <form novalidate name="[c.getFormName()/]" role="form">
     <fieldset>

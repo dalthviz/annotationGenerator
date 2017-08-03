@@ -127,7 +127,7 @@ dataTable
 [else]
 <list-records  name="model.name" fields="model.fields" records="records" actions="recordActions" buttons="buttons" ></list-records>
 [/if]
-<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="ctrl.closeAlert($index)">{{alert.msg}} </alert>
+
 <div ui-view="[c.getMainView()/]"></div>
 <pagination ng-if="ctrl.itemsPerPage < ctrl.totalItems"
             total-items="ctrl.totalItems"

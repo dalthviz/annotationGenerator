@@ -104,7 +104,7 @@
     <div ncy-breadcrumb></div>
     <toolbar name="model.name" ng-if="isAuthenticated()" display-name="model.displayName" actions='actions'></toolbar>
 </header>
-<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="ctrl.closeAlert($index)">{{alert.msg}} </alert>
+
 <div ui-view="[c.getMainView()/]"></div>
 <div  class="container-fluid well">
     <div class="col-md-12">

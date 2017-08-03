@@ -69,7 +69,7 @@
     </ng-message>
 </div>
 
-<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="ctrl.closeAlert($index)">{{alert.msg}} </alert>
+
 <div ui-view="[c.getMainView()/]"></div>
 
 <header>
