@@ -28,7 +28,7 @@ public interface [className/] {
     public List<[c.getEntityName()/]> get[c.name/]s(Long [c.getParentAttribute().getClass().getName()/]id);
     public List<[c.getEntityName()/]> get[c.name/]s(Integer page, Integer maxRecords, Long [c.getParentAttribute().getClass().getName()/]id);
     public [c.getEntityName()/] get[c.name/](Long [c.getName()/]id);
-    public [c.getEntityName()/] create[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity) [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException;[/if][/for]
+    public [c.getEntityName()/] create[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity) [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException[/if][/for];
     public [c.getEntityName()/] update[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity);
     public void delete[c.name/](Long id);
 [else]
