@@ -4,19 +4,20 @@
 
 
 [template public genDirectives(m : Model, path : String)]
-[m.genDir(path.concat('src/modules/directives/js/'))/]
-[m.genMod(path.concat('src/modules/directives/js/'))/]
+[m.genDir(path.concat('src/directives/js/'))/]
+[m.genMod(path.concat('src/directives/js/'))/]
 
-[m.genCrudTemplate(path.concat('src/modules/directives/templates/'))/]
-[m.genDatePickerTemplate(path.concat('src/modules/directives/templates/'))/]
-[m.genFormTemplate(path.concat('src/modules/directives/templates/'))/]
-[m.genGalleryTemplate(path.concat('src/modules/directives/templates/'))/]
-[m.genListTemplate(path.concat('src/modules/directives/templates/'))/]
-[m.genModalTemplate(path.concat('src/modules/directives/templates/'))/]
-[m.genMoveListTemplate(path.concat('src/modules/directives/templates/'))/]
-[m.genDataTableTemplate(path.concat('src/modules/directives/templates/'))/]
-[m.genSearchTemplate(path.concat('src/modules/directives/templates/'))/]
-[m.genToolBarTemplate(path.concat('src/modules/directives/templates/'))/]
+[m.genCrudTemplate(path.concat('src/directives/templates/'))/]
+[m.genDatePickerTemplate(path.concat('src/directives/templates/'))/]
+[m.genFormTemplate(path.concat('src/directives/templates/'))/]
+[m.genGalleryTemplate(path.concat('src/directives/templates/'))/]
+[m.genListTemplate(path.concat('src/directives/templates/'))/]
+[m.genModalTemplate(path.concat('src/directives/templates/'))/]
+[m.genMoveListTemplate(path.concat('src/directives/templates/'))/]
+[m.genDataTableTemplate(path.concat('src/directives/templates/'))/]
+[m.genSearchTemplate(path.concat('src/directives/templates/'))/]
+[m.genToolBarTemplate(path.concat('src/directives/templates/'))/]
+[m.genUtilsMenu(path.concat('src/utils/menu/'))/]
 [/template]
 
 
@@ -106,7 +107,8 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
           fields: '=*',
           actions: '=*?',
           name: '=',
-          checklist: '=?'
+          checklist: '=?',
+          buttons:'=*?'
         },
         restrict: 'E',
         templateUrl: tplDir + 'list.tpl.html',
@@ -117,7 +119,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
                  var actions = $scope.actions;
                  $scope.actions = {};
                  for(var action in actions){
-                     if("list" !== action){
+                     if($scope.buttons.indexOf(action) === -1){
                          delete actions['['/]action];
                      }
                  }
@@ -202,7 +204,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
                  var actions = $scope.actions;
                  $scope.actions = {};
                  for(var action in actions){
-                     if("list" !== action){
+                     if("list" !== action ){
                          delete actions['['/]action];
                      }
                  }
@@ -277,7 +279,8 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
                 fields: '=*',
                 actions: '=*?',
                 checklist: '=?',
-                name: '='
+                name: '=',
+                buttons: '=*?'
             },
             restrict: 'E',
             templateUrl: tplDir + 'gallery.tpl.html',
@@ -287,7 +290,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
                  var actions = $scope.actions;
                  $scope.actions = {};
                  for(var action in actions){
-                     if("list" !== action){
+                     if($scope.buttons.indexOf(action) === -1){
                          delete actions['['/]action];
                      }
                  }
@@ -351,7 +354,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
                  var actions = $scope.actions;
                  $scope.actions = {};
                  for(var action in actions){
-                     if("read" !== action){
+                     if("list" !== action && "refresh" !== action [for (c: Class | m.getClasses()) ]&& "[c.getURI()/]" !== action [/for] ){
                          delete actions['['/]action];
                      }
                  }
@@ -601,7 +604,7 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
 (function (ng) {
     var mod = ng.module('ngCrud', ['['/]'restangular', 'ui.bootstrap']);
 
-    mod.constant('CrudTemplatesDir', 'src/modules/directives/templates/');
+    mod.constant('CrudTemplatesDir', 'src/directives/templates/');
 
 })(window.angular);
 
@@ -867,6 +870,13 @@ mod.directive('ifPermission', ['['/]'CrudTemplatesDir', '$cookies', function (tp
     </div>
 </nav>
 
+[/file]
+[/template]
+[template protected genUtilsMenu(path : String) ]
+[file (path.concat('menu.ctrl.js'), false, 'UTF-8')]
+/*
+* controlador para personalizar homepage
+*/
 [/file]
 [/template]
  

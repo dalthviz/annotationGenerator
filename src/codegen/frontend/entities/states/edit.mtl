@@ -56,6 +56,8 @@
     <div ncy-breadcrumb></div>
     <toolbar name="model.name" display-name="model.displayName" actions='actions'></toolbar>
 </header>
+
+<div ui-view="[c.getMainView()/]"></div>
 <form novalidate name="[c.getFormName()/]" role="form">
     <fieldset>
         [if (c.getModel().valueOf('form')='true')]

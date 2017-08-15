@@ -41,6 +41,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
+[for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;[/if][/for]
+
 
 /**
  * @generated
@@ -220,7 +222,8 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void create[c.name/]Test() {
+    public void create[c.name/]Test() [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException[/if][/for]
+{
         [c.getEntityName()/] newEntity = factory.manufacturePojo([c.getEntityName()/].class);
         [c.getEntityName()/] result = [bean/].create[c.name/](fatherEntity.getId(), newEntity);
         Assert.assertNotNull(result);
@@ -311,7 +314,7 @@ public class [className/] {
      * @generated
      */
     @Test
-    public void create[c.name/]Test() {
+    public void create[c.name/]Test() [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException[/if][/for] {
         [c.getEntityName()/] newEntity = factory.manufacturePojo([c.getEntityName()/].class);
         [c.getEntityName()/] result = [bean/].create[c.name/](newEntity);
         Assert.assertNotNull(result);

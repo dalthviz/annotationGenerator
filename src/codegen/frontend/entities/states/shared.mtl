@@ -22,6 +22,8 @@
     <div ncy-breadcrumb></div>
     <toolbar name="model.name" display-name="model.displayName" actions='actions'></toolbar>
 </header>
+
+<div ui-view="[a.getClass().getMainView()/]"></div>
 <list-records fields="model.fields" records="records"></list-records>
 [/file]
 [/template]

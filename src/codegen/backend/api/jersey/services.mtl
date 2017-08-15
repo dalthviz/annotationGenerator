@@ -50,6 +50,8 @@ import [c.getModel().baseGroup()/].dtos.detail.[c.getBasicDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import java.util.ArrayList;
 import javax.ws.rs.WebApplicationException;
+[for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;[/if][/for]
+
 
 /**
  * URI: [c.getFullURI()/]
@@ -119,7 +121,8 @@ public class [className/] {
      */
     @POST
     @StatusCreated
-    public [c.getBasicDTOName()/] create[c.name/]([c.getBasicDTOName()/] dto) {
+    public [c.getBasicDTOName()/] create[c.name/]([c.getBasicDTOName()/] dto)[for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException [/if][/for] {
+       
         return new [c.getBasicDTOName()/]([logic/].create[c.name/](dto.toEntity()));
     }
 
@@ -157,6 +160,8 @@ public class [className/] {
         [logic/].delete[c.name/](id);
     }
     [c.genSubResourceLocators()/]
+
+
 }
 [/file]
 [/template]
@@ -193,6 +198,7 @@ import [c.getModel().baseGroup()/].dtos.detail.[c.getBasicDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import java.util.ArrayList;
 import javax.ws.rs.WebApplicationException;
+[for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']import [c.getModel().baseGroup()/].exceptions.BusinessLogicException  [/if][/for]
 
 /**
  * URI: [a.getFullURI()/]
@@ -266,7 +272,8 @@ public class [className/] {
      */
     @POST
     @StatusCreated
-    public [c.getBasicDTOName()/] create[a.name.toUpperFirst()/]([c.getBasicDTOName()/] dto) {
+    public [c.getBasicDTOName()/] create[a.name.toUpperFirst()/]([c.getBasicDTOName()/] dto) [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException [/if][/for] {
+          
         return new [c.getBasicDTOName()/]([logic/].create[c.name/]([parentId/], dto.toEntity()));
     }
 
@@ -304,6 +311,7 @@ public class [className/] {
         [logic/].delete[c.name/]([a.getIdVariable()/]);
     }
     [c.genSubResourceLocators()/]
+
 }
 [/file]
 [/template]
@@ -441,6 +449,7 @@ public class [className/] {
     public void remove[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
         [logic/].remove[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/], [a.getIdVariable()/]);
     }
+
 }
 [/file]
 [/template]

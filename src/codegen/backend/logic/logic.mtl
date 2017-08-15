@@ -19,6 +19,8 @@ import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 [/for]
 import java.util.List;
+[for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;[/if][/for]
+
 
 public interface [className/] {
     public int count[c.name/]s();
@@ -26,14 +28,14 @@ public interface [className/] {
     public List<[c.getEntityName()/]> get[c.name/]s(Long [c.getParentAttribute().getClass().getName()/]id);
     public List<[c.getEntityName()/]> get[c.name/]s(Integer page, Integer maxRecords, Long [c.getParentAttribute().getClass().getName()/]id);
     public [c.getEntityName()/] get[c.name/](Long [c.getName()/]id);
-    public [c.getEntityName()/] create[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity);
+    public [c.getEntityName()/] create[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity) [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException[/if][/for];
     public [c.getEntityName()/] update[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity);
     public void delete[c.name/](Long id);
 [else]
     public List<[c.getEntityName()/]> get[c.name/]s();
     public List<[c.getEntityName()/]> get[c.name/]s(Integer page, Integer maxRecords);
     public [c.getEntityName()/] get[c.name/](Long id);
-    public [c.getEntityName()/] create[c.name/]([c.getEntityName()/] entity); 
+    public [c.getEntityName()/] create[c.name/]([c.getEntityName()/] entity)[for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException[/if][/for]; 
     public [c.getEntityName()/] update[c.name/]([c.getEntityName()/] entity);
     public void delete[c.name/](Long id);
 [/if]
@@ -75,6 +77,8 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
+[for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;[/if][/for]
+
 
 /**
  * @generated
@@ -166,7 +170,16 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
-    public [c.getEntityName()/] create[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity) {
+    public [c.getEntityName()/] create[c.name/](Long [c.getParentAttribute().getClass().getName()/]id, [c.getEntityName()/] entity) [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException[/if][/for] {
+        [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']
+        for (Iterator<[c.getEntityName()/]> it = this.get[c.name/]s().iterator(); it.hasNext();) {
+            [c.getEntityName()/] ae = it.next();
+            if(ae.getName().equals(entity.getName()))      
+                    throw new BusinessLogicException("el nombre de [c.name/] ya existe"); 
+        }        
+
+        [/if][/for]
+
         [c.getParentAttribute().getClass().getEntityName()/] [c.getParentAttribute().getClass().getName()/] = [c.getParentAttribute().getClass().getBeanLower()/].get[c.getParentAttribute().getClass().name/]([c.getParentAttribute().getClass().getName()/]id);
         [if(c.getParentAttribute().isOne2One())]
         Long [c.getName()/]id=0L;
@@ -255,7 +268,16 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
-    public [c.getEntityName()/] create[c.name/]([c.getEntityName()/] entity) {
+    public [c.getEntityName()/] create[c.name/]([c.getEntityName()/] entity) [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException[/if][/for]{
+
+       [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']
+        for (Iterator<[c.getEntityName()/]> it = this.get[c.name/]s().iterator(); it.hasNext();) {
+            [c.getEntityName()/] ae = it.next();
+            if(ae.getName().equals(entity.getName()))      
+                    throw new BusinessLogicException("el nombre de [c.name/] ya existe"); 
+        }        
+
+        [/if][/for]
         persistence.create(entity);
         return entity;
     }

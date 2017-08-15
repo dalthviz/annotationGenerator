@@ -121,7 +121,8 @@ Cada [c.name/] en la colección tiene embebidos los siguientes objetos: [for(a :
 Código|Descripción|Cuerpo
 :--|:--|:--
 200|OK|Colección de ['['/]representaciones Detail[']'/](#recurso-[c.name.toLowerCase()/])
-409|Un objeto relacionado no existe|Mensaje de error
+412|precondition failed, no se cumple la regla de negocio establecida|Mensaje de error
+405|method not allowed, no existe permiso para el recurso|Mensaje de error
 500|Error interno|Mensaje de error
 
 #### GET /[c.getURI()/]/{id}
@@ -143,6 +144,7 @@ Código|Descripción|Cuerpo
 :--|:--|:--
 200|OK|Objeto [c.name/] en ['['/]representaciones Detail[']'/](#recurso-[c.name.toLowerCase()/])
 404|No existe un objeto [c.name/] con el ID solicitado|Mensaje de error
+405|method not allowed, no existe permiso para el recurso|Mensaje de error
 500|Error interno|Mensaje de error
 
 #### POST /[c.getURI()/]
@@ -160,7 +162,8 @@ body|body|Objeto [c.name/] que será creado|Sí|['['/]Representación Detail[']'
 Código|Descripción|Cuerpo
 :--|:--|:--
 201|El objeto [c.name/] ha sido creado|['['/]Representación Detail[']'/](#recurso-[c.name.toLowerCase()/])
-409|Un objeto relacionado no existe|Mensaje de error
+412|precondition failed, no se cumple la regla de negocio establecida|Mensaje de error
+405|method not allowed, no existe permiso para el recurso|Mensaje de error
 500|No se pudo crear el objeto [c.name/]|Mensaje de error
 
 #### PUT /[c.getURI()/]/{id}
@@ -180,6 +183,7 @@ Código|Descripción|Cuerpo
 :--|:--|:--
 201|El objeto [c.name/] actualizado|['['/]Representación Detail[']'/](#recurso-[c.name.toLowerCase()/])
 412|business exception, no se cumple con las reglas de negocio|Mensaje de error
+405|method not allowed, no existe permiso para el recurso|Mensaje de error
 500|No se pudo actualizar el objeto [c.name/]|Mensaje de error
 
 #### DELETE /[c.getURI()/]/{id}
@@ -198,6 +202,7 @@ Código|Descripción|Cuerpo
 :--|:--|:--
 204|Objeto eliminado|N/A
 500|Error interno|Mensaje de error
+405|method not allowed, no existe permiso para el recurso|Mensaje de error
 
 [for (elem : Property | c.getNonCompositeCollectionAttributes())]
 #### GET [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]
@@ -216,6 +221,7 @@ Código|Descripción|Cuerpo
 :--|:--|:--
 200|OK|Colección de objetos [ elem.getClass().name /] en ['['/]representación Detail[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
 500|Error consultando [ elem.name /] |Mensaje de error
+405|method not allowed, no existe permiso para el recurso|Mensaje de error
 
 #### GET [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
 
@@ -235,6 +241,7 @@ Código|Descripción|Cuerpo
 200|OK|Objeto [ elem.getClass().name /] en ['['/]representación Detail[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
 404|No existe un objeto [ elem.getClass().name /] con el ID solicitado asociado al objeto [c.name/] indicado |Mensaje de error
 500|Error interno|Mensaje de error
+405|method not allowed, no existe permiso para el recurso|Mensaje de error
 
 #### POST [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
 
@@ -253,6 +260,7 @@ Código|Descripción|Cuerpo
 :--|:--|:--
 200|Objeto [ elem.getClass().name /] asociado|['['/]Representación Detail de [ elem.getClass().name /][']'/](#recurso-[elem.getClass().name.toLowerCase()/])
 500|No se pudo asociar el objeto [ elem.getClass().name /]|Mensaje de error
+405|method not allowed, no existe permiso para el recurso|Mensaje de error
 
 #### PUT [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]
 
@@ -271,6 +279,7 @@ Código|Descripción|Cuerpo
 :--|:--|:--
 200|Se remplazó la colección|Colección de objetos [ elem.getClass().name /] en ['['/]Representación Detail[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
 500|No se pudo remplazar la colección|Mensaje de error
+405|method not allowed, no existe permiso para el recurso|Mensaje de error
 
 #### DELETE [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
 
@@ -289,6 +298,7 @@ Código|Descripción|Cuerpo
 :--|:--|:--
 204|Objeto removido|N/A
 500|Error interno|Mensaje de error
+405|method not allowed, no existe permiso para el recurso|Mensaje de error
 
 [/for]
 
@@ -328,6 +338,7 @@ Código|Descripción|Cuerpo
 200|OK|Objeto [ elem.getClass().name /] en ['['/]representación Detail[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
 404|No existe un objeto [ elem.getClass().name /] con el ID solicitado asociado al objeto [c.name/] indicado |Mensaje de error
 500|Error interno|Mensaje de error
+405|method not allowed, no existe permiso para el recurso|Mensaje de error
 
 #### POST [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
 
@@ -364,6 +375,7 @@ Código|Descripción|Cuerpo
 :--|:--|:--
 200|Se actualizo el objeto|Objeto [ elem.getClass().name /] en ['['/]Representación Detail[']'/](#recurso-[elem.getClass().name.toLowerCase()/])
 500|No se pudo actualizar|Mensaje de error
+405|method not allowed, no existe permiso para el recurso|Mensaje de error
 
 #### DELETE [c.getURI()/]/{[c.getURI()/]id}/[elem.name/]/{[elem.name/]id}
 
@@ -382,6 +394,7 @@ Código|Descripción|Cuerpo
 :--|:--|:--
 204|Objeto removido|N/A
 500|Error interno|Mensaje de error
+405|method not allowed, no existe permiso para el recurso|Mensaje de error
 
 [/for]
 

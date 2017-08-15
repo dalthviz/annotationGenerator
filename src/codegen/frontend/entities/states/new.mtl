@@ -68,6 +68,10 @@
         <alert type="warning">Image field must be a URL</alert>
     </ng-message>
 </div>
+
+
+<div ui-view="[c.getMainView()/]"></div>
+
 <header>
     <div ncy-breadcrumb></div>
     <toolbar name="model.name" display-name="model.displayName" actions='actions'></toolbar>
