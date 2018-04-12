@@ -48,13 +48,13 @@ and a.getOtherEnd().getUpper() <> 1
 /]
 
 [**
- * Obtiene la colección de atributos de la clase, cuyo tipo es otra clase del modelo y son aceptados por el generador.<br>
+ * Obtiene la colecciÃ³n de atributos de la clase, cuyo tipo es otra clase del modelo y son aceptados por el generador.<br>
  * 
- * Actualmente los atributos válidos cumplen con las siguientes características:
+ * Actualmente los atributos vÃ¡lidos cumplen con las siguientes caracterÃ­sticas:
  * - Es navegable
- * - Su límite máximo de objetos es diferente de cero
- * - El otro extremo de la relación apunta a la clase que realiza la consulta
- * - En caso de haber agregación, el otro extremo de la relación no puede tener agregación y su límite máximo debe ser 1
+ * - Su lÃ­mite mÃ¡ximo de objetos es diferente de cero
+ * - El otro extremo de la relaciÃ³n apunta a la clase que realiza la consulta
+ * - En caso de haber agregaciÃ³n, el otro extremo de la relaciÃ³n no puede tener agregaciÃ³n y su lÃ­mite mÃ¡ximo debe ser 1
  * - En caso del atributo ser composite, el extremo opuesto debe ser navegable
 */]
 [query public getRelationshipAttributes(c : Class) : Set(Property) =
@@ -63,14 +63,8 @@ c.getAssociations()->collect( asc |
         a | a.isNavigable()
         and a.getUpper() <> 0
         and a.getOtherEnd().type = c
-        and (a.aggregation <> AggregationKind::none implies (
-                a.getOtherEnd().getUpper() = 1
-            and a.getOtherEnd().aggregation = AggregationKind::none)
-        )
-        and (a.getOtherEnd().aggregation <> AggregationKind::none implies (
-                a.getUpper() = 1
-            and a.aggregation = AggregationKind::none)
-        )
+        and (a.aggregation <> AggregationKind::none implies (a.getOtherEnd().getUpper() = 1 and a.getOtherEnd().aggregation = AggregationKind::none))
+        and (a.getOtherEnd().aggregation <> AggregationKind::none implies (a.getUpper() = 1 and a.aggregation = AggregationKind::none))
         and (a.isComposite() implies a.getOtherEnd().isNavigable())
     )
 )->asSet()
@@ -172,8 +166,10 @@ cl.generalization->notEmpty()
 [query public isName(a : Property) : Boolean = a.name = 'name' /]
 
 [query public getter(a : Property) : String = 'get'.concat(a.name.toUpperFirst()) /]
+[query public getter(a : NamedElement) : String = 'get'.concat(a.name.toUpperFirst()) /]
 
 [query public setter(a : Property) : String = 'set'.concat(a.name.toUpperFirst()) /]
+[query public setter(a : NamedElement) : String = 'set'.concat(a.name.toUpperFirst()) /]
 
 [query public getClass(a : Property) : Class = Class.allInstances()->any(c | c.name = a.type.name) /]
 
@@ -184,11 +180,11 @@ Class.allInstances()->select(c | cl.generalization->select(g | g.general.name=c.
 [query public isRequired(a : Property) : Boolean = self.getLower() > 0 /]
 
 [**
- * Permite identificar si el atributo es el dueño de una relación.
+ * Permite identificar si el atributo es el dueÃ±o de una relaciÃ³n.
  * Esto se da cuando el atributo es navegable y:
- * - La relación es unidireccional
- * - La relación es bidireccional, uno a muchos, y el atributo es de cardinalidad 1 o 0..1
- * - La relación es bidireccional, muchos a muchos o uno a uno, entonces se decide cualquiera (se implementa comparando nombres y aquel que sea mayor que el otro)
+ * - La relaciÃ³n es unidireccional
+ * - La relaciÃ³n es bidireccional, uno a muchos, y el atributo es de cardinalidad 1 o 0..1
+ * - La relaciÃ³n es bidireccional, muchos a muchos o uno a uno, entonces se decide cualquiera (se implementa comparando nombres y aquel que sea mayor que el otro)
 */]
 [query public isRelationshipOwner(a : Property) : Boolean =
     a.isNavigable()
@@ -220,6 +216,147 @@ else
 null
 endif
 /]
+
+[query public getMemberEnd(c:Class) : Set(Property) =
+c.getAssociations()->collect(a | a.memberEnd->select(m |m.type.name = c.name))->asSet()
+/]
+
+[template public setAttributes(c:Class)]
+
+[for(p:Property | c.getAllAttribs())]
+private [p.type.name/] [p.name/];
+[/for]
+[/template]
+
+[template public setConstructor(c:Class)]
+
+public [c.getMinimumDTOName()/]([c.getEntityName()/] entity) {
+    [if(c.isGeneralization())]
+    super(entity); 
+    [/if]	
+    [if(not c.getAllAttribs()->isEmpty())]
+   if (entity!=null){
+    [for(p:Property | c.getAllAttribs())]
+    this.[p.name/]=entity.[p.getter()/]();
+    [/for]    
+       }
+    [/if]
+    }
+    
+[/template]
+
+[template public setDetailDTOConstructor(c:Class)]
+public [c.getBasicDTOName()/]([c.getEntityName()/] entity) {
+ super(entity); 
+[for(p:Property | c.getMemberEnd())]
+[if(p.getOtherEnd().getUpper() = -1)]
+List<[p.getOtherEnd().getClass().getMinimumDTOName()/]> l[p.getOtherEnd().name/] = new ArrayList<>();
+[/if]
+[/for]
+[for(p:Property | c.getMemberEnd())]
+[if(p.getOtherEnd().getUpper() = 1)]
+if (entity.[p.getOtherEnd().getter()/]()!=null){
+this.[p.getOtherEnd().name/] = new [p.getOtherEnd().getClass().getMinimumDTOName()/](entity.[p.getOtherEnd().getter()/]());
+}
+
+[/if]
+[if(p.getOtherEnd().getUpper() = -1)]
+if (entity.[p.getOtherEnd().getter()/]()!=null){
+ for([p.getOtherEnd().getClass().getEntityName()/] ent : entity.[p.getOtherEnd().getter()/]()){
+ l[p.getOtherEnd().name/].add(new [p.getOtherEnd().getClass().getMinimumDTOName()/](ent));
+}
+this.[p.getOtherEnd().name/] = l[p.getOtherEnd().name/];
+}
+
+[/if]
+[/for]
+}
+[/template]
+
+[template public setDetailDTOtoEntity(c:Class)]
+ public [c.getEntityName()/] toEntity() {
+[c.getEntityName()/] entity = super.toEntity();
+[for(p:Property | c.getMemberEnd())]
+[if(p.getOtherEnd().getUpper() = -1)]
+List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass().getEntityName()/] = new ArrayList<>();
+[/if]
+[/for]
+[for(p:Property | c.getMemberEnd())]
+[if(p.getOtherEnd().getUpper() = 1)]
+ if (this.[p.getOtherEnd().getter()/]()!=null){
+        entity.[p.getOtherEnd().setter()/](this.[p.getOtherEnd().getter()/]().toEntity());
+        }
+[/if]
+[if(p.getOtherEnd().getUpper() = -1)]
+if (this.[p.getOtherEnd().getter()/]()!=null){
+  for([p.getOtherEnd().getClass().getBasicDTOName()/] dto : this.[p.getOtherEnd().getter()/]()){
+l[p.getOtherEnd().getClass().getEntityName()/].add(dto.toEntity());
+    
+ }       
+  entity.[p.getOtherEnd().setter()/](l[p.getOtherEnd().getClass().getEntityName()/]);  
+ }
+[/if]
+[/for]
+return entity;
+}
+[/template]
+
+[template public setToEntity(c:Class)]
+
+ public [c.getEntityName()/] toEntity() {
+       [if(c.isGeneralization())]
+       [c.getEntityName()/] entity = super.toEntity();
+        [else]
+        [c.getEntityName()/] entity = new [c.getEntityName()/]();
+       [/if]  
+        [for(n:Property | c.getAllAttribs())]
+        entity.[n.setter()/](this.[n.getter()/]());
+        [/for]
+         return entity;
+       }
+      
+[/template]
+
+
+[template public setDetailDTOAttributes(c:Class)]
+
+[for(p:Property | c.getMemberEnd())]
+[if(p.getOtherEnd().getUpper() = 1)]
+private [p.getOtherEnd().getClass().getMinimumDTOName()/] [p.getOtherEnd().name/];
+[/if]
+[if(p.getOtherEnd().getUpper() = -1)]
+private List<[p.getOtherEnd().getClass().getMinimumDTOName()/]> [p.getOtherEnd().name/];
+[/if]
+[/for]
+[/template]
+
+[template public setDetailDTOGettersAndSetters(c:Class)]
+[for(p:Property | c.getMemberEnd())]
+[if(p.getOtherEnd().getUpper() = 1)]
+ public [p.getOtherEnd().getClass().getMinimumDTOName()/] [p.getOtherEnd().getter()/]() {
+        return [p.getOtherEnd().name/];
+    }
+ 
+    public void [p.getOtherEnd().setter()/]([p.getOtherEnd().getClass().getMinimumDTOName()/] [p.getOtherEnd().name/]) {
+        this.[p.getOtherEnd().name/] = [p.getOtherEnd().name/];
+    }
+[/if]
+[if(p.getOtherEnd().getUpper() = -1)]
+ public List<[p.getOtherEnd().getClass().getMinimumDTOName()/]> [p.getOtherEnd().getter()/]() {
+        return [p.getOtherEnd().name/];
+    }
+ 
+    public void [p.getOtherEnd().setter()/](List<[p.getOtherEnd().getClass().getMinimumDTOName()/]> [p.getOtherEnd().name/]) {
+        this.[p.getOtherEnd().name/] = [p.getOtherEnd().name/];
+    }
+
+[/if]
+[/for]
+[/template]
+
+ 
+
+ 
 
 [template public getJavaType(a : Property) post (trim())]
 [if (a.type.name = 'Image')]
@@ -286,11 +423,19 @@ endif
 [/template]
 
 [template public baseGroup(m : Model)]
+[if(m.valueOf('package')=null)]
 ['co.edu.uniandes.csw.'.concat(m.name.toLowerCase())/]
+[else]
+[m.valueOf('package').concat('.').concat(m.name.toLowerCase())/]
+[/if]
 [/template]
 
 [template public basePath(m : Model)]
+[if(m.valueOf('package')=null)]
 ['/src/main/java/'.concat(m.baseGroup().replaceAll('[.]', '/')).concat('/')/]
+[else]
+['/'.concat(m.baseGroup().replaceAll('[.]', '/')).concat('/')/]
+[/if]
 [/template]
 
 [template public basePathAuth0(m : Model)]
