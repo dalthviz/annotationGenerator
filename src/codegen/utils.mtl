@@ -423,19 +423,13 @@ private List<[p.getOtherEnd().getClass().getMinimumDTOName()/]> [p.getOtherEnd()
 [/template]
 
 [template public baseGroup(m : Model)]
-[if(m.valueOf('package')=null)]
+
 ['co.edu.uniandes.csw.'.concat(m.name.toLowerCase())/]
-[else]
-[m.valueOf('package').concat('.').concat(m.name.toLowerCase())/]
-[/if]
+
 [/template]
 
 [template public basePath(m : Model)]
-[if(m.valueOf('package')=null)]
 ['/src/main/java/'.concat(m.baseGroup().replaceAll('[.]', '/')).concat('/')/]
-[else]
-['/'.concat(m.baseGroup().replaceAll('[.]', '/')).concat('/')/]
-[/if]
 [/template]
 
 [template public basePathAuth0(m : Model)]
