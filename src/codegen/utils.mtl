@@ -423,9 +423,7 @@ private List<[p.getOtherEnd().getClass().getMinimumDTOName()/]> [p.getOtherEnd()
 [/template]
 
 [template public baseGroup(m : Model)]
-
 ['co.edu.uniandes.csw.'.concat(m.name.toLowerCase())/]
-
 [/template]
 
 [template public basePath(m : Model)]
