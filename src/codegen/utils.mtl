@@ -223,7 +223,7 @@ c.getAssociations()->collect(a | a.memberEnd->select(m |m.type.name = c.name))->
 
 [template public setAttributes(c:Class)]
 
-[for(p:Property | c.getAllAttribs())]
+[for(p:Property | c.allAttributes())]
 private [p.type.name/] [p.name/];
 [/for]
 [/template]
@@ -234,9 +234,9 @@ public [c.getMinimumDTOName()/]([c.getEntityName()/] entity) {
     [if(c.isGeneralization())]
     super(entity); 
     [/if]	
-    [if(not c.getAllAttribs()->isEmpty())]
+    [if(not c.allAttributes()->isEmpty())]
    if (entity!=null){
-    [for(p:Property | c.getAllAttribs())]
+    [for(p:Property | c.allAttributes())]
     this.[p.name/]=entity.[p.getter()/]();
     [/for]    
        }
