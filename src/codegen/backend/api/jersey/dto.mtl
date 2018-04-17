@@ -26,6 +26,8 @@ import co.edu.uniandes.csw.crud.api.podam.strategy.DateStrategy;
 [elseif(c.isGeneralization())]
 [if (c.getGeneralizationClass().hasDateAttribute())]
 import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
 import uk.co.jemos.podam.common.PodamStrategyValue;
 import co.edu.uniandes.csw.crud.api.podam.strategy.DateStrategy;
 [/if]
