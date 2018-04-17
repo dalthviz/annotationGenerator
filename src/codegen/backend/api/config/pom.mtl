@@ -159,7 +159,7 @@
         </dependency>
         <dependency>
             <groupId>[m.getCSWGroupId()/]</groupId>
-            <artifactId>auth0_utils</artifactId>
+            <artifactId>auth0-utils</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>
