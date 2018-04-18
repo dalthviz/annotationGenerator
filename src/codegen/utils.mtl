@@ -275,7 +275,7 @@ this.[p.getOtherEnd().name/] = l[p.getOtherEnd().name/];
 
 [template public setDetailDTOtoEntity(c:Class)]
  public [c.getEntityName()/] toEntity() {
-[c.getEntityName()/] entity = super.toEntity();
+[c.getEntityName()/] entity = ([c.getEntityName()/]) super.toEntity();
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().getUpper() = -1)]
 List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass().getEntityName()/] = new ArrayList<>();
@@ -305,7 +305,7 @@ return entity;
 
  public [c.getEntityName()/] toEntity() {
        [if(c.isGeneralization())]
-       [c.getEntityName()/] entity = super.toEntity();
+       [c.getEntityName()/] entity = ([c.getEntityName()/]) super.toEntity();
         [else]
         [c.getEntityName()/] entity = new [c.getEntityName()/]();
        [/if]  
