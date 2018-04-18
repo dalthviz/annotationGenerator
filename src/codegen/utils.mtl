@@ -289,7 +289,7 @@ List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass()
 [/if]
 [if(p.getOtherEnd().getUpper() = -1)]
 if (this.[p.getOtherEnd().getter()/]()!=null){
-  for([p.getOtherEnd().getClass().getBasicDTOName()/] dto : this.[p.getOtherEnd().getter()/]()){
+  for([p.getOtherEnd().getClass().getMinimumDTOName()/] dto : this.[p.getOtherEnd().getter()/]()){
 l[p.getOtherEnd().getClass().getEntityName()/].add(dto.toEntity());
     
  }       
