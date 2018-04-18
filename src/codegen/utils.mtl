@@ -327,11 +327,15 @@ return entity;
 
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().getUpper() = 1)]
+[if (c.getRelationshipAttributes()->select(not isComposite())->notEmpty())]
 @PodamExclude
+[/if]
 private [p.getOtherEnd().getClass().getMinimumDTOName()/] [p.getOtherEnd().name/];
 [/if]
 [if(p.getOtherEnd().getUpper() = -1)]
+[if (c.getRelationshipAttributes()->select(not isComposite())->notEmpty())]
 @PodamExclude
+[/if]
 private List<[p.getOtherEnd().getClass().getMinimumDTOName()/]> [p.getOtherEnd().name/];
 [/if]
 [/for]
