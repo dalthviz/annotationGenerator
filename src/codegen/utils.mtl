@@ -273,8 +273,8 @@ this.[p.getOtherEnd().name/] = l[p.getOtherEnd().name/];
 }
 [/template]
 [template public setImportsDetailDTO(c:Class)]
-[for(p:Property | c.getAllAttributes())]
-import [c.getModel().baseGroup()/].entities.[p.getClass().getEntityName()/];
+[for(p:Property | c.getMemberEnd())]
+import [c.getModel().baseGroup()/].entities.[p.getOtherEnd().getClass().getEntityName()/];
 [/for]
 [/template]
 
