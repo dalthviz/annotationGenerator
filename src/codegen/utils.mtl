@@ -273,7 +273,7 @@ this.[p.getOtherEnd().name/] = l[p.getOtherEnd().name/];
 }
 [/template]
 [template public setImportsDetailDTO(c:Class)]
-[for(p:Property | c.getMemberEnd())]
+[for(p:Property | c.getAllAttributes())]
 import [p.getClass().getModel().baseGroup()/].entities.[p.getClass().getEntityName()/];
 [/for]
 [/template]
@@ -360,10 +360,6 @@ private List<[p.getOtherEnd().getClass().getMinimumDTOName()/]> [p.getOtherEnd()
 [/if]
 [/for]
 [/template]
-
- 
-
- 
 
 [template public getJavaType(a : Property) post (trim())]
 [if (a.type.name = 'Image')]
