@@ -90,6 +90,9 @@ package [c.getModel().baseGroup()/].dtos.detail;
 import [c.getModel().baseGroup()/].dtos.minimum.*;
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
+import java.util.ArrayList;
+[c.setImportsDetailDTO()/]
 [if (c.getRelationshipAttributes()->select(not isComposite())->notEmpty())]
 import uk.co.jemos.podam.common.PodamExclude;
 [/if]

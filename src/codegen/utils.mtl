@@ -272,6 +272,11 @@ this.[p.getOtherEnd().name/] = l[p.getOtherEnd().name/];
 [/for]
 }
 [/template]
+[template public setImportsDetailDTO(c:Class)]
+[for(p:Property | c.getMemberEnd())]
+import [p.getClass().getModel().baseGroup()/].entities.[p.getClass().getEntityName()/];
+[/for]
+[/template]
 
 [template public setDetailDTOtoEntity(c:Class)]
  public [c.getEntityName()/] toEntity() {
@@ -322,9 +327,11 @@ return entity;
 
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().getUpper() = 1)]
+@PodamExclude
 private [p.getOtherEnd().getClass().getMinimumDTOName()/] [p.getOtherEnd().name/];
 [/if]
 [if(p.getOtherEnd().getUpper() = -1)]
+@PodamExclude
 private List<[p.getOtherEnd().getClass().getMinimumDTOName()/]> [p.getOtherEnd().name/];
 [/if]
 [/for]
