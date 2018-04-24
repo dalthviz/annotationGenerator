@@ -65,7 +65,7 @@ public class [className/] extends [if(c.isGeneralization())][c.getGeneralization
     [/if]
     private [a.type.name/] [a.name.toLowerFirst()/];
 [/for]
-[for (a : Property | c.getMemberEnd())]
+[for (a : Property | c.getRelationshipAttributes())]
 
     @PodamExclude
     @[a.getJPAAnnotation()/][a.genParameters()/]
@@ -78,7 +78,7 @@ public class [className/] extends [if(c.isGeneralization())][c.getGeneralization
     private List<[a.getClass().getEntityName()/]> [a.name/] = new ArrayList<>();
     [/if]
 [/for]
-[for (a : Property | c.allAttributes()->reject(isID() or isName()))]
+[for (a : Property | c.getMemberEnd()->reject(isID() or isName()))]
 
     /**
      * Obtiene el atributo [a.name.toLowerFirst()/].
