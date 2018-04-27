@@ -50,6 +50,7 @@ import [c.getModel().baseGroup()/].dtos.detail.[c.getBasicDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import java.util.ArrayList;
 import javax.ws.rs.WebApplicationException;
+import co.edu.uniandes.annotation.FP;
 [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;[/if][/for]
 
 
@@ -91,6 +92,7 @@ public class [className/] {
      * @generated
      */
     @GET
+	@FP(useCases = { "[c.getEntityName().concat('GetAll') /]" })
     public List<[c.getBasicDTOName()/]> get[c.name/]s() {
         if (page != null && maxRecords != null) {
             this.response.setIntHeader("X-Total-Count", [logic/].count[c.name/]s());
@@ -108,6 +110,7 @@ public class [className/] {
      */
     @GET
     @Path("{id: \\d+}")
+	@FP(useCases = { "[c.getEntityName().concat('GetOne') /]" })
     public [c.getBasicDTOName()/] get[c.name/](@PathParam("id") Long id) {
         return new [c.getBasicDTOName()/]([logic/].get[c.name/](id));
     }
@@ -121,6 +124,7 @@ public class [className/] {
      */
     @POST
     @StatusCreated
+	@FP(useCases = { "[c.getEntityName().concat('Post') /]" })
     public [c.getBasicDTOName()/] create[c.name/]([c.getBasicDTOName()/] dto)[for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException [/if][/for] {
        
         return new [c.getBasicDTOName()/]([logic/].create[c.name/](dto.toEntity()));
@@ -136,6 +140,7 @@ public class [className/] {
      */
     @PUT
     @Path("{id: \\d+}")
+	@FP(useCases = { "[c.getEntityName().concat('Update') /]" })
     public [c.getBasicDTOName()/] update[c.name/](@PathParam("id") Long id, [c.getBasicDTOName()/] dto) {
         [c.getEntityName()/] entity = dto.toEntity();
         entity.setId(id);
@@ -156,6 +161,7 @@ public class [className/] {
      */
     @DELETE
     @Path("{id: \\d+}")
+	@FP(useCases = { "[c.getEntityName().concat('Delete') /]" })
     public void delete[c.name/](@PathParam("id") Long id) {
         [logic/].delete[c.name/](id);
     }
