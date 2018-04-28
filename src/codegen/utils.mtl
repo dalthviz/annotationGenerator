@@ -246,7 +246,7 @@ public [c.getMinimumDTOName()/]([c.getEntityName()/] entity) {
 [/template]
 [template public setEntityManyToManyShared(c:Class)]
 [for(p:Property | c.getMemberEnd())]
-[if(not p.getOtherEnd().isNavigable() and p.getOtherEnd().getUpper() = -1 and p.getOtherEnd().aggregation = AggregationKind::shared )]
+[if(not p.getOtherEnd().isNavigable() and p.getOtherEnd().getUpper() = -1 and p.aggregation = AggregationKind::shared )]
 @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
 @JoinTable(name = [p.name/]_[p.getOtherEnd().name/], 
 JoinColumns = @JoinColumn(name = [p.getOtherEnd().name/]),
@@ -259,7 +259,7 @@ List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass()
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().getUpper() = -1)]
 [if(not p.getOtherEnd().isNavigable())]
-[if(p.getOtherEnd().aggregation = AggregationKind::shared)]
+[if(p.aggregation = AggregationKind::shared)]
  public List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().getter()/]() {
         return [p.getOtherEnd().name/];
     }
