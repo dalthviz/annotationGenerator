@@ -61,6 +61,11 @@ import co.edu.uniandes.annotation.FP;
 @Path("/[c.getURI()/]")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@FP(useCases = { "['getAll'.concat(c.getName()) /]" })
+@FP(useCases = { "['get'.concat(c.getName()) /]" })
+@FP(useCases = { "['create'.concat(c.getName()) /]" })
+@FP(useCases = { "['update'.concat(c.getName()) /]" })
+@FP(useCases = { "['delete'.concat(c.getName()) /]" })
 public class [className/] {
 
     @Inject private [c.getAPIName()/] [logic/];
@@ -92,7 +97,7 @@ public class [className/] {
      * @generated
      */
     @GET
-	@FP(useCases = { "[c.getEntityName().concat('GetAll') /]" })
+	@FP(useCases = { "['getAll'.concat(c.getName()) /]" })
     public List<[c.getBasicDTOName()/]> get[c.name/]s() {
         if (page != null && maxRecords != null) {
             this.response.setIntHeader("X-Total-Count", [logic/].count[c.name/]s());
@@ -110,7 +115,7 @@ public class [className/] {
      */
     @GET
     @Path("{id: \\d+}")
-	@FP(useCases = { "[c.getEntityName().concat('GetOne') /]" })
+	@FP(useCases = { "['get'.concat(c.getName()) /]" })
     public [c.getBasicDTOName()/] get[c.name/](@PathParam("id") Long id) {
         return new [c.getBasicDTOName()/]([logic/].get[c.name/](id));
     }
@@ -124,7 +129,7 @@ public class [className/] {
      */
     @POST
     @StatusCreated
-	@FP(useCases = { "[c.getEntityName().concat('Post') /]" })
+	@FP(useCases = { "['create'.concat(c.getName()) /]" })
     public [c.getBasicDTOName()/] create[c.name/]([c.getBasicDTOName()/] dto)[for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException [/if][/for] {
        
         return new [c.getBasicDTOName()/]([logic/].create[c.name/](dto.toEntity()));
@@ -140,7 +145,7 @@ public class [className/] {
      */
     @PUT
     @Path("{id: \\d+}")
-	@FP(useCases = { "[c.getEntityName().concat('Update') /]" })
+	@FP(useCases = { "['update'.concat(c.getName()) /]" })
     public [c.getBasicDTOName()/] update[c.name/](@PathParam("id") Long id, [c.getBasicDTOName()/] dto) {
         [c.getEntityName()/] entity = dto.toEntity();
         entity.setId(id);
@@ -161,7 +166,7 @@ public class [className/] {
      */
     @DELETE
     @Path("{id: \\d+}")
-	@FP(useCases = { "[c.getEntityName().concat('Delete') /]" })
+	@FP(useCases = { "['delete'.concat(c.getName()) /]" })
     public void delete[c.name/](@PathParam("id") Long id) {
         [logic/].delete[c.name/](id);
     }
@@ -204,6 +209,7 @@ import [c.getModel().baseGroup()/].dtos.detail.[c.getBasicDTOName()/];
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import java.util.ArrayList;
 import javax.ws.rs.WebApplicationException;
+import co.edu.uniandes.annotation.FP;
 [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']import [c.getModel().baseGroup()/].exceptions.BusinessLogicException  [/if][/for]
 
 /**
@@ -212,6 +218,11 @@ import javax.ws.rs.WebApplicationException;
  */
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@FP(useCases = { "['getAll'.concat(c.getName()).concat(a.name.toUpperFirst()) /]" })
+@FP(useCases = { "['get'.concat(c.getName()).concat(a.name.toUpperFirst()) /]" })
+@FP(useCases = { "['create'.concat(c.getName()).concat(a.name.toUpperFirst()) /]" })
+@FP(useCases = { "['update'.concat(c.getName()) /]" })
+@FP(useCases = { "['delete'.concat(c.getName()) /]" })
 public class [className/] {
 
     @Inject private [c.getAPIName()/] [logic/];
@@ -244,6 +255,7 @@ public class [className/] {
      * @generated
      */
     @GET
+	@FP(useCases = { "['getAll'.concat(c.getName()).concat(a.name.toUpperFirst()) /]" })
     public List<[c.getBasicDTOName()/]> get[a.name.toUpperFirst()/]s() {
         if (page != null && maxRecords != null) {
             this.response.setIntHeader("X-Total-Count", [logic/].count[c.name/]s());
@@ -261,6 +273,7 @@ public class [className/] {
      */
     @GET
     @Path("{[a.getIdVariable()/]: \\d+}")
+	@FP(useCases = { "['get'.concat(c.getName()).concat(a.name.toUpperFirst()) /]" })
     public [c.getBasicDTOName()/] get[a.name.toUpperFirst()/](@PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
         [c.getEntityName()/] entity = [logic/].get[c.name/]([a.getIdVariable()/]);
         if (entity.[c.getParentAttribute().getter()/]() != null && ![parentId/].equals(entity.[c.getParentAttribute().getter()/]().getId())) {
@@ -278,6 +291,7 @@ public class [className/] {
      */
     @POST
     @StatusCreated
+	@FP(useCases = { "['create'.concat(c.getName()).concat(a.name.toUpperFirst()) /]" })
     public [c.getBasicDTOName()/] create[a.name.toUpperFirst()/]([c.getBasicDTOName()/] dto) [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException [/if][/for] {
           
         return new [c.getBasicDTOName()/]([logic/].create[c.name/]([parentId/], dto.toEntity()));
@@ -293,6 +307,7 @@ public class [className/] {
      */
     @PUT
     @Path("{[a.getIdVariable()/]: \\d+}")
+	@FP(useCases = { "['update'.concat(c.getName()) /]" })
     public [c.getBasicDTOName()/] update[a.name.toUpperFirst()/](@PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/], [c.getBasicDTOName()/] dto) {
         [c.getEntityName()/] entity = dto.toEntity();
         entity.setId([a.getIdVariable()/]);
@@ -313,6 +328,7 @@ public class [className/] {
      */
     @DELETE
     @Path("[a.getIdVariable()/]: \\d+}")
+	@FP(useCases = { "['delete'.concat(c.getName()) /]" })
     public void delete[a.name.toUpperFirst()/](@PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
         [logic/].delete[c.name/]([a.getIdVariable()/]);
     }
@@ -349,12 +365,18 @@ import [a.getClass().getModel().baseGroup()/].api.[a.getOwner().getAPIName()/];
 import [a.getClass().getModel().baseGroup()/].dtos.detail.[a.getClass().getBasicDTOName()/];
 import [a.getClass().getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 import java.util.ArrayList;
+import co.edu.uniandes.annotation.FP;
 /**
  * URI: [a.getFullURI()/]
  * @generated
  */
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@FP(useCases = { "['list'.concat(className).concat(a.name.toUpperFirst()) /]" })
+@FP(useCases = { "['get'.concat(className).concat(a.name.toUpperFirst()) /]" })
+@FP(useCases = { "['add'.concat(className).concat(a.name.toUpperFirst()) /]" })
+@FP(useCases = { "['replace'.concat(className).concat(a.name.toUpperFirst()) /]" })
+@FP(useCases = { "['remove'.concat(className).concat(a.name.toUpperFirst()) /]" })
 public class [className/] {
 
     @Inject private [a.getOwner().getAPIName()/] [logic/];
@@ -399,6 +421,7 @@ public class [className/] {
      * @generated
      */
     @GET
+	@FP(useCases = { "['list'.concat(className).concat(a.name.toUpperFirst()) /]" })
     public List<[a.getClass().getBasicDTOName()/]> list[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/]) {
         return [a.name/]ListEntity2DTO([logic/].list[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/]));
     }
@@ -412,6 +435,7 @@ public class [className/] {
      */
     @GET
     @Path("{[a.getIdVariable()/]: \\d+}")
+	@FP(useCases = { "['get'.concat(className).concat(a.name.toUpperFirst()) /]" })
     public [a.getClass().getBasicDTOName()/] get[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
         return new [a.getClass().getBasicDTOName()/]([logic/].get[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/], [a.getIdVariable()/]));
     }
@@ -426,6 +450,7 @@ public class [className/] {
      */
     @POST
     @Path("{[a.getIdVariable()/]: \\d+}")
+    @FP(useCases = { "['add'.concat(className).concat(a.name.toUpperFirst()) /]" })
     public [a.getClass().getBasicDTOName()/] add[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
         return new [a.getClass().getBasicDTOName()/]([logic/].add[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/], [a.getIdVariable()/]));
     }
@@ -439,6 +464,7 @@ public class [className/] {
      * @generated
      */
     @PUT
+	@FP(useCases = { "['replace'.concat(className).concat(a.name.toUpperFirst()) /]" })
     public List<[a.getClass().getBasicDTOName()/]> replace[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], List<[a.getClass().getBasicDTOName()/]> [a.getClass().getURI()/]) {
         return [a.name/]ListEntity2DTO([logic/].replace[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/], [a.name/]ListDTO2Entity([a.getClass().getURI()/])));
     }
@@ -452,6 +478,7 @@ public class [className/] {
      */
     @DELETE
     @Path("{[a.getIdVariable()/]: \\d+}")
+    @FP(useCases = { "['remove'.concat(className).concat(a.name.toUpperFirst()) /]" })
     public void remove[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
         [logic/].remove[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/], [a.getIdVariable()/]);
     }
