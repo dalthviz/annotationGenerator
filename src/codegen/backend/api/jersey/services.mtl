@@ -61,11 +61,11 @@ import co.edu.uniandes.annotation.FP;
 @Path("/[c.getURI()/]")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@FP(useCases = { "['getAll'.concat(c.getName()) /]" })
-@FP(useCases = { "['get'.concat(c.getName()) /]" })
-@FP(useCases = { "['create'.concat(c.getName()) /]" })
-@FP(useCases = { "['update'.concat(c.getName()) /]" })
-@FP(useCases = { "['delete'.concat(c.getName()) /]" })
+@FP(useCases = { "['getAll'.concat(c.getName()) /]",
+				 "['get'.concat(c.getName()) /]",
+				 "['create'.concat(c.getName()) /]",
+                 "['update'.concat(c.getName()) /]", 
+				 "['delete'.concat(c.getName()) /]" })
 public class [className/] {
 
     @Inject private [c.getAPIName()/] [logic/];
@@ -218,11 +218,11 @@ import co.edu.uniandes.annotation.FP;
  */
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@FP(useCases = { "['getAll'.concat(c.getName()).concat(a.name.toUpperFirst()) /]" })
-@FP(useCases = { "['get'.concat(c.getName()).concat(a.name.toUpperFirst()) /]" })
-@FP(useCases = { "['create'.concat(c.getName()).concat(a.name.toUpperFirst()) /]" })
-@FP(useCases = { "['update'.concat(c.getName()) /]" })
-@FP(useCases = { "['delete'.concat(c.getName()) /]" })
+@FP(useCases = { "['getAll'.concat(c.getName()).concat(a.name.toUpperFirst()) /]",
+				 "['get'.concat(c.getName()).concat(a.name.toUpperFirst()) /]",
+	             "['create'.concat(c.getName()).concat(a.name.toUpperFirst()) /]",
+				 "['update'.concat(c.getName()) /]",
+				 "['delete'.concat(c.getName()) /]" })
 public class [className/] {
 
     @Inject private [c.getAPIName()/] [logic/];
@@ -372,11 +372,11 @@ import co.edu.uniandes.annotation.FP;
  */
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@FP(useCases = { "['list'.concat(className).concat(a.name.toUpperFirst()) /]" })
-@FP(useCases = { "['get'.concat(className).concat(a.name.toUpperFirst()) /]" })
-@FP(useCases = { "['add'.concat(className).concat(a.name.toUpperFirst()) /]" })
-@FP(useCases = { "['replace'.concat(className).concat(a.name.toUpperFirst()) /]" })
-@FP(useCases = { "['remove'.concat(className).concat(a.name.toUpperFirst()) /]" })
+@FP(useCases = { "['list'.concat(className).concat(a.name.toUpperFirst()) /]",
+				 "['get'.concat(className).concat(a.name.toUpperFirst()) /]",
+				 "['add'.concat(className).concat(a.name.toUpperFirst()) /]",
+				 "['replace'.concat(className).concat(a.name.toUpperFirst()) /]",
+				 "['remove'.concat(className).concat(a.name.toUpperFirst()) /]" })
 public class [className/] {
 
     @Inject private [a.getOwner().getAPIName()/] [logic/];
