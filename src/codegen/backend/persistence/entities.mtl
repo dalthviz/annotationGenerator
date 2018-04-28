@@ -147,8 +147,9 @@ public class [className/] extends [if(c.isGeneralization())][c.getGeneralization
         this.[a.name/] = [a.name.toLower()/];
     }
 [/for]
-}
 [c.setEntityGetterAndSettersManyToManyShared()/]
+}
+
 [/file]
 [/template]
 
