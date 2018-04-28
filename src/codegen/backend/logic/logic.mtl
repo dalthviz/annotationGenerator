@@ -90,9 +90,9 @@ import co.edu.uniandes.annotation.FP;
 				 "['delete'.concat(c.name) /]" 
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
 				 , "['list'.concat(c.name).concat(a.getClass().name) /]",
-				 "['get'.concat(c.name).concat(a.getClass().name) /]" }),
-				 "['add'.concat(c.name).concat(a.getClass().name) /]" }),
-			     "['replace'.concat(c.name).concat(a.getClass().name) /]" }),
+				 "['get'.concat(c.name).concat(a.getClass().name) /]",
+				 "['add'.concat(c.name).concat(a.getClass().name) /]",
+			     "['replace'.concat(c.name).concat(a.getClass().name) /]",
 				 "['remove'.concat(c.name).concat(a.getClass().name) /]"
 [/for]
 				})
