@@ -249,10 +249,13 @@ public [c.getMinimumDTOName()/]([c.getEntityName()/] entity) {
 [if(p.getOtherEnd().getUpper() = -1)]
 [if(p.getOtherEnd().isNavigable())]
 [if(p.aggregation = AggregationKind::shared)]
-@ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-@JoinTable(name = [p.name/]_[p.getOtherEnd().name/], 
-JoinColumns = @JoinColumn(name = [p.getOtherEnd().name/]),
-inverseColumns = @JoinColumn(name = [p.name/]))
+@PodamExclude
+@ManyToMany
+[for ( a:Property | p.getClass().getRelationshipAttributes())]
+[if (a.isMany2Many() and a.isRelationshipOwner())]
+(mappedBy = "[a.getOtherEnd().name/]" )
+[/if]
+[/for]
 List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass().getEntityName()/] = new ArrayList<>();
 [/if][/if][/if]
 [/for]
@@ -265,11 +268,9 @@ List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass()
  public List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().getter()/]() {
         return [p.getOtherEnd().name/];
     }
- 
     public void [p.getOtherEnd().setter()/](List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().name/]) {
         this.[p.getOtherEnd().name/] = [p.getOtherEnd().name/];
     }
-
 [/if]
 [/if]
 [/if]
