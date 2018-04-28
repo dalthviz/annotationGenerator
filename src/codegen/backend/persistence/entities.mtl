@@ -21,7 +21,6 @@ import java.util.Date;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import uk.co.jemos.podam.common.PodamStrategyValue;
-import co.edu.uniandes.csw.crud.api.podam.strategy.DateStrategy;
 [/if]
 [if (c.hasRelationshipAttributes())]
 import uk.co.jemos.podam.common.PodamExclude;
@@ -61,7 +60,6 @@ public class [className/] extends [if(c.isGeneralization())][c.getGeneralization
 
     [if (a.isDate())]
     @Temporal(TemporalType.DATE)
-    @PodamStrategyValue(DateStrategy.class)
     [/if]
     private [a.type.name/] [a.name.toLowerFirst()/];
 [/for]
