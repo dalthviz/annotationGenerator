@@ -251,11 +251,14 @@ public [c.getMinimumDTOName()/]([c.getEntityName()/] entity) {
 [if(p.aggregation = AggregationKind::shared)]
 @PodamExclude
 @ManyToMany(mappedBy = "[p.name/]")
-List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass().getEntityName()/] = new ArrayList<>();
-[elseif (p.aggregation = AggregationKind::none and p.getOtherEnd().aggregation = AggregationKind::shared)]
-@PodamExclude
+List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().name/]Ent = new ArrayList<>();
+[elseif (p.aggregation = AggregationKind::none 
+and p.getOtherEnd().aggregation = AggregationKind::shared
+and p.getOtherEnd().getUpper() = -1
+and p.getOtherEnd().isNavigable())]
+@PodamExclude 
 @ManyToMany
-List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass().getEntityName()/] = new ArrayList<>();
+List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().name/]Ent = new ArrayList<>();
 [/if][/if][/if]
 [/for]
 [/template]
@@ -265,17 +268,20 @@ List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass()
 [if(p.getOtherEnd().isNavigable())]
 [if(p.aggregation = AggregationKind::shared)]
  public List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().getter()/]() {
-        return l[p.getOtherEnd().getClass().getEntityName()/];
+        return [p.getOtherEnd().name/]Ent;
     }
     public void [p.getOtherEnd().setter()/](List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass().getEntityName()/]) {
-        this.l[p.getOtherEnd().getClass().getEntityName()/] = l[p.getOtherEnd().getClass().getEntityName()/];
+        this.[p.getOtherEnd().name/]Ent = [p.getOtherEnd().name/]Ent;
     }
-[elseif (p.aggregation = AggregationKind::none and p.getOtherEnd().aggregation = AggregationKind::shared)]
+[elseif (p.aggregation = AggregationKind::none 
+and p.getOtherEnd().aggregation = AggregationKind::shared
+and p.getOtherEnd().getUpper() = -1
+and p.getOtherEnd().isNavigable())]
  public List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().getter()/]() {
-        return l[p.getOtherEnd().getClass().getEntityName()/];
+        return [p.getOtherEnd().name/]Ent;
     }
     public void [p.getOtherEnd().setter()/](List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass().getEntityName()/]) {
-        this.l[p.getOtherEnd().getClass().getEntityName()/] = l[p.getOtherEnd().getClass().getEntityName()/];
+        this.[p.getOtherEnd().name/]Ent = [p.getOtherEnd().name/]Ent;
     }
 [/if]
 [/if]
