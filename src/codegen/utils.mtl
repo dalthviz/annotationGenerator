@@ -246,13 +246,15 @@ public [c.getMinimumDTOName()/]([c.getEntityName()/] entity) {
 [/template]
 [template public setEntityManyToManyShared(c:Class)]
 [for(p:Property | c.getMemberEnd())]
-[if(not p.getOtherEnd().isNavigable() and p.getOtherEnd().getUpper() = -1 and p.aggregation = AggregationKind::shared )]
+[if(p.getOtherEnd().getUpper() = -1)]
+[if(not p.getOtherEnd().isNavigable())]
+[if(p.aggregation = AggregationKind::shared)]
 @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
 @JoinTable(name = [p.name/]_[p.getOtherEnd().name/], 
 JoinColumns = @JoinColumn(name = [p.getOtherEnd().name/]),
 inverseColumns = @JoinColumn(name = [p.name/]))
 List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass().getEntityName()/] = new ArrayList<>();
-[/if]
+[/if][/if][/if]
 [/for]
 [/template]
 [template public setEntityGetterAndSettersManyToManyShared(c:Class)]
