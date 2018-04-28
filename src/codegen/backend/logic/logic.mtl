@@ -77,6 +77,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
+import co.uniandes.annotation.FP;
 [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;[/if][/for]
 
 
@@ -84,6 +85,17 @@ import javax.persistence.NoResultException;
  * @generated
  */
 @Stateless
+@FP(useCases = { "['getAll'.concat(c.name) /]", "['get'.concat(c.name) /]",
+				 "['create'.concat(c.name) /]", "['update'.concat(c.name) /]", 
+				 "['delete'.concat(c.name) /]" 
+[for (a : Property | c.getNonCompositeCollectionAttributes())]
+				 , "['list'.concat(c.name).concat(a.getClass().name) /]",
+				 "['get'.concat(c.name).concat(a.getClass().name) /]" }),
+				 "['add'.concat(c.name).concat(a.getClass().name) /]" }),
+			     "['replace'.concat(c.name).concat(a.getClass().name) /]" }),
+				 "['remove'.concat(c.name).concat(a.getClass().name) /]"
+[/for]
+				})
 public class [className/] implements [c.getAPIName()/] {
 
     @Inject private [c.getPersistenceName()/] persistence;
@@ -232,6 +244,7 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
+    @FP(useCases = { "['getAll'.concat(c.name) /]" })
     public List<[c.getEntityName()/]> get[c.name/]s() {
         return persistence.findAll();
     }
@@ -245,6 +258,7 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
+    @FP(useCases = { "['getAll'.concat(c.name) /]" })
     public List<[c.getEntityName()/]> get[c.name/]s(Integer page, Integer maxRecords) {
         return persistence.findAll(page, maxRecords);
     }
@@ -256,6 +270,7 @@ public class [className/] implements [c.getAPIName()/] {
      * @return Instancia de [c.getEntityName()/] con los datos del [c.name/] consultado.
      * @generated
      */
+    @FP(useCases = { "['get'.concat(c.name) /]" })
     public [c.getEntityName()/] get[c.name/](Long id) {
         return persistence.find(id);
     }
@@ -268,6 +283,7 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
+    @FP(useCases = { "['create'.concat(c.name) /]" })
     public [c.getEntityName()/] create[c.name/]([c.getEntityName()/] entity) [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException[/if][/for]{
 
        [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']
@@ -290,6 +306,7 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
+	@FP(useCases = { "['update'.concat(c.name) /]" })
     public [c.getEntityName()/] update[c.name/]([c.getEntityName()/] entity) {
         return persistence.update(entity);
     }
@@ -301,6 +318,7 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
+    @FP(useCases = { "['delete'.concat(c.name) /]" })
     public void delete[c.name/](Long id) {
         persistence.delete(id);
     }
@@ -317,6 +335,7 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
+    @FP(useCases = { "['list'.concat(c.name).concat(a.getClass().name) /]" })
     public List<[a.getClass().getEntityName()/]> list[a.name.toUpperFirst()/](Long [c.getEntityId()/]) {
         return get[c.name/]([c.getEntityId()/]).[a.getter()/]();
     }
@@ -329,6 +348,7 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
+    @FP(useCases = { "['get'.concat(c.name).concat(a.getClass().name) /]" })
     public [a.getClass().getEntityName()/] get[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]) {
         List<[a.getClass().getEntityName()/]> list = get[c.name/]([c.getEntityId()/]).[a.getter()/]();
         [a.getClass().getEntityName()/] [a.getEntityLower()/] = new [a.getClass().getEntityName()/]();
@@ -349,6 +369,7 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
+    @FP(useCases = { "['add'.concat(c.name).concat(a.getClass().name) /]" })
     public [a.getClass().getEntityName()/] add[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]) {
 		[if (a.isRelationshipOwner())]
         [c.getEntityName()/] [c.getEntityLower()/] = get[c.name/]([c.getEntityId()/]);
@@ -378,6 +399,7 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
+	@FP(useCases = { "['replace'.concat(c.name).concat(a.getClass().name) /]" })
     public List<[a.getClass().getEntityName()/]> replace[a.name.toUpperFirst()/](Long [c.getEntityId()/], List<[a.getClass().getEntityName()/]> list) {
         [c.getEntityName()/] [c.getEntityLower()/] = get[c.name/]([c.getEntityId()/]);
 		[if (not a.isRelationshipOwner())]
@@ -416,6 +438,7 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
+	@FP(useCases = { "['remove'.concat(c.name).concat(a.getClass().name) /]" })
     public void remove[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]) {
         [if (not a.isRelationshipOwner())]
         [if (a.getOtherEnd().getUpper() = 1)]
