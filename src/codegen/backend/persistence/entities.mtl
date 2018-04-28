@@ -45,6 +45,7 @@ import javax.persistence.InheritanceType;
 [elseif(c.isGeneralization())]
 import javax.persistence.PrimaryKeyJoinColumn;
 [/if]
+import co.edu.uniandes.annotation.FP;
 
 /**
  * @generated
@@ -55,6 +56,19 @@ import javax.persistence.PrimaryKeyJoinColumn;
 [elseif(c.isGeneralization())]
 @PrimaryKeyJoinColumn(name="[c.generalization.general.name/]_ID")
 [/if]
+@FP(useCases = { "['getAll'.concat(c.name) /]",
+				 "['get'.concat(c.name) /]",
+				 "['create'.concat(c.name) /]",
+                 "['update'.concat(c.name) /]", 
+				 "['delete'.concat(c.name) /],
+[for (a : Property | c.getCollectionAttributes())]
+				 "['list'.concat(c.name).concat(a.getClass().name) /]",
+				 "['get'.concat(c.name).concat(a.getClass().name) /]",
+				 "['add'.concat(c.name).concat(a.getClass().name) /]",
+				 "['replace'.concat(c.name).concat(a.getClass().name) /]",
+				 "['remove'.concat(c.name).concat(a.getClass().name) /]"
+[/for]
+				 })
 public class [className/] extends [if(c.isGeneralization())][c.getGeneralizationClass().getEntityName()/][else]BaseEntity[/if] implements Serializable {
 [for (a : Property | c.allAttributes()->reject(isID() or isName()))]
 
