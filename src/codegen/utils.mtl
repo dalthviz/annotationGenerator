@@ -248,7 +248,7 @@ public [c.getMinimumDTOName()/]([c.getEntityName()/] entity) {
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().getUpper() = -1)]
 [if(p.getOtherEnd().isNavigable())]
-[if(p.aggregation = AggregationKind::shared or p.getOtherEnd().aggregation = AggregationKind::shared)]
+[if(p.aggregation = AggregationKind::shared)]
 @PodamExclude
 @ManyToMany
 List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass().getEntityName()/] = new ArrayList<>();
@@ -259,7 +259,7 @@ List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass()
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().getUpper() = -1)]
 [if(p.getOtherEnd().isNavigable())]
-[if(p.aggregation = AggregationKind::shared or p.getOtherEnd().aggregation = AggregationKind::shared)]
+[if(p.aggregation = AggregationKind::shared)]
  public List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().getter()/]() {
         return l[p.getOtherEnd().getClass().getEntityName()/];
     }
