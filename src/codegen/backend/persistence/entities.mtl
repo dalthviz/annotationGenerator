@@ -60,9 +60,9 @@ import co.edu.uniandes.annotation.FP;
 				 "['get'.concat(c.name) /]",
 				 "['create'.concat(c.name) /]",
                  "['update'.concat(c.name) /]", 
-				 "['delete'.concat(c.name) /],
+				 "['delete'.concat(c.name) /]"
 [for (a : Property | c.getCollectionAttributes())]
-				 "['list'.concat(c.name).concat(a.getClass().name) /]",
+				 ,"['list'.concat(c.name).concat(a.getClass().name) /]",
 				 "['get'.concat(c.name).concat(a.getClass().name) /]",
 				 "['add'.concat(c.name).concat(a.getClass().name) /]",
 				 "['replace'.concat(c.name).concat(a.getClass().name) /]",
