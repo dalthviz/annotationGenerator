@@ -25,11 +25,25 @@ import javax.persistence.TypedQuery;
 [if(c.isGeneralization() and c.isChild()=false)]
 import javax.persistence.TypedQuery;
 [/if]
+import co.edu.uniandes.annotation.FP;
 
 /**
  * @generated
  */
 @Stateless
+@FP(useCases = { "['getAll'.concat(c.name) /]",
+				 "['get'.concat(c.name) /]",
+				 "['create'.concat(c.name) /]",
+                 "['update'.concat(c.name) /]", 
+				 "['delete'.concat(c.name) /]"
+[for (a : Property | c.getCollectionAttributes())]
+				 ,"['list'.concat(c.name).concat(a.getClass().name) /]",
+				 "['get'.concat(c.name).concat(a.getClass().name) /]",
+				 "['add'.concat(c.name).concat(a.getClass().name) /]",
+				 "['replace'.concat(c.name).concat(a.getClass().name) /]",
+				 "['remove'.concat(c.name).concat(a.getClass().name) /]"
+[/for]
+				 })
 public class [className/] extends CrudPersistence<[c.getEntityName()/]> {
 
     @PersistenceContext(unitName="[c.getModel().getPUName()/]")

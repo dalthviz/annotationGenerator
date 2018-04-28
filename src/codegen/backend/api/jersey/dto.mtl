@@ -22,21 +22,33 @@ import java.io.Serializable;
 [if (c.hasDateAttribute())]
 import java.util.Date;
 import uk.co.jemos.podam.common.PodamStrategyValue;
-import co.edu.uniandes.csw.crud.api.podam.strategy.DateStrategy;
 [elseif(c.isGeneralization())]
 [if (c.getGeneralizationClass().hasDateAttribute())]
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 import uk.co.jemos.podam.common.PodamStrategyValue;
-import co.edu.uniandes.csw.crud.api.podam.strategy.DateStrategy;
 [/if]
 [/if]
+import co.edu.uniandes.annotation.FP;
 
 /**
  * @generated
  */
 @XmlRootElement
+@FP(useCases = { "['getAll'.concat(c.name) /]",
+				 "['get'.concat(c.name) /]",
+				 "['create'.concat(c.name) /]",
+                 "['update'.concat(c.name) /]", 
+				 "['delete'.concat(c.name) /]"
+[for (a : Property | c.getCollectionAttributes())]
+				 ,"['list'.concat(c.name).concat(a.getClass().name) /]",
+				 "['get'.concat(c.name).concat(a.getClass().name) /]",
+				 "['add'.concat(c.name).concat(a.getClass().name) /]",
+				 "['replace'.concat(c.name).concat(a.getClass().name) /]",
+				 "['remove'.concat(c.name).concat(a.getClass().name) /]"
+[/for]
+				 })
 public class [className/] [if(c.isGeneralization())] extends [c.getGeneralizationClass().getMinimumDTOName()/][/if] implements Serializable{
 
 [c.setAttributes()/]
