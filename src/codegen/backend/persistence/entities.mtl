@@ -70,6 +70,9 @@ import co.edu.uniandes.annotation.FP;
 [/for]
 				 })
 public class [className/] extends [if(c.isGeneralization())][c.getGeneralizationClass().getEntityName()/][else]BaseEntity[/if] implements Serializable {
+
+[c.setEntityManyToManyShared()/]
+
 [for (a : Property | c.allAttributes()->reject(isID() or isName()))]
 
     [if (a.isDate())]
@@ -157,6 +160,7 @@ public class [className/] extends [if(c.isGeneralization())][c.getGeneralization
     }
 [/for]
 }
+[c.setEntityGetterAndSettersManyToManyShared()/]
 [/file]
 [/template]
 
