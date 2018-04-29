@@ -273,7 +273,7 @@ List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().name/] = ne
  public List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().getter()/]() {
         return [p.getOtherEnd().name/];
     }
-    public void [p.getOtherEnd().setter()/](List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().name/]) {
+    public void [p.getOtherEnd().setter()/](List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass().getEntityName()/]) {
         this.[p.getOtherEnd().name/] = [p.getOtherEnd().name/];
     }
 [elseif (p.aggregation = AggregationKind::none 
