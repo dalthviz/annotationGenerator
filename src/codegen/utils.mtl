@@ -334,7 +334,7 @@ if (entity.[p.getOtherEnd().getter()/]()!=null){
  for([p.getOtherEnd().getClass().getEntityName()/] ent : entity.[p.getOtherEnd().getter()/]()){
  l[p.getOtherEnd().name/].add(new [p.getOtherEnd().getClass().getMinimumDTOName()/](ent));
 }
-this.[p.getOtherEnd().name/] = [p.getOtherEnd().name/];
+this.[p.getOtherEnd().name/] = l[p.getOtherEnd().name/];
 }
 [/if]
 [/if]
