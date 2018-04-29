@@ -423,7 +423,7 @@ private List<[p.getOtherEnd().getClass().getMinimumDTOName()/]> [p.getOtherEnd()
 [template public setDetailDTOGettersAndSetters(c:Class)]
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().getUpper() = 1)]
-[if(not p.getOtherEnd().isNavigable())] 
+[if(p.getOtherEnd().isNavigable())] 
 public [p.getOtherEnd().getClass().getMinimumDTOName()/] [p.getOtherEnd().getter()/]() {
         return [p.getOtherEnd().name/];
     }
@@ -434,7 +434,7 @@ public [p.getOtherEnd().getClass().getMinimumDTOName()/] [p.getOtherEnd().getter
 [/if]
 [/if]
 [if(p.getOtherEnd().getUpper() = -1)]
-[if(not p.getOtherEnd().isNavigable())]
+[if(p.getOtherEnd().isNavigable())]
  public List<[p.getOtherEnd().getClass().getMinimumDTOName()/]> [p.getOtherEnd().getter()/]() {
         return [p.getOtherEnd().name/];
     }
