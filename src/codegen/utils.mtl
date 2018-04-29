@@ -236,10 +236,8 @@ public [c.getMinimumDTOName()/]([c.getEntityName()/] entity) {
     [/if]	
     [if(not c.allAttributes()->isEmpty())]
    if (entity!=null){
-    [for(p:Property | c.getMemberEnd())]
-    [if (p.isNavigable())]
+    [for(p:Property | c.getAllAttribs())]
     this.[p.name/]=entity.[p.getter()/]();
-    [/if]
     [/for]    
        }
     [/if]
@@ -298,8 +296,9 @@ and p.getOtherEnd().isNavigable())]
 [template public setImportsSharedRelation(c:Class)]
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().isNavigable())]
-[if(p.getOtherEnd().getUpper() = -1 )]
-[if(p.aggregation = AggregationKind::shared)]
+[if(p.getUpper() + p.getOtherEnd().getUpper() = -2)]
+[if((p.aggregation = AggregationKind::shared and p.getOtherEnd().aggregation = AggregationKind::none) or
+ (p.aggregation = AggregationKind::none and p.getOtherEnd().aggregation = AggregationKind::shared ))]
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.ManyToMany;
@@ -314,21 +313,21 @@ import uk.co.jemos.podam.common.PodamExclude;
 public [c.getBasicDTOName()/]([c.getEntityName()/] entity) {
  super(entity); 
 [for(p:Property | c.getMemberEnd())]
-[if(not p.getOtherEnd().isNavigable())]
+[if(p.getOtherEnd().isNavigable())]
 [if(p.getOtherEnd().getUpper() = -1 )]
 List<[p.getOtherEnd().getClass().getMinimumDTOName()/]> l[p.getOtherEnd().name/] = new ArrayList<>();
 [/if]
 [/if]
 [/for]
 [for(p:Property | c.getMemberEnd())]
-[if(not p.getOtherEnd().isNavigable())]
+[if(p.getOtherEnd().isNavigable())]
 [if(p.getOtherEnd().getUpper() = 1)]
 if (entity.[p.getOtherEnd().getter()/]()!=null){
 this.[p.getOtherEnd().name/] = new [p.getOtherEnd().getClass().getMinimumDTOName()/](entity.[p.getOtherEnd().getter()/]());
 }
 [/if]
 [/if]
-[if(not p.getOtherEnd().isNavigable())]
+[if(p.getOtherEnd().isNavigable())]
 [if(p.getOtherEnd().getUpper() = -1)]
 if (entity.[p.getOtherEnd().getter()/]()!=null){
  for([p.getOtherEnd().getClass().getEntityName()/] ent : entity.[p.getOtherEnd().getter()/]()){
@@ -343,7 +342,9 @@ this.[p.getOtherEnd().name/] = l[p.getOtherEnd().name/];
 [/template]
 [template public setImportsDetailDTO(c:Class)]
 [for(p:Property | c.getMemberEnd())]
+[if(p.getOtherEnd().isNavigable())]
 import [c.getModel().baseGroup()/].entities.[p.getOtherEnd().getClass().getEntityName()/];
+[/if]
 [/for]
 [/template]
 
@@ -351,28 +352,28 @@ import [c.getModel().baseGroup()/].entities.[p.getOtherEnd().getClass().getEntit
  public [c.getEntityName()/] toEntity() {
 [c.getEntityName()/] entity = ([c.getEntityName()/]) super.toEntity();
 [for(p:Property | c.getMemberEnd())]
-[if(not p.getOtherEnd().isNavigable())]
+[if(p.getOtherEnd().isNavigable())]
 [if(p.getOtherEnd().getUpper() = -1)]
-List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass().getEntityName()/] = new ArrayList<>();
+List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().name/] = new ArrayList<>();
 [/if]
 [/if]
 [/for]
 [for(p:Property | c.getMemberEnd())]
-[if(not p.getOtherEnd().isNavigable())]
+[if(p.getOtherEnd().isNavigable())]
 [if(p.getOtherEnd().getUpper() = 1)]
  if (this.[p.getOtherEnd().getter()/]()!=null){
         entity.[p.getOtherEnd().setter()/](this.[p.getOtherEnd().getter()/]().toEntity());
         }
 [/if]
 [/if]
-[if(not p.getOtherEnd().isNavigable())]
+[if(p.getOtherEnd().isNavigable())]
 [if(p.getOtherEnd().getUpper() = -1)]
 if (this.[p.getOtherEnd().getter()/]()!=null){
   for([p.getOtherEnd().getClass().getMinimumDTOName()/] dto : this.[p.getOtherEnd().getter()/]()){
-l[p.getOtherEnd().getClass().getEntityName()/].add(dto.toEntity());
+l[p.getOtherEnd().name/].add(dto.toEntity());
     
  }       
-  entity.[p.getOtherEnd().setter()/](l[p.getOtherEnd().getClass().getEntityName()/]);  
+  entity.[p.getOtherEnd().setter()/](l[p.getOtherEnd().name/]);  
  }
 [/if]
 [/if]
@@ -389,10 +390,8 @@ return entity;
         [else]
         [c.getEntityName()/] entity = new [c.getEntityName()/]();
        [/if]  
-        [for(n:Property | c.getMemberEnd())]
-        [if (n.isNavigable())]
+        [for(n:Property | c.getAllAttribs())]
         entity.[n.setter()/](this.[n.getter()/]());
-        [/if]
         [/for]
          return entity;
        }
@@ -403,7 +402,7 @@ return entity;
 [template public setDetailDTOAttributes(c:Class)]
 
 [for(p:Property | c.getMemberEnd())]
-[if(not p.getOtherEnd().isNavigable())]
+[if(p.getOtherEnd().isNavigable())]
 [if(p.getOtherEnd().getUpper() = 1)]
 [if (c.getRelationshipAttributes()->select(not isComposite())->notEmpty())]
 @PodamExclude
@@ -423,7 +422,7 @@ private List<[p.getOtherEnd().getClass().getMinimumDTOName()/]> [p.getOtherEnd()
 [template public setDetailDTOGettersAndSetters(c:Class)]
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().getUpper() = 1)]
-[if(not p.getOtherEnd().isNavigable())] 
+[if(p.getOtherEnd().isNavigable())] 
 public [p.getOtherEnd().getClass().getMinimumDTOName()/] [p.getOtherEnd().getter()/]() {
         return [p.getOtherEnd().name/];
     }
@@ -434,7 +433,7 @@ public [p.getOtherEnd().getClass().getMinimumDTOName()/] [p.getOtherEnd().getter
 [/if]
 [/if]
 [if(p.getOtherEnd().getUpper() = -1)]
-[if(not p.getOtherEnd().isNavigable())]
+[if(p.getOtherEnd().isNavigable())]
  public List<[p.getOtherEnd().getClass().getMinimumDTOName()/]> [p.getOtherEnd().getter()/]() {
         return [p.getOtherEnd().name/];
     }
