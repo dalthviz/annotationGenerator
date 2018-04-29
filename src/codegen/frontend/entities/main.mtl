@@ -10,6 +10,7 @@
 
 [template private genModule(c : Class, path : String)]
 [file (path.concat(c.getName()) + '.mod.js', false, 'UTF-8')]
+//['getAll'.concat(c.name) /], ['get'.concat(c.name) /], ['create'.concat(c.name) /], ['update'.concat(c.name) /], ['delete'.concat(c.name) /][for (a : Property | c.getCollectionAttributes())], ['list'.concat(c.name).concat(a.getClass().name) /], ['get'.concat(c.name).concat(a.getClass().name) /], ['add'.concat(c.name).concat(a.getClass().name) /], ['replace'.concat(c.name).concat(a.getClass().name) /], ['remove'.concat(c.name).concat(a.getClass().name) /][/for][if (c.isChild())], ['list'.concat(c.getParentAttribute().getClass().name).concat(c.name) /], ['get'.concat(c.getParentAttribute().getClass().name).concat(c.name) /], ['add'.concat(c.getParentAttribute().getClass().name).concat(c.name) /], ['replace'.concat(c.getParentAttribute().getClass().name).concat(c.name) /], ['remove'.concat(c.getParentAttribute().getClass().name).concat(c.name) /][/if]
 /*
 [c.getModel().license()/]
 */
@@ -235,6 +236,7 @@
 
 [template private genCtrl(c : Class, path : String)]
 [file (path.concat(c.getName()) + '.ctrl.js', false, 'UTF-8')]
+//['getAll'.concat(c.name) /], ['get'.concat(c.name) /], ['create'.concat(c.name) /], ['update'.concat(c.name) /], ['delete'.concat(c.name) /]
 /*
 [c.getModel().license()/]
 */
@@ -296,7 +298,7 @@
                 return true; // error not handled
             });
 
-            /* Función showMessage: Recibe el mensaje en String y
+            /* Funciï¿½n showMessage: Recibe el mensaje en String y
              * su tipo con el fin de almacenarlo en el array $scope.alerts.
              */
             function showMessage(msg, type) {
