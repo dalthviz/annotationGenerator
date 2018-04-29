@@ -403,7 +403,7 @@ return entity;
 [template public setDetailDTOAttributes(c:Class)]
 
 [for(p:Property | c.getMemberEnd())]
-[if(not p.getOtherEnd().isNavigable())]
+[if(p.getOtherEnd().isNavigable())]
 [if(p.getOtherEnd().getUpper() = 1)]
 [if (c.getRelationshipAttributes()->select(not isComposite())->notEmpty())]
 @PodamExclude
