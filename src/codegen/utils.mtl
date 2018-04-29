@@ -236,8 +236,10 @@ public [c.getMinimumDTOName()/]([c.getEntityName()/] entity) {
     [/if]	
     [if(not c.allAttributes()->isEmpty())]
    if (entity!=null){
-    [for(p:Property | c.allAttributes())]
+    [for(p:Property | c.getMemberEnd())]
+    [if (p.isNavigable())]
     this.[p.name/]=entity.[p.getter()/]();
+    [/if]
     [/for]    
        }
     [/if]
@@ -247,25 +249,61 @@ public [c.getMinimumDTOName()/]([c.getEntityName()/] entity) {
 [template public setEntityManyToManyShared(c:Class)]
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().getUpper() = -1)]
+[if(p.getUpper() = -1)]
 [if(p.getOtherEnd().isNavigable())]
 [if(p.aggregation = AggregationKind::shared)]
 @PodamExclude
+@ManyToMany(mappedBy = "[p.name/]")
+List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().name/] = new ArrayList<>();
+[elseif (p.aggregation = AggregationKind::none 
+and p.getOtherEnd().aggregation = AggregationKind::shared
+and p.getOtherEnd().getUpper() = -1
+and p.getUpper() = -1
+and p.getOtherEnd().isNavigable())]
+@PodamExclude 
 @ManyToMany
-List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass().getEntityName()/] = new ArrayList<>();
-[/if][/if][/if]
+List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().name/] = new ArrayList<>();
+[/if][/if][/if][/if]
 [/for]
 [/template]
 [template public setEntityGetterAndSettersManyToManyShared(c:Class)]
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().getUpper() = -1)]
+[if(p.getUpper() = -1)]
 [if(p.getOtherEnd().isNavigable())]
 [if(p.aggregation = AggregationKind::shared)]
+ public List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().getter()/]() {
+        return [p.getOtherEnd().name/];
+    }
+    public void [p.getOtherEnd().setter()/](List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().getClass().getEntityName()/]) {
+        this.[p.getOtherEnd().name/] = [p.getOtherEnd().name/];
+    }
+[elseif (p.aggregation = AggregationKind::none 
+and p.getOtherEnd().aggregation = AggregationKind::shared
+and p.getOtherEnd().getUpper() = -1
+and p.getUpper() = -1
+and p.getOtherEnd().isNavigable())]
  public List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().getter()/]() {
         return [p.getOtherEnd().name/];
     }
     public void [p.getOtherEnd().setter()/](List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().name/]) {
         this.[p.getOtherEnd().name/] = [p.getOtherEnd().name/];
     }
+[/if]
+[/if]
+[/if]
+[/if]
+[/for]
+[/template]
+[template public setImportsSharedRelation(c:Class)]
+[for(p:Property | c.getMemberEnd())]
+[if(p.getOtherEnd().isNavigable())]
+[if(p.getOtherEnd().getUpper() = -1 )]
+[if(p.aggregation = AggregationKind::shared)]
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.ManyToMany;
+import uk.co.jemos.podam.common.PodamExclude;
 [/if]
 [/if]
 [/if]
@@ -351,8 +389,10 @@ return entity;
         [else]
         [c.getEntityName()/] entity = new [c.getEntityName()/]();
        [/if]  
-        [for(n:Property | c.getAllAttribs())]
+        [for(n:Property | c.getMemberEnd())]
+        [if (n.isNavigable())]
         entity.[n.setter()/](this.[n.getter()/]());
+        [/if]
         [/for]
          return entity;
        }
