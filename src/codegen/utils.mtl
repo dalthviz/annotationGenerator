@@ -296,8 +296,9 @@ and p.getOtherEnd().isNavigable())]
 [template public setImportsSharedRelation(c:Class)]
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().isNavigable())]
-[if(p.getOtherEnd().getUpper() = -1 )]
-[if(p.aggregation = AggregationKind::shared)]
+[if(p.getUpper() + p.getOtherEnd().getUpper() = -2)]
+[if((p.aggregation = AggregationKind::shared and p.getOtherEnd().aggregation = AggregationKind::none) or
+ (p.aggregation = AggregationKind::none and p.getOtherEnd().aggregation = AggregationKind::shared ))]
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.ManyToMany;
