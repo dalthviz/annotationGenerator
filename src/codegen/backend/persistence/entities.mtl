@@ -16,14 +16,7 @@ package [c.getModel().baseGroup()/].entities;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import co.edu.uniandes.csw.crud.spi.entity.BaseEntity;
-[for (a:Property | c.getRelationshipAttributes())]
-[if (a.isMany2Many() and a.aggregation = AggregationKind::shared)]
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.ManyToMany;
-import uk.co.jemos.podam.common.PodamExclude;
-[/if]
-[/for]
+[c.setImportsSharedRelation()/]
 [if (c.hasDateAttribute())]
 import java.util.Date;
 import javax.persistence.Temporal;

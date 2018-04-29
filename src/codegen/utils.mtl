@@ -293,6 +293,18 @@ and p.getOtherEnd().isNavigable())]
 [/if]
 [/for]
 [/template]
+[template public setImportsSharedRelation(c:Class)]
+[for(p:Property | c.getMemberEnd())]
+[if(not p.getOtherEnd().isNavigable())]
+[if(p.getOtherEnd().getUpper() = -1 )]
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.ManyToMany;
+import uk.co.jemos.podam.common.PodamExclude;
+[/if]
+[/if]
+[/for]
+[/template]
 
 [template public setDetailDTOConstructor(c:Class)]
 public [c.getBasicDTOName()/]([c.getEntityName()/] entity) {
