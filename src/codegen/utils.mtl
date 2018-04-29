@@ -316,7 +316,7 @@ public [c.getBasicDTOName()/]([c.getEntityName()/] entity) {
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().isNavigable())]
 [if(p.getOtherEnd().getUpper() = -1 )]
-List<[p.getOtherEnd().getClass().getMinimumDTOName()/]> [p.getOtherEnd().name/] = new ArrayList<>();
+List<[p.getOtherEnd().getClass().getMinimumDTOName()/]> l[p.getOtherEnd().name/] = new ArrayList<>();
 [/if]
 [/if]
 [/for]
@@ -355,7 +355,7 @@ import [c.getModel().baseGroup()/].entities.[p.getOtherEnd().getClass().getEntit
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().isNavigable())]
 [if(p.getOtherEnd().getUpper() = -1)]
-List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().name/] = new ArrayList<>();
+List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().name/] = new ArrayList<>();
 [/if]
 [/if]
 [/for]
@@ -371,10 +371,10 @@ List<[p.getOtherEnd().getClass().getEntityName()/]> [p.getOtherEnd().name/] = ne
 [if(p.getOtherEnd().getUpper() = -1)]
 if (this.[p.getOtherEnd().getter()/]()!=null){
   for([p.getOtherEnd().getClass().getMinimumDTOName()/] dto : this.[p.getOtherEnd().getter()/]()){
-[p.getOtherEnd().name/].add(dto.toEntity());
+l[p.getOtherEnd().name/].add(dto.toEntity());
     
  }       
-  entity.[p.getOtherEnd().setter()/]([p.getOtherEnd().name/]);  
+  entity.[p.getOtherEnd().setter()/](l[p.getOtherEnd().name/]);  
  }
 [/if]
 [/if]
