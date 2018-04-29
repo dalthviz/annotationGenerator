@@ -236,8 +236,10 @@ public [c.getMinimumDTOName()/]([c.getEntityName()/] entity) {
     [/if]	
     [if(not c.allAttributes()->isEmpty())]
    if (entity!=null){
-    [for(p:Property | c.allAttributes())]
+    [for(p:Property | c.getMemberEnd())]
+    [if (p.isNavigable())]
     this.[p.name/]=entity.[p.getter()/]();
+    [/if]
     [/for]    
        }
     [/if]
@@ -295,7 +297,7 @@ and p.getOtherEnd().isNavigable())]
 [/template]
 [template public setImportsSharedRelation(c:Class)]
 [for(p:Property | c.getMemberEnd())]
-[if(not p.getOtherEnd().isNavigable())]
+[if(p.getOtherEnd().isNavigable())]
 [if(p.getOtherEnd().getUpper() = -1 )]
 [if(p.aggregation = AggregationKind::shared)]
 import java.util.ArrayList;
@@ -387,8 +389,10 @@ return entity;
         [else]
         [c.getEntityName()/] entity = new [c.getEntityName()/]();
        [/if]  
-        [for(n:Property | c.getAllAttribs())]
+        [for(n:Property | c.getMemberEnd())]
+        [if (n.isNavigable())]
         entity.[n.setter()/](this.[n.getter()/]());
+        [/if]
         [/for]
          return entity;
        }
