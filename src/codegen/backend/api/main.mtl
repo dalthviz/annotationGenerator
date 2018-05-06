@@ -18,7 +18,7 @@
 [m.mainJerseyApp(path.concat(m.basePath()))/]
 [m.mainPostmanCollections()/]
 [m.mainTests()/]
-[m.mainProperties()/]
+[comment][m.mainProperties()/][/comment]
 [let webinf : String = m.getWebInfPath()]
     [m.mainXML(webinf)/]
 [/let]

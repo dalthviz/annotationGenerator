@@ -31,7 +31,6 @@
 */
 package [c.getModel().baseGroup()/].resources;
 
-import co.edu.uniandes.csw.auth.filter.StatusCreated;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
@@ -129,7 +128,6 @@ public class [className/] {
      * @generated
      */
     @POST
-    @StatusCreated
 	@FP(useCases = { "['create'.concat(classSimpleName) /]" })
     public [c.getBasicDTOName()/] create[c.name/]([c.getBasicDTOName()/] dto)[for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException [/if][/for] {
        
@@ -191,7 +189,6 @@ public class [className/] {
 */
 package [a.getClass().getModel().baseGroup()/].resources;
 
-import co.edu.uniandes.csw.auth.filter.StatusCreated;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
@@ -292,7 +289,6 @@ public class [className/] {
      * @generated
      */
     @POST
-    @StatusCreated
 	@FP(useCases = { "['create'.concat(classSimpleName) /]" })
     public [c.getBasicDTOName()/] create[a.name.toUpperFirst()/]([c.getBasicDTOName()/] dto) [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']throws BusinessLogicException [/if][/for] {
           
