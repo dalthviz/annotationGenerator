@@ -80,7 +80,19 @@ public class [className/] extends [if(c.isGeneralization())][c.getGeneralization
     [if (a.isDate())]
     @Temporal(TemporalType.DATE)
     [/if]
-    private [a.type.name/] [a.name.toLowerFirst()/];
+[if (a.type.name = null or a.type.name = '' )]
+[if (a.type.toString().contains('Integer'))]
+	private Integer [a.name.toLowerFirst()/];
+[elseif (a.type.toString().contains('BigDecimal'))]
+	private Long [a.name.toLowerFirst()/];
+[elseif (a.type.toString().contains('Date'))]
+	private Date [a.name.toLowerFirst()/];
+[elseif (a.type.toString().contains('String'))]
+	private String [a.name.toLowerFirst()/];
+[/if]
+[else]
+	private [a.type.name/] [a.name.toLowerFirst()/];
+[/if]
 [/for]
 [for (a : Property | c.getRelationshipAttributes())]
 

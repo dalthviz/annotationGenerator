@@ -23,13 +23,13 @@
     <eAnnotations xmi:id="_igGX1FGUEeiJ9Iqdpt6Iew" source="genmymodel">
       <details xmi:id="_igGX1VGUEeiJ9Iqdpt6Iew" key="uuid" value="_l921sLWLEeaFR5SV_RJHaw"/>
     </eAnnotations>
-    <importedPackage href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#/"/>
+    <importedPackage href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
   </packageImport>
   <packageImport xmi:id="_igGX1lGUEeiJ9Iqdpt6Iew">
     <eAnnotations xmi:id="_igGX11GUEeiJ9Iqdpt6Iew" source="genmymodel">
       <details xmi:id="_igGX2FGUEeiJ9Iqdpt6Iew" key="uuid" value="_l98VQLWLEeaFR5SV_RJHaw"/>
     </eAnnotations>
-    <importedPackage href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#/"/>
+    <importedPackage href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#_RB-7oDj5EeSWIoeppx7IKQ"/>
   </packageImport>
   <packagedElement xsi:type="uml:Class" xmi:id="_igGX2VGUEeiJ9Iqdpt6Iew" name="User" isAbstract="true">
     <eAnnotations xmi:id="_igGX2lGUEeiJ9Iqdpt6Iew" source="genmymodel">
@@ -39,43 +39,43 @@
       <eAnnotations xmi:id="_igGX3VGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGX3lGUEeiJ9Iqdpt6Iew" key="uuid" value="_3wevMJe9EDSm4IVtgLpGIg"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#//Long"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#_RB-7rTj5EeSWIoeppx7IKQ"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGX31GUEeiJ9Iqdpt6Iew" name="name" visibility="private">
       <eAnnotations xmi:id="_igGX4FGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGX4VGUEeiJ9Iqdpt6Iew" key="uuid" value="_3wevMZe9EDSm4IVtgLpGIg"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//String"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGX4lGUEeiJ9Iqdpt6Iew" name="fistName" visibility="private">
       <eAnnotations xmi:id="_igGX41GUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGX5FGUEeiJ9Iqdpt6Iew" key="uuid" value="_3wfWQJe9EDSm4IVtgLpGIg"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//String"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGX5VGUEeiJ9Iqdpt6Iew" name="lastName" visibility="private">
       <eAnnotations xmi:id="_igGX5lGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGX51GUEeiJ9Iqdpt6Iew" key="uuid" value="_3wfWQZe9EDSm4IVtgLpGIg"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//String"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGX6FGUEeiJ9Iqdpt6Iew" name="birthDate" visibility="private">
       <eAnnotations xmi:id="_igGX6VGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGX6lGUEeiJ9Iqdpt6Iew" key="uuid" value="_dZjDIJk7EDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#//Date"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EDate"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGX61GUEeiJ9Iqdpt6Iew" name="enable" visibility="private">
       <eAnnotations xmi:id="_igGX7FGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGX7VGUEeiJ9Iqdpt6Iew" key="uuid" value="_f_KagJk7EDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//Boolean"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGX7lGUEeiJ9Iqdpt6Iew" name="docNumber" visibility="private">
       <eAnnotations xmi:id="_igGX71GUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGX8FGUEeiJ9Iqdpt6Iew" key="uuid" value="_hlxzAJk7EDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//String"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
   </packagedElement>
   <packagedElement xsi:type="uml:Class" xmi:id="_igGX8VGUEeiJ9Iqdpt6Iew" name="DocumentType">
@@ -86,19 +86,19 @@
       <eAnnotations xmi:id="_igGX9VGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGX9lGUEeiJ9Iqdpt6Iew" key="uuid" value="_wB8hoJk7EDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#//Long"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EBigDecimal"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGX91GUEeiJ9Iqdpt6Iew" name="name" visibility="private">
       <eAnnotations xmi:id="_igGX-FGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGX-VGUEeiJ9Iqdpt6Iew" key="uuid" value="_wB9vwJk7EDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//String"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGX-lGUEeiJ9Iqdpt6Iew" name="length" visibility="private">
       <eAnnotations xmi:id="_igGX-1GUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGX_FGUEeiJ9Iqdpt6Iew" key="uuid" value="_xPddoJk7EDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//Integer"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
     </ownedAttribute>
   </packagedElement>
   <packagedElement xsi:type="uml:Association" xmi:id="_igGX_VGUEeiJ9Iqdpt6Iew" name="User_DocumentType" memberEnd="_igGYAFGUEeiJ9Iqdpt6Iew _igGYBVGUEeiJ9Iqdpt6Iew" navigableOwnedEnd="_igGYAFGUEeiJ9Iqdpt6Iew">
@@ -181,7 +181,7 @@
       <eAnnotations xmi:id="_igGYMVGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYMlGUEeiJ9Iqdpt6Iew" key="uuid" value="_zDjbAJlHEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//Integer"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
     </ownedAttribute>
   </packagedElement>
   <packagedElement xsi:type="uml:Class" xmi:id="_igGYM1GUEeiJ9Iqdpt6Iew" name="Address">
@@ -192,25 +192,25 @@
       <eAnnotations xmi:id="_igGYN1GUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYOFGUEeiJ9Iqdpt6Iew" key="uuid" value="_AU6jYJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#//Long"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYOVGUEeiJ9Iqdpt6Iew" name="name" visibility="private">
       <eAnnotations xmi:id="_igGYOlGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYO1GUEeiJ9Iqdpt6Iew" key="uuid" value="_AU7KcJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//String"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EString"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYPFGUEeiJ9Iqdpt6Iew" name="street" visibility="private">
       <eAnnotations xmi:id="_igGYPVGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYPlGUEeiJ9Iqdpt6Iew" key="uuid" value="_Bz2mkJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//String"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYP1GUEeiJ9Iqdpt6Iew" name="aveneu" visibility="private">
       <eAnnotations xmi:id="_igGYQFGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYQVGUEeiJ9Iqdpt6Iew" key="uuid" value="_C70UMJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//String"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
   </packagedElement>
   <packagedElement xsi:type="uml:Association" xmi:id="_igGYQlGUEeiJ9Iqdpt6Iew" name="Member_Address" memberEnd="_igGYRVGUEeiJ9Iqdpt6Iew _igGYSlGUEeiJ9Iqdpt6Iew" navigableOwnedEnd="_igGYRVGUEeiJ9Iqdpt6Iew">
@@ -240,25 +240,25 @@
       <eAnnotations xmi:id="_igGYU1GUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYVFGUEeiJ9Iqdpt6Iew" key="uuid" value="_N-btEJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#//Long"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#_RB-7rTj5EeSWIoeppx7IKQ"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYVVGUEeiJ9Iqdpt6Iew" name="name" visibility="private">
       <eAnnotations xmi:id="_igGYVlGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYV1GUEeiJ9Iqdpt6Iew" key="uuid" value="_N-c7MJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//String"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYWFGUEeiJ9Iqdpt6Iew" name="minAge" visibility="private">
       <eAnnotations xmi:id="_igGYWVGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYWlGUEeiJ9Iqdpt6Iew" key="uuid" value="_O4XlwJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//Integer"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYW1GUEeiJ9Iqdpt6Iew" name="maxAge" visibility="private">
       <eAnnotations xmi:id="_igGYXFGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYXVGUEeiJ9Iqdpt6Iew" key="uuid" value="_P9lhYJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//Integer"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
     </ownedAttribute>
   </packagedElement>
   <packagedElement xsi:type="uml:Association" xmi:id="_igGYXlGUEeiJ9Iqdpt6Iew" name="Member_Sport" memberEnd="_igGYYVGUEeiJ9Iqdpt6Iew _igGYZlGUEeiJ9Iqdpt6Iew" navigableOwnedEnd="_igGYYVGUEeiJ9Iqdpt6Iew">
@@ -288,19 +288,19 @@
       <eAnnotations xmi:id="_igGYb1GUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYcFGUEeiJ9Iqdpt6Iew" key="uuid" value="_iOWjAJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#//Long"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EDate"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYcVGUEeiJ9Iqdpt6Iew" name="name" visibility="private">
       <eAnnotations xmi:id="_igGYclGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYc1GUEeiJ9Iqdpt6Iew" key="uuid" value="_iOWjAZlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//String"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYdFGUEeiJ9Iqdpt6Iew" name="population" visibility="private">
       <eAnnotations xmi:id="_igGYdVGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYdlGUEeiJ9Iqdpt6Iew" key="uuid" value="_jGGqYJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//Integer"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
     </ownedAttribute>
   </packagedElement>
   <packagedElement xsi:type="uml:Association" xmi:id="_igGYd1GUEeiJ9Iqdpt6Iew" name="Address_City" memberEnd="_igGYelGUEeiJ9Iqdpt6Iew _igGYf1GUEeiJ9Iqdpt6Iew" navigableOwnedEnd="_igGYelGUEeiJ9Iqdpt6Iew">
@@ -330,19 +330,19 @@
       <eAnnotations xmi:id="_igGYiFGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYiVGUEeiJ9Iqdpt6Iew" key="uuid" value="_pqwqMJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#//Long"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#_RB-7rTj5EeSWIoeppx7IKQ"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYilGUEeiJ9Iqdpt6Iew" name="name" visibility="private">
       <eAnnotations xmi:id="_igGYi1GUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYjFGUEeiJ9Iqdpt6Iew" key="uuid" value="_pqxRQJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//String"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYjVGUEeiJ9Iqdpt6Iew" name="population" visibility="private">
       <eAnnotations xmi:id="_igGYjlGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYj1GUEeiJ9Iqdpt6Iew" key="uuid" value="_qehpcJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//Integer"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
     </ownedAttribute>
   </packagedElement>
   <packagedElement xsi:type="uml:Association" xmi:id="_igGYkFGUEeiJ9Iqdpt6Iew" name="City_Country" memberEnd="_igGYk1GUEeiJ9Iqdpt6Iew _igGYmFGUEeiJ9Iqdpt6Iew" navigableOwnedEnd="_igGYk1GUEeiJ9Iqdpt6Iew">
@@ -372,19 +372,19 @@
       <eAnnotations xmi:id="_igGYoVGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYolGUEeiJ9Iqdpt6Iew" key="uuid" value="_3UNicJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#//Long"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#_RB-7rTj5EeSWIoeppx7IKQ"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYo1GUEeiJ9Iqdpt6Iew" name="name" visibility="private">
       <eAnnotations xmi:id="_igGYpFGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYpVGUEeiJ9Iqdpt6Iew" key="uuid" value="_3UOJgJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//String"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYplGUEeiJ9Iqdpt6Iew" name="capacity" visibility="private">
       <eAnnotations xmi:id="_igGYp1GUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYqFGUEeiJ9Iqdpt6Iew" key="uuid" value="_3UOwkJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//Integer"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
     </ownedAttribute>
   </packagedElement>
   <packagedElement xsi:type="uml:Association" xmi:id="_igGYqVGUEeiJ9Iqdpt6Iew" name="Stadium_City" memberEnd="_igGYrFGUEeiJ9Iqdpt6Iew _igGYsVGUEeiJ9Iqdpt6Iew" navigableOwnedEnd="_igGYrFGUEeiJ9Iqdpt6Iew">
@@ -414,25 +414,25 @@
       <eAnnotations xmi:id="_igGYulGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYu1GUEeiJ9Iqdpt6Iew" key="uuid" value="_DJxbMJlJEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#//Long"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_METAMODELS/Ecore.metamodel.uml#EBigDecimal"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYvFGUEeiJ9Iqdpt6Iew" name="name" visibility="private">
       <eAnnotations xmi:id="_igGYvVGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYvlGUEeiJ9Iqdpt6Iew" key="uuid" value="_DJyCQJlJEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//String"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYv1GUEeiJ9Iqdpt6Iew" name="starDate" visibility="private">
       <eAnnotations xmi:id="_igGYwFGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYwVGUEeiJ9Iqdpt6Iew" key="uuid" value="_EPP1gJlJEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#//Date"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EDate"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYwlGUEeiJ9Iqdpt6Iew" name="endDate" visibility="private">
       <eAnnotations xmi:id="_igGYw1GUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYxFGUEeiJ9Iqdpt6Iew" key="uuid" value="_FgdlwJlJEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#//Date"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_METAMODELS/Ecore.metamodel.uml#EDate"/>
     </ownedAttribute>
   </packagedElement>
   <packagedElement xsi:type="uml:Association" xmi:id="_igGYxVGUEeiJ9Iqdpt6Iew" name="ChampionShip_Stadium" memberEnd="_igGYyFGUEeiJ9Iqdpt6Iew _igGYzVGUEeiJ9Iqdpt6Iew" navigableOwnedEnd="_igGYyFGUEeiJ9Iqdpt6Iew">
@@ -462,13 +462,13 @@
       <eAnnotations xmi:id="_igGY1lGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGY11GUEeiJ9Iqdpt6Iew" key="uuid" value="_Siht4JlJEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#//Long"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EBigDecimal"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGY2FGUEeiJ9Iqdpt6Iew" name="name" visibility="private">
       <eAnnotations xmi:id="_igGY2VGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGY2lGUEeiJ9Iqdpt6Iew" key="uuid" value="_Siht4ZlJEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//String"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
   </packagedElement>
   <packagedElement xsi:type="uml:Association" xmi:id="_igGY21GUEeiJ9Iqdpt6Iew" name="ChampionShip_Prize" memberEnd="_igGY3lGUEeiJ9Iqdpt6Iew _igGY41GUEeiJ9Iqdpt6Iew" navigableOwnedEnd="_igGY3lGUEeiJ9Iqdpt6Iew">
@@ -536,19 +536,19 @@
       <eAnnotations xmi:id="_igGZBlGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGZB1GUEeiJ9Iqdpt6Iew" key="uuid" value="_y1Bk4JlJEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#//Long"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EBigDecimal"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGZCFGUEeiJ9Iqdpt6Iew" name="name" visibility="private">
       <eAnnotations xmi:id="_igGZCVGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGZClGUEeiJ9Iqdpt6Iew" key="uuid" value="_y1CL8JlJEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//String"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGZC1GUEeiJ9Iqdpt6Iew" name="record" visibility="private">
       <eAnnotations xmi:id="_igGZDFGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGZDVGUEeiJ9Iqdpt6Iew" key="uuid" value="_zjOHoJlJEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//Integer"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
     </ownedAttribute>
   </packagedElement>
   <packagedElement xsi:type="uml:Association" xmi:id="_igGZDlGUEeiJ9Iqdpt6Iew" name="ChampionShip_Record" memberEnd="_igGZEVGUEeiJ9Iqdpt6Iew _igGZFlGUEeiJ9Iqdpt6Iew" navigableOwnedEnd="_igGZEVGUEeiJ9Iqdpt6Iew">
@@ -578,19 +578,19 @@
       <eAnnotations xmi:id="_igGZH1GUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGZIFGUEeiJ9Iqdpt6Iew" key="uuid" value="_AlUE8JlKEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#//Long"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EBigDecimal"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGZIVGUEeiJ9Iqdpt6Iew" name="name" visibility="private">
       <eAnnotations xmi:id="_igGZIlGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGZI1GUEeiJ9Iqdpt6Iew" key="uuid" value="_AlV6IJlKEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//String"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGZJFGUEeiJ9Iqdpt6Iew" name="description" visibility="private">
       <eAnnotations xmi:id="_igGZJVGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGZJlGUEeiJ9Iqdpt6Iew" key="uuid" value="_A6MIwJlKEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#//String"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
   </packagedElement>
   <packagedElement xsi:type="uml:Association" xmi:id="_igGZJ1GUEeiJ9Iqdpt6Iew" name="Record_MeasureUnit" memberEnd="_igGZKlGUEeiJ9Iqdpt6Iew _igGZL1GUEeiJ9Iqdpt6Iew" navigableOwnedEnd="_igGZKlGUEeiJ9Iqdpt6Iew">

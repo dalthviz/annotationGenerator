@@ -224,7 +224,19 @@ c.getAssociations()->collect(a | a.memberEnd->select(m |m.type.name = c.name))->
 [template public setAttributes(c:Class)]
 
 [for(p:Property | c.allAttributes())]
+[if (p.type.name = null or p.type.name = '' )]
+[if (p.type.toString().contains('Integer'))]
+private Integer [p.name/];
+[elseif (p.type.toString().contains('BigDecimal'))]
+private Long [p.name/];
+[elseif (p.type.toString().contains('Date'))]
+private Date [p.name/];
+[elseif (p.type.toString().contains('String'))]
+private String [p.name/];
+[/if]
+[else]
 private [p.type.name/] [p.name/];
+[/if]
 [/for]
 [/template]
 
