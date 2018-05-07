@@ -57,7 +57,8 @@ import co.edu.uniandes.annotation.FP;
 [elseif(c.isGeneralization())]
 @PrimaryKeyJoinColumn(name="[c.generalization.general.name/]_ID")
 [/if]
-@FP(useCases = { "['getAll'.concat(c.name) /]",
+@FP(useCases = { "[c.name/]",
+				 "['getAll'.concat(c.name) /]",
 				 "['get'.concat(c.name) /]",
 				 "['create'.concat(c.name) /]",
                  "['update'.concat(c.name) /]", 
