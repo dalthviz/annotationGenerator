@@ -421,7 +421,7 @@ public class [className/] {
      */
     @GET
 	@Path("{[a.getOwner().getIdVariable()/]: \\d+}")
-	@FP(useCases = { "['list'.concat(className).concat(a.name.toUpperFirst()) /]" })
+	@FP(useCases = { "['list'.concat(classSimpleName) /]" })
     public List<[a.getClass().getBasicDTOName()/]> list[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/]) {
         return [a.name/]ListEntity2DTO([logic/].list[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/]));
     }
