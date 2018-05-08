@@ -19,17 +19,10 @@ package [c.getModel().baseGroup()/].dtos.minimum;
 import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-[if (c.hasDateAttribute())]
-import java.util.Date;
-import uk.co.jemos.podam.common.PodamStrategyValue;
-[elseif(c.isGeneralization())]
-[if (c.getGeneralizationClass().hasDateAttribute())]
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 import uk.co.jemos.podam.common.PodamStrategyValue;
-[/if]
-[/if]
 import co.edu.uniandes.annotation.FP;
 
 /**
@@ -65,25 +58,78 @@ public class [className/] [if(c.isGeneralization())] extends [c.getGeneralizatio
 [if(not c.isGeneralization())]
 [for (a : Property | c.allAttributes())]
     
-    public [a.type.name/] [a.getter()/]() {
+[if (a.type.name = null or a.type.name = '' )]
+[if (a.type.toString().contains('Integer'))]
+	public Integer [a.getter()/](){
+[elseif (a.type.toString().contains('BigDecimal'))]
+	public Long [a.getter()/](){
+[elseif (a.type.toString().contains('Boolean'))]
+	public boolean [a.getter()/](){
+[elseif (a.type.toString().contains('Date'))]
+	public Date [a.getter()/](){
+[elseif (a.type.toString().contains('String'))]
+	public String [a.getter()/](){
+[/if]
+[else]
+	public [a.type.name/] [a.getter()/](){
+[/if]
         return [a.name/];
     }
-  
-    public void [a.setter()/]([a.type.name/] [a.name.toLower()/]) {
-        this.[a.name/] = [a.name.toLower()/];
+[if (a.type.name = null or a.type.name = '' )]
+[if (a.type.toString().contains('Integer'))]
+    public void [a.setter()/](Integer [a.name.toLowerFirst()/]){
+[elseif (a.type.toString().contains('BigDecimal'))]
+    public void [a.setter()/](Long [a.name.toLowerFirst()/]){
+[elseif (a.type.toString().contains('Boolean'))]
+    public void [a.setter()/](Boolean [a.name.toLowerFirst()/]){
+[elseif (a.type.toString().contains('Date'))]
+    public void [a.setter()/](Date [a.name.toLowerFirst()/]){
+[elseif (a.type.toString().contains('String'))]
+    public void [a.setter()/](String [a.name.toLowerFirst()/]){
+[/if]
+[else]
+    public void [a.setter()/]([a.type.name/] [a.name.toLowerFirst()/]){
+[/if]        this.[a.name/] = [a.name.toLowerFirst()/];
     }
 
 [/for]
 [/if]
 [if(c.isGeneralization())]
     [for( p : Property | c.excludeAttributes(c.getGeneralizationClass()))]
-          
-    public [p.type.name/] [p.getter()/]() {
+
+[if (p.type.name = null or p.type.name = '' )]
+[if (p.type.toString().contains('Integer'))]
+	public Integer [p.getter()/](){
+[elseif (p.type.toString().contains('BigDecimal'))]
+	public Long [p.getter()/](){
+[elseif (p.type.toString().contains('Boolean'))]
+	public boolean [p.getter()/](){
+[elseif (p.type.toString().contains('Date'))]
+	public Date [p.getter()/](){
+[elseif (p.type.toString().contains('String'))]
+	public String [p.getter()/](){
+[/if]
+[else]
+	public [p.type.name/] [p.getter()/](){
+[/if]
         return [p.name/];
     }
 
-    public void [p.setter()/]([p.type.name/] [p.name.toLower()/]) {
-        this.[p.name/] = [p.name.toLower()/];
+[if (p.type.name = null or p.type.name = '' )]
+[if (p.type.toString().contains('Integer'))]
+    public void [p.setter()/](Integer [p.name.toLowerFirst()/]){
+[elseif (p.type.toString().contains('BigDecimal'))]
+    public void [p.setter()/](Long [p.name.toLowerFirst()/]){
+[elseif (p.type.toString().contains('Boolean'))]
+    public void [p.setter()/](Boolean [p.name.toLowerFirst()/]){
+[elseif (p.type.toString().contains('Date'))]
+    public void [p.setter()/](Date [p.name.toLowerFirst()/]){
+[elseif (p.type.toString().contains('String'))]
+    public void [p.setter()/](String [p.name.toLowerFirst()/]){
+[/if]
+[else]
+    public void [p.setter()/]([p.type.name/] [p.name.toLowerFirst()/]){
+[/if]       this.[p.name/] = [p.name.toLowerFirst()/];
     }
         
     [/for]

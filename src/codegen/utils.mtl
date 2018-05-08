@@ -231,6 +231,8 @@ private Integer [p.name/];
 private Long [p.name/];
 [elseif (p.type.toString().contains('Date'))]
 private Date [p.name/];
+[elseif (p.type.toString().contains('Boolean'))]
+private boolean [p.name/];
 [elseif (p.type.toString().contains('String'))]
 private String [p.name/];
 [/if]
@@ -326,21 +328,21 @@ public [c.getBasicDTOName()/]([c.getEntityName()/] entity) {
  super(entity); 
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().isNavigable())]
-[if(p.getOtherEnd().getUpper() = -1 )]
+[if(p.getOtherEnd().getUpper() = -1 and not p.getOtherEnd().isComposite)]
 List<[p.getOtherEnd().getClass().getMinimumDTOName()/]> l[p.getOtherEnd().name/] = new ArrayList<>();
 [/if]
 [/if]
 [/for]
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().isNavigable())]
-[if(p.getOtherEnd().getUpper() = 1)]
+[if(p.getOtherEnd().getUpper() = 1 and not p.getOtherEnd().isComposite)]
 if (entity.[p.getOtherEnd().getter()/]()!=null){
 this.[p.getOtherEnd().name/] = new [p.getOtherEnd().getClass().getMinimumDTOName()/](entity.[p.getOtherEnd().getter()/]());
 }
 [/if]
 [/if]
 [if(p.getOtherEnd().isNavigable())]
-[if(p.getOtherEnd().getUpper() = -1)]
+[if(p.getOtherEnd().getUpper() = -1 and not p.getOtherEnd().isComposite)]
 if (entity.[p.getOtherEnd().getter()/]()!=null){
  for([p.getOtherEnd().getClass().getEntityName()/] ent : entity.[p.getOtherEnd().getter()/]()){
  l[p.getOtherEnd().name/].add(new [p.getOtherEnd().getClass().getMinimumDTOName()/](ent));
@@ -365,21 +367,21 @@ import [c.getModel().baseGroup()/].entities.[p.getOtherEnd().getClass().getEntit
 [c.getEntityName()/] entity = ([c.getEntityName()/]) super.toEntity();
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().isNavigable())]
-[if(p.getOtherEnd().getUpper() = -1)]
+[if(p.getOtherEnd().getUpper() = -1 and not p.getOtherEnd().isComposite)]
 List<[p.getOtherEnd().getClass().getEntityName()/]> l[p.getOtherEnd().name/] = new ArrayList<>();
 [/if]
 [/if]
 [/for]
 [for(p:Property | c.getMemberEnd())]
 [if(p.getOtherEnd().isNavigable())]
-[if(p.getOtherEnd().getUpper() = 1)]
+[if(p.getOtherEnd().getUpper() = 1 and not p.getOtherEnd().isComposite)]
  if (this.[p.getOtherEnd().getter()/]()!=null){
         entity.[p.getOtherEnd().setter()/](this.[p.getOtherEnd().getter()/]().toEntity());
         }
 [/if]
 [/if]
 [if(p.getOtherEnd().isNavigable())]
-[if(p.getOtherEnd().getUpper() = -1)]
+[if(p.getOtherEnd().getUpper() = -1 and not p.getOtherEnd().isComposite)]
 if (this.[p.getOtherEnd().getter()/]()!=null){
   for([p.getOtherEnd().getClass().getMinimumDTOName()/] dto : this.[p.getOtherEnd().getter()/]()){
 l[p.getOtherEnd().name/].add(dto.toEntity());

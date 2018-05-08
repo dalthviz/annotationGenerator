@@ -17,12 +17,10 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import co.edu.uniandes.csw.crud.spi.entity.BaseEntity;
 [c.setImportsSharedRelation()/]
-[if (c.hasDateAttribute())]
 import java.util.Date;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import uk.co.jemos.podam.common.PodamStrategyValue;
-[/if]
 [if (c.hasRelationshipAttributes())]
 import uk.co.jemos.podam.common.PodamExclude;
 [for (s : String | c.getJPAAnnotations())]
@@ -85,8 +83,11 @@ public class [className/] extends [if(c.isGeneralization())][c.getGeneralization
 	private Integer [a.name.toLowerFirst()/];
 [elseif (a.type.toString().contains('BigDecimal'))]
 	private Long [a.name.toLowerFirst()/];
+[elseif (a.type.toString().contains('Boolean'))]
+	private boolean [a.name.toLowerFirst()/];
 [elseif (a.type.toString().contains('Date'))]
-	private Date [a.name.toLowerFirst()/];
+	@Temporal(TemporalType.DATE)
+    private Date [a.name.toLowerFirst()/];
 [elseif (a.type.toString().contains('String'))]
 	private String [a.name.toLowerFirst()/];
 [/if]
@@ -115,7 +116,21 @@ public class [className/] extends [if(c.isGeneralization())][c.getGeneralization
      * @return atributo [a.name.toLowerFirst()/].
      * @generated
      */
-    public [a.type.name/] [a.getter()/](){
+[if (a.type.name = null or a.type.name = '' )]
+[if (a.type.toString().contains('Integer'))]
+	public Integer [a.getter()/](){
+[elseif (a.type.toString().contains('BigDecimal'))]
+	public Long [a.getter()/](){
+[elseif (a.type.toString().contains('Boolean'))]
+	public boolean [a.getter()/](){
+[elseif (a.type.toString().contains('Date'))]
+	public Date [a.getter()/](){
+[elseif (a.type.toString().contains('String'))]
+	public String [a.getter()/](){
+[/if]
+[else]
+	public [a.type.name/] [a.getter()/](){
+[/if]
         return [a.name.toLowerFirst()/];
     }
 
@@ -125,7 +140,21 @@ public class [className/] extends [if(c.isGeneralization())][c.getGeneralization
      * @param [a.name.toLowerFirst()/] nuevo valor del atributo
      * @generated
      */
+[if (a.type.name = null or a.type.name = '' )]
+[if (a.type.toString().contains('Integer'))]
+    public void [a.setter()/](Integer [a.name.toLowerFirst()/]){
+[elseif (a.type.toString().contains('BigDecimal'))]
+    public void [a.setter()/](Long [a.name.toLowerFirst()/]){
+[elseif (a.type.toString().contains('Boolean'))]
+    public void [a.setter()/](Boolean [a.name.toLowerFirst()/]){
+[elseif (a.type.toString().contains('Date'))]
+    public void [a.setter()/](Date [a.name.toLowerFirst()/]){
+[elseif (a.type.toString().contains('String'))]
+    public void [a.setter()/](String [a.name.toLowerFirst()/]){
+[/if]
+[else]
     public void [a.setter()/]([a.type.name/] [a.name.toLowerFirst()/]){
+[/if]
         this.[a.name.toLowerFirst()/] = [a.name.toLowerFirst()/];
     }
 [/for]

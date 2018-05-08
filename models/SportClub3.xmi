@@ -39,7 +39,7 @@
       <eAnnotations xmi:id="_igGX3VGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGX3lGUEeiJ9Iqdpt6Iew" key="uuid" value="_3wevMJe9EDSm4IVtgLpGIg"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#_RB-7rTj5EeSWIoeppx7IKQ"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EBigDecimal"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGX31GUEeiJ9Iqdpt6Iew" name="name" visibility="private">
       <eAnnotations xmi:id="_igGX4FGUEeiJ9Iqdpt6Iew" source="genmymodel">
@@ -240,7 +240,7 @@
       <eAnnotations xmi:id="_igGYU1GUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYVFGUEeiJ9Iqdpt6Iew" key="uuid" value="_N-btEJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#_RB-7rTj5EeSWIoeppx7IKQ"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EBigDecimal"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYVVGUEeiJ9Iqdpt6Iew" name="name" visibility="private">
       <eAnnotations xmi:id="_igGYVlGUEeiJ9Iqdpt6Iew" source="genmymodel">
@@ -284,11 +284,11 @@
     <eAnnotations xmi:id="_igGYbFGUEeiJ9Iqdpt6Iew" source="genmymodel">
       <details xmi:id="_igGYbVGUEeiJ9Iqdpt6Iew" key="uuid" value="_g3IRYJlIEDSnesyb6kY2Tw"/>
     </eAnnotations>
-    <ownedAttribute xmi:id="_igGYblGUEeiJ9Iqdpt6Iew" name="id" visibility="private">
+    <ownedAttribute xmi:id="_igGYblGUEeiJ9Iqdpt6Iew" name="id" visibility="private" isID="true">
       <eAnnotations xmi:id="_igGYb1GUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYcFGUEeiJ9Iqdpt6Iew" key="uuid" value="_iOWjAJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EDate"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EBigDecimal"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYcVGUEeiJ9Iqdpt6Iew" name="name" visibility="private">
       <eAnnotations xmi:id="_igGYclGUEeiJ9Iqdpt6Iew" source="genmymodel">
@@ -330,7 +330,7 @@
       <eAnnotations xmi:id="_igGYiFGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYiVGUEeiJ9Iqdpt6Iew" key="uuid" value="_pqwqMJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#_RB-7rTj5EeSWIoeppx7IKQ"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EBigDecimal"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYilGUEeiJ9Iqdpt6Iew" name="name" visibility="private">
       <eAnnotations xmi:id="_igGYi1GUEeiJ9Iqdpt6Iew" source="genmymodel">
@@ -372,7 +372,7 @@
       <eAnnotations xmi:id="_igGYoVGUEeiJ9Iqdpt6Iew" source="genmymodel">
         <details xmi:id="_igGYolGUEeiJ9Iqdpt6Iew" key="uuid" value="_3UNicJlIEDSnesyb6kY2Tw"/>
       </eAnnotations>
-      <type xsi:type="uml:PrimitiveType" href="pathmap://GENMYMODEL_LIBRARIES/GenMyModelPrimitiveTypes.library.uml#_RB-7rTj5EeSWIoeppx7IKQ"/>
+      <type xsi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EBigDecimal"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_igGYo1GUEeiJ9Iqdpt6Iew" name="name" visibility="private">
       <eAnnotations xmi:id="_igGYpFGUEeiJ9Iqdpt6Iew" source="genmymodel">

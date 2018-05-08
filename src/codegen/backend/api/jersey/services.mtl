@@ -420,6 +420,7 @@ public class [className/] {
      * @generated
      */
     @GET
+	@Path("{[a.getOwner().getIdVariable()/]: \\d+}")
 	@FP(useCases = { "['list'.concat(className).concat(a.name.toUpperFirst()) /]" })
     public List<[a.getClass().getBasicDTOName()/]> list[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/]) {
         return [a.name/]ListEntity2DTO([logic/].list[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/]));
@@ -433,7 +434,7 @@ public class [className/] {
      * @generated
      */
     @GET
-    @Path("{[a.getIdVariable()/]: \\d+}")
+    @Path("{[a.getIdVariable()/]: \\d+}, {[a.getOwner().getIdVariable()/]: \\d+}")
 	@FP(useCases = { "['get'.concat(classSimpleName) /]" })
     public [a.getClass().getBasicDTOName()/] get[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
         return new [a.getClass().getBasicDTOName()/]([logic/].get[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/], [a.getIdVariable()/]));
@@ -448,8 +449,8 @@ public class [className/] {
      * @generated
      */
     @POST
-    @Path("{[a.getIdVariable()/]: \\d+}")
-    @FP(useCases = { "['add'.concat(classSimpleName) /]" })
+    @Path("{[a.getIdVariable()/]: \\d+}, {[a.getOwner().getIdVariable()/]: \\d+}")
+	@FP(useCases = { "['add'.concat(classSimpleName) /]" })
     public [a.getClass().getBasicDTOName()/] add[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
         return new [a.getClass().getBasicDTOName()/]([logic/].add[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/], [a.getIdVariable()/]));
     }
@@ -463,6 +464,7 @@ public class [className/] {
      * @generated
      */
     @PUT
+	@Path("{[a.getOwner().getIdVariable()/]: \\d+}")
 	@FP(useCases = { "['replace'.concat(classSimpleName) /]" })
     public List<[a.getClass().getBasicDTOName()/]> replace[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], List<[a.getClass().getBasicDTOName()/]> [a.getClass().getURI()/]) {
         return [a.name/]ListEntity2DTO([logic/].replace[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/], [a.name/]ListDTO2Entity([a.getClass().getURI()/])));
@@ -476,8 +478,8 @@ public class [className/] {
      * @generated
      */
     @DELETE
-    @Path("{[a.getIdVariable()/]: \\d+}")
-    @FP(useCases = { "['remove'.concat(classSimpleName) /]" })
+    @Path("{[a.getIdVariable()/]: \\d+}, {[a.getOwner().getIdVariable()/]: \\d+}")
+	@FP(useCases = { "['remove'.concat(classSimpleName) /]" })
     public void remove[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
         [logic/].remove[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/], [a.getIdVariable()/]);
     }
