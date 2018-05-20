@@ -10,8 +10,8 @@
     [for (a : Property | c.getNonCompositeCollectionAttributes())]
         [a.genSharedResourceClass(filePath)/]
     [/for]
-    [for (a : Property | c.getCompositeCollectionAttributes())]
-        [a.genCompositeResourceClass(filePath)/]
+    [for (a : Property | c.getCompositeRelationshipAttributes())]
+        [a.genSharedResourceClass(filePath)/]
     [/for]
     [for (a : Property | c.getRelationshipAttributes()->select(isComposite())->select(getUpper() = 1)->asSet())]
         [a.genCompositeResourceClass(filePath)/]
@@ -371,10 +371,10 @@ import co.edu.uniandes.annotation.FP;
  */
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@FP(useCases = { "['list'.concat(classSimpleName) /]",
+@FP(useCases = { "['gatAll'.concat(classSimpleName) /]",
 				 "['get'.concat(classSimpleName) /]",
 				 "['add'.concat(classSimpleName) /]",
-				 "['replace'.concat(classSimpleName) /]",
+				 "['update'.concat(classSimpleName) /]",
 				 "['remove'.concat(classSimpleName) /]" })
 public class [className/] {
 
@@ -394,6 +394,10 @@ public class [className/] {
             list.add(new [a.getClass().getBasicDTOName()/](entity));
         }
         return list;
+    }
+
+	private [a.getClass().getBasicDTOName()/] [a.name/]Entity2DTO([a.getClass().getEntityName()/] entity){
+        return new [a.getClass().getBasicDTOName()/](entity);
     }
 
     /**
@@ -421,10 +425,15 @@ public class [className/] {
      */
     @GET
 	@Path("{[a.getOwner().getIdVariable()/]: \\d+}")
-	@FP(useCases = { "['list'.concat(classSimpleName) /]" })
-    public List<[a.getClass().getBasicDTOName()/]> list[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/]) {
+	@FP(useCases = { "['getAll'.concat(classSimpleName) /]" })
+    [if (a.getUpper() <> 1)]
+	public List<[a.getClass().getBasicDTOName()/]> list[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/]) {
         return [a.name/]ListEntity2DTO([logic/].list[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/]));
-    }
+	[else]
+	public [a.getClass().getBasicDTOName()/] list[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/]) {
+    	return [a.name/]Entity2DTO([logic/].get[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/]));
+		[/if]	    
+	}
 
     /**
      * Obtiene una instancia de [a.getClass().name/] asociada a una instancia de [a.getOwner().name/]
@@ -465,10 +474,16 @@ public class [className/] {
      */
     @PUT
 	@Path("{[a.getOwner().getIdVariable()/]: \\d+}")
-	@FP(useCases = { "['replace'.concat(classSimpleName) /]" })
-    public List<[a.getClass().getBasicDTOName()/]> replace[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], List<[a.getClass().getBasicDTOName()/]> [a.getClass().getURI()/]) {
+	@FP(useCases = { "['update'.concat(classSimpleName) /]" })
+	[if (a.getUpper() <> 1)]
+	public List<[a.getClass().getBasicDTOName()/]> replace[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], List<[a.getClass().getBasicDTOName()/]> [a.getClass().getURI()/]) {
         return [a.name/]ListEntity2DTO([logic/].replace[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/], [a.name/]ListDTO2Entity([a.getClass().getURI()/])));
-    }
+    [else]
+	public [a.getClass().getBasicDTOName()/] replace[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], [a.getClass().getBasicDTOName()/] [a.getClass().getURI()/]) {
+   		return [a.name/]Entity2DTO([logic/].replace[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/], [a.getClass().getURI()/].toEntity()));
+  	[/if]
+    
+	}
 
     /**
      * Desasocia un [a.getClass().name/] existente de un [a.getOwner().name/] existente

@@ -15,7 +15,7 @@
 
 [template private genListTemplate(a : Property, path : String)]
 [file (path.concat(a.getOwner().getName() + '.' + a.name + '.list.tpl.html'), false, 'UTF-8')]
-<!-- [ 'update'.concat(a.getClass().getName()).concat(a.getOwner().getName()) /]-->
+<!-- [ 'getAll'.concat(a.getClass().name).concat(a.getOwner().name) /]-->
 <!--
 [a.getClass().getModel().license()/]
 -->
@@ -31,6 +31,7 @@
 
 [template private genListCtrl(a : Property, path : String)]
 [file (path.concat(a.getOwner().getName() + '.' + a.name + '.list.ctrl.js'), false, 'UTF-8')]
+// [ 'getAll'.concat(a.getOwner().name).concat(a.getClass().name) /]
 /*
 [a.getClass().getModel().license()/]
 */
@@ -76,7 +77,7 @@
 
 [template private genEditCtrl(a : Property, path : String)]
 [file (path.concat(a.getOwner().getName() + '.' + a.name + '.edit.ctrl.js'), false, 'UTF-8')]
-// [ 'update'.concat(a.getOwner().getName()).concat(a.getClass().getName()) /]
+// [ 'update'.concat(a.getOwner().name).concat(a.getClass().name) /]
 /*
 [a.getClass().getModel().license()/]
 */

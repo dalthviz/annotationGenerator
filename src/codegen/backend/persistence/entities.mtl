@@ -13,6 +13,12 @@
 */
 package [c.getModel().baseGroup()/].entities;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.OneToOne;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import co.edu.uniandes.csw.crud.spi.entity.BaseEntity;
@@ -21,8 +27,9 @@ import java.util.Date;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import uk.co.jemos.podam.common.PodamStrategyValue;
-[if (c.hasRelationshipAttributes())]
+
 import uk.co.jemos.podam.common.PodamExclude;
+[if (c.hasRelationshipAttributes())]
 [for (s : String | c.getJPAAnnotations())]
 import javax.persistence.[s/];
 [/for]
@@ -61,11 +68,18 @@ import co.edu.uniandes.annotation.FP;
 				 "['create'.concat(c.name) /]",
                  "['update'.concat(c.name) /]", 
 				 "['delete'.concat(c.name) /]"
-[for (a : Property | c.getCollectionAttributes())]
-				 ,"['list'.concat(c.name).concat(a.getClass().name) /]",
+[for (a : Property | c.getRelationshipAttributes())]
+				 ,"['getAll'.concat(c.name).concat(a.getClass().name) /]",
 				 "['get'.concat(c.name).concat(a.getClass().name) /]",
 				 "['add'.concat(c.name).concat(a.getClass().name) /]",
-				 "['replace'.concat(c.name).concat(a.getClass().name) /]",
+				 "['update'.concat(c.name).concat(a.getClass().name) /]",
+				 "['remove'.concat(c.name).concat(a.getClass().name) /]"
+[/for]
+[for (a : Property | c.getCompositeRelationshipAttributes())]
+				 , "['getAll'.concat(c.name).concat(a.getClass().name) /]",
+				 "['get'.concat(c.name).concat(a.getClass().name) /]",
+				 "['create'.concat(c.name).concat(a.getClass().name) /]",
+			     "['update'.concat(c.name).concat(a.getClass().name) /]",
 				 "['remove'.concat(c.name).concat(a.getClass().name) /]"
 [/for]
 				 })
@@ -99,6 +113,18 @@ public class [className/] extends [if(c.isGeneralization())][c.getGeneralization
 
     @PodamExclude
     @[a.getJPAAnnotation()/][a.genParameters()/]
+    [if (a.has2Relationships(c) and not a.isComposite())]
+    @JoinTable(name = "[c.name/]_[a.name.toUpper()/]")
+    [/if]
+    [if (a.getUpper() = 1)]
+    private [a.getClass().getEntityName()/] [a.name/];
+    [else]
+    private List<[a.getClass().getEntityName()/]> [a.name/] = new ArrayList<>();
+    [/if]
+[/for]
+[for (a : Property | c.getCompositeRelationshipAttributes())]
+
+    @PodamExclude
     [if (a.has2Relationships(c) and not a.isComposite())]
     @JoinTable(name = "[c.name/]_[a.name.toUpper()/]")
     [/if]
@@ -203,6 +229,49 @@ public class [className/] extends [if(c.isGeneralization())][c.getGeneralization
     }
 [/for]
 [c.setEntityGetterAndSettersManyToManyShared()/]
+[for (a : Property | c.getCompositeRelationshipAttributes())]
+	[if (a.getUpper() <> 1)]
+    /**
+     * Obtiene la colección de [a.name/].
+     *
+     * @return colección [a.name/].
+     * @generated
+     */
+    public List<[a.getClass().getEntityName()/]> [a.getter()/]() {
+        return [a.name/];
+    }
+
+    /**
+     * Establece el valor de la colección de [a.name/].
+     *
+     * @param [a.name/] nuevo valor de la colección.
+     * @generated
+     */
+    public void [a.setter()/](List<[a.getClass().getEntityName()/]> [a.name.toLower()/]) {
+        this.[a.name/] = [a.name.toLower()/];
+    }
+	[else]
+    /**
+     * Obtiene el atributo [a.name/].
+     *
+     * @return atributo [a.name/].
+     * @generated
+     */
+    public [a.getClass().getEntityName()/] [a.getter()/]() {
+        return [a.name/];
+    }
+
+    /**
+     * Establece el valor del atributo [a.name/].
+     *
+     * @param [a.name/] nuevo valor del atributo
+     * @generated
+     */
+    public void [a.setter()/]([a.getClass().getEntityName()/] [a.name.toLower()/]) {
+        this.[a.name/] = [a.name.toLower()/];
+    }
+	[/if]
+[/for]
 }
 
 [/file]

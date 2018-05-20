@@ -16,7 +16,7 @@
 */]
 [template private genController(c : Class, path : String)]
 [file (path.concat(c.getName()).concat('.detail.ctrl.js'), false, 'UTF-8')]
-//['getAll'.concat(c.name) /], ['get'.concat(c.name) /], ['create'.concat(c.name) /], ['update'.concat(c.name) /], ['delete'.concat(c.name) /][for (a : Property | c.getCollectionAttributes())], ['list'.concat(c.name).concat(a.getClass().name) /], ['get'.concat(c.name).concat(a.getClass().name) /], ['add'.concat(c.name).concat(a.getClass().name) /], ['replace'.concat(c.name).concat(a.getClass().name) /], ['remove'.concat(c.name).concat(a.getClass().name) /][/for]
+//['getAll'.concat(c.name) /], ['get'.concat(c.name) /], ['create'.concat(c.name) /], ['update'.concat(c.name) /], ['delete'.concat(c.name) /][for (a : Property | c.getCollectionAttributes())], ['getAll'.concat(c.name).concat(a.getClass().name) /], ['get'.concat(c.name).concat(a.getClass().name) /], ['add'.concat(c.name).concat(a.getClass().name) /], ['update'.concat(c.name).concat(a.getClass().name) /], ['remove'.concat(c.name).concat(a.getClass().name) /][/for][for (a : Property | c.getCompositeRelationshipAttributes())], ['getAll'.concat(c.name).concat(a.getClass().name) /], ['get'.concat(c.name).concat(a.getClass().name) /], ['add'.concat(c.name).concat(a.getClass().name) /], ['update'.concat(c.name).concat(a.getClass().name) /], ['remove'.concat(c.name).concat(a.getClass().name) /][/for]
 /*
 [c.getModel().license()/]
 */
@@ -98,7 +98,7 @@
 
 [template private genTemplate(c : Class, path : String)]
 [file (path.concat(c.getName()).concat('.detail.tpl.html'), false, 'UTF-8')]
-<!-- ['getAll'.concat(c.name) /], ['get'.concat(c.name) /], ['create'.concat(c.name) /], ['update'.concat(c.name) /], ['delete'.concat(c.name) /][for (a : Property | c.getCollectionAttributes())], ['list'.concat(c.name).concat(a.getClass().name) /], ['get'.concat(c.name).concat(a.getClass().name) /], ['add'.concat(c.name).concat(a.getClass().name) /], ['replace'.concat(c.name).concat(a.getClass().name) /], ['remove'.concat(c.name).concat(a.getClass().name) /][/for] -->
+<!-- ['getAll'.concat(c.name) /], ['get'.concat(c.name) /], ['create'.concat(c.name) /], ['update'.concat(c.name) /], ['delete'.concat(c.name) /][for (a : Property | c.getCollectionAttributes())], ['getAll'.concat(c.name).concat(a.getClass().name) /], ['get'.concat(c.name).concat(a.getClass().name) /], ['add'.concat(c.name).concat(a.getClass().name) /], ['update'.concat(c.name).concat(a.getClass().name) /], ['remove'.concat(c.name).concat(a.getClass().name) /][/for][for (a : Property | c.getCompositeRelationshipAttributes())], ['getAll'.concat(c.name).concat(a.getClass().name) /], ['get'.concat(c.name).concat(a.getClass().name) /], ['add'.concat(c.name).concat(a.getClass().name) /], ['update'.concat(c.name).concat(a.getClass().name) /], ['remove'.concat(c.name).concat(a.getClass().name) /][/for] -->
 <!--
 [c.getModel().license()/]
 -->

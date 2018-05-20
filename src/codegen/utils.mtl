@@ -70,6 +70,39 @@ c.getAssociations()->collect( asc |
 )->asSet()
 /]
 
+[query public getRelationshipAttributesCE(c : Class) : Set(Property) =
+c.getAssociations()->union(c.parents().getAssociations())->collect( asc |
+    asc.getAllAttributes()->select(
+        a | a.isNavigable()
+        and a.getUpper() <> 0
+        and a.getOtherEnd().type = c
+        and (a.aggregation <> AggregationKind::none implies (
+                a.getOtherEnd().getUpper() = 1
+            and a.getOtherEnd().aggregation = AggregationKind::none)
+        )
+        and (a.getOtherEnd().aggregation <> AggregationKind::none implies (
+                a.getUpper() = 1
+            and a.aggregation = AggregationKind::none)
+        )
+    )
+)->asSet()
+/]
+
+[**
+ * Determina si la es hijo en relación composite
+*/]
+[query public isCompositeChild(c: Class): Boolean = 
+c.getAssociations()->union(c.parents().getAssociations())->collect( asc |
+    asc.getAllAttributes()->select(
+        a | not a.isNavigable()
+        and a.getOtherEnd().getUpper() <> 0
+		and a.getOtherEnd().type = c
+        and a.getOtherEnd().isNavigable()
+        and a.getOtherEnd().isComposite()
+    )
+)->asSet()->size()<>0
+/]
+
 [query public hasRelationshipAttributes(c : Class) : Boolean =
 c.getRelationshipAttributes()->notEmpty()
 /]
@@ -104,6 +137,10 @@ c.getCollectionAttributes()->notEmpty()
 
 [query public getCompositeCollectionAttributes(c : Class) : Set(Property) =
 c.getCollectionAttributes()->select(isComposite())
+/]
+
+[query public getCompositeRelationshipAttributes(c : Class) : Set(Property) =
+c.getRelationshipAttributesCE()->select(isComposite())
 /]
 
 [query public getNonCompositeCollectionAttributes(c : Class) : Set(Property) =

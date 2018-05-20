@@ -18,6 +18,9 @@ import [c.getModel().baseGroup()/].entities.[c.getEntityName()/];
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
 import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
 [/for]
+[for (a: Property | c.getCompositeRelationshipAttributes())]
+import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
+[/for]
 import java.util.List;
 [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;[/if][/for]
 
@@ -46,6 +49,22 @@ public interface [className/] {
     public List<[a.getClass().getEntityName()/]> replace[a.name.toUpperFirst()/](Long [c.getEntityId()/], List<[a.getClass().getEntityName()/]> list);
     public void remove[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]);
     [/for]
+	
+	[for (a: Property | c.getCompositeRelationshipAttributes())]
+	[if (a.getUpper() <> 1)]
+	public List<[a.getClass().getEntityName()/]> list[a.name.toUpperFirst()/](Long [c.getEntityId()/]);
+    public [a.getClass().getEntityName()/] get[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]);
+    public [a.getClass().getEntityName()/] add[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]);
+    public List<[a.getClass().getEntityName()/]> replace[a.name.toUpperFirst()/](Long [c.getEntityId()/], List<[a.getClass().getEntityName()/]> list);
+    public void remove[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]);
+	[else]
+	public [a.getClass().getEntityName()/] get[a.name.toUpperFirst()/](Long [c.getEntityId()/]);
+    public [a.getClass().getEntityName()/] get[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]);
+    public [a.getClass().getEntityName()/] add[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]);
+    public [a.getClass().getEntityName()/] replace[a.name.toUpperFirst()/](Long [c.getEntityId()/], [a.getClass().getEntityName()/] list);
+    public void remove[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]);
+	[/if]    
+[/for]
 }
 [/file]
 [/template]
@@ -79,6 +98,9 @@ import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import co.edu.uniandes.annotation.FP;
 [for (a : Property | c.getAllAttribs())][if a.valueOf('avoidDuplicated')='true']import [c.getModel().baseGroup()/].exceptions.BusinessLogicException;[/if][/for]
+[for (a: Property | c.getCompositeRelationshipAttributes())]
+import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
+[/for]
 
 
 /**
@@ -89,10 +111,17 @@ import co.edu.uniandes.annotation.FP;
 				 "['create'.concat(c.name) /]", "['update'.concat(c.name) /]", 
 				 "['delete'.concat(c.name) /]" 
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
-				 , "['list'.concat(c.name).concat(a.getClass().name) /]",
+				 , "['getAll'.concat(c.name).concat(a.getClass().name) /]",
 				 "['get'.concat(c.name).concat(a.getClass().name) /]",
 				 "['add'.concat(c.name).concat(a.getClass().name) /]",
-			     "['replace'.concat(c.name).concat(a.getClass().name) /]",
+			     "['update'.concat(c.name).concat(a.getClass().name) /]",
+				 "['remove'.concat(c.name).concat(a.getClass().name) /]"
+[/for]
+[for (a : Property | c.getCompositeRelationshipAttributes())]
+				 , "['getAll'.concat(c.name).concat(a.getClass().name) /]",
+				 "['get'.concat(c.name).concat(a.getClass().name) /]",
+				 "['create'.concat(c.name).concat(a.getClass().name) /]",
+			     "['update'.concat(c.name).concat(a.getClass().name) /]",
 				 "['remove'.concat(c.name).concat(a.getClass().name) /]"
 [/for]
 				})
@@ -335,7 +364,7 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
-    @FP(useCases = { "['list'.concat(c.name).concat(a.getClass().name) /]" })
+    @FP(useCases = { "['getAll'.concat(c.name).concat(a.getClass().name) /]" })
     public List<[a.getClass().getEntityName()/]> list[a.name.toUpperFirst()/](Long [c.getEntityId()/]) {
         return get[c.name/]([c.getEntityId()/]).[a.getter()/]();
     }
@@ -399,7 +428,7 @@ public class [className/] implements [c.getAPIName()/] {
      * @generated
      */
     @Override
-	@FP(useCases = { "['replace'.concat(c.name).concat(a.getClass().name) /]" })
+	@FP(useCases = { "['update'.concat(c.name).concat(a.getClass().name) /]" })
     public List<[a.getClass().getEntityName()/]> replace[a.name.toUpperFirst()/](Long [c.getEntityId()/], List<[a.getClass().getEntityName()/]> list) {
         [c.getEntityName()/] [c.getEntityLower()/] = get[c.name/]([c.getEntityId()/]);
 		[if (not a.isRelationshipOwner())]
@@ -454,6 +483,262 @@ public class [className/] implements [c.getAPIName()/] {
         entity.[a.getter()/]().remove([a.getEntityLower()/]);
         [/if]
     }
+    [/for]
+
+[for (a : Property | c.getCompositeRelationshipAttributes())]
+[if (a.getUpper() <> 1)]
+    /**
+     * Obtiene una colección de instancias de [a.getClass().getEntityName()/] asociadas a una
+     * instancia de [c.name/]
+     *
+     * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
+     * @return Colección de instancias de [a.getClass().getEntityName()/] asociadas a la instancia de [c.name/]
+     * @generated
+     */
+    @Override
+    @FP(useCases = { "['getAll'.concat(c.name).concat(a.getClass().name) /]" })
+    public List<[a.getClass().getEntityName()/]> list[a.name.toUpperFirst()/](Long [c.getEntityId()/]) {
+        return get[c.name/]([c.getEntityId()/]).[a.getter()/]();
+    }
+
+    /**
+     * Obtiene una instancia de [a.getClass().getEntityName()/] asociada a una instancia de [c.name/]
+     *
+     * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
+     * @param [a.getEntityId()/] Identificador de la instancia de [a.getClass().name/]
+     * @generated
+     */
+    @Override
+    @FP(useCases = { "['get'.concat(c.name).concat(a.getClass().name) /]" })
+    public [a.getClass().getEntityName()/] get[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]) {
+        List<[a.getClass().getEntityName()/]> list = get[c.name/]([c.getEntityId()/]).[a.getter()/]();
+        [a.getClass().getEntityName()/] [a.getEntityLower()/] = new [a.getClass().getEntityName()/]();
+        [a.getEntityLower()/].setId([a.getEntityId()/]);
+        int index = list.indexOf([a.getEntityLower()/]);
+        if (index >= 0) {
+            return list.get(index);
+        }
+        return null;
+    }
+
+    /**
+     * Asocia un [a.getClass().name/] existente a un [c.name/]
+     *
+     * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
+     * @param [a.getEntityId()/] Identificador de la instancia de [a.getClass().name/]
+     * @return Instancia de [a.getClass().getEntityName()/] que fue asociada a [c.name/]
+     * @generated
+     */
+    @Override
+    @FP(useCases = { "['create'.concat(c.name).concat(a.getClass().name) /]" })
+    public [a.getClass().getEntityName()/] add[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]) {
+		[if (a.isRelationshipOwner())]
+        [c.getEntityName()/] [c.getEntityLower()/] = get[c.name/]([c.getEntityId()/]);
+        [a.getClass().getEntityName()/] [a.getEntityLower()/] = new [a.getClass().getEntityName()/]();
+        [a.getEntityLower()/].setId([a.getEntityId()/]);
+        [c.getEntityLower()/].[a.getter()/]().add([a.getEntityLower()/]);
+        return get[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getEntityId()/]);
+		[else]
+        [if (a.getOtherEnd().getUpper() = 1)]
+        [c.getEntityName()/] [c.getEntityLower()/] = get[c.name/]([c.getEntityId()/]);
+        [a.getClass().getEntityName()/] [a.getEntityLower()/] = [a.getClass().getBeanLower()/].get[a.getClass().name/]([a.getEntityId()/]);
+        [a.getEntityLower()/].[a.getOtherEnd().setter()/]([c.getEntityLower()/]);
+        return [a.getEntityLower()/];
+        [else]
+        [a.getClass().getBeanLower()/].add[a.getOtherEnd().name.toUpperFirst()/]([a.getEntityId()/], [c.getEntityId()/]);
+        return [a.getClass().getBeanLower()/].get[a.getClass().name/]([a.getEntityId()/]);
+        [/if]
+		[/if]
+    }
+
+    /**
+     * Remplaza las instancias de [a.getClass().name/] asociadas a una instancia de [c.name/]
+     *
+     * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
+     * @param list Colección de instancias de [a.getClass().getEntityName()/] a asociar a instancia de [c.name/]
+     * @return Nueva colección de [a.getClass().getEntityName()/] asociada a la instancia de [c.name/]
+     * @generated
+     */
+    @Override
+	@FP(useCases = { "['update'.concat(c.name).concat(a.getClass().name) /]" })
+    public List<[a.getClass().getEntityName()/]> replace[a.name.toUpperFirst()/](Long [c.getEntityId()/], List<[a.getClass().getEntityName()/]> list) {
+        [c.getEntityName()/] [c.getEntityLower()/] = get[c.name/]([c.getEntityId()/]);
+		[if (not a.isRelationshipOwner())]
+        List<[a.getClass().getEntityName()/]> [a.getClass().getName()/]List = [a.getClass().getBeanLower()/].get[a.getClass().name/]s();
+        [if (a.getOtherEnd().getUpper() = 1)]
+        for ([a.getClass().getEntityName()/] [a.getClass().getName()/] : [a.getClass().getName()/]List) {
+            if (list.contains([a.getClass().getName()/])) {
+                [a.getClass().getName()/].[a.getOtherEnd().setter()/]([c.getEntityLower()/]);
+            } else {
+                if ([a.getClass().getName()/].[a.getOtherEnd().getter()/]() != null && [a.getClass().getName()/].[a.getOtherEnd().getter()/]().equals([c.getEntityLower()/])) {
+                    [a.getClass().getName()/].[a.getOtherEnd().setter()/](null);
+                }
+            }
+        }
+        [else]
+        for ([a.getClass().getEntityName()/] [a.getClass().getName()/] : [a.getClass().getName()/]List) {
+            if (list.contains([a.getClass().getName()/])) {
+                if (![a.getClass().getName()/].[a.getOtherEnd().getter()/]().contains([c.getEntityLower()/])) {
+                    [a.getClass().getBeanLower()/].add[a.getOtherEnd().name.toUpperFirst()/]([a.getClass().getName()/].getId(), [c.getEntityId()/]);
+                }
+            } else {
+                [a.getClass().getBeanLower()/].remove[a.getOtherEnd().name.toUpperFirst()/]([a.getClass().getName()/].getId(), [c.getEntityId()/]);
+            }
+        }
+        [/if]
+		[/if]
+        [c.getEntityLower()/].[a.setter()/](list);
+        return [c.getEntityLower()/].[a.getter()/]();
+    }
+
+    /**
+     * Desasocia un [a.getClass().name/] existente de un [c.name/] existente
+     *
+     * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
+     * @param [a.getEntityId()/] Identificador de la instancia de [a.getClass().name/]
+     * @generated
+     */
+    @Override
+	@FP(useCases = { "['remove'.concat(c.name).concat(a.getClass().name) /]" })
+    public void remove[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]) {
+        [if (not a.isRelationshipOwner())]
+        [if (a.getOtherEnd().getUpper() = 1)]
+        [a.getClass().getEntityName()/] entity = [a.getClass().getBeanLower()/].get[a.getClass().name/]([a.getEntityId()/]);
+        entity.[a.getOtherEnd().setter()/](null);
+        [else]
+        [a.getClass().getBeanLower()/].remove[a.getOtherEnd().name.toUpperFirst()/]([a.getEntityId()/], [c.getEntityId()/]);
+        [/if]
+        [else]
+        [c.getEntityName()/] entity = get[c.name/]([c.getEntityId()/]);
+        [a.getClass().getEntityName()/] [a.getEntityLower()/] = new [a.getClass().getEntityName()/]();
+        [a.getEntityLower()/].setId([a.getEntityId()/]);
+        entity.[a.getter()/]().remove([a.getEntityLower()/]);
+        [/if]
+    }
+[else]
+ /**
+     * Obtiene una colección de instancias de [a.getClass().getEntityName()/] asociadas a una
+     * instancia de [c.name/]
+     *
+     * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
+     * @return Colección de instancias de [a.getClass().getEntityName()/] asociadas a la instancia de [c.name/]
+     * @generated
+     */
+    @Override
+    @FP(useCases = { "['getAll'.concat(c.name).concat(a.getClass().name) /]" })
+    public [a.getClass().getEntityName()/] get[a.name.toUpperFirst()/](Long [c.getEntityId()/]) {
+        return get[c.name/]([c.getEntityId()/]).[a.getter()/]();
+    }
+
+    /**
+     * Obtiene una instancia de [a.getClass().getEntityName()/] asociada a una instancia de [c.name/]
+     *
+     * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
+     * @param [a.getEntityId()/] Identificador de la instancia de [a.getClass().name/]
+     * @generated
+     */
+    @Override
+    @FP(useCases = { "['get'.concat(c.name).concat(a.getClass().name) /]" })
+    public [a.getClass().getEntityName()/] get[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]) {
+        [a.getClass().getEntityName()/] list = get[c.name/]([c.getEntityId()/]).[a.getter()/]();
+        [a.getClass().getEntityName()/] [a.getEntityLower()/] = new [a.getClass().getEntityName()/]();
+        [a.getEntityLower()/].setId([a.getEntityId()/]);        
+        return null;
+    }
+
+    /**
+     * Asocia un [a.getClass().name/] existente a un [c.name/]
+     *
+     * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
+     * @param [a.getEntityId()/] Identificador de la instancia de [a.getClass().name/]
+     * @return Instancia de [a.getClass().getEntityName()/] que fue asociada a [c.name/]
+     * @generated
+     */
+    @Override
+    @FP(useCases = { "['create'.concat(c.name).concat(a.getClass().name) /]" })
+    public [a.getClass().getEntityName()/] add[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]) {
+		[if (a.isRelationshipOwner())]
+        [c.getEntityName()/] [c.getEntityLower()/] = get[c.name/]([c.getEntityId()/]);
+        [a.getClass().getEntityName()/] [a.getEntityLower()/] = new [a.getClass().getEntityName()/]();
+        [a.getEntityLower()/].setId([a.getEntityId()/]);
+        return get[a.name.toUpperFirst()/]([c.getEntityId()/], [a.getEntityId()/]);
+		[else]
+        [if (a.getOtherEnd().getUpper() = 1)]
+        [c.getEntityName()/] [c.getEntityLower()/] = get[c.name/]([c.getEntityId()/]);
+        [a.getClass().getEntityName()/] [a.getEntityLower()/] = [a.getClass().getBeanLower()/].get[a.getClass().name/]([a.getEntityId()/]);
+        [a.getEntityLower()/].[a.getOtherEnd().setter()/]([c.getEntityLower()/]);
+        return [a.getEntityLower()/];
+        [else]
+        return [a.getClass().getBeanLower()/].get[a.getClass().name/]([a.getEntityId()/]);
+        [/if]
+		[/if]
+    }
+
+    /**
+     * Remplaza las instancias de [a.getClass().name/] asociadas a una instancia de [c.name/]
+     *
+     * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
+     * @param list Colección de instancias de [a.getClass().getEntityName()/] a asociar a instancia de [c.name/]
+     * @return Nueva colección de [a.getClass().getEntityName()/] asociada a la instancia de [c.name/]
+     * @generated
+     */
+    @Override
+	@FP(useCases = { "['update'.concat(c.name).concat(a.getClass().name) /]" })
+    public [a.getClass().getEntityName()/] replace[a.name.toUpperFirst()/](Long [c.getEntityId()/], [a.getClass().getEntityName()/] list) {
+        [c.getEntityName()/] [c.getEntityLower()/] = get[c.name/]([c.getEntityId()/]);
+		[if (not a.isRelationshipOwner())]
+        [a.getClass().getEntityName()/] [a.getClass().getName()/]List = [a.getClass().getBeanLower()/].get[a.getClass().name/]s();
+        [if (a.getOtherEnd().getUpper() = 1)]
+        for ([a.getClass().getEntityName()/] [a.getClass().getName()/] : [a.getClass().getName()/]List) {
+            if (list.contains([a.getClass().getName()/])) {
+                [a.getClass().getName()/].[a.getOtherEnd().setter()/]([c.getEntityLower()/]);
+            } else {
+                if ([a.getClass().getName()/].[a.getOtherEnd().getter()/]() != null && [a.getClass().getName()/].[a.getOtherEnd().getter()/]().equals([c.getEntityLower()/])) {
+                    [a.getClass().getName()/].[a.getOtherEnd().setter()/](null);
+                }
+            }
+        }
+        [else]
+        for ([a.getClass().getEntityName()/] [a.getClass().getName()/] : [a.getClass().getName()/]List) {
+            if (list.contains([a.getClass().getName()/])) {
+                if (![a.getClass().getName()/].[a.getOtherEnd().getter()/]().contains([c.getEntityLower()/])) {
+                    [a.getClass().getBeanLower()/].add[a.getOtherEnd().name.toUpperFirst()/]([a.getClass().getName()/].getId(), [c.getEntityId()/]);
+                }
+            } else {
+                [a.getClass().getBeanLower()/].remove[a.getOtherEnd().name.toUpperFirst()/]([a.getClass().getName()/].getId(), [c.getEntityId()/]);
+            }
+        }
+        [/if]
+		[/if]
+        [c.getEntityLower()/].[a.setter()/](list);
+        return [c.getEntityLower()/].[a.getter()/]();
+    }
+
+    /**
+     * Desasocia un [a.getClass().name/] existente de un [c.name/] existente
+     *
+     * @param [c.getEntityId()/] Identificador de la instancia de [c.name/]
+     * @param [a.getEntityId()/] Identificador de la instancia de [a.getClass().name/]
+     * @generated
+     */
+    @Override
+	@FP(useCases = { "['remove'.concat(c.name).concat(a.getClass().name) /]" })
+    public void remove[a.name.toUpperFirst()/](Long [c.getEntityId()/], Long [a.getEntityId()/]) {
+        [if (not a.isRelationshipOwner())]
+        [if (a.getOtherEnd().getUpper() = 1)]
+        [a.getClass().getEntityName()/] entity = [a.getClass().getBeanLower()/].get[a.getClass().name/]([a.getEntityId()/]);
+        entity.[a.getOtherEnd().setter()/](null);
+        [else]
+        [a.getClass().getBeanLower()/].remove[a.getOtherEnd().name.toUpperFirst()/]([a.getEntityId()/], [c.getEntityId()/]);
+        [/if]
+        [else]
+        [c.getEntityName()/] entity = get[c.name/]([c.getEntityId()/]);
+        [a.getClass().getEntityName()/] [a.getEntityLower()/] = new [a.getClass().getEntityName()/]();
+        [a.getEntityLower()/].setId([a.getEntityId()/]);
+        entity.[a.getter()/]();
+        [/if]
+    }
+[/if]
     [/for]
 }
 [/file]
