@@ -371,9 +371,13 @@ import co.edu.uniandes.annotation.FP;
  */
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@FP(useCases = { "['gatAll'.concat(classSimpleName) /]",
+@FP(useCases = { "['getAll'.concat(classSimpleName) /]",
 				 "['get'.concat(classSimpleName) /]",
+[if (a.isComposite)]
+				 "['create'.concat(classSimpleName) /]",
+[else]
 				 "['add'.concat(classSimpleName) /]",
+[/if]
 				 "['update'.concat(classSimpleName) /]",
 				 "['remove'.concat(classSimpleName) /]" })
 public class [className/] {
@@ -459,8 +463,12 @@ public class [className/] {
      */
     @POST
     @Path("{[a.getIdVariable()/]: \\d+}, {[a.getOwner().getIdVariable()/]: \\d+}")
+	[if (a.isComposite)]
+	@FP(useCases = { "['create'.concat(classSimpleName) /]" })
+    [else]
 	@FP(useCases = { "['add'.concat(classSimpleName) /]" })
-    public [a.getClass().getBasicDTOName()/] add[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
+    [/if]
+	public [a.getClass().getBasicDTOName()/] add[a.name.toUpperFirst()/](@PathParam("[a.getOwner().getIdVariable()/]") Long [a.getOwner().getIdVariable()/], @PathParam("[a.getIdVariable()/]") Long [a.getIdVariable()/]) {
         return new [a.getClass().getBasicDTOName()/]([logic/].add[a.name.toUpperFirst()/]([a.getOwner().getIdVariable()/], [a.getIdVariable()/]));
     }
 
@@ -586,7 +594,7 @@ public Class<[a.getSharedResourceClassName()/]> get[a.getSharedResourceClassName
 [/template]
 
 [template protected getSharedResourceClassSimpleName(a : Property)]
-[a.getOwner().name.toUpperFirst()/][a.name.toUpperFirst()/]
+[a.getOwner().name/][a.type.name/]
 [/template]
 
 [template protected getCompositeResourceClassName(a : Property)]
