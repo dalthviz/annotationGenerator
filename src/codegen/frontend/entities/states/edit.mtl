@@ -11,7 +11,7 @@
 
 [template private genController(c : Class, path : String)]
 [file (path.concat(c.getName()).concat('.edit.ctrl.js'), false, 'UTF-8')]
-//['update'.concat(c.name) /] [if (c.isCompositeChild())], ['update'.concat(c.getParentAttribute().type.name).concat(c.name) /][/if]
+//[if (not c.isCompositeChild())]['update'.concat(c.name) /] [else] ['update'.concat(c.getParentAttribute().type.name).concat(c.name) /][/if]
 /*
 [c.getModel().license()/]
 */
@@ -50,7 +50,7 @@
 
 [template private genTemplate(c : Class, path : String)]
 [file (path.concat(c.getName()).concat('.edit.tpl.html'), false, 'UTF-8')]
-<!-- ['update'.concat(c.name)/][if (c.isCompositeChild())], ['update'.concat(c.getParentAttribute().type.name).concat(c.name) /][/if]-->
+<!-- [if (not c.isCompositeChild())]['update'.concat(c.name) /] [else] ['update'.concat(c.getParentAttribute().type.name).concat(c.name) /][/if]-->
 <!--
 [c.getModel().license()/]
 -->

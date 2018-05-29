@@ -163,6 +163,12 @@ c.getNonCompositeCollectionAttributes()->notEmpty()
 c.getParentAttribute() <> null
  /]
 
+[query public getParentAttributes(c : Class) : Set(Property) =
+c.getNonCompositeCollectionAttributes()->select(
+    a | not a.getOtherEnd().isNavigable()
+)->asOrderedSet()
+/]
+
 [query public getParentAttribute(c : Class) : Property =
 c.getReferences(true)->any(isParentAttribute())
 /]

@@ -10,7 +10,7 @@
 
 [template private genModule(c : Class, path : String)]
 [file (path.concat(c.getName()) + '.mod.js', false, 'UTF-8')]
-//[c.name/], ['getAll'.concat(c.name) /], ['get'.concat(c.name) /], ['create'.concat(c.name) /], ['update'.concat(c.name) /], ['delete'.concat(c.name) /][for (a : Property | c.getCollectionAttributes())], ['getAll'.concat(c.name).concat(a.type.name) /], ['get'.concat(c.name).concat(a.type.name) /], ['add'.concat(c.name).concat(a.type.name) /], ['replace'.concat(c.name).concat(a.type.name) /], ['remove'.concat(c.name).concat(a.type.name) /][/for][if (c.isCompositeChild())], ['getAll'.concat(c.getParentAttribute().type.name).concat(c.name) /], ['get'.concat(c.getParentAttribute().type.name).concat(c.name) /], ['add'.concat(c.getParentAttribute().type.name).concat(c.name) /], ['replace'.concat(c.getParentAttribute().type.name).concat(c.name) /], ['remove'.concat(c.getParentAttribute().type.name).concat(c.name) /][/if]
+//[c.name/], ['getAll'.concat(c.name) /], ['get'.concat(c.name) /], ['create'.concat(c.name) /], ['update'.concat(c.name) /], ['delete'.concat(c.name) /][for (a : Property | c.getCollectionAttributes())], ['getAll'.concat(c.name).concat(a.type.name) /], ['get'.concat(c.name).concat(a.type.name) /], ['add'.concat(c.name).concat(a.type.name) /], ['replace'.concat(c.name).concat(a.type.name) /], ['remove'.concat(c.name).concat(a.type.name) /][/for][if (c.isCompositeChild())], ['getAll'.concat(c.getParentAttribute().type.name).concat(c.name) /], ['get'.concat(c.getParentAttribute().type.name).concat(c.name) /], ['add'.concat(c.getParentAttribute().type.name).concat(c.name) /], ['replace'.concat(c.getParentAttribute().type.name).concat(c.name) /], ['remove'.concat(c.getParentAttribute().type.name).concat(c.name) /][/if][for (a : Relationship | c.getRelationships())][if (a.eGet('name').toString().endsWith('_'.concat(c.name)))],['getAll'.concat(a.eGet('name').toString().replace('_', '').toString()) /],['get'.concat(a.eGet('name').toString().replace('_', '').toString()) /],['create'.concat(a.eGet('name').toString().replace('_', '').toString()) /],['update'.concat(a.eGet('name').toString().replace('_', '').toString()) /],['remove'.concat(a.eGet('name').toString().replace('_', '').toString()) /][/if][/for]
 /*
 [c.getModel().license()/]
 */
@@ -236,7 +236,7 @@
 
 [template private genCtrl(c : Class, path : String)]
 [file (path.concat(c.getName()) + '.ctrl.js', false, 'UTF-8')]
-//['getAll'.concat(c.name) /], ['get'.concat(c.name) /], ['create'.concat(c.name) /], ['update'.concat(c.name) /], ['delete'.concat(c.name) /]
+//['getAll'.concat(c.name) /], ['get'.concat(c.name) /], ['create'.concat(c.name) /], ['update'.concat(c.name) /], ['delete'.concat(c.name) /][for (a : Relationship | c.getRelationships())][if (a.eGet('name').toString().endsWith('_'.concat(c.name)))],['getAll'.concat(a.eGet('name').toString().replace('_', '').toString()) /],['get'.concat(a.eGet('name').toString().replace('_', '').toString()) /],['create'.concat(a.eGet('name').toString().replace('_', '').toString()) /],['update'.concat(a.eGet('name').toString().replace('_', '').toString()) /],['remove'.concat(a.eGet('name').toString().replace('_', '').toString()) /][/if][/for]
 /*
 [c.getModel().license()/]
 */

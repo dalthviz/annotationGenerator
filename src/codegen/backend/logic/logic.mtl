@@ -107,9 +107,12 @@ import [c.getModel().baseGroup()/].entities.[a.getClass().getEntityName()/];
  * @generated
  */
 @Stateless
-@FP(useCases = { "['getAll'.concat(c.name) /]", "['get'.concat(c.name) /]",
+@FP(useCases = { "[c.name/]"
+[if (not isCompositeChild())]
+				,"['getAll'.concat(c.name) /]", "['get'.concat(c.name) /]",
 				 "['create'.concat(c.name) /]", "['update'.concat(c.name) /]", 
-				 "['delete'.concat(c.name) /]" 
+				 "['delete'.concat(c.name) /]"
+[/if]
 [for (a : Property | c.getNonCompositeCollectionAttributes())]
 				 , "['getAll'.concat(c.name).concat(a.getClass().name) /]",
 				 "['get'.concat(c.name).concat(a.getClass().name) /]",

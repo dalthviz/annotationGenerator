@@ -5,6 +5,7 @@
 [module jerseyapp('http://www.eclipse.org/uml2/5.0.0/UML')]
 [import ::utils /]
 
+
 [**
  * The documentation of the template genJerseyApp. uniandes
  * @param m

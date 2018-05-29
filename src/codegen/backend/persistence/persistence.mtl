@@ -31,17 +31,36 @@ import co.edu.uniandes.annotation.FP;
  * @generated
  */
 @Stateless
-@FP(useCases = { "['getAll'.concat(c.name) /]",
+@FP(useCases = { "[c.name/]"
+[if (not isCompositeChild())]
+				,"['getAll'.concat(c.name) /]",
 				 "['get'.concat(c.name) /]",
 				 "['create'.concat(c.name) /]",
                  "['update'.concat(c.name) /]", 
 				 "['delete'.concat(c.name) /]"
-[for (a : Property | c.getCollectionAttributes())]
-				 ,"['list'.concat(c.name).concat(a.getClass().name) /]",
+[/if]
+[for (a : Property | c.getRelationshipAttributes())]
+				 ,"['getAll'.concat(c.name).concat(a.getClass().name) /]",
 				 "['get'.concat(c.name).concat(a.getClass().name) /]",
 				 "['add'.concat(c.name).concat(a.getClass().name) /]",
-				 "['replace'.concat(c.name).concat(a.getClass().name) /]",
+				 "['update'.concat(c.name).concat(a.getClass().name) /]",
 				 "['remove'.concat(c.name).concat(a.getClass().name) /]"
+[/for]
+[for (a : Property | c.getCompositeRelationshipAttributes())]
+				 , "['getAll'.concat(c.name).concat(a.getClass().name) /]",
+				 "['get'.concat(c.name).concat(a.getClass().name) /]",
+				 "['create'.concat(c.name).concat(a.getClass().name) /]",
+			     "['update'.concat(c.name).concat(a.getClass().name) /]",
+				 "['remove'.concat(c.name).concat(a.getClass().name) /]"
+[/for]
+[for (a : Relationship | c.getRelationships())]
+		[if (a.eGet('name').toString().endsWith('_'.concat(c.name)))]
+				, "['getAll'.concat(a.eGet('name').toString().replace('_', '').toString()) /]",
+				 "['get'.concat(a.eGet('name').toString().replace('_', '').toString()) /]",
+				 "['create'.concat(a.eGet('name').toString().replace('_', '').toString()) /]",
+			     "['update'.concat(a.eGet('name').toString().replace('_', '').toString()) /]",
+				 "['remove'.concat(a.eGet('name').toString().replace('_', '').toString()) /]"
+		[/if]
 [/for]
 				 })
 public class [className/] extends CrudPersistence<[c.getEntityName()/]> {

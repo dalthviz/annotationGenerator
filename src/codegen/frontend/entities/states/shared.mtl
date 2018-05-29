@@ -65,6 +65,7 @@
 
 [template private genEditTemplate(a : Property, path : String)]
 [file (path.concat(a.getOwner().getName() + '.' + a.name + '.edit.tpl.html'), false, 'UTF-8')]
+<!-- [ 'update'.concat(a.getOwner().name).concat(a.getClass().name) /] -->
 <!--
 [a.getClass().getModel().license()/]
 -->
